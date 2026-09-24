@@ -6,6 +6,10 @@ class ArLang {
     "areYouSureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج",
+    "ageValidate": "العمر مطلوب",
+    "ageTooYoung": "يجب ألا يقل العمر عن 18 سنة",
+    "ageTooOld": "العمر غير صحيح",
+    "age" : "العمر",
 
     "writeYourPhoneNumberHere": "اكتب رقم الهاتف هنا",
     "uploadImages": "قم بتحميل ما يصل الي 10 صوره",

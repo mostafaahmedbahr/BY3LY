@@ -10,6 +10,11 @@ class EnLang {
     "areYouSureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج",
+    "ageValidate": "Age is required",
+    "ageInvalid": "Please enter a valid age",
+    "ageTooYoung": "Age must be at least 18 years",
+    "ageTooOld": "Invalid age",
+    "age" : "Age",
 
     "acceptable": "Negotiable",
     "both": "Both",

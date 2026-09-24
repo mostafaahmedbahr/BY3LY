@@ -46,23 +46,33 @@ class RegisterButtons extends StatelessWidget {
                           .copyWith(color: Colors.white),
                     ),
                     onPressed: () {
+                      // context.pushNamed(Routes.chooseLocationView,);
                       if (formKey.currentState!.validate()) {
-                        if (registerCubit.profileImage == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  context.tr(LocaleKeys.youNotUploadAnyImage)),
-                            ),
-                          );
-                        } else {
-                          registerCubit.signUp(
-                            name: registerCubit.nameCon.text,
-                            password: registerCubit.passCon.text,
-                            email: registerCubit.emailCon.text,
-                            phoneNumber: registerCubit.mobileCon.text,
-                            image: registerCubit.profileImage,
-                          );
-                        }
+                        registerCubit.signUp(
+                          name: registerCubit.nameCon.text,
+                          password: registerCubit.passCon.text,
+                          email: registerCubit.emailCon.text,
+                          age: registerCubit.ageCon.text,
+                          phoneNumber: registerCubit.mobileCon.text,
+                          image: registerCubit.profileImage,
+                        );
+                        // if (registerCubit.profileImage == null) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text(
+                        //           context.tr(LocaleKeys.youNotUploadAnyImage)),
+                        //     ),
+                        //   );
+                        // } else {
+                        //   // context.pushNamed(Routes.chooseLocationView,);
+                        //   registerCubit.signUp(
+                        //     name: registerCubit.nameCon.text,
+                        //     password: registerCubit.passCon.text,
+                        //     email: registerCubit.emailCon.text,
+                        //     phoneNumber: registerCubit.mobileCon.text,
+                        //     image: registerCubit.profileImage,
+                        //   );
+                        // }
                       }
                     },
                   ),

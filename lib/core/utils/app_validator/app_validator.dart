@@ -172,4 +172,26 @@ class MyValidators {
     return null; // valid
   }
 
+  static String? ageValidator(String? age) {
+    if (age == null || age.trim().isEmpty) {
+      return LocaleKeys.ageValidate.tr();
+    }
+
+    final ageValue = int.tryParse(age.trim());
+
+    if (ageValue == null) {
+      return LocaleKeys.ageInvalid.tr();
+    }
+
+    if (ageValue < 18) {
+      return LocaleKeys.ageTooYoung.tr();
+    }
+
+    if (ageValue > 100) {
+      return LocaleKeys.ageTooOld.tr();
+    }
+
+    return null;
+  }
+
 }

@@ -16,6 +16,11 @@ abstract class LocaleKeys {
   static const changePasswordMsg = "changePasswordMsg";
   static const oldPassword = "oldPassword";
   static const newPassword = "newPassword";
+  static const ageValidate = "ageValidate";
+  static const ageInvalid = "ageInvalid";
+  static const ageTooYoung = "ageTooYoung";
+  static const ageTooOld = "ageTooOld";
+  static const age = "age";
 
 
   static const appName = "appName";

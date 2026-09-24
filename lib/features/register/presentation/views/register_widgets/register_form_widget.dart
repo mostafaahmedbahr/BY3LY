@@ -47,7 +47,17 @@ class RegisterForm extends StatelessWidget {
           prefixIcon: SvgPicture.asset(AppImages.email),
         ),
         Gap(20.h),
-
+        /// age
+        CustomTextFormField(
+          controller: registerCubit.ageCon,
+          keyboardType: TextInputType.number,
+          validator: (dynamic value) {
+            return MyValidators.ageValidator(value);
+          },
+          hintText: context.tr(LocaleKeys.ageInvalid),
+          prefixIcon: SvgPicture.asset(AppImages.email),
+        ),
+        Gap(20.h),
         BlocBuilder<RegisterCubit,RegisterStates>(
           buildWhen: (previous, current){
             return current is ChangeSuffixIconState

@@ -32,6 +32,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
   var emailCon = TextEditingController();
   var mobileCon = TextEditingController();
   var nameCon = TextEditingController();
+  var ageCon = TextEditingController();
 
   // File? file;
   // Future uploadOnlyImage() async {
@@ -82,6 +83,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String name,
     required String email,
     required String password,
+    required String age,
   }) async {
     emit(SignUpLoading());
     var result = await registerRepo!.register(
@@ -91,6 +93,9 @@ class RegisterCubit extends Cubit<RegisterStates> {
         "name": name,
         "email": email,
         "password": password,
+        "center_id": 1,
+        "city_id": 1,
+        "age" : age
       }),
     );
     return result.fold((failure) {
@@ -109,6 +114,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
 
   void clearData() {
     nameCon.clear();
+    ageCon.clear();
     mobileCon.clear();
     passCon.clear();
     confirmPassCon.clear();
