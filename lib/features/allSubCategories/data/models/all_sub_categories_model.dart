@@ -50,10 +50,10 @@ class SubCategories {
   SubCategories({this.id, this.name, this.image, this.productsCount});
 
   SubCategories.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
+    id = json["id"];
     name = json["name"];
     image = json["image"];
-    productsCount = (json["products_count"] as num).toInt();
+    productsCount = json["products_count"];
   }
 
   Map<String, dynamic> toJson() {
