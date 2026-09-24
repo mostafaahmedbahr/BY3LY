@@ -46,6 +46,7 @@ class User {
   String? name;
   String? email;
   String? phone;
+  dynamic age;
   String? image;
   String? token;
   int? centerId;
@@ -54,17 +55,18 @@ class User {
   String? centerName;
   String? createdAt;
 
-  User({this.id, this.name, this.email, this.phone, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
+  User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
+    id = json["id"];
     name = json["name"];
     email = json["email"];
     phone = json["phone"];
+    age = json["age"];
     image = json["image"];
     token = json["token"];
-    centerId = (json["center_id"] as num).toInt();
-    cityId = (json["city_id"] as num).toInt();
+    centerId = json["center_id"];
+    cityId = json["city_id"];
     cityName = json["cityName"];
     centerName = json["centerName"];
     createdAt = json["created_at"];
@@ -76,6 +78,7 @@ class User {
     _data["name"] = name;
     _data["email"] = email;
     _data["phone"] = phone;
+    _data["age"] = age;
     _data["image"] = image;
     _data["token"] = token;
     _data["center_id"] = centerId;
