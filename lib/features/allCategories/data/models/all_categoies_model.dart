@@ -50,7 +50,7 @@ class Categories {
   Categories({this.id, this.name, this.image, this.subCategories});
 
   Categories.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
+    id = json["id"];
     name = json["name"];
     image = json["image"];
     subCategories = json["subCategories"] == null ? null : (json["subCategories"] as List).map((e) => SubCategories.fromJson(e)).toList();
@@ -77,10 +77,10 @@ class SubCategories {
   SubCategories({this.id, this.name, this.image, this.productsCount});
 
   SubCategories.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
+    id = json["id"];
     name = json["name"];
     image = json["image"];
-    productsCount = (json["products_count"] as num).toInt();
+    productsCount = json["products_count"];
   }
 
   Map<String, dynamic> toJson() {
