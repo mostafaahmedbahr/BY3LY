@@ -26,24 +26,18 @@ class LoginCubit extends Cubit<LoginStates> {
   LoginModel? loginModel;
   bool isPasswordVisible = true;
 
-  changePasswordVisible()
+  void changePasswordVisible()
   {
     isPasswordVisible = !isPasswordVisible;
     emit(ChangePasswordVisibleState());
   }
 
   Future<void> login({
-    // required String phone,
-    required String email,
-    required String password,
+    required String phone , required String password , required String deviceToken
 })
   async {
     emit(LoginLoadingState());
-    var result = await loginRepo!.login(data: {
-      "device_token":CacheHelper.getData(key: "fcmToken"),
-      "email":email,
-      "password":password,
-    });
+    var result = await loginRepo!.login(phone: phone, password: password, deviceToken: deviceToken);
     return result.fold((failure) {
       emit(LoginErrorState(failure.errMessage));
     }, (data) async {
@@ -54,12 +48,9 @@ class LoginCubit extends Cubit<LoginStates> {
           emit(LoginSuccessState(data));
         }else if(data.data!.isActive==false){
           CacheHelper.saveData(key: "email", value: data.data!.user!.email);
-          // CacheHelper.saveData(key: "code", value: data.data!.user!.code);
+          CacheHelper.saveData(key: "requiresOtp", value: data.data!.requiresOtp);
           CacheHelper.saveData(key: "isActive", value: data.data!.isActive);
-          // emit(LoginSuccessWithNoActiveState(code: data.data!.user!.code));
         }
-
-
       }
       else{
         emit(LoginErrorState(data.message.toString()));

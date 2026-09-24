@@ -1,6 +1,7 @@
 class EndPoints {
   // static const baseUrl = "https://by3li.leaderfortrans.com/api/";
-  static const baseUrl = "http://tzhab.cloudy-digital.com/api/";
+  // static const baseUrl = "http://tzhab.cloudy-digital.com/api/";
+  static const baseUrl = "https://by3li.axeviadigital.com/api/";
   static const viewAllCategories = "viewAllCategories";
   static const register = "register";
   static const home = "home";

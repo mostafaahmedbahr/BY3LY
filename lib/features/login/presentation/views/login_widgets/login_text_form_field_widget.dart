@@ -20,14 +20,27 @@ class LoginTextFormFieldWidget extends StatelessWidget {
             ignoring : state is LoginLoadingState,
           child: Column(
             children: [
+              // CustomTextFormField(
+              //   controller:  context.read<LoginCubit>().emailCon,
+              //   keyboardType: TextInputType.emailAddress,
+              //   validator: (String? value) {
+              //     return MyValidators.emailValidator(value);
+              //   },
+              //   hintText:   context.tr(LocaleKeys.email),
+              //   prefixIcon: SvgPicture.asset(AppImages.email),
+              // ),
               CustomTextFormField(
-                controller:  context.read<LoginCubit>().emailCon,
-                keyboardType: TextInputType.emailAddress,
+                maxLength: 11,
+                controller:  context.read<LoginCubit>().phoneCon,
+                keyboardType: TextInputType.number,
                 validator: (String? value) {
-                  return MyValidators.emailValidator(value);
+                  return MyValidators.phoneValidator(value);
                 },
-                hintText:   context.tr(LocaleKeys.email),
-                prefixIcon: SvgPicture.asset(AppImages.email),
+                hintText:   context.tr(LocaleKeys.writeYourPhoneNumberHere),
+                prefixIcon: Padding(
+                  padding:   EdgeInsets.all(8.0.r),
+                  child: SvgPicture.asset(AppImages.egyptLogo),
+                ),
               ),
               Gap(20.h),
               CustomTextFormField(
@@ -49,19 +62,7 @@ class LoginTextFormFieldWidget extends StatelessWidget {
                 prefixIcon: SvgPicture.asset(AppImages.lock),
                 obscureText: context.read<LoginCubit>().isPasswordVisible,
               ),
-              // CustomTextFormField(
-              //   maxLength: 11,
-              //   controller:  context.read<LoginCubit>().phoneCon,
-              //   keyboardType: TextInputType.number,
-              //   validator: (String? value) {
-              //     return MyValidators.phoneValidator(value);
-              //   },
-              //   hintText:   context.tr(LocaleKeys.writeYourPhoneNumberHere),
-              //   prefixIcon: Padding(
-              //     padding:   EdgeInsets.all(8.0.r),
-              //     child: SvgPicture.asset(AppImages.egyptLogo),
-              //   ),
-              // ),
+
             ],
           ),
         );

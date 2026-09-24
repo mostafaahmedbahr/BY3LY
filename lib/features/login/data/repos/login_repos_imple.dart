@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:by3ly/core/errors/failure.dart';
   import 'package:by3ly/features/login/data/models/login_model.dart';
 import 'package:dartz/dartz.dart';
@@ -14,8 +16,13 @@ class LoginRepoImpl implements LoginRepo {
 
 
   @override
-  Future<Either<Failure, LoginModel>> login({required dynamic data}) async{
+  Future<Either<Failure, LoginModel>> login({required String phone , required String password , required String deviceToken}) async{
     try {
+      var data = json.encode({
+        "phone": phone,
+        "password": password,
+        "device_token": deviceToken,
+      });
       var response = await apiService!.postData(
         endPoint: EndPoints.login,
         data: data,

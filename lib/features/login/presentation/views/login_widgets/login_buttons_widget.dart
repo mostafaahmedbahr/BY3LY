@@ -46,17 +46,13 @@ class LoginButtonsWidget extends StatelessWidget {
                       style: AppStyles.textStyle14W500White,
                     ),
                     onPressed: () {
-                      // loginCubit.emailCon.text = "newtest@gmail.com";
-                      // loginCubit.passwordCon.text = "Mm@123456";
-                      // loginCubit.emailCon.text = "mt@gmail.com";
-                      // loginCubit.passwordCon.text = "Mm@123456";
-                      loginCubit.emailCon.text = "test0@example.com";
+                      loginCubit.phoneCon.text = "01000000000";
                       loginCubit.passwordCon.text = "12345678";
                       if (formKey.currentState!.validate()) {
                         loginCubit.login(
-                          // phone: loginCubit.phoneCon.text,
-                          email: loginCubit.emailCon.text,
+                           phone: loginCubit.phoneCon.text,
                           password: loginCubit.passwordCon.text,
+                          deviceToken: CacheHelper.getData(key: "fcmToken")
                         );
                       }
                     },
