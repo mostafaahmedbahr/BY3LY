@@ -38,7 +38,6 @@ class ProfileRepoImpl implements ProfileRepos {
     try {
       var response = await apiService!.postData(
           endPoint: EndPoints.logout,
-          
       );
       LogoutModel result = LogoutModel.fromJson(response.data);
       return right(result);

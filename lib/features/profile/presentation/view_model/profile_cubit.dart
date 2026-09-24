@@ -33,7 +33,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
 
   bool switchValue = true;
 
-  changeNotificationValue(newValue)
+  void changeNotificationValue(newValue)
   {
     switchValue = newValue;
     emit(ChangeNotificationValueState());
