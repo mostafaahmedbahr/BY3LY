@@ -25,9 +25,9 @@ class ChangePasswordRepoImpl implements ChangePasswordRepo {
       });
       var changePasswordFormData = FormData.fromMap({
         "email": CacheHelper.getData(key: "email"),
-        // "old_password": oldPassword,
-        "password": newPassword,
-        "confirm_password": newPasswordConfirmation,
+        "reset_token": CacheTokenManger.userToken,
+        "new_password": newPassword,
+        "confirm_new_password": newPasswordConfirmation,
       });
       var response = await apiService!.postData(
         endPoint: screenName == "ForgetPasswordView"

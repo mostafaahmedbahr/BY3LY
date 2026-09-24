@@ -45,6 +45,8 @@ class LoginCubit extends Cubit<LoginStates> {
         if(data.data!.isActive==true){
           loginModel = data;
           await CacheTokenManger.saveUserToken("${data.data!.user!.token}");
+          CacheHelper.saveData(key: "email", value: data.data!.user!.email);
+          CacheHelper.saveData(key: "isActive", value: data.data!.isActive);
           emit(LoginSuccessState(data));
         }else if(data.data!.isActive==false){
           CacheHelper.saveData(key: "email", value: data.data!.user!.email);

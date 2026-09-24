@@ -56,9 +56,9 @@ class ChangePasswordForm extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: SvgPicture.asset(AppImages.lock,),
               ),
-              // validator: (String? value) {
-              //   return MyValidators.passwordValidator(value);
-              // },
+              validator: (String? value) {
+                return MyValidators.passwordValidator(value);
+              },
               suffixIcon: IconButton(
                 color: AppColors.greyColor,
                 icon: changePasswordCubit.isNewPasswordVisible
