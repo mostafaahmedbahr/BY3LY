@@ -33,7 +33,7 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
               height: 120.h,
             ),
             Gap(10.h),
-            Text(product.name,
+            Text(product.name.toString(),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style:   TextStyle(
@@ -46,7 +46,7 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
               children: [
                 SvgPicture.asset(AppImages.location),
                 Gap(5.h),
-                  Text(product.address,
+                  Text(product.location??"لا يوجد",
                     style: AppStyles.textStyle10W400Green,),
               ],
             ),
@@ -57,7 +57,7 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
                 Row(
                   children: [
                     const Text("النوع ", style: AppStyles.textStyle10W400Gray,),
-                    Text(product.type, style: AppStyles.textStyle10W400Yellow,),
+                    Text(product.type.toString(), style: AppStyles.textStyle10W400Yellow,),
                   ],
                 ),
                 Row(
@@ -69,13 +69,13 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
               ],
             ),
             Gap(5.h),
-            Text(product.price,
+            Text(product.price.toString(),
                 style:   TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                 )),
             Gap(5.h),
-            Text(product.createdAt,
+            Text(product.createdAt.toString(),
               style: AppStyles.textStyle10W400Green.copyWith(
                 color: const Color(0xff7A7A7A),
               ),),
