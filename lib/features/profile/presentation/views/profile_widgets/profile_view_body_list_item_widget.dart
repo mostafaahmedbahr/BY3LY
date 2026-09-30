@@ -24,15 +24,15 @@ class ProfileViewBodyListItemWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0.r),
         ),
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           height: 56.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: const Color(0xffF8F8F8),
-          ),
           child: ListTile(
             onTap: onTap,
+            tileColor: const Color(0xffF8F8F8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
             leading:
             CustomNetWorkImage(imageUrl: image,height: 40.h,raduis: 5.r,width: 40.w,
             fit: BoxFit.cover,),

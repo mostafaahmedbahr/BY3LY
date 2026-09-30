@@ -21,17 +21,17 @@ class AddBalanceViewBody extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xffF8F8F8),
-              ),
               child: ListTile(
                 onTap: () {
                   AddBalanceCubit.get(context).showPhoneNumbersDialog(context);
                 },
+                tileColor: const Color(0xffF8F8F8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 title:   Text(
                   LocaleKeys.vodafoneCash.tr(),
                   style: AppStyles.textStyle16W500Black,
@@ -50,14 +50,14 @@ class AddBalanceViewBody extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xffF8F8F8),
-              ),
               child: ListTile(
+                tileColor: const Color(0xffF8F8F8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 onTap: () {
                   showModalBottomSheet(
                     backgroundColor: AppColors.whiteColor,
