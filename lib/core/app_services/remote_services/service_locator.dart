@@ -10,6 +10,7 @@ import '../../../../features/advertisements/data/repos/advertisements_repos_impl
 import '../../../../features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
 import '../../../../features/allSubCategoriesProducts/data/repos/all_sub_categories_products_repos_imple.dart';
 import '../../../../features/chooseLocation/data/repos/choose_location_repos_imple.dart';
+import '../../../../features/compare/data/repos/compare_repos_imple.dart';
 import '../../../../features/deleteAccount/data/repos/delete_account_repos_imple.dart';
 import '../../../../features/howToMakePurchase/data/repos/how_to_make_purchase_repos_imple.dart';
 import '../../../../features/notifications/data/repos/notifications_repos_imple.dart';
@@ -104,6 +105,9 @@ void setup() {
     getIt.get<ApiService>(),
   ));
   getIt.registerSingleton<ChangePasswordRepoImpl>(ChangePasswordRepoImpl(
+    getIt.get<ApiService>(),
+  ));
+  getIt.registerSingleton<CompareReposImpl>(CompareReposImpl(
     getIt.get<ApiService>(),
   ));
 

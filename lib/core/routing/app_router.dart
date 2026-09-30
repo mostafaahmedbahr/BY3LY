@@ -20,6 +20,7 @@ import '../../features/chooseLocation/data/repos/choose_location_repos_imple.dar
 import '../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../features/otp/presentation/view_model/otp_cubit.dart';
 import '../../features/otp/presentation/views/otp_view.dart';
+import '../../features/compare/presentation/views/compare_view.dart';
 import '../../features/productDetails/data/repos/product_details_repo_imple.dart';
 import '../../features/productDetails/presentation/view_model/product_details_cubit.dart';
 import '../../features/productDetails/presentation/views/product_details_view.dart';
@@ -115,6 +116,10 @@ class AppRouter {
             ),
             child:     const AllCategoriesView(),
           ),
+        );
+      case Routes.compareView:
+        return MaterialPageRoute(
+          builder: (context) => const CompareView(),
         );
         default:
         return null;

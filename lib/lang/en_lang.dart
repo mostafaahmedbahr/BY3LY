@@ -233,5 +233,15 @@ class EnLang {
     "yourComment": "Write your comment...",
     "submitRating": "Submit rating",
     "pleaseSelectStars": "Please select stars first",
+    "comparison": "Comparison",
+    "addToCompare": "Add to compare",
+    "removeFromCompare": "Removed from compare",
+    "compareMaxTwo": "You can compare only 2 products",
+    "pickSecondProduct": "Pick one more product to compare",
+    "oldPrice": "Old price",
+    "rating": "Rating",
+    "dateAdded": "Date added",
+    "descriptionLabel": "Description",
+    "clearCompareConfirm": "Clear both products from comparison?",
   };
 }

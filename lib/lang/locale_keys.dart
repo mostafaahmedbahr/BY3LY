@@ -244,6 +244,16 @@ abstract class LocaleKeys {
   static const yourComment = "yourComment";
   static const submitRating = "submitRating";
   static const pleaseSelectStars = "pleaseSelectStars";
+  static const comparison = "comparison";
+  static const addToCompare = "addToCompare";
+  static const removeFromCompare = "removeFromCompare";
+  static const compareMaxTwo = "compareMaxTwo";
+  static const pickSecondProduct = "pickSecondProduct";
+  static const oldPrice = "oldPrice";
+  static const rating = "rating";
+  static const dateAdded = "dateAdded";
+  static const descriptionLabel = "descriptionLabel";
+  static const clearCompareConfirm = "clearCompareConfirm";
 
 
 

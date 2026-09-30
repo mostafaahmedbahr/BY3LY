@@ -1,3 +1,4 @@
+import 'package:by3ly/features/compare/presentation/views/compare_view.dart';
 import 'package:by3ly/features/PaymentBalance/presentation/views/payment_and_balance_view.dart';
 import 'package:by3ly/features/profile/presentation/views/profile_widgets/profile_view_body_list_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -58,6 +59,20 @@ class ProfileListItemsWidgets extends StatelessWidget {
           },
           title: LocaleKeys.statistics.tr(),
           image: AppImages.chart,
+        ),
+        ProfileViewBodyListItemWidget(
+          svg: true,
+          onTap: (){
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: const CompareView(),
+              ),
+            );
+          },
+          title: LocaleKeys.comparison.tr(),
+          image: AppImages.cpmpration,
         ),
         ProfileViewBodyListItemWidget(
           svg: true,

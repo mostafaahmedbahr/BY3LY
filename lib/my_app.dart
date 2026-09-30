@@ -1,4 +1,7 @@
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_cubit.dart';
+import 'package:by3ly/features/compare/data/repos/compare_repos_imple.dart';
+import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dart';
+import 'package:by3ly/features/productDetails/data/repos/product_details_repo_imple.dart';
 import 'package:easy_localization/easy_localization.dart';
  import 'core/shared_cubits/auth_cubit/auth_cubit.dart';
 import 'features/chooseLocation/data/repos/choose_location_repos_imple.dart';
@@ -54,6 +57,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => UpdateProfileDataCubit (getIt.get<UpdateProfileDataRepoImpl>()) ),
         BlocProvider(create: (context) => SellAllBestViewCubit(getIt.get<SellAllBestViewRepoImpl>())..getSellAllBestView() ),
         BlocProvider(create: (context) => HomeCubit (getIt.get<HomeRepoImpl>())..getHome()),
+        BlocProvider(create: (context) => CompareCubit (getIt.get<CompareReposImpl>(), getIt.get<ProductDetailsRepoImpl>())),
        ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),

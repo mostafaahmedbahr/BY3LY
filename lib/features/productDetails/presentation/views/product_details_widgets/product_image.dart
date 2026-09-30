@@ -1,7 +1,9 @@
- import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
+  import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dart';
+import 'package:by3ly/features/compare/presentation/view_model/compare_states.dart';
+import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
 import 'package:easy_localization/easy_localization.dart';
- import '../../../../../main_importants.dart';
+  import '../../../../../main_importants.dart';
 
 class ProductImage extends StatelessWidget {
   const ProductImage({
@@ -36,7 +38,6 @@ class ProductImage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        var productDetailsCubit = context.read<ProductDetailsCubit>();
         return SizedBox(
           height: 300,
           width: double.infinity,
@@ -51,37 +52,84 @@ class ProductImage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: InkWell(
-                  onTap: () {
-                    if (state is! AddProductToCompareLoadingState) {
-                      productDetailsCubit.addProductToCompare(
-                          productId: productId
-                      );
-                    }
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (state is AddProductToCompareLoadingState)
-                        const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            color: AppColors.whiteColor,
-                            strokeWidth: 2,
+                child: BlocBuilder<CompareCubit, CompareStates>(
+                  builder: (context, compareState) {
+                    final compareCubit = CompareCubit.get(context);
+                    final inBasket = compareCubit.isInBasket(productId);
+                    return InkWell(
+                      onTap: () {
+                        final added =
+                            compareCubit.toggleBasket(productId);
+                        if (added) {
+                          if (compareCubit.basketIds.length >= 2) {
+                            context.pushNamed(Routes.compareView);
+                          } else {
+                            Toast.showSuccessToast(
+                              msg:
+                                  '${context.tr(LocaleKeys.addToCompare)} (${compareCubit.basketIds.length}/2)',
+                              context: context,
+                            );
+                          }
+                        } else {
+                          Toast.showSuccessToast(
+                            msg: context
+                                .tr(LocaleKeys.removeFromCompare),
+                            context: context,
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 9),
+                        decoration: BoxDecoration(
+                          color: inBasket
+                              ? AppColors.mainColor
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: inBasket
+                                ? AppColors.mainColor
+                                : const Color(0xFFE8E8E8),
+                            width: 1.2,
                           ),
-                        )
-                      else
-                        SvgPicture.asset(AppImages.cpmpration),
-                      const SizedBox(width: 10),
-                      Text(
-                        LocaleKeys.compration.tr(),
-                        style: AppStyles.textStyle12W600Gary.copyWith(
-                          color: AppColors.whiteColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              AppImages.cpmpration,
+                              width: 20,
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                inBasket
+                                    ? Colors.white
+                                    : AppColors.mainColor,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              LocaleKeys.compration.tr(),
+                              style: AppStyles.textStyle12W600Gary.copyWith(
+                                color: inBasket
+                                    ? Colors.white
+                                    : const Color(0xff1F2937),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
             ],

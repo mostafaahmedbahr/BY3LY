@@ -233,5 +233,15 @@ class ArLang {
     "yourComment": "اكتب تعليقك...",
     "submitRating": "إرسال التقييم",
     "pleaseSelectStars": "من فضلك اختر النجوم أولًا",
+    "comparison": "المقارنة",
+    "addToCompare": "أضف للمقارنة",
+    "removeFromCompare": "تمت الإزالة من المقارنة",
+    "compareMaxTwo": "يمكنك مقارنة منتجين فقط",
+    "pickSecondProduct": "اختر منتجًا آخر للمقارنة",
+    "oldPrice": "السعر قبل الخصم",
+    "rating": "التقييم",
+    "dateAdded": "تاريخ الإضافة",
+    "descriptionLabel": "الوصف",
+    "clearCompareConfirm": "مسح المنتجين من المقارنة؟",
   };
 }
