@@ -30,7 +30,11 @@ class AllSubCategoriesProductsViewBody extends StatelessWidget {
           }
           if (state is GetAllSubCategoriesProductsError) {
             return CustomErrorWidget(
-                error: state.message.toString(), onTap: () {});
+                error: state.message.toString(),
+                onTap: () => context
+                    .read<AllSubCategoriesProductsCubit>()
+                    .getAllSubCategoriesProducts(
+                        subCategoryId: subCategoryId));
           }
           return AllSubCategoriesProductsList(
             allSubCategoriesProductsList:

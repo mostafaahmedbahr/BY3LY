@@ -1,6 +1,5 @@
 import '../../../../../main_importants.dart';
-import '../../../../productDetails/presentation/views/product_details_view.dart';
-import '../../../data/models/all_sub_categories_products_model.dart';
+import 'package:by3ly/features/allSubCategoriesProducts/data/models/all_sub_categories_products_model.dart';
 
 class AllSubCategoriesProductsListItem extends StatelessWidget {
   const AllSubCategoriesProductsListItem({super.key, required this.product});

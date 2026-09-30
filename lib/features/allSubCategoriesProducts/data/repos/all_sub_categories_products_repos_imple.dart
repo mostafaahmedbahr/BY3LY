@@ -1,6 +1,7 @@
 import 'package:by3ly/core/errors/failure.dart';
  import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 
@@ -28,7 +29,10 @@ class AllSubCategoriesProductsReposImpl implements AllSubCategoriesProductsRepos
       );
       AllSubCategoriesProductsModel result = AllSubCategoriesProductsModel.fromJson(response.data);
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint(
+          'AllSubCategoriesProductsReposImpl getAllSubCategoriesProductsData error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

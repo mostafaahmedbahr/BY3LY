@@ -1,4 +1,35 @@
 
+String? _asString(dynamic v) => v?.toString();
+
+int? _asInt(dynamic v) {
+  if (v == null) return null;
+  if (v is int) return v;
+  if (v is double) return v.toInt();
+  if (v is String) return int.tryParse(v);
+  if (v is bool) return v ? 1 : 0;
+  return null;
+}
+
+double? _asDouble(dynamic v) {
+  if (v == null) return null;
+  if (v is double) return v;
+  if (v is int) return v.toDouble();
+  if (v is String) return double.tryParse(v);
+  return null;
+}
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is int) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 class AllSubCategoriesProductsModel {
   bool? status;
   String? message;
@@ -7,8 +38,8 @@ class AllSubCategoriesProductsModel {
   AllSubCategoriesProductsModel({this.status, this.message, this.data});
 
   AllSubCategoriesProductsModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
+    status = _asBool(json["status"]) ?? json["status"] == 1;
+    message = _asString(json["message"]);
     data = json["data"] == null ? null : Data.fromJson(json["data"]);
   }
 
@@ -76,14 +107,14 @@ class Products {
   Products({this.id, this.name, this.desc, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt});
 
   Products.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    name = json["name"]?.toString();
-    desc = json["desc"]?.toString();
+    id = _asInt(json["id"]);
+    name = _asString(json["name"]);
+    desc = _asString(json["desc"]);
     price = json["price"]?.toString();
 
     oldPrice = json["old_price"];
 
-    currency = json["currency"]?.toString();
+    currency = _asString(json["currency"]);
 
     listingType = json["listing_type"];
     listingTypeLabel = json["listing_type_label"];
@@ -95,43 +126,43 @@ class Products {
         ? null
         : Seller.fromJson(json["seller"]);
 
-    image = json["image"]?.toString();
+    image = _asString(json["image"]);
 
     location = json["location"];
     cityId = json["city_id"];
 
-    categoryId = json["category_id"];
+    categoryId = _asInt(json["category_id"]);
 
-    categoryType = json["category_type"]?.toString();
+    categoryType = _asString(json["category_type"]);
 
-    subCategoryId = json["sub_category_id"];
+    subCategoryId = _asInt(json["sub_category_id"]);
 
-    subCategory = json["sub_category"]?.toString();
+    subCategory = _asString(json["sub_category"]);
 
-    date = json["date"]?.toString();
+    date = _asString(json["date"]);
 
     images = json["images"] ?? [];
 
     // مهم جدًا
-    rate = json["rate"]?.toString();
+    rate = _asString(json["rate"]);
 
-    countCommenets = json["countCommenets"];
+    countCommenets = _asInt(json["countCommenets"]);
 
     commenets = json["commenets"] ?? [];
 
     reviews = json["reviews"] ?? [];
 
-    reviewsCount = json["reviews_count"];
+    reviewsCount = _asInt(json["reviews_count"]);
 
-    isFavourite = json["isFavourite"];
+    isFavourite = _asBool(json["isFavourite"]);
 
-    model = json["model"]?.toString();
+    model = _asString(json["model"]);
 
-    marka = json["marka"]?.toString();
+    marka = _asString(json["marka"]);
 
-    type = json["type"]?.toString();
+    type = _asString(json["type"]);
 
-    createdAt = json["created_at"]?.toString();
+    createdAt = _asString(json["created_at"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -189,12 +220,12 @@ class Seller {
   Seller({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
 
   Seller.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    name = json["name"];
-    image = json["image"];
-    phone = json["phone"];
-    rating = json["rating"];
-    reviewsCount = json["reviews_count"];
+    id = _asInt(json["id"]);
+    name = _asString(json["name"]);
+    image = _asString(json["image"]);
+    phone = _asString(json["phone"]);
+    rating = _asDouble(json["rating"]);
+    reviewsCount = _asInt(json["reviews_count"]);
   }
 
   Map<String, dynamic> toJson() {

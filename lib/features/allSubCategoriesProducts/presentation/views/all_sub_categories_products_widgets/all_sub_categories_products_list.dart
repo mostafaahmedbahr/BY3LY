@@ -1,6 +1,6 @@
 import 'package:by3ly/main_importants.dart';
+import 'package:by3ly/features/allSubCategoriesProducts/data/models/all_sub_categories_products_model.dart';
 import '../../../../../core/shared_widgets/container_search_widget.dart';
-import '../../../data/models/all_sub_categories_products_model.dart';
 import 'all_sub_categories_products_list_item.dart';
 
 class AllSubCategoriesProductsList extends StatelessWidget {

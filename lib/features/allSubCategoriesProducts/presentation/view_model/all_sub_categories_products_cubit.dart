@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../data/models/all_sub_categories_products_model.dart';
 import '../../data/repos/all_sub_categories_products_repos.dart';
@@ -18,10 +19,16 @@ class AllSubCategoriesProductsCubit extends Cubit<AllSubCategoriesProductsStates
     emit(GetAllSubCategoriesProductsLoading());
     var result = await allSubCategoriesProductsRepos!.getAllSubCategoriesProductsData(subCategoryId: subCategoryId);
     return result.fold((failure) {
+      debugPrint(
+          'AllSubCategoriesProductsCubit getAllSubCategoriesProducts failed: ${failure.errMessage}');
       emit(GetAllSubCategoriesProductsError(failure.errMessage));
     }, (data) {
       allSubCategoriesProductsModel = data;
-      allSubCategoriesProductsList = allSubCategoriesProductsList + allSubCategoriesProductsModel!.data!.products!;
+      final newProducts = data.data?.products;
+      if (newProducts != null) {
+        allSubCategoriesProductsList =
+            allSubCategoriesProductsList + newProducts;
+      }
       emit(GetAllSubCategoriesProductsSuccess(data));
     });
   }
