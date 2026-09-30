@@ -26,6 +26,17 @@ class _FavViewBodyState extends State<FavViewBody> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // The startup call may have run before login (401) or on a bad
+    // network, so fetch again when the tab is opened with no data.
+    final cubit = FavCubit.get(context);
+    if (cubit.favDataModel?.data?.favourites == null) {
+      cubit.getFavData();
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -116,16 +127,19 @@ class _FavViewBodyState extends State<FavViewBody> {
                     ),
                   );
                 }
-                return ListView.separated(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return FavItemWidget(
-                      favourite: items[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const CustomSizedBox(height: 10,);
-                  },
+                return RefreshIndicator(
+                  onRefresh: () => favCubit.getFavData(),
+                  child: ListView.separated(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return FavItemWidget(
+                        favourite: items[index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const CustomSizedBox(height: 10,);
+                    },
+                  ),
                 );
               },
 

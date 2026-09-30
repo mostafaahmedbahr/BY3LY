@@ -1,4 +1,27 @@
 
+String? _asString(dynamic v) => v?.toString();
+
+int? _asInt(dynamic v) {
+  if (v == null) return null;
+  if (v is int) return v;
+  if (v is double) return v.toInt();
+  if (v is String) return int.tryParse(v);
+  if (v is bool) return v ? 1 : 0;
+  return null;
+}
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is int) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 class FavDataModel {
   bool? status;
   String? message;
@@ -7,12 +30,8 @@ class FavDataModel {
   FavDataModel({this.status, this.message, this.data});
 
   FavDataModel.fromJson(Map<String, dynamic> json) {
-    if(json["status"] is bool) {
-      status = json["status"];
-    }
-    if(json["message"] is String) {
-      message = json["message"];
-    }
+    status = _asBool(json["status"]) ?? json["status"] == 1;
+    message = _asString(json["message"]);
     if(json["data"] is Map) {
       data = json["data"] == null ? null : Data.fromJson(json["data"]);
     }
@@ -105,87 +124,37 @@ class Favourites {
   Favourites({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
 
   Favourites.fromJson(Map<String, dynamic> json) {
-    if(json["id"] is num) {
-      id = (json["id"] as num).toInt();
-    }
-    if(json["unique_number"] is String) {
-      uniqueNumber = json["unique_number"];
-    }
-    if(json["name"] is String) {
-      name = json["name"];
-    }
-    if(json["desc"] is String) {
-      desc = json["desc"];
-    }
-    if(json["price"] is String) {
-      price = json["price"];
-    }
-    if(json["image"] is String) {
-      image = json["image"];
-    }
+    id = _asInt(json["id"]);
+    uniqueNumber = _asString(json["unique_number"]);
+    name = _asString(json["name"]);
+    desc = _asString(json["desc"]);
+    price = _asString(json["price"]);
+    image = _asString(json["image"]);
     if(json["images"] is List) {
       images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     }
-    if(json["rate"] is num) {
-      rate = (json["rate"] as num).toInt();
-    }
-    if(json["seller_rate"] is num) {
-      sellerRate = (json["seller_rate"] as num).toInt();
-    }
-    if(json["countCommenets"] is num) {
-      countCommenets = (json["countCommenets"] as num).toInt();
-    }
+    rate = _asInt(json["rate"]);
+    sellerRate = _asInt(json["seller_rate"]);
+    countCommenets = _asInt(json["countCommenets"]);
     if(json["commenets"] is List) {
       commenets = json["commenets"] ?? [];
     }
-    if(json["isFavourite"] is bool) {
-      isFavourite = json["isFavourite"];
-    }
-    if(json["model"] is String) {
-      model = json["model"];
-    }
-    if(json["marka"] is String) {
-      marka = json["marka"];
-    }
-    if(json["type"] is String) {
-      type = json["type"];
-    }
-    if(json["view"] is num) {
-      view = (json["view"] as num).toInt();
-    }
-    if(json["seller_id"] is num) {
-      sellerId = (json["seller_id"] as num).toInt();
-    }
-    if(json["seller_name"] is String) {
-      sellerName = json["seller_name"];
-    }
-    if(json["seller_image"] is String) {
-      sellerImage = json["seller_image"];
-    }
-    if(json["seller_phone"] is String) {
-      sellerPhone = json["seller_phone"];
-    }
-    if(json["lat"] is String) {
-      lat = json["lat"];
-    }
-    if(json["long"] is String) {
-      long = json["long"];
-    }
-    if(json["status"] is num) {
-      status = (json["status"] as num).toInt();
-    }
-    if(json["negotiable"] is num) {
-      negotiable = (json["negotiable"] as num).toInt();
-    }
-    if(json["communication"] is num) {
-      communication = (json["communication"] as num).toInt();
-    }
-    if(json["address"] is String) {
-      address = json["address"];
-    }
-    if(json["created_at"] is String) {
-      createdAt = json["created_at"];
-    }
+    isFavourite = _asBool(json["isFavourite"]) ?? true;
+    model = _asString(json["model"]);
+    marka = _asString(json["marka"]);
+    type = _asString(json["type"]);
+    view = _asInt(json["view"]);
+    sellerId = _asInt(json["seller_id"]);
+    sellerName = _asString(json["seller_name"]);
+    sellerImage = _asString(json["seller_image"]);
+    sellerPhone = _asString(json["seller_phone"]);
+    lat = _asString(json["lat"]);
+    long = _asString(json["long"]);
+    status = _asInt(json["status"]);
+    negotiable = _asInt(json["negotiable"]);
+    communication = _asInt(json["communication"]);
+    address = _asString(json["address"]);
+    createdAt = _asString(json["created_at"]);
   }
 
   static List<Favourites> fromList(List<Map<String, dynamic>> list) {
@@ -294,12 +263,8 @@ class Images {
   Images({this.id, this.image});
 
   Images.fromJson(Map<String, dynamic> json) {
-    if(json["id"] is num) {
-      id = (json["id"] as num).toInt();
-    }
-    if(json["image"] is String) {
-      image = json["image"];
-    }
+    id = _asInt(json["id"]);
+    image = _asString(json["image"]);
   }
 
   static List<Images> fromList(List<Map<String, dynamic>> list) {

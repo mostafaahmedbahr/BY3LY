@@ -1,5 +1,6 @@
 import 'package:by3ly/core/extensions/navigate.dart';
 import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
@@ -42,14 +43,27 @@ class FavItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(favourite.name ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff000000),
-                    ),),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(favourite.name ?? '',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff000000),
+                          ),),
+                      ),
+                      FavHeartButton(
+                        productId: favourite.id,
+                        initialIsFavourite: true,
+                        withBackground: false,
+                        iconSize: 22,
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       SvgPicture.asset(AppImages.location),

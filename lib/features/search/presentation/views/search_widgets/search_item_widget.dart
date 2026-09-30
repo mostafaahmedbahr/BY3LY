@@ -24,25 +24,13 @@ class SearchItemWidget extends StatelessWidget {
       },
       child: Row(
         children: [
-            Stack(
-              children: [
-                CustomNetWorkImage(
-                  imageUrl: "${product.image}",
-                  raduis: 10,
-                  fit: BoxFit.cover,
-                  width: 175,
-                  height: 120,
-                ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: FavHeartButton(
-                    productId: product.id,
-                    initialIsFavourite: product.isFavourite == true,
-                  ),
-                ),
-              ],
-            ),
+            CustomNetWorkImage(
+            imageUrl: "${product.image}",
+            raduis: 10,
+            fit: BoxFit.cover,
+            width: 175,
+            height: 120,
+          ),
           const  CustomSizedBox(width: 10,),
           Expanded(
             child: SizedBox(
@@ -51,14 +39,27 @@ class SearchItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Text( "${product.name}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff000000),
-                    ),),
+                   Row(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Expanded(
+                         child: Text( "${product.name}",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff000000),
+                          ),),
+                       ),
+                       FavHeartButton(
+                         productId: product.id,
+                         initialIsFavourite: product.isFavourite == true,
+                         withBackground: false,
+                         iconSize: 22,
+                       ),
+                     ],
+                   ),
                   Row(
                     children: [
                       SvgPicture.asset(AppImages.location),
