@@ -37,6 +37,7 @@ class EndPoints {
 
 
   static const getBanners = "getBanners";
+  static const products = "products";
 
 
 }

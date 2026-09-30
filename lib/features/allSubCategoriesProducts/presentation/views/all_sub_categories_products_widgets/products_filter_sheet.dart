@@ -63,6 +63,27 @@ class ProductsFilter {
   }
 }
 
+/// Opens the shared products filter bottom sheet and returns the
+/// filter picked by the user (or null if dismissed).
+Future<ProductsFilter?> showProductsFilterSheet({
+  required BuildContext context,
+  required ProductsFilter initial,
+  required List<String> availableTypes,
+}) {
+  return showModalBottomSheet<ProductsFilter>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.whiteColor,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => ProductsFilterSheet(
+      initial: initial,
+      availableTypes: availableTypes,
+    ),
+  );
+}
+
 /// Bottom sheet that lets the user pick type / price range / place
 /// (governorate + center from the shared cities list).
 class ProductsFilterSheet extends StatefulWidget {

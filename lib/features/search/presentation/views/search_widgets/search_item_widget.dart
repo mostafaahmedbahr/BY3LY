@@ -21,7 +21,7 @@ class SearchItemWidget extends StatelessWidget {
           PageTransition(
             type: PageTransitionType.fade,
             child:   ProductDetailsView(
-                productId: product.id!,
+                productId: product.id ?? 0,
                 type: "home",
             ),
           ),
@@ -56,22 +56,31 @@ class SearchItemWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AppImages.location),
                       const  CustomSizedBox(width: 5,),
-                      const Text("مدينة نصر",style: AppStyles.textStyle10W400Green,),
+                      Expanded(
+                        child: Text(
+                          (product.location?.toString().trim().isNotEmpty ?? false)
+                              ? product.location.toString()
+                              : "لا يوجد",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.textStyle10W400Green,
+                        ),
+                      ),
                     ],
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          Text("النوع ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ايجار",style: AppStyles.textStyle10W400Yellow,),
+                          const Text("النوع ",style: AppStyles.textStyle10W400Gray,),
+                          Text(" ${product.type ?? "-"}",style: AppStyles.textStyle10W400Yellow,),
                         ],
                       ),
                       Row(
                         children: [
-                          Text("الاثاث ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" مفروشة",style: AppStyles.textStyle10W400Yellow,),
+                          const Text("الاثاث ",style: AppStyles.textStyle10W400Gray,),
+                          Text(" ${product.model ?? "-"}", style: AppStyles.textStyle10W400Yellow,),
                         ],
                       ),
                     ],

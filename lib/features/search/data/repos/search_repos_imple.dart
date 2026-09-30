@@ -1,9 +1,8 @@
 import 'package:by3ly/core/errors/failure.dart';
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
 import 'package:by3ly/features/search/data/repos/search_repos.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
@@ -17,16 +16,18 @@ class SearchReposImpl implements SearchRepos {
 
 
   @override
-  Future<Either<Failure, AllProductsSearchModel>> getAllProductsForSearch() async{
+  Future<Either<Failure, AllProductsSearchModel>> getAllProductsForSearch({int page = 1}) async{
     try {
       var response = await apiService!.getData(
-        endPoint: EndPoints.searchProducts,
+        endPoint: EndPoints.products,
+        query: {'page': page},
       );
       AllProductsSearchModel result = AllProductsSearchModel.fromJson(response.data);
-      print(response.data);
-      print("SearchReposImpl getAllProductsForSearch");
+      debugPrint("SearchReposImpl getAllProductsForSearch page=$page");
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint('SearchReposImpl getAllProductsForSearch error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
