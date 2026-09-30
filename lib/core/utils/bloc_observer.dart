@@ -11,7 +11,9 @@ class SimpleBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    debugPrint(change.toString());
+    debugPrint(
+      '${bloc.runtimeType} Change { currentState: ${change.currentState}, nextState: ${change.nextState} }',
+    );
   }
 
   @override

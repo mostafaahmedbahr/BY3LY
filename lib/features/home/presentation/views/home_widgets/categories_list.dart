@@ -36,18 +36,23 @@ class CategoriesList extends StatelessWidget {
                 listener:(context ,state){} ,
                 builder: (context ,state){
                   var homeCubit = context.read<HomeCubit>();
+                  final categories =
+                      homeCubit.homeModel?.data?.categories ?? [];
+                  if (categories.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context , index){
                       return CategoriesListItem(
-                        image: homeCubit.homeModel!.data.categories[index].image,
-                        name: homeCubit.homeModel!.data.categories[index].name,
+                        image: categories[index].image ?? '',
+                        name: categories[index].name ?? '',
                       );
                     },
                     separatorBuilder: (context , index){
                       return   Gap(25.w);
                     },
-                    itemCount: homeCubit.homeModel!.data.categories.length,
+                    itemCount: categories.length,
                   );
                 }
 

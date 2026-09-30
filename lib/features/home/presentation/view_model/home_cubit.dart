@@ -1,4 +1,5 @@
-    import 'package:flutter_bloc/flutter_bloc.dart';
+    import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/add_remove_product_to_fav_model.dart';
 import '../../data/models/home_model.dart';
@@ -19,6 +20,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(GetHomeDataLoading());
     var result = await homeRepo!.getHomeData();
     return result.fold((failure) {
+      debugPrint('HomeCubit getHome failed: ${failure.errMessage}');
       emit(GetHomeDataError(failure.errMessage));
     }, (data) {
       homeModel = data;

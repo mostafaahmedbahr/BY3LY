@@ -6,7 +6,6 @@ import 'package:by3ly/main_importants.dart';
 import '../../../../../core/shared_widgets/container_search_widget.dart';
 import 'banner_ads.dart';
 import 'banner_to_login.dart';
-import 'best_view_products.dart';
 import 'home_loading_widget.dart';
 
 class HomeViewBody extends StatelessWidget {
@@ -16,11 +15,19 @@ class HomeViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeStates>(builder: (context, state) {
       var homeCubit = context.read<HomeCubit>();
-      return state is GetHomeDataLoading
-          ? const HomeLoadingWidget()
-          : state is GetHomeDataError
-              ? CustomErrorWidget(error: state.message.toString(), onTap: () {})
-              : ListView(
+      if (state is GetHomeDataLoading) {
+        return const HomeLoadingWidget();
+      }
+      if (state is GetHomeDataError) {
+        return CustomErrorWidget(
+          error: state.message.toString(),
+          onTap: () => context.read<HomeCubit>().getHome(),
+        );
+      }
+      final ads = homeCubit.homeModel?.data?.ads;
+      final firstAdImages =
+          (ads != null && ads.isNotEmpty) ? ads[0].images : null;
+      return ListView(
                   children: [
                     /// search
                     Padding(
@@ -35,33 +42,34 @@ class HomeViewBody extends StatelessWidget {
                     const BannerToLogin(),
 
                     /// BannerAds1
-                    if(homeCubit.homeModel!.data.ads[0].images.isNotEmpty)...[
+                    if (firstAdImages != null &&
+                        firstAdImages.isNotEmpty) ...[
                       BannerAds(
-                        images: homeCubit.homeModel!.data.ads[0].images,
+                        images: firstAdImages,
                       ),
                       Gap(10.h),
                     ],
-                    /// bestView
-                    BestViewProducts(
-                      bestView: homeCubit.homeModel!.data.bestView,
-                    ),
-                    Gap(10.h),
-
-                    /// BannerAds2
-                    if(homeCubit.homeModel!.data.ads[1].images.isNotEmpty)...[
-                      BannerAds(
-                        images: homeCubit.homeModel!.data.ads[1].images,
-                      ),
-                      Gap(10.h),
-                    ],
-
-                    /// BannerAds3
-                    if(homeCubit.homeModel!.data.ads[2].images.isNotEmpty)...[
-                      BannerAds(
-                        images: homeCubit.homeModel!.data.ads[2].images,
-                      ),
-                      Gap(10.h),
-                    ],
+                    // /// bestView
+                    // BestViewProducts(
+                    //   bestView: homeCubit.homeModel!.data.bestView,
+                    // ),
+                    // Gap(10.h),
+                    //
+                    // /// BannerAds2
+                    // if(homeCubit.homeModel!.data.ads[1].images.isNotEmpty)...[
+                    //   BannerAds(
+                    //     images: homeCubit.homeModel!.data.ads[1].images,
+                    //   ),
+                    //   Gap(10.h),
+                    // ],
+                    //
+                    // /// BannerAds3
+                    // if(homeCubit.homeModel!.data.ads[2].images.isNotEmpty)...[
+                    //   BannerAds(
+                    //     images: homeCubit.homeModel!.data.ads[2].images,
+                    //   ),
+                    //   Gap(10.h),
+                    // ],
                   ],
                 );
     });

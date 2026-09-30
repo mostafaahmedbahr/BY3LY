@@ -45,7 +45,7 @@ class Products {
   int? id;
   String? name;
   String? desc;
-  String? price;
+  dynamic price;
   dynamic oldPrice;
   String? currency;
   dynamic listingType;

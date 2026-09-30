@@ -100,7 +100,8 @@ class HomeLoadingWidget extends StatelessWidget {
               ),
               margin: EdgeInsets.all(10.0),
             ),
-            autoplay: true,
+            loop: false,
+            autoplay: false,
           ),
         ),
         const SizedBox(
@@ -176,7 +177,8 @@ class HomeLoadingWidget extends StatelessWidget {
               ),
               margin: EdgeInsets.all(10.0),
             ),
-            autoplay: true,
+            loop: false,
+            autoplay: false,
           ),
         ),
         const SizedBox(
@@ -202,7 +204,8 @@ class HomeLoadingWidget extends StatelessWidget {
               ),
               margin: EdgeInsets.all(10.0),
             ),
-            autoplay: true,
+            loop: false,
+            autoplay: false,
           ),
         ),
         const SizedBox(

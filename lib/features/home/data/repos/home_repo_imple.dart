@@ -3,6 +3,7 @@ import 'package:by3ly/features/home/data/models/add_remove_product_to_fav_model.
 import 'package:by3ly/features/home/data/models/home_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import 'home_repo.dart';
@@ -23,7 +24,9 @@ class HomeRepoImpl implements HomeRepo {
       );
       HomeModel result = HomeModel.fromJson(response.data);
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint('HomeRepoImpl getHomeData parse/network error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

@@ -36,4 +36,7 @@ class EndPoints {
   static const changePassword = "changePassword";
 
 
+  static const getBanners = "getBanners";
+
+
 }
