@@ -222,5 +222,10 @@ class ArLang {
     "updateProfileData": "تعديل بيانات الملف الشخصي",
     "profilePhoto": "صورة الملف الشخصي",
     "delete": "حذف",
+    "filter": "تصفية",
+    "apply": "تطبيق",
+    "clearAll": "مسح الكل",
+    "place": "المكان",
+    "noResults": "لا توجد نتائج، جرّب تغيير البحث أو الفلاتر",
   };
 }

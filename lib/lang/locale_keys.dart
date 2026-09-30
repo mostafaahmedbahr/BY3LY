@@ -233,6 +233,11 @@ abstract class LocaleKeys {
   static const goBackExit = "goBackExit";
   static const allProducts = "allProducts";
   static const sellerData = "sellerData";
+  static const filter = "filter";
+  static const apply = "apply";
+  static const clearAll = "clearAll";
+  static const place = "place";
+  static const noResults = "noResults";
 
 
 

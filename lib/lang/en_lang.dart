@@ -222,5 +222,10 @@ class EnLang {
     "updateProfileData": "Update Profile Data",
     "profilePhoto": "Profile Photo",
     "delete": "Delete",
+    "filter": "Filter",
+    "apply": "Apply",
+    "clearAll": "Clear all",
+    "place": "Location",
+    "noResults": "No results found, try changing search or filters",
   };
 }
