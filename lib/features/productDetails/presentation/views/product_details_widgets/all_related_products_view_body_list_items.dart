@@ -15,7 +15,7 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 0.62,
+        childAspectRatio: 0.64,
       ),
       itemCount: relatedProducts?.length ?? 0,
       itemBuilder: (context, index) {
@@ -28,6 +28,7 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
           model: item.model,
           price: item.price,
           date: item.createdAt,
+          rating: item.rate,
           productId: item.id,
           initialIsFavourite: item.isFavourite == true,
           onTap: () {

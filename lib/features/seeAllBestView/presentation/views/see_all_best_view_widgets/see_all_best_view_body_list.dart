@@ -24,11 +24,12 @@ class SeeAllBestViewBodyList extends StatelessWidget {
             onTap: (){});
       }
       return GridView.builder(
+            padding: const EdgeInsets.only(bottom: 12),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
-              childAspectRatio: 0.7,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.66,
             ),
             itemCount: sellAllBestViewCubit.sellAllBestViewModel!.data!.products!.length,
             itemBuilder: (context, index) {

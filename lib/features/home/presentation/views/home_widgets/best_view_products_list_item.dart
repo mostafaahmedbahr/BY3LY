@@ -15,8 +15,9 @@ class BestViewProductsListItem extends StatelessWidget {
        location: bestView.location?.toString(),
        type: bestView.type,
        model: bestView.model,
-       price: bestView.price,
-       date: bestView.createdAt,
+      price: bestView.price,
+      date: bestView.createdAt,
+      rating: bestView.rate?.toString(),
        productId: bestView.id,
        initialIsFavourite: bestView.isFavourite == true,
        onTap: () {

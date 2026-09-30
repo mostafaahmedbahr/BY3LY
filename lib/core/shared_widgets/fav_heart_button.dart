@@ -17,6 +17,7 @@ class FavHeartButton extends StatefulWidget {
     this.size = 30,
     this.iconSize = 18,
     this.withBackground = true,
+    this.favIconColor = AppColors.redColor,
   });
 
   /// Null-safe: renders nothing when the product has no id.
@@ -27,6 +28,9 @@ class FavHeartButton extends StatefulWidget {
   final double size;
   final double iconSize;
   final bool withBackground;
+
+  /// Colour of the heart when favourited (white when sitting on a red bubble).
+  final Color favIconColor;
 
   @override
   State<FavHeartButton> createState() => _FavHeartButtonState();
@@ -93,12 +97,12 @@ class _FavHeartButtonState extends State<FavHeartButton> {
           duration: const Duration(milliseconds: 250),
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
-          child: Icon(
-            key: ValueKey(isFav),
-            isFav ? Icons.favorite : Icons.favorite_border,
-            color: isFav ? AppColors.redColor : Colors.grey,
-            size: widget.iconSize,
-          ),
+                child: Icon(
+                  key: ValueKey(isFav),
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: isFav ? widget.favIconColor : Colors.grey,
+                  size: widget.iconSize,
+                ),
         );
         if (!widget.withBackground) {
           return InkWell(onTap: _onTap, child: icon);

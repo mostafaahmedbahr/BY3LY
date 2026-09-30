@@ -27,6 +27,7 @@ class RelatedProductsList extends StatelessWidget {
               model: item.model,
               price: item.price,
               date: item.createdAt,
+              rating: item.rate,
               productId: item.id,
               initialIsFavourite: item.isFavourite == true,
               imageHeight: 110,

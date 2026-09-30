@@ -17,6 +17,7 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
       model: product.model,
       price: product.price?.toString(),
       date: product.createdAt?.toString(),
+      rating: product.rate?.toString(),
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
       onTap: () {

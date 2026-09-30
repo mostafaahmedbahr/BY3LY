@@ -17,6 +17,7 @@ class SeeAllBestViewBodyListItem extends StatelessWidget {
       model: product.model,
       price: product.price,
       date: product.createdAt,
+      rating: product.rate?.toString(),
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
       onTap: () {

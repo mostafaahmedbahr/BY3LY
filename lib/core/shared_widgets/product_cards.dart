@@ -2,140 +2,89 @@ import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
-import 'package:by3ly/core/utils/app_styles/app_styles.dart';
+import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
+import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ---------------------------------------------------------------------------
-// Unified product identity used in EVERY place products appear.
-// Signature look: soft 16-radius white card, cover image, price pill
-// floating over the image, heart in a white circular button.
+// Modern unified product identity used in EVERY place products appear.
+//
+// Clean white cards, hairline borders, image-forward layout, dark bold
+// prices, minimal heart buttons. No heavy shadows, no coloured pills.
 // ---------------------------------------------------------------------------
 
 List<BoxShadow> get _cardShadow => [
       BoxShadow(
-        color: Colors.black.withValues(alpha: 0.07),
-        blurRadius: 12,
-        offset: const Offset(0, 3),
+        color: Colors.black.withValues(alpha: 0.04),
+        blurRadius: 10,
+        offset: const Offset(0, 4),
       ),
     ];
 
-/// Small white pill carrying the price, floating over the image bottom.
-class _PricePill extends StatelessWidget {
-  const _PricePill({required this.price});
+const _cardBorder = BorderSide(color: Color(0xFFF0F0F0), width: 1);
 
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Text(
-        price,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-          color: AppColors.mainColor,
-        ),
-      ),
-    );
-  }
-}
-
-/// White circular heart button with a soft shadow.
-class _HeartBubble extends StatelessWidget {
-  const _HeartBubble({
+/// Minimal heart: white circle, hairline frame (always), grey outline
+/// heart that flips to a solid red heart instantly on toggle.
+class _MinimalHeart extends StatefulWidget {
+  const _MinimalHeart({
     required this.productId,
     required this.initialIsFavourite,
+    this.size = 32,
+    this.iconSize = 18,
   });
 
   final int? productId;
   final bool initialIsFavourite;
+  final double size;
+  final double iconSize;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      width: 32,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        // Permanent frame around the heart mark.
-        border: Border.all(
-          color: const Color(0xFFE0E0E0),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Center(
-        child: FavHeartButton(
-          productId: productId,
-          initialIsFavourite: initialIsFavourite,
-          withBackground: false,
-          iconSize: 18,
-        ),
-      ),
-    );
-  }
+  State<_MinimalHeart> createState() => _MinimalHeartState();
 }
 
-/// Framed heart for row cards: white circle with a permanent frame.
-class _FramedHeart extends StatelessWidget {
-  const _FramedHeart({
-    required this.productId,
-    required this.initialIsFavourite,
-  });
-
-  final int? productId;
-  final bool initialIsFavourite;
+class _MinimalHeartState extends State<_MinimalHeart> {
+  bool? _localFav;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 34,
-      width: 34,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color(0xFFE0E0E0),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+    return BlocConsumer<FavCubit, FavStates>(
+      listener: (context, state) {
+        if (state is FavToggleSuccess &&
+            state.productId == widget.productId) {
+          setState(() => _localFav = state.isNowFavourite);
+        } else if (state is FavToggleError) {
+          setState(() => _localFav = null);
+        }
+      },
+      builder: (context, state) {
+        final cubit = FavCubit.get(context);
+        final isFav = _localFav ??
+            cubit.isFavourite(widget.productId) ||
+                widget.initialIsFavourite;
+        return Container(
+          height: widget.size,
+          width: widget.size,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color:
+                  isFav ? AppColors.redColor : const Color(0xFFE8E8E8),
+              width: 1.2,
+            ),
           ),
-        ],
-      ),
-      child: Center(
-        child: FavHeartButton(
-          productId: productId,
-          initialIsFavourite: initialIsFavourite,
-          withBackground: false,
-          iconSize: 19,
-        ),
-      ),
+          child: Center(
+            child: FavHeartButton(
+              productId: widget.productId,
+              initialIsFavourite: widget.initialIsFavourite,
+              withBackground: false,
+              iconSize: widget.iconSize,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -154,12 +103,32 @@ Widget _locationRow(String? location) {
           (location?.trim().isNotEmpty ?? false) ? location! : "لا يوجد",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppStyles.textStyle10W400Green,
+          style: const TextStyle(fontSize: 11, color: Color(0xff9AA0A6)),
         ),
       ),
     ],
   );
 }
+
+Widget _ratingChip(String rating) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      const Icon(Icons.star_rounded, size: 14, color: AppColors.yellowColor),
+      const SizedBox(width: 2),
+      Text(
+        rating,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: Color(0xff1F2937),
+        ),
+      ),
+    ],
+  );
+}
+
+bool _hasValue(String? v) => v?.trim().isNotEmpty ?? false;
 
 /// Shared horizontal product card used everywhere products are listed
 /// in rows (search, favourites, seller products...).
@@ -205,27 +174,18 @@ class ProductRowCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.fromBorderSide(_cardBorder),
           boxShadow: _cardShadow,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                CustomNetWorkImage(
-                  imageUrl: imageUrl,
-                  raduis: 12,
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 118,
-                ),
-                if ((price?.trim().isNotEmpty ?? false))
-                  Positioned(
-                    bottom: 8,
-                    right: 8,
-                    child: _PricePill(price: price!),
-                  ),
-              ],
+            CustomNetWorkImage(
+              imageUrl: imageUrl,
+              raduis: 12,
+              fit: BoxFit.cover,
+              width: 104,
+              height: 116,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -238,83 +198,64 @@ class ProductRowCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.35,
+                      fontSize: 13.5,
+                      height: 1.4,
                       fontWeight: FontWeight.w600,
                       color: Color(0xff1F2937),
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 4),
                   _locationRow(location),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 4),
                   Text(
                     [type, model]
                         .where((e) => (e?.trim().isNotEmpty ?? false))
-                        .join(' • '),
+                        .join('  •  '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppStyles.textStyle10W400Gray,
+                    style: const TextStyle(
+                        fontSize: 11, color: Color(0xff9AA0A6)),
                   ),
                   const SizedBox(height: 6),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              date ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  AppStyles.textStyle10W400Green.copyWith(
-                                color: const Color(0xff9AA0A6),
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          price ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xff1F2937),
+                          ),
                         ),
                       ),
-                      if ((rating?.trim().isNotEmpty ?? false) &&
-                          rating != '-')
-                        Container(
-                          margin: const EdgeInsets.only(left: 6, right: 6),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 7, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFFF8E6),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                size: 13,
-                                color: AppColors.yellowColor,
-                              ),
-                              const SizedBox(width: 3),
-                              Text(
-                                rating!,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff1F2937),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (productId != null)
-                        _FramedHeart(
+                      if (_hasValue(rating) && rating != '-')
+                        _ratingChip(rating!),
+                      if (productId != null) ...[
+                        const SizedBox(width: 8),
+                        _MinimalHeart(
                           productId: productId,
                           initialIsFavourite: initialIsFavourite,
+                          size: 34,
+                          iconSize: 19,
                         ),
+                      ],
                     ],
                   ),
+                  if (_hasValue(date)) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      date!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 10, color: Color(0xffB0B5BB)),
+                    ),
+                  ],
                   if (bottomWidget != null) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     bottomWidget!,
                   ],
                 ],
@@ -329,7 +270,7 @@ class ProductRowCard extends StatelessWidget {
 
 /// Shared vertical product card used everywhere products are shown
 /// in grids / horizontal lists (home best-view, sub-category, see-all,
-/// related...). Price pill floats over the image, heart in a white bubble.
+/// related...). Image bleeds to the card edges, heart floats on top.
 class ProductGridCard extends StatelessWidget {
   const ProductGridCard({
     super.key,
@@ -340,9 +281,10 @@ class ProductGridCard extends StatelessWidget {
     this.model,
     this.price,
     this.date,
+    this.rating,
     this.productId,
     this.initialIsFavourite = false,
-    this.imageHeight = 128,
+    this.imageHeight = 132,
     required this.onTap,
   });
 
@@ -353,6 +295,7 @@ class ProductGridCard extends StatelessWidget {
   final String? model;
   final String? price;
   final String? date;
+  final String? rating;
   final int? productId;
   final bool initialIsFavourite;
   final double imageHeight;
@@ -364,10 +307,10 @@ class ProductGridCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.fromBorderSide(_cardBorder),
           boxShadow: _cardShadow,
         ),
         child: Column(
@@ -376,81 +319,80 @@ class ProductGridCard extends StatelessWidget {
           children: [
             Stack(
               children: [
-                CustomNetWorkImage(
-                  imageUrl: imageUrl,
-                  raduis: 12,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: imageHeight,
-                ),
-                // Soft bottom scrim so the pill + heart sit comfortably.
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.10),
-                        ],
-                        stops: const [0.7, 1.0],
-                      ),
-                    ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: CustomNetWorkImage(
+                    imageUrl: imageUrl,
+                    raduis: 0,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: imageHeight,
                   ),
                 ),
                 if (productId != null)
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: _HeartBubble(
+                    child: _MinimalHeart(
                       productId: productId,
                       initialIsFavourite: initialIsFavourite,
                     ),
                   ),
-                if ((price?.trim().isNotEmpty ?? false))
-                  Positioned(
-                    bottom: 8,
-                    right: 8,
-                    child: _PricePill(price: price!),
-                  ),
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 12,
-                height: 1.35,
-                fontWeight: FontWeight.w500,
-                color: Color(0xff1F2937),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      height: 1.35,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff1F2937),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  _locationRow(location),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          price ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xff1F2937),
+                          ),
+                        ),
+                      ),
+                      if (_hasValue(rating) && rating != '-')
+                        _ratingChip(rating!),
+                    ],
+                  ),
+                  if (_hasValue(date)) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      date!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 10, color: Color(0xffB0B5BB)),
+                    ),
+                  ],
+                ],
               ),
             ),
-            const SizedBox(height: 4),
-            _locationRow(location),
-            const SizedBox(height: 2),
-            Text(
-              [type, model]
-                  .where((e) => (e?.trim().isNotEmpty ?? false))
-                  .join(' • '),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppStyles.textStyle10W400Gray,
-            ),
-            if (date?.trim().isNotEmpty ?? false) ...[
-              const SizedBox(height: 2),
-              Text(
-                date!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppStyles.textStyle10W400Green.copyWith(
-                  color: const Color(0xff9AA0A6),
-                ),
-              ),
-            ],
           ],
         ),
       ),
