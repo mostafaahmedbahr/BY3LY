@@ -26,22 +26,35 @@ class FavItemWidget extends StatelessWidget {
           "productId": favourite.id ?? 0,
         });
       },
-      child: Row(
-        children: [
-          CustomNetWorkImage(
-            imageUrl: favourite.image ?? '',
-            raduis: 10,
-            fit: BoxFit.cover,
-            width: 175,
-            height: 120,
-          ),
-          const  CustomSizedBox(width: 10,),
-          Expanded(
-            child: SizedBox(
-              height: 120,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomNetWorkImage(
+              imageUrl: favourite.image ?? '',
+              raduis: 10,
+              fit: BoxFit.cover,
+              width: 110,
+              height: 132,
+            ),
+            const CustomSizedBox(width: 12,),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +64,9 @@ class FavItemWidget extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff000000),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff1F2937),
                           ),),
                       ),
                       FavHeartButton(
@@ -64,10 +77,15 @@ class FavItemWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const CustomSizedBox(height: 4,),
                   Row(
                     children: [
-                      SvgPicture.asset(AppImages.location),
-                      const  CustomSizedBox(width: 5,),
+                      SvgPicture.asset(
+                        AppImages.location,
+                        width: 14,
+                        height: 14,
+                      ),
+                      const CustomSizedBox(width: 4,),
                       Expanded(
                         child: Text(
                           (favourite.address?.trim().isNotEmpty ?? false)
@@ -80,28 +98,33 @@ class FavItemWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                    Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  const CustomSizedBox(height: 4,),
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(" ${LocaleKeys.type.tr()}",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${favourite.type ?? "-"}",style: AppStyles.textStyle10W400Yellow,),
-                        ],
+                      Text(" ${LocaleKeys.type.tr()}", style: AppStyles.textStyle10W400Gray,),
+                      Expanded(
+                        child: Text(" ${favourite.type ?? "-"}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.textStyle10W400Yellow,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          const Text("الاثاث ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${favourite.model ?? "-"}",style: AppStyles.textStyle10W400Yellow,),
-                        ],
+                      const Text("الاثاث ", style: AppStyles.textStyle10W400Gray,),
+                      Text(" ${favourite.model ?? "-"}",
+                        style: AppStyles.textStyle10W400Yellow,
                       ),
                     ],
                   ),
+                  const CustomSizedBox(height: 6,),
                   Text(favourite.price ?? '',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      )),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.mainColor,
+                    )),
+                  const CustomSizedBox(height: 4,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -113,25 +136,13 @@ class FavItemWidget extends StatelessWidget {
                             color: const Color(0xff7A7A7A),
                           ),),
                       ),
-                      InkWell(
-                        onTap: (){
-                          if (favourite.id != null) {
-                            FavCubit.get(context).removeProductFromFav(
-                                productId: favourite.id!);
-                          }
-                        },
-                        child: Text(LocaleKeys.removerFromFav.tr(),
-                          style: AppStyles.textStyle12W600Gary.copyWith(
-                            color: AppColors.redColor,
-                          ),),
-                      ),
                     ],
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/search/data/models/all_products_search_model.dart';
 import 'package:flutter/material.dart';
@@ -22,48 +23,67 @@ class SearchItemWidget extends StatelessWidget {
           "productId": product.id ?? 0,
         });
       },
-      child: Row(
-        children: [
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             CustomNetWorkImage(
-            imageUrl: "${product.image}",
-            raduis: 10,
-            fit: BoxFit.cover,
-            width: 175,
-            height: 120,
-          ),
-          const  CustomSizedBox(width: 10,),
-          Expanded(
-            child: SizedBox(
-              height: 120,
+              imageUrl: product.image ?? '',
+              raduis: 10,
+              fit: BoxFit.cover,
+              width: 110,
+              height: 124,
+            ),
+            const CustomSizedBox(width: 12,),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                   Row(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Expanded(
-                         child: Text( "${product.name}",
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(product.name ?? '',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff000000),
-                          ),),
-                       ),
-                       FavHeartButton(
-                         productId: product.id,
-                         initialIsFavourite: product.isFavourite == true,
-                         withBackground: false,
-                         iconSize: 22,
-                       ),
-                     ],
-                   ),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff1F2937),
+                          ),
+                        ),
+                      ),
+                      FavHeartButton(
+                        productId: product.id,
+                        initialIsFavourite: product.isFavourite == true,
+                        withBackground: false,
+                        iconSize: 22,
+                      ),
+                    ],
+                  ),
+                  const CustomSizedBox(height: 4,),
                   Row(
                     children: [
-                      SvgPicture.asset(AppImages.location),
-                      const  CustomSizedBox(width: 5,),
+                      SvgPicture.asset(
+                        AppImages.location,
+                        width: 14,
+                        height: 14,
+                      ),
+                      const CustomSizedBox(width: 4,),
                       Expanded(
                         child: Text(
                           (product.location?.toString().trim().isNotEmpty ?? false)
@@ -76,37 +96,48 @@ class SearchItemWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const CustomSizedBox(height: 4,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          const Text("النوع ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${product.type ?? "-"}",style: AppStyles.textStyle10W400Yellow,),
-                        ],
+                      const Text("النوع ", style: AppStyles.textStyle10W400Gray,),
+                      Expanded(
+                        child: Text(product.type ?? "-",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.textStyle10W400Yellow,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          const Text("الاثاث ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${product.model ?? "-"}", style: AppStyles.textStyle10W400Yellow,),
-                        ],
+                      const Text("الاثاث ", style: AppStyles.textStyle10W400Gray,),
+                      Text(product.model ?? "-",
+                        style: AppStyles.textStyle10W400Yellow,
                       ),
                     ],
                   ),
-                   Text( "${product.price}",
-                      style:const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Text( "${product.createdAt}",
-                    style: AppStyles.textStyle10W400Green.copyWith(
-                      color: const Color(0xff7A7A7A),
-                    ),),
+                  const CustomSizedBox(height: 6,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(product.price ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.mainColor,
+                          )),
+                      ),
+                      Text(product.createdAt ?? '',
+                        style: AppStyles.textStyle10W400Green.copyWith(
+                          color: const Color(0xff7A7A7A),
+                        ),),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

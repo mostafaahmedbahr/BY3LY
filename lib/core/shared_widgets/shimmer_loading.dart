@@ -12,16 +12,15 @@ class SimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.greyColor.withOpacity(0.5),
-      highlightColor: AppColors.greyColor.withOpacity(0.2),
+      // Calm, soft loading shimmer (no harsh grey/teal flashing).
+      baseColor: const Color(0xFFECEFF1),
+      highlightColor: const Color(0xFFFAFBFC),
+      period: const Duration(milliseconds: 1600),
       child: Container(
         width: width ?? double.infinity,
         height: height?? double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.mainColor,
-          border: Border.all(
-            color: AppColors.greyColor.withOpacity(0.5),
-          ),
+          color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(raduis ?? 10),
         ),
       ),
