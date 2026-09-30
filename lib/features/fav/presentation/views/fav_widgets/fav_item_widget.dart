@@ -17,6 +17,7 @@ class FavItemWidget extends StatelessWidget {
       model: favourite.model,
       price: favourite.price,
       date: favourite.createdAt,
+      rating: favourite.rate?.toString(),
       productId: favourite.id,
       initialIsFavourite: true,
       onTap: () {

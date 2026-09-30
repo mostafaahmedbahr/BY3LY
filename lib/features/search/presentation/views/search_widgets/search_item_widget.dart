@@ -17,6 +17,7 @@ class SearchItemWidget extends StatelessWidget {
       model: product.model,
       price: product.price,
       date: product.createdAt,
+      rating: product.rate,
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
       onTap: () {

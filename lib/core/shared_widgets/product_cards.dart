@@ -173,6 +173,7 @@ class ProductRowCard extends StatelessWidget {
     this.model,
     this.price,
     this.date,
+    this.rating,
     this.productId,
     this.initialIsFavourite = false,
     this.bottomWidget,
@@ -186,6 +187,7 @@ class ProductRowCard extends StatelessWidget {
   final String? model;
   final String? price;
   final String? date;
+  final String? rating;
   final int? productId;
   final bool initialIsFavourite;
 
@@ -215,7 +217,7 @@ class ProductRowCard extends StatelessWidget {
                   raduis: 12,
                   fit: BoxFit.cover,
                   width: 100,
-                  height: 112,
+                  height: 118,
                 ),
                 if ((price?.trim().isNotEmpty ?? false))
                   Positioned(
@@ -231,32 +233,16 @@ class ProductRowCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              height: 1.35,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff1F2937),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      if (productId != null)
-                        _FramedHeart(
-                          productId: productId,
-                          initialIsFavourite: initialIsFavourite,
-                        ),
-                    ],
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 1.35,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff1F2937),
+                    ),
                   ),
                   const SizedBox(height: 3),
                   _locationRow(location),
@@ -269,14 +255,63 @@ class ProductRowCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.textStyle10W400Gray,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    date ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppStyles.textStyle10W400Green.copyWith(
-                      color: const Color(0xff9AA0A6),
-                    ),
+                  const SizedBox(height: 6),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              date ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  AppStyles.textStyle10W400Green.copyWith(
+                                color: const Color(0xff9AA0A6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if ((rating?.trim().isNotEmpty ?? false) &&
+                          rating != '-')
+                        Container(
+                          margin: const EdgeInsets.only(left: 6, right: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xffFFF8E6),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                size: 13,
+                                color: AppColors.yellowColor,
+                              ),
+                              const SizedBox(width: 3),
+                              Text(
+                                rating!,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff1F2937),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (productId != null)
+                        _FramedHeart(
+                          productId: productId,
+                          initialIsFavourite: initialIsFavourite,
+                        ),
+                    ],
                   ),
                   if (bottomWidget != null) ...[
                     const SizedBox(height: 4),
