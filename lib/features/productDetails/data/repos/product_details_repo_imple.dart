@@ -1,11 +1,12 @@
 import 'package:by3ly/core/errors/failure.dart';
+import 'package:by3ly/features/productDetails/data/models/add_product_to_compare_model.dart';
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
  import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
-import '../models/add_product_to_compare_model.dart';
-import '../models/product_details_model.dart';
 
 
 class ProductDetailsRepoImpl implements ProductDetailsRepo {
@@ -28,7 +29,9 @@ class ProductDetailsRepoImpl implements ProductDetailsRepo {
       );
       ProductDetailsModel result = ProductDetailsModel.fromJson(response.data);
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint('ProductDetailsRepoImpl getProductDetailsData error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -52,7 +55,9 @@ class ProductDetailsRepoImpl implements ProductDetailsRepo {
       );
       AddProductToCompareModel result = AddProductToCompareModel.fromJson(response.data);
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint('ProductDetailsRepoImpl addProductToCompare error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

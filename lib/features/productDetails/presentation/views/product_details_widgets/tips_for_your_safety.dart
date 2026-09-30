@@ -1,7 +1,6 @@
+import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-import '../../view_model/product_details_cubit.dart';
 
 class TipsForYourSafety extends StatelessWidget {
   const TipsForYourSafety({super.key});

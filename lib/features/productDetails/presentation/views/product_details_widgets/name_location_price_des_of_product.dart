@@ -1,8 +1,7 @@
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:easy_localization/easy_localization.dart';
- import 'package:flutter_svg/svg.dart';
 import 'package:readmore/readmore.dart';
 import '../../../../../main_importants.dart';
-import '../../../data/models/product_details_model.dart';
 
 class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
   const NameAndLocationAndPriceAndDesOfProduct({super.key, this.product});
@@ -26,7 +25,9 @@ class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
               width: 10,
             ),
             Text(
-              "${product!.address}",
+              (product?.location?.toString().trim().isNotEmpty ?? false)
+                  ? product!.location.toString()
+                  : "لا يوجد",
               style: AppStyles.textStyle14W500White
                   .copyWith(color: AppColors.mainColor),
             ),

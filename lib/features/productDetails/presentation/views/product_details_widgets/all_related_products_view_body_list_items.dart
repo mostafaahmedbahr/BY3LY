@@ -1,8 +1,6 @@
-import 'package:flutter_svg/svg.dart';
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../data/models/product_details_model.dart';
-import '../product_details_view.dart';
 
 class AllRelatedProductsViewBodyListItems extends StatelessWidget {
   const AllRelatedProductsViewBodyListItems({super.key, this.relatedProducts});
@@ -17,32 +15,28 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
         crossAxisSpacing: 20,
         childAspectRatio: 0.7,
       ),
-      itemCount: relatedProducts!.length,
+      itemCount: relatedProducts?.length ?? 0,
       itemBuilder: (context, index) {
+        final item = relatedProducts![index];
         return InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                child:   ProductDetailsView(
-                    productId: relatedProducts![index].id!,
-                    type: "home"),
-              ),
-            );
+            context.pushNamed(Routes.productDetailsView, arguments: {
+              "type": "home",
+              "productId": item.id ?? 0,
+            });
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomNetWorkImage(
-                imageUrl: "${relatedProducts![index].image}",
+                imageUrl: "${item.image}",
                 raduis: 10,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 120,
               ),
               const SizedBox(height: 10,),
-              Text("${relatedProducts![index].name}",
+              Text("${item.name}",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -55,7 +49,16 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
                 children: [
                   SvgPicture.asset(AppImages.location),
                   const SizedBox(width: 5,),
-                  const Text("مدينة نصر", style: AppStyles.textStyle10W400Green,),
+                  Expanded(
+                    child: Text(
+                      (item.location?.toString().trim().isNotEmpty ?? false)
+                          ? item.location.toString()
+                          : "لا يوجد",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppStyles.textStyle10W400Green,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 5,),
@@ -65,25 +68,25 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
                   Row(
                     children: [
                       const Text("النوع ", style: AppStyles.textStyle10W400Gray,),
-                      Text("${relatedProducts![index].type}", style: AppStyles.textStyle10W400Yellow,),
+                      Text("${item.type}", style: AppStyles.textStyle10W400Yellow,),
                     ],
                   ),
                   Row(
                     children: [
                       const Text("الاثاث ", style: AppStyles.textStyle10W400Gray,),
-                      Text(" ${relatedProducts![index].model}", style: AppStyles.textStyle10W400Yellow,),
+                      Text(" ${item.model}", style: AppStyles.textStyle10W400Yellow,),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 5,),
-              Text("${relatedProducts![index].price}",
+              Text("${item.price}",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   )),
               const SizedBox(height: 5,),
-              Text("${relatedProducts![index].createdAt}",
+              Text("${item.createdAt}",
                 style: AppStyles.textStyle10W400Green.copyWith(
                   color: const Color(0xff7A7A7A),
                 ),),

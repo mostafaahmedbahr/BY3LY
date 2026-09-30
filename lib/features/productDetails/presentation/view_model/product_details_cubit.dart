@@ -1,11 +1,11 @@
-  import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
+  import 'package:by3ly/features/productDetails/data/models/add_product_to_compare_model.dart';
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
+import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
+import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
+import 'package:flutter/foundation.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../data/models/add_product_to_compare_model.dart';
-import '../../data/models/product_details_model.dart';
-import '../../data/repos/product_details_repo.dart';
 
 class ProductDetailsCubit extends Cubit<ProductDetailsStates> {
   ProductDetailsCubit(this.productDetailsRepo) : super(ProductDetailsInitState());
@@ -49,6 +49,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsStates> {
       type: type,
     );
     return result.fold((failure) {
+      debugPrint('ProductDetailsCubit getProductDetailsData failed: ${failure.errMessage}');
       emit(GetProductDetailsDataErrorState(failure.errMessage));
     }, (data) {
       if(data.status == true){
@@ -70,6 +71,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsStates> {
       productId: productId,
     );
     return result.fold((failure) {
+      debugPrint('ProductDetailsCubit addProductToCompare failed: ${failure.errMessage}');
       emit(AddProductToCompareErrorState(failure.errMessage));
     }, (data) {
       if(data.status == true){

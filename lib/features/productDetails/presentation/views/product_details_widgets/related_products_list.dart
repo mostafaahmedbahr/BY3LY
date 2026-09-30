@@ -1,7 +1,6 @@
-import 'package:flutter_svg/svg.dart';
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../data/models/product_details_model.dart';
 
 class RelatedProductsList extends StatelessWidget {
   const RelatedProductsList({super.key,required this.relatedProductsList});
@@ -17,7 +16,7 @@ class RelatedProductsList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
                 CustomNetWorkImage(
-                imageUrl: relatedProductsList![index].image!,
+                imageUrl: relatedProductsList![index].image ?? '',
                 raduis: 10,
                 fit: BoxFit.cover,
                 width: 165,
@@ -40,7 +39,17 @@ class RelatedProductsList extends StatelessWidget {
                 children: [
                   SvgPicture.asset(AppImages.location),
                   const  CustomSizedBox(width: 5,),
-                    Text("${relatedProductsList![index].address}",style: AppStyles.textStyle10W400Green,),
+                    SizedBox(
+                      width: 135,
+                      child: Text(
+                        (relatedProductsList![index].location?.toString().trim().isNotEmpty ?? false)
+                            ? relatedProductsList![index].location.toString()
+                            : "لا يوجد",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.textStyle10W400Green,
+                      ),
+                    ),
                 ],
               ),
               const  CustomSizedBox(height: 5,),

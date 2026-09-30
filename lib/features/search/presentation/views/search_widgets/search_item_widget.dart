@@ -2,12 +2,12 @@ import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/search/data/models/all_products_search_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 
+import '../../../../../core/routing/routes.dart';
+import '../../../../../core/extensions/navigate.dart';
 import '../../../../../core/shared_widgets/custom_cached_network_image.dart';
 import '../../../../../core/shared_widgets/custom_sized_box.dart';
 import '../../../../../core/utils/app_styles/app_styles.dart';
-import '../../../../productDetails/presentation/views/product_details_view.dart';
 
 class SearchItemWidget extends StatelessWidget {
   const SearchItemWidget({super.key, required this.product});
@@ -16,16 +16,10 @@ class SearchItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.push(
-          context,
-          PageTransition(
-            type: PageTransitionType.fade,
-            child:   ProductDetailsView(
-                productId: product.id ?? 0,
-                type: "home",
-            ),
-          ),
-        );
+        context.pushNamed(Routes.productDetailsView, arguments: {
+          "type": "home",
+          "productId": product.id ?? 0,
+        });
       },
       child: Row(
         children: [

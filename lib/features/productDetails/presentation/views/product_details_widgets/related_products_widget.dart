@@ -1,9 +1,8 @@
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
+import 'package:by3ly/features/productDetails/presentation/views/all_related_products_view.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/related_products_list.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-import '../../../data/models/product_details_model.dart';
-import '../all_related_products_view.dart';
 
 class RelatedProductsWidget extends StatelessWidget {
   const RelatedProductsWidget({super.key, this.relatedProducts});

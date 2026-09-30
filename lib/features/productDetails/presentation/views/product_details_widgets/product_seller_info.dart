@@ -1,11 +1,11 @@
+import 'package:by3ly/features/productSeller/presentation/views/product_seller_view.dart';
 import 'package:by3ly/main_importants.dart';
 
-import '../../../../productSeller/presentation/views/product_seller_view.dart';
-
 class ProductSellerInfo extends StatelessWidget {
-  const ProductSellerInfo({super.key, required this.sellerName, required this.sellerId});
+  const ProductSellerInfo({super.key, required this.sellerName, required this.sellerId, this.sellerImage = ''});
   final String sellerName;
   final int sellerId;
+  final String sellerImage;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,8 +20,8 @@ class ProductSellerInfo extends StatelessWidget {
                 color: const Color(0xffEFEFEF),
               )
           ),
-          child:const CustomNetWorkImage(
-            imageUrl: "",
+          child:CustomNetWorkImage(
+            imageUrl: sellerImage,
             raduis: 50,
             fit: BoxFit.cover,
           ),
