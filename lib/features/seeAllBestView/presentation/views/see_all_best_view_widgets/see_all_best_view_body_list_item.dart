@@ -1,99 +1,30 @@
-import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../../main_importants.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_model.dart';
-import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
-import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
+import 'package:flutter/material.dart';
 
 class SeeAllBestViewBodyListItem extends StatelessWidget {
   const SeeAllBestViewBodyListItem({super.key, required this.product});
  final  Products  product;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SellAllBestViewCubit , SellAllBestViewStates>(
-        listener: (context ,state){},
-    builder:  (context ,state) {
-         return InkWell(
-          onTap: () {
-            context.pushNamed(Routes.productDetailsView, arguments: {
-              "type": "home",
-              "productId": product.id ?? 0,
-            });
-          },
-           child: Column(
-             crossAxisAlignment: CrossAxisAlignment.start,
-             children: [
-               Stack(
-                 children: [
-                   CustomNetWorkImage(
-                     imageUrl: "${product.image}",
-                     raduis: 10,
-                     fit: BoxFit.cover,
-                     width: double.infinity,
-                     height: 120,
-                   ),
-                   Positioned(
-                     top: 5,
-                     right: 5,
-                     child: FavHeartButton(
-                       productId: product.id,
-                       initialIsFavourite: product.isFavourite == true,
-                     ),
-                   ),
-                 ],
-               ),
-              const SizedBox(height: 10,),
-              Text("${product.name}",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xff000000),
-                ),),
-              const SizedBox(height: 5,),
-              Row(
-                children: [
-                  SvgPicture.asset(AppImages.location),
-                  const SizedBox(width: 5,),
-                  Text("${product.address}", style: AppStyles.textStyle10W400Green,),
-                ],
-              ),
-              const SizedBox(height: 5,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text("النوع ", style: AppStyles.textStyle10W400Gray,),
-                      Text("${product.type}", style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("الاثاث ", style: AppStyles.textStyle10W400Gray,),
-                      Text(" ${product.model}", style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5,),
-              Text("${product.price}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-              const SizedBox(height: 5,),
-              Text("${product.createdAt}",
-                style: AppStyles.textStyle10W400Green.copyWith(
-                  color: const Color(0xff7A7A7A),
-                ),),
-            ],
-          ),
-        );
-        }
-
+    return ProductGridCard(
+      imageUrl: product.image ?? '',
+      title: product.name ?? '',
+      location: product.address,
+      type: product.type,
+      model: product.model,
+      price: product.price,
+      date: product.createdAt,
+      productId: product.id,
+      initialIsFavourite: product.isFavourite == true,
+      onTap: () {
+        context.pushNamed(Routes.productDetailsView, arguments: {
+          "type": "home",
+          "productId": product.id ?? 0,
+        });
+      },
     );
   }
 }

@@ -1,7 +1,8 @@
-import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
-
-import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
 
 class AllRelatedProductsViewBodyListItems extends StatelessWidget {
   const AllRelatedProductsViewBodyListItems({super.key, this.relatedProducts});
@@ -12,99 +13,29 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
     GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 20,
-        crossAxisSpacing: 20,
-        childAspectRatio: 0.7,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.62,
       ),
       itemCount: relatedProducts?.length ?? 0,
       itemBuilder: (context, index) {
         final item = relatedProducts![index];
-        return InkWell(
+        return ProductGridCard(
+          imageUrl: item.image ?? '',
+          title: item.name ?? '',
+          location: item.location?.toString(),
+          type: item.type,
+          model: item.model,
+          price: item.price,
+          date: item.createdAt,
+          productId: item.id,
+          initialIsFavourite: item.isFavourite == true,
           onTap: () {
             context.pushNamed(Routes.productDetailsView, arguments: {
               "type": "home",
               "productId": item.id ?? 0,
             });
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  CustomNetWorkImage(
-                    imageUrl: "${item.image}",
-                    raduis: 10,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 120,
-                  ),
-                  Positioned(
-                    top: 5,
-                    right: 5,
-                    child: FavHeartButton(
-                      productId: item.id,
-                      initialIsFavourite: item.isFavourite == true,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10,),
-              Text("${item.name}",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xff000000),
-                ),),
-              const SizedBox(height: 5,),
-              Row(
-                children: [
-                  SvgPicture.asset(AppImages.location),
-                  const SizedBox(width: 5,),
-                  Expanded(
-                    child: Text(
-                      (item.location?.toString().trim().isNotEmpty ?? false)
-                          ? item.location.toString()
-                          : "لا يوجد",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppStyles.textStyle10W400Green,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text("النوع ", style: AppStyles.textStyle10W400Gray,),
-                      Text("${item.type}", style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("الاثاث ", style: AppStyles.textStyle10W400Gray,),
-                      Text(" ${item.model}", style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5,),
-              Text("${item.price}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-              const SizedBox(height: 5,),
-              Text("${item.createdAt}",
-                style: AppStyles.textStyle10W400Green.copyWith(
-                  color: const Color(0xff7A7A7A),
-                ),),
-            ],
-          ),
         );
       },
     );

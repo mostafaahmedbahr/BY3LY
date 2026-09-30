@@ -1,97 +1,30 @@
-import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
 
 class PreviousSalesProductsItem extends StatelessWidget {
   const PreviousSalesProductsItem({super.key, required this.product});
   final Products product;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (){
+    return ProductRowCard(
+      imageUrl: product.image ?? '',
+      title: product.name ?? '',
+      location: product.address,
+      type: product.type,
+      model: product.model,
+      price: product.price,
+      date: product.createdAt,
+      productId: product.id,
+      initialIsFavourite: product.isFavourite == true,
+      onTap: () {
         context.pushNamed(Routes.productDetailsView, arguments: {
           "type": "home",
           "productId": product.id ?? 0,
         });
       },
-      child: Row(
-        children: [
-            Stack(
-              children: [
-                CustomNetWorkImage(
-                  imageUrl: "${product.image}",
-                  raduis: 10,
-                  fit: BoxFit.cover,
-                  width: 175,
-                  height: 120,
-                ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: FavHeartButton(
-                    productId: product.id,
-                    initialIsFavourite: product.isFavourite == true,
-                  ),
-                ),
-              ],
-            ),
-          const  CustomSizedBox(width: 10,),
-          Expanded(
-            child: SizedBox(
-              height: 120,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                    Text( "${product.name}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff000000),
-                    ),),
-                  Row(
-                    children: [
-                      SvgPicture.asset(AppImages.location),
-                      const  CustomSizedBox(width: 5,),
-                        Text("${product.address}",style: AppStyles.textStyle10W400Green,),
-                    ],
-                  ),
-                    Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Text("النوع ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${product.type}",style: AppStyles.textStyle10W400Yellow,),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text("الاثاث ",style: AppStyles.textStyle10W400Gray,),
-                          Text(" ${product.model}",style: AppStyles.textStyle10W400Yellow,),
-                        ],
-                      ),
-                    ],
-                  ),
-                    Text( "${product.price}",
-                      style:const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Text( "${product.createdAt}",
-                    style: AppStyles.textStyle10W400Green.copyWith(
-                      color: const Color(0xff7A7A7A),
-                    ),),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

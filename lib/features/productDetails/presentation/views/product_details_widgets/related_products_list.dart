@@ -1,108 +1,48 @@
-import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
-
-import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
 
 class RelatedProductsList extends StatelessWidget {
   const RelatedProductsList({super.key,required this.relatedProductsList});
   final List<RelatedProducts>? relatedProductsList;
   @override
   Widget build(BuildContext context) {
+    final items = relatedProductsList ?? [];
+    if (items.isEmpty) return const SizedBox.shrink();
     return SizedBox(
       height: 300,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder:  (context , index ){
-          return    Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                Stack(
-                  children: [
-                    CustomNetWorkImage(
-                      imageUrl: relatedProductsList![index].image ?? '',
-                      raduis: 10,
-                      fit: BoxFit.cover,
-                      width: 165,
-                      height: 165,
-                    ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: FavHeartButton(
-                        productId: relatedProductsList![index].id,
-                        initialIsFavourite:
-                            relatedProductsList![index].isFavourite == true,
-                      ),
-                    ),
-                  ],
-                ),
-              const  CustomSizedBox(height: 5,),
-                SizedBox(
-                  width: 165,
-                  child: Text("${relatedProductsList![index].name}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff000000),
-                  ),),
-                ),
-              const  CustomSizedBox(height: 5,),
-              Row(
-                children: [
-                  SvgPicture.asset(AppImages.location),
-                  const  CustomSizedBox(width: 5,),
-                    SizedBox(
-                      width: 135,
-                      child: Text(
-                        (relatedProductsList![index].location?.toString().trim().isNotEmpty ?? false)
-                            ? relatedProductsList![index].location.toString()
-                            : "لا يوجد",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppStyles.textStyle10W400Green,
-                      ),
-                    ),
-                ],
-              ),
-              const  CustomSizedBox(height: 5,),
-               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text("النوع ",style: AppStyles.textStyle10W400Gray,),
-                      Text("${relatedProductsList![index].type}",style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("الماركة ",style: AppStyles.textStyle10W400Gray,),
-                      Text("${relatedProductsList![index].marka}",style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("المودل ",style: AppStyles.textStyle10W400Gray,),
-                      Text("${relatedProductsList![index].model}",style: AppStyles.textStyle10W400Yellow,),
-                    ],
-                  ),
-                ],
-              ),
-              const  CustomSizedBox(height: 5,),
-                Text("${relatedProductsList![index].price}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-            ],
+          final item = items[index];
+          return SizedBox(
+            width: 165,
+            child: ProductGridCard(
+              imageUrl: item.image ?? '',
+              title: item.name ?? '',
+              location: item.location?.toString(),
+              type: item.type,
+              model: item.model,
+              price: item.price,
+              date: item.createdAt,
+              productId: item.id,
+              initialIsFavourite: item.isFavourite == true,
+              imageHeight: 110,
+              onTap: () {
+                context.pushNamed(Routes.productDetailsView, arguments: {
+                  "type": "home",
+                  "productId": item.id ?? 0,
+                });
+              },
+            ),
           );
         },
         separatorBuilder: (context , index ){
           return const SizedBox(width: 10,);
         },
-        itemCount: relatedProductsList!.length,
+        itemCount: items.length,
       ),
     );
   }
