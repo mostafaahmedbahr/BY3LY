@@ -19,10 +19,31 @@ class FavDataRepoImpl implements FavRepos {
   Future<Either<Failure, FavDataModel>> getFavData() async{
     try {
       var response = await apiService!.getData(
-        endPoint: EndPoints.getFavourites,
-        
+        endPoint: EndPoints.favourites,
       );
       FavDataModel result = FavDataModel.fromJson(response.data);
+      return right(result);
+    } catch (e) {
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, GeneralModel>> addProductToFav(
+      {required int productId}
+      ) async{
+    try {
+      var response = await apiService!.postData(
+        endPoint: EndPoints.favourites,
+        data: {
+          "product_id" : productId,
+        },
+      );
+      GeneralModel result = GeneralModel.fromJson(response.data);
       return right(result);
     } catch (e) {
       if (e is DioException) {
@@ -38,9 +59,8 @@ class FavDataRepoImpl implements FavRepos {
       {required int productId}
       ) async{
     try {
-      var response = await apiService!.getData(
-        endPoint: EndPoints.addFavourite,
-        
+      var response = await apiService!.deleteData(
+        endPoint: EndPoints.favourites,
         query: {
           "product_id" : productId,
         },

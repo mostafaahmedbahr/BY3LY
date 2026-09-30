@@ -7,6 +7,7 @@ import '../../../../core/general_models/general_model.dart';
 abstract class FavRepos{
 
   Future<Either<Failure , FavDataModel>> getFavData();
+  Future<Either<Failure , GeneralModel>> addProductToFav({required int productId});
   Future<Either<Failure , GeneralModel>> removeProductFromFav({required int productId});
 
 }

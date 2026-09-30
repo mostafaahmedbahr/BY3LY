@@ -1,8 +1,8 @@
+import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
+import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_states.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../../main_importants.dart';
- import '../../../../productDetails/presentation/views/product_details_view.dart';
 import '../../../data/models/home_model.dart';
 import '../../view_model/home_cubit.dart';
 
@@ -12,28 +12,14 @@ class BestViewProductsListItem extends StatelessWidget {
    @override
    Widget build(BuildContext context) {
      return BlocConsumer<HomeCubit,HomeStates>(
-       listener: (context,state){
-         if(state is AddRemoveProductToFavSuccessState){
-           CherryToast.success(
-             title:  Text(state.addRemoveProductToFavModel.message!,
-                 style: const TextStyle(color: AppColors.mainColor)),
-           ).show(context);
-           HomeCubit.get(context).getHome();
-         }
-       },
+       listener: (context,state){},
        builder:  (context,state){
          return InkWell(
            onTap: () {
-             Navigator.push(
-               context,
-               PageTransition(
-                 type: PageTransitionType.fade,
-                 child: ProductDetailsView(
-                   productId: bestView.id!,
-                   type: "home",
-                 ),
-               ),
-             );
+             context.pushNamed(Routes.productDetailsView, arguments: {
+               "type": "home",
+               "productId": bestView.id ?? 0,
+             });
            },
            child: Column(
              crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,14 +43,57 @@ class BestViewProductsListItem extends StatelessWidget {
                          color: Colors.grey.withOpacity(0.5),
                          shape: BoxShape.circle,
                        ),
-                       child: InkWell(
-                           onTap: (){
-                             HomeCubit.get(context).addRemoveProductToFavMethod(productId: bestView.id!);
-                           },
-                           child:   Icon(
-                             Icons.favorite,
-                             color:bestView.isFavourite==true ? Colors.grey : AppColors.redColor,
-                             size: 18,))
+                       child: BlocConsumer<FavCubit, FavStates>(
+                         listener: (context, favState) {
+                           if (favState is FavToggleSuccess) {
+                             CherryToast.success(
+                               title: Text(
+                                   favState.message ?? '',
+                                   style: const TextStyle(
+                                       color: AppColors.mainColor)),
+                             ).show(context);
+                           } else if (favState is FavToggleError) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(content: Text(favState.message)),
+                             );
+                           }
+                         },
+                         builder: (context, favState) {
+                           final isFav = FavCubit.get(context)
+                                   .isFavourite(bestView.id) ||
+                               bestView.isFavourite == true;
+                           final toggling = favState
+                                   is FavToggleOptimistic &&
+                               favState.productId == bestView.id;
+                           return InkWell(
+                               onTap: () {
+                                 if (bestView.id != null && !toggling) {
+                                   FavCubit.get(context).toggleFavourite(
+                                       productId: bestView.id!);
+                                 }
+                               },
+                               child: toggling
+                                   ? const Padding(
+                                       padding: EdgeInsets.all(7.0),
+                                       child: SizedBox(
+                                         width: 16,
+                                         height: 16,
+                                         child: CircularProgressIndicator(
+                                           strokeWidth: 2,
+                                           color: AppColors.whiteColor,
+                                         ),
+                                       ),
+                                     )
+                                   : Icon(
+                                       isFav
+                                           ? Icons.favorite
+                                           : Icons.favorite_border,
+                                       color: isFav
+                                           ? AppColors.redColor
+                                           : Colors.grey,
+                                       size: 18));
+                         },
+                       )
                        ,
                      ),
                    ),
@@ -86,9 +115,16 @@ class BestViewProductsListItem extends StatelessWidget {
                  children: [
                    SvgPicture.asset(AppImages.location),
                    const SizedBox(width: 5),
-                   const Text(
-                     "مدينة نصر",
-                     style: AppStyles.textStyle10W400Green,
+                   Expanded(
+                     child: Text(
+                       (bestView.location?.toString().trim().isNotEmpty ??
+                               false)
+                           ? bestView.location.toString()
+                           : "لا يوجد",
+                       maxLines: 1,
+                       overflow: TextOverflow.ellipsis,
+                       style: AppStyles.textStyle10W400Green,
+                     ),
                    ),
                  ],
                ),

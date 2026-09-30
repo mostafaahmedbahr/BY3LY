@@ -12,7 +12,8 @@ class EndPoints {
   static const verifyCode = "verifyCode";
   static const getCities = "getCities";
   static const addLocation = "addLocation";
-  static const getFavourites = "getFavourites";
+  /// Favourites: GET = all, POST = add, DELETE = remove.
+  static const favourites = "favourites";
   static const searchProducts = "searchProducts";
   static const deleteAccount = "deleteAccount";
   static const productDetials = "productDetials";
@@ -22,7 +23,6 @@ class EndPoints {
   static const models = "models";
   static const typies = "typies";
   static const makePurchase = "makePurchase";
-  static const addFavourite = "addFavourite";
   static const myAds = "myAds";
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
