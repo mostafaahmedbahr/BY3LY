@@ -1,7 +1,5 @@
-import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
-import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_states.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../main_importants.dart';
 import '../../../data/models/home_model.dart';
@@ -37,69 +35,9 @@ class BestViewProductsListItem extends StatelessWidget {
                    Positioned(
                      top: 5,
                      right: 5,
-                     child: Container(
-                       height: 30,
-                       width: 30,
-                       decoration:   BoxDecoration(
-                         color: Colors.grey.withOpacity(0.5),
-                         shape: BoxShape.circle,
-                       ),
-                       child: BlocConsumer<FavCubit, FavStates>(
-                         listener: (context, favState) {
-                           if (favState is FavToggleSuccess) {
-                             final msg =
-                                 (favState.message?.trim().isNotEmpty ??
-                                         false)
-                                     ? favState.message!
-                                     : (favState.isNowFavourite
-                                         ? context.tr(LocaleKeys.addedToFav)
-                                         : context.tr(
-                                             LocaleKeys.removedFromFav));
-                             CherryToast.success(
-                               title: Text(msg,
-                                   style: const TextStyle(
-                                       color: AppColors.mainColor)),
-                             ).show(context);
-                           } else if (favState is FavToggleError) {
-                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text(favState.message)),
-                             );
-                           }
-                         },
-                         builder: (context, favState) {
-                           // Instant UI: favouriteIds is updated optimistically
-                           // before the request, so the heart flips at once.
-                           final isFav = FavCubit.get(context)
-                                   .isFavourite(bestView.id) ||
-                               bestView.isFavourite == true;
-                           return InkWell(
-                               onTap: () {
-                                 if (bestView.id != null) {
-                                   FavCubit.get(context).toggleFavourite(
-                                       productId: bestView.id!);
-                                 }
-                               },
-                               child: AnimatedSwitcher(
-                                 duration:
-                                     const Duration(milliseconds: 250),
-                                 transitionBuilder: (child, animation) =>
-                                     ScaleTransition(
-                                   scale: animation,
-                                   child: child,
-                                 ),
-                                 child: Icon(
-                                     key: ValueKey(isFav),
-                                     isFav
-                                         ? Icons.favorite
-                                         : Icons.favorite_border,
-                                     color: isFav
-                                         ? AppColors.redColor
-                                         : Colors.grey,
-                                     size: 18),
-                               ));
-                         },
-                       )
-                       ,
+                     child: FavHeartButton(
+                       productId: bestView.id,
+                       initialIsFavourite: bestView.isFavourite == true,
                      ),
                    ),
                  ],

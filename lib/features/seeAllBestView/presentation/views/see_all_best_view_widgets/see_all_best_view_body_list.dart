@@ -3,8 +3,8 @@ import 'package:by3ly/features/seeAllBestView/presentation/views/see_all_best_vi
 
 import '../../../../../core/shared_widgets/custom_error_widget.dart';
 import '../../../../../main_importants.dart';
- import '../../view_model/sell_all_best_view_cubit.dart';
-import '../../view_model/sell_all_best_view_states.dart';
+ import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
+import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
 
 class SeeAllBestViewBodyList extends StatelessWidget {
   const SeeAllBestViewBodyList({super.key});

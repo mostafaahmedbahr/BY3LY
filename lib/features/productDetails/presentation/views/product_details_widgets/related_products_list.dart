@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 
 import '../../../../../main_importants.dart';
@@ -15,13 +16,26 @@ class RelatedProductsList extends StatelessWidget {
           return    Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                CustomNetWorkImage(
-                imageUrl: relatedProductsList![index].image ?? '',
-                raduis: 10,
-                fit: BoxFit.cover,
-                width: 165,
-                height: 165,
-              ),
+                Stack(
+                  children: [
+                    CustomNetWorkImage(
+                      imageUrl: relatedProductsList![index].image ?? '',
+                      raduis: 10,
+                      fit: BoxFit.cover,
+                      width: 165,
+                      height: 165,
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: FavHeartButton(
+                        productId: relatedProductsList![index].id,
+                        initialIsFavourite:
+                            relatedProductsList![index].isFavourite == true,
+                      ),
+                    ),
+                  ],
+                ),
               const  CustomSizedBox(height: 5,),
                 SizedBox(
                   width: 165,

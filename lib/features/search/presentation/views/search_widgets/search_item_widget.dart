@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/search/data/models/all_products_search_model.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +24,25 @@ class SearchItemWidget extends StatelessWidget {
       },
       child: Row(
         children: [
-            CustomNetWorkImage(
-            imageUrl: "${product.image}",
-            raduis: 10,
-            fit: BoxFit.cover,
-            width: 175,
-            height: 120,
-          ),
+            Stack(
+              children: [
+                CustomNetWorkImage(
+                  imageUrl: "${product.image}",
+                  raduis: 10,
+                  fit: BoxFit.cover,
+                  width: 175,
+                  height: 120,
+                ),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: FavHeartButton(
+                    productId: product.id,
+                    initialIsFavourite: product.isFavourite == true,
+                  ),
+                ),
+              ],
+            ),
           const  CustomSizedBox(width: 10,),
           Expanded(
             child: SizedBox(

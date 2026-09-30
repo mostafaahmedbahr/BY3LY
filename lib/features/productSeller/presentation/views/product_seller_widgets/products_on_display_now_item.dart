@@ -1,8 +1,8 @@
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../../productDetails/presentation/views/product_details_view.dart';
-import '../../../data/models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
 class ProductsOnDisplayNowItem extends StatelessWidget {
   const ProductsOnDisplayNowItem({super.key, required this.product});
@@ -11,25 +11,31 @@ class ProductsOnDisplayNowItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.push(
-          context,
-          PageTransition(
-            type: PageTransitionType.fade,
-            child:   ProductDetailsView(
-              productId: product.id!,
-              type: "home",
-            ),
-          ),
-        );
+        context.pushNamed(Routes.productDetailsView, arguments: {
+          "type": "home",
+          "productId": product.id ?? 0,
+        });
       },
       child: Row(
         children: [
-          CustomNetWorkImage(
-            imageUrl: "${product.image}",
-            raduis: 10,
-            fit: BoxFit.cover,
-            width: 175,
-            height: 120,
+          Stack(
+            children: [
+              CustomNetWorkImage(
+                imageUrl: "${product.image}",
+                raduis: 10,
+                fit: BoxFit.cover,
+                width: 175,
+                height: 120,
+              ),
+              Positioned(
+                top: 5,
+                right: 5,
+                child: FavHeartButton(
+                  productId: product.id,
+                  initialIsFavourite: product.isFavourite == true,
+                ),
+              ),
+            ],
           ),
           const  CustomSizedBox(width: 10,),
           Expanded(

@@ -3,8 +3,8 @@
   import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
- import '../../view_model/sell_all_best_view_cubit.dart';
-import '../../view_model/sell_all_best_view_states.dart';
+ import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
+import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
 
 class SeeAllBestViewBody extends StatelessWidget {
   const SeeAllBestViewBody({super.key});

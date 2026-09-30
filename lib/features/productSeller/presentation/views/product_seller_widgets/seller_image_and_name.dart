@@ -1,7 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../data/models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
 class SellerImageAndName extends StatelessWidget {
   const SellerImageAndName({super.key, required this.seller});

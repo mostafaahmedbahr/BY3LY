@@ -2,7 +2,7 @@ import 'package:by3ly/features/productSeller/presentation/views/product_seller_w
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../data/models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
 class PreviousSalesProducts extends StatelessWidget {
   const PreviousSalesProducts({super.key, this.products});

@@ -1,6 +1,6 @@
 
 
-import '../../data/models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
 abstract class ProductSellerStates{}
 

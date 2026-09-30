@@ -1,10 +1,10 @@
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../main_importants.dart';
-import '../../../../productDetails/presentation/views/product_details_view.dart';
-import '../../../data/models/sell_all_best_view_model.dart';
-import '../../view_model/sell_all_best_view_cubit.dart';
-import '../../view_model/sell_all_best_view_states.dart';
+import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_model.dart';
+import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
+import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
 
 class SeeAllBestViewBodyListItem extends StatelessWidget {
   const SeeAllBestViewBodyListItem({super.key, required this.product});
@@ -16,27 +16,33 @@ class SeeAllBestViewBodyListItem extends StatelessWidget {
     builder:  (context ,state) {
          return InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                child:   ProductDetailsView(
-                  productId: product.id!,
-                  type: "home",
-                ),
-              ),
-            );
+            context.pushNamed(Routes.productDetailsView, arguments: {
+              "type": "home",
+              "productId": product.id ?? 0,
+            });
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomNetWorkImage(
-                imageUrl: "${product.image}",
-                raduis: 10,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 120,
-              ),
+           child: Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Stack(
+                 children: [
+                   CustomNetWorkImage(
+                     imageUrl: "${product.image}",
+                     raduis: 10,
+                     fit: BoxFit.cover,
+                     width: double.infinity,
+                     height: 120,
+                   ),
+                   Positioned(
+                     top: 5,
+                     right: 5,
+                     child: FavHeartButton(
+                       productId: product.id,
+                       initialIsFavourite: product.isFavourite == true,
+                     ),
+                   ),
+                 ],
+               ),
               const SizedBox(height: 10,),
               Text("${product.name}",
                 maxLines: 2,

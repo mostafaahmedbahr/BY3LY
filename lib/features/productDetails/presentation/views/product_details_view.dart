@@ -1,10 +1,8 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
-import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_details_view_body.dart';
-import 'package:easy_localization/easy_localization.dart';
 import '../../../../main_importants.dart';
 
 class ProductDetailsView extends StatelessWidget {
@@ -63,53 +61,11 @@ class ProductDetailsView extends StatelessWidget {
                   color: AppColors.blackColor, fontWeight: FontWeight.bold),
             ),
                       actions: [
-                        BlocConsumer<FavCubit, FavStates>(
-                          listener: (context, favState) {
-                            if (favState is FavToggleSuccess) {
-                              final msg =
-                                  (favState.message?.trim().isNotEmpty ??
-                                          false)
-                                      ? favState.message!
-                                      : (favState.isNowFavourite
-                                          ? context.tr(LocaleKeys.addedToFav)
-                                          : context.tr(
-                                              LocaleKeys.removedFromFav));
-                              CherryToast.success(
-                                title: Text(msg,
-                                    style: const TextStyle(
-                                        color: AppColors.mainColor)),
-                              ).show(context);
-                            } else if (favState is FavToggleError) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(favState.message)),
-                              );
-                            }
-                          },
-                          builder: (context, favState) {
-                            final favCubit = FavCubit.get(context);
-                            final isFav = favCubit.isFavourite(productId) ||
-                                product.isFavourite == true;
-                            return IconButton(
-                              onPressed: () => favCubit.toggleFavourite(
-                                  productId: productId),
-                              icon: AnimatedSwitcher(
-                                duration:
-                                    const Duration(milliseconds: 250),
-                                transitionBuilder: (child, animation) =>
-                                    ScaleTransition(
-                                  scale: animation,
-                                  child: child,
-                                ),
-                                child: Icon(
-                                  key: ValueKey(isFav),
-                                  isFav
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: isFav ? AppColors.redColor : null,
-                                ),
-                              ),
-                            );
-                          },
+                        FavHeartButton(
+                          productId: productId,
+                          initialIsFavourite:
+                              product.isFavourite == true,
+                          withBackground: false,
                         ),
                         IconButton(
                           onPressed: () {},

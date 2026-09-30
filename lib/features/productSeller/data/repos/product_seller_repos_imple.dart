@@ -4,7 +4,7 @@ import 'package:by3ly/features/productSeller/data/repos/product_seller_repos.dar
 import 'package:dio/dio.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
-import '../models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
 
 class ProductSellerRepoImpl implements ProductSellerRepo {

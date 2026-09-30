@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
-import '../../data/models/sell_all_best_view_model.dart';
-import '../../data/repos/sell_all_best_view_repo.dart';
+import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_model.dart';
+import 'package:by3ly/features/seeAllBestView/data/repos/sell_all_best_view_repo.dart';
 import 'sell_all_best_view_states.dart';
 
 

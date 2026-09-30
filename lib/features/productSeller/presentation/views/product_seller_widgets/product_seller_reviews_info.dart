@@ -1,8 +1,8 @@
 import 'package:by3ly/main_importants.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../view_model/product_seller_cubit.dart';
-import '../../view_model/product_seller_states.dart';
+import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_cubit.dart';
+import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_states.dart';
 
 class ProductSellerReviewsInfo extends StatelessWidget {
   const ProductSellerReviewsInfo({super.key});

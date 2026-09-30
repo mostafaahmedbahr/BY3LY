@@ -1,6 +1,6 @@
 import '../../../../../main_importants.dart';
-import '../../view_model/product_seller_cubit.dart';
-import '../../view_model/product_seller_states.dart';
+import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_cubit.dart';
+import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_states.dart';
 
 class SellerTapsButtons extends StatelessWidget {
   const SellerTapsButtons({super.key});

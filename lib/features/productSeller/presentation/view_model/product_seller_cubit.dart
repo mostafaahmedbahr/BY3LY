@@ -1,8 +1,8 @@
 import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_states.dart';
 
 import '../../../../main_importants.dart';
-import '../../data/models/product_seller_model.dart';
-import '../../data/repos/product_seller_repos.dart';
+import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
+import 'package:by3ly/features/productSeller/data/repos/product_seller_repos.dart';
 
 class ProductSellerCubit extends Cubit<ProductSellerStates> {
   ProductSellerCubit(this.productSellerRepo)

@@ -1,3 +1,5 @@
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+
 import '../../../../../main_importants.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/data/models/all_sub_categories_products_model.dart';
 
@@ -17,19 +19,31 @@ class AllSubCategoriesProductsListItem extends StatelessWidget {
           context.pushNamed(Routes.productDetailsView,
           arguments: {
             "type" :  "home",
-            "productId" :  product.id,
+            "productId" :  product.id ?? 0,
               });
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomNetWorkImage(
-              imageUrl: "${product.image}",
-              raduis: 10.r,
-              fit: BoxFit.contain,
-              width: double.infinity,
-              height: 120.h,
+            Stack(
+              children: [
+                CustomNetWorkImage(
+                  imageUrl: "${product.image}",
+                  raduis: 10.r,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: 120.h,
+                ),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: FavHeartButton(
+                    productId: product.id,
+                    initialIsFavourite: product.isFavourite == true,
+                  ),
+                ),
+              ],
             ),
             Gap(10.h),
             Text(product.name.toString(),

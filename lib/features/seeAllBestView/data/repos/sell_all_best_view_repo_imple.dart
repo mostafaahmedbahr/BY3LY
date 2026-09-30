@@ -4,7 +4,7 @@ import 'package:by3ly/features/seeAllBestView/data/repos/sell_all_best_view_repo
 import 'package:dio/dio.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
-import '../models/sell_all_best_view_model.dart';
+import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_model.dart';
 
 
 class SellAllBestViewRepoImpl implements SellAllBestViewRepo {
