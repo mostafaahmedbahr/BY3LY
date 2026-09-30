@@ -61,11 +61,27 @@ class ProductDetailsView extends StatelessWidget {
                   color: AppColors.blackColor, fontWeight: FontWeight.bold),
             ),
                       actions: [
-                        FavHeartButton(
-                          productId: productId,
-                          initialIsFavourite:
-                              product.isFavourite == true,
-                          withBackground: false,
+                        Container(
+                          height: 36,
+                          width: 36,
+                          margin: const EdgeInsets.only(left: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.whiteColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFE8E8E8),
+                              width: 1.2,
+                            ),
+                          ),
+                          child: Center(
+                            child: FavHeartButton(
+                              productId: productId,
+                              initialIsFavourite:
+                                  product.isFavourite == true,
+                              withBackground: false,
+                              iconSize: 20,
+                            ),
+                          ),
                         ),
                         IconButton(
                           onPressed: () {},
