@@ -5,6 +5,7 @@ import 'package:by3ly/features/productDetails/presentation/view_model/product_de
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/name_location_price_des_of_product.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_image.dart';
+import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/rate_product_widget.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_images_list.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_seller_info.dart';
  import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/related_products_widget.dart';
@@ -14,9 +15,14 @@ import 'package:easy_localization/easy_localization.dart';
  import '../../../../../main_importants.dart';
 
 class ProductDetailsViewBody extends StatelessWidget {
-  const ProductDetailsViewBody({super.key,required this.product,required this.relatedProducts});
+  const ProductDetailsViewBody(
+      {super.key,
+      required this.product,
+      required this.relatedProducts,
+      this.type = 'home'});
   final Product? product;
   final List<RelatedProducts>? relatedProducts;
+  final String type;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductDetailsCubit, ProductDetailsStates>(
@@ -57,6 +63,20 @@ class ProductDetailsViewBody extends StatelessWidget {
                       sellerId: seller?.id ?? 0,
                       sellerImage: seller?.image ?? '',
                   ),
+                  const CustomSizedBox(
+                    height: 10,
+                  ),
+                  if (product?.id != null)
+                    RateProductWidget(
+                      productId: product!.id!,
+                      type: type,
+                      currentRate: product?.rate,
+                      reviewsCount: product?.reviewsCount,
+                    ),
+                  if (product?.id != null)
+                    const CustomSizedBox(
+                      height: 10,
+                    ),
                   const CustomSizedBox(
                     height: 10,
                   ),

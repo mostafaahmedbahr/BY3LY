@@ -240,6 +240,10 @@ abstract class LocaleKeys {
   static const noResults = "noResults";
   static const addedToFav = "addedToFav";
   static const removedFromFav = "removedFromFav";
+  static const rateProduct = "rateProduct";
+  static const yourComment = "yourComment";
+  static const submitRating = "submitRating";
+  static const pleaseSelectStars = "pleaseSelectStars";
 
 
 

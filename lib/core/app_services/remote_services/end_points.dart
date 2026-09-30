@@ -17,6 +17,7 @@ class EndPoints {
   static const searchProducts = "searchProducts";
   static const deleteAccount = "deleteAccount";
   static const productDetials = "productDetials";
+  static const rateProduct = "rateProduct";
   static const addCompare = "addCompare";
   static const addProduct = "addProduct";
   static const marka = "marka";

@@ -49,3 +49,24 @@ class AddProductToCompareErrorState extends ProductDetailsStates{
   @override
   String toString() => 'AddProductToCompareErrorState(error: $error)';
 }
+
+class RateProductLoadingState extends ProductDetailsStates {
+  @override
+  String toString() => 'RateProductLoadingState';
+}
+
+class RateProductSuccessState extends ProductDetailsStates {
+  final String? message;
+  RateProductSuccessState(this.message);
+
+  @override
+  String toString() => 'RateProductSuccessState(message: $message)';
+}
+
+class RateProductErrorState extends ProductDetailsStates {
+  final String error;
+  RateProductErrorState(this.error);
+
+  @override
+  String toString() => 'RateProductErrorState(error: $error)';
+}

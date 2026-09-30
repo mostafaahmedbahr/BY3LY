@@ -229,5 +229,9 @@ class ArLang {
     "noResults": "لا توجد نتائج، جرّب تغيير البحث أو الفلاتر",
     "addedToFav": "تمت الإضافة إلى المفضلة",
     "removedFromFav": "تمت الإزالة من المفضلة",
+    "rateProduct": "قيّم هذا المنتج",
+    "yourComment": "اكتب تعليقك...",
+    "submitRating": "إرسال التقييم",
+    "pleaseSelectStars": "من فضلك اختر النجوم أولًا",
   };
 }

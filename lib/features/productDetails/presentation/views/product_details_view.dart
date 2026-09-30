@@ -96,6 +96,7 @@ class ProductDetailsView extends StatelessWidget {
           body: ProductDetailsViewBody(
             product: product,
             relatedProducts: relatedProducts,
+            type: type,
           ),
         );
       },

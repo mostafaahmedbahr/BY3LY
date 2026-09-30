@@ -229,5 +229,9 @@ class EnLang {
     "noResults": "No results found, try changing search or filters",
     "addedToFav": "Added to favorites",
     "removedFromFav": "Removed from favorites",
+    "rateProduct": "Rate this product",
+    "yourComment": "Write your comment...",
+    "submitRating": "Submit rating",
+    "pleaseSelectStars": "Please select stars first",
   };
 }

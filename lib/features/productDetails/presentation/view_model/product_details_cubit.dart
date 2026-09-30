@@ -84,5 +84,32 @@ class ProductDetailsCubit extends Cubit<ProductDetailsStates> {
   }
 
 
+  Future<void> rateProduct({
+    required int productId,
+    required int rate,
+    required String commenet,
+    required String type,
+  }) async {
+    emit(RateProductLoadingState());
+    var result = await productDetailsRepo!.rateProduct(
+      productId: productId,
+      rate: rate,
+      commenet: commenet,
+    );
+    return result.fold((failure) {
+      debugPrint('ProductDetailsCubit rateProduct failed: ${failure.errMessage}');
+      emit(RateProductErrorState(failure.errMessage));
+    }, (data) {
+      if (data.status == true) {
+        emit(RateProductSuccessState(data.message));
+        // Refresh details so the new rate/review appears at once.
+        getProductDetailsData(productId: productId, type: type);
+      } else {
+        emit(RateProductErrorState(data.message ?? 'Something went wrong'));
+      }
+    });
+  }
+
+
 
 }

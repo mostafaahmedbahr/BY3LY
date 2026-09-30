@@ -1,4 +1,5 @@
 import 'package:by3ly/core/errors/failure.dart';
+import 'package:by3ly/core/general_models/general_model.dart';
 import 'package:by3ly/features/productDetails/data/models/add_product_to_compare_model.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
@@ -57,6 +58,36 @@ class ProductDetailsRepoImpl implements ProductDetailsRepo {
       return right(result);
     } catch (e, s) {
       debugPrint('ProductDetailsRepoImpl addProductToCompare error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, GeneralModel>> rateProduct({
+    required int productId,
+    required int rate,
+    required String commenet,
+  }) async {
+    try {
+      var response = await apiService!.postData(
+        endPoint: EndPoints.rateProduct,
+        data: {
+          "product_id": productId,
+          "rate": rate,
+          "commenet": commenet,
+        },
+      );
+      GeneralModel result = GeneralModel.fromJson(response.data);
+      debugPrint('ProductDetailsRepoImpl rateProduct: status=${result.status} msg=${result.message}');
+      return right(result);
+    } catch (e, s) {
+      debugPrint('ProductDetailsRepoImpl rateProduct error: $e');
       debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
