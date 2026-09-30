@@ -73,6 +73,11 @@ class _HeartBubble extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+        // Permanent frame around the heart mark.
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.12),
@@ -87,6 +92,48 @@ class _HeartBubble extends StatelessWidget {
           initialIsFavourite: initialIsFavourite,
           withBackground: false,
           iconSize: 18,
+        ),
+      ),
+    );
+  }
+}
+
+/// Framed heart for row cards: white circle with a permanent frame.
+class _FramedHeart extends StatelessWidget {
+  const _FramedHeart({
+    required this.productId,
+    required this.initialIsFavourite,
+  });
+
+  final int? productId;
+  final bool initialIsFavourite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 34,
+      width: 34,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: const Color(0xFFE0E0E0),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: FavHeartButton(
+          productId: productId,
+          initialIsFavourite: initialIsFavourite,
+          withBackground: false,
+          iconSize: 19,
         ),
       ),
     );
@@ -167,8 +214,8 @@ class ProductRowCard extends StatelessWidget {
                   imageUrl: imageUrl,
                   raduis: 12,
                   fit: BoxFit.cover,
-                  width: 112,
-                  height: 132,
+                  width: 100,
+                  height: 112,
                 ),
                 if ((price?.trim().isNotEmpty ?? false))
                   Positioned(
@@ -203,18 +250,17 @@ class ProductRowCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(width: 6),
                       if (productId != null)
-                        FavHeartButton(
+                        _FramedHeart(
                           productId: productId,
                           initialIsFavourite: initialIsFavourite,
-                          withBackground: false,
-                          iconSize: 22,
                         ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   _locationRow(location),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   Text(
                     [type, model]
                         .where((e) => (e?.trim().isNotEmpty ?? false))
@@ -223,7 +269,7 @@ class ProductRowCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppStyles.textStyle10W400Gray,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     date ?? '',
                     maxLines: 1,

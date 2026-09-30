@@ -137,7 +137,7 @@ class _FavViewBodyState extends State<FavViewBody> {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const CustomSizedBox(height: 10,);
+                      return const CustomSizedBox(height: 20,);
                     },
                   ),
                 );

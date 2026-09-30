@@ -412,7 +412,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                     product: items[index]);
                               },
                               separatorBuilder: (context, index) {
-                                return const CustomSizedBox(height: 10);
+                                return const CustomSizedBox(height: 20);
                               },
                             ),
                     ),
