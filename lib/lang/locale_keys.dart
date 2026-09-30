@@ -238,6 +238,8 @@ abstract class LocaleKeys {
   static const clearAll = "clearAll";
   static const place = "place";
   static const noResults = "noResults";
+  static const addedToFav = "addedToFav";
+  static const removedFromFav = "removedFromFav";
 
 
 

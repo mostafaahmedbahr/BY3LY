@@ -1,4 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:cherry_toast/cherry_toast.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
@@ -66,7 +68,18 @@ class _FavViewBodyState extends State<FavViewBody> {
           Expanded(
             child: BlocConsumer<FavCubit , FavStates>(
               listener: (context ,state){
-                if (state is RemoveProductFromFavError ||
+                if (state is RemoveProductFromFavSuccess) {
+                  final msg = (state.removeProductFromFavModel.message
+                                  ?.trim()
+                                  .isNotEmpty ??
+                              false)
+                      ? state.removeProductFromFavModel.message!
+                      : context.tr(LocaleKeys.removedFromFav);
+                  CherryToast.success(
+                    title: Text(msg,
+                        style: const TextStyle(color: AppColors.mainColor)),
+                  ).show(context);
+                } else if (state is RemoveProductFromFavError ||
                     state is FavToggleError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

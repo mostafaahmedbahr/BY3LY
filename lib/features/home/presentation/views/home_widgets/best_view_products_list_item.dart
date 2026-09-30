@@ -1,6 +1,7 @@
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_states.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../main_importants.dart';
 import '../../../data/models/home_model.dart';
@@ -46,9 +47,16 @@ class BestViewProductsListItem extends StatelessWidget {
                        child: BlocConsumer<FavCubit, FavStates>(
                          listener: (context, favState) {
                            if (favState is FavToggleSuccess) {
+                             final msg =
+                                 (favState.message?.trim().isNotEmpty ??
+                                         false)
+                                     ? favState.message!
+                                     : (favState.isNowFavourite
+                                         ? context.tr(LocaleKeys.addedToFav)
+                                         : context.tr(
+                                             LocaleKeys.removedFromFav));
                              CherryToast.success(
-                               title: Text(
-                                   favState.message ?? '',
+                               title: Text(msg,
                                    style: const TextStyle(
                                        color: AppColors.mainColor)),
                              ).show(context);
@@ -59,39 +67,36 @@ class BestViewProductsListItem extends StatelessWidget {
                            }
                          },
                          builder: (context, favState) {
+                           // Instant UI: favouriteIds is updated optimistically
+                           // before the request, so the heart flips at once.
                            final isFav = FavCubit.get(context)
                                    .isFavourite(bestView.id) ||
                                bestView.isFavourite == true;
-                           final toggling = favState
-                                   is FavToggleOptimistic &&
-                               favState.productId == bestView.id;
                            return InkWell(
                                onTap: () {
-                                 if (bestView.id != null && !toggling) {
+                                 if (bestView.id != null) {
                                    FavCubit.get(context).toggleFavourite(
                                        productId: bestView.id!);
                                  }
                                },
-                               child: toggling
-                                   ? const Padding(
-                                       padding: EdgeInsets.all(7.0),
-                                       child: SizedBox(
-                                         width: 16,
-                                         height: 16,
-                                         child: CircularProgressIndicator(
-                                           strokeWidth: 2,
-                                           color: AppColors.whiteColor,
-                                         ),
-                                       ),
-                                     )
-                                   : Icon(
-                                       isFav
-                                           ? Icons.favorite
-                                           : Icons.favorite_border,
-                                       color: isFav
-                                           ? AppColors.redColor
-                                           : Colors.grey,
-                                       size: 18));
+                               child: AnimatedSwitcher(
+                                 duration:
+                                     const Duration(milliseconds: 250),
+                                 transitionBuilder: (child, animation) =>
+                                     ScaleTransition(
+                                   scale: animation,
+                                   child: child,
+                                 ),
+                                 child: Icon(
+                                     key: ValueKey(isFav),
+                                     isFav
+                                         ? Icons.favorite
+                                         : Icons.favorite_border,
+                                     color: isFav
+                                         ? AppColors.redColor
+                                         : Colors.grey,
+                                     size: 18),
+                               ));
                          },
                        )
                        ,
