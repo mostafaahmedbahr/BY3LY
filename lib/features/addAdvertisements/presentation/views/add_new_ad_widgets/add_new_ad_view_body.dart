@@ -6,8 +6,6 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_states.dart';
-import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
-import 'package:by3ly/features/advertisements/presentation/views/advertisements_view.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
@@ -22,7 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewAdViewBody extends StatefulWidget {
-  const AddNewAdViewBody({super.key});
+  const AddNewAdViewBody({super.key, this.adToEdit});
+
+  /// When set, the form works in edit mode pre-filled from this ad.
+  final dynamic adToEdit;
 
   @override
   State<AddNewAdViewBody> createState() => _AddNewAdViewBodyState();
@@ -32,13 +33,49 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
   @override
   void initState() {
     super.initState();
-    // Default city/center = the user's own data (changeable below).
+    final cubit = AddNewAdCubit.get(context);
     final user =
         ProfileCubit.get(context).profileModel?.data?.user;
-    AddNewAdCubit.get(context).initLocation(
-      defaultCityId: _asInt(user?.cityId),
-      defaultCenterId: _asInt(user?.centerId),
-    );
+    final ad = widget.adToEdit;
+    if (ad != null) {
+      cubit.fillForEdit(
+        adId: ad.id ?? 0,
+        name: ad.name?.toString(),
+        description:
+            (ad.desc?.toString().trim().isNotEmpty ?? false)
+                ? ad.desc?.toString()
+                : ad.description?.toString(),
+        price: ad.price?.toString(),
+        discount: ad.discount?.toString(),
+        negotiable: ad.isNegotiable == true ? 1 : 0,
+        urgent: ad.isUrgent == true ? 1 : 0,
+        categoryId: _asInt(ad.categoryId),
+        subCategoryId: _asInt(ad.subCategoryId),
+        shipping: ad.shippingType?.toString(),
+        conditionValue: ad.condition?.toString(),
+        cityIdValue: _asInt(ad.cityId),
+        centerIdValue: _asInt(ad.centerId),
+        imageUrls: [
+          for (final img in (ad.images ?? []))
+            if ((img?.image?.trim().isNotEmpty ?? false))
+              img!.image!.trim(),
+        ],
+        profileCityId: _asInt(user?.cityId),
+        profileCenterId: _asInt(user?.centerId),
+      );
+      // Load sub-categories of the ad's category for the dropdown.
+      final catId = _asInt(ad.categoryId);
+      if (catId != null) {
+        AllSubCategoriesCubit.get(context)
+            .getAllSubCategories(categoryId: catId);
+      }
+    } else {
+      // Default city/center = the user's own data (changeable below).
+      cubit.initLocation(
+        defaultCityId: _asInt(user?.cityId),
+        defaultCenterId: _asInt(user?.centerId),
+      );
+    }
   }
 
   int? _asInt(dynamic v) {
@@ -343,15 +380,19 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          context.tr(LocaleKeys.publishAd),
+                          cubit.isEditMode
+                              ? context.tr(LocaleKeys.editAd)
+                              : context.tr(LocaleKeys.publishAd),
                           style: AppStyles.textStyle14W500White.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(
-                          Icons.rocket_launch_outlined,
+                        Icon(
+                          cubit.isEditMode
+                              ? Icons.edit_outlined
+                              : Icons.rocket_launch_outlined,
                           color: Colors.white,
                           size: 20,
                         ),
@@ -369,7 +410,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                         );
                         return;
                       }
-                      cubit.submit();
+                      if (cubit.isEditMode) {
+                        cubit.submitEdit();
+                      } else {
+                        cubit.submit();
+                      }
                     },
             ),
             const SizedBox(height: 12),
@@ -522,108 +567,182 @@ class _ImagesPicker extends StatelessWidget {
           height: 100,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: cubit.images.length + 1,
+            itemCount: cubit.existingImages.length +
+                cubit.images.length +
+                1,
             separatorBuilder: (context, _) =>
                 const SizedBox(width: 10),
             itemBuilder: (context, index) {
-              if (index >= cubit.images.length) {
-                final full =
-                    cubit.images.length >= AddNewAdCubit.maxImages;
-                return InkWell(
-                  onTap: full ? null : onAdd,
-                  borderRadius: BorderRadius.circular(14),
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffF8FAF9),
+              final existingCount = cubit.existingImages.length;
+              // Existing network images, then newly picked files,
+              // then the add tile.
+              if (index < existingCount) {
+                final url = cubit.existingImages[index];
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.4),
-                        style: BorderStyle.solid,
-                        width: 1.2,
+                      child: Image.network(
+                        url,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 100,
+                          height: 100,
+                          color: const Color(0xffF1F3F5),
+                          child: const Icon(
+                              Icons.broken_image_outlined),
+                        ),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add_a_photo_outlined,
+                    Positioned(
+                      top: -6,
+                      right: -6,
+                      child: InkWell(
+                        onTap: () =>
+                            cubit.removeExistingImage(index),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: AppColors.redColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 6,
+                      left: 6,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.black.withValues(alpha: 0.55),
+                          borderRadius:
+                              BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              final fileIndex = index - existingCount;
+              if (fileIndex < cubit.images.length) {
+                final file = cubit.images[fileIndex];
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: Image.file(
+                        File(file.path),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: -6,
+                      right: -6,
+                      child: InkWell(
+                        onTap: () =>
+                            cubit.removeImage(fileIndex),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: AppColors.redColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 6,
+                      left: 6,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.black.withValues(alpha: 0.55),
+                          borderRadius:
+                              BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              final full =
+                  cubit.totalImagesCount >= AddNewAdCubit.maxImages;
+              return InkWell(
+                onTap: full ? null : onAdd,
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF8FAF9),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.mainColor
+                          .withValues(alpha: 0.4),
+                      style: BorderStyle.solid,
+                      width: 1.2,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_a_photo_outlined,
+                        color: full
+                            ? Colors.grey.shade400
+                            : AppColors.mainColor,
+                        size: 26,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${cubit.totalImagesCount}/${AddNewAdCubit.maxImages}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
                           color: full
                               ? Colors.grey.shade400
                               : AppColors.mainColor,
-                          size: 26,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${cubit.images.length}/${AddNewAdCubit.maxImages}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: full
-                                ? Colors.grey.shade400
-                                : AppColors.mainColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-              final file = cubit.images[index];
-              return Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.file(
-                      File(file.path),
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    top: -6,
-                    right: -6,
-                    child: InkWell(
-                      onTap: () => cubit.removeImage(index),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: AppColors.redColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.close,
-                          size: 14,
-                          color: Colors.white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  Positioned(
-                    bottom: 6,
-                    left: 6,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 2),
-                      decoration: BoxDecoration(
-                        color:
-                            Colors.black.withValues(alpha: 0.55),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '${index + 1}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               );
             },
           ),

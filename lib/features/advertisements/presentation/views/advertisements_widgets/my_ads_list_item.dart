@@ -2,8 +2,9 @@
 import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
-import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import 'package:by3ly/features/addAdvertisements/presentation/views/edit_ad_view.dart';
 
 import '../../../../../main_importants.dart';
 import '../../../data/models/my_ads_data_model.dart';
@@ -13,6 +14,77 @@ class MyAdsListItem extends StatelessWidget {
   final Ads adsProduct;
 
   bool get _isActive => adsProduct.isPaused != true;
+
+  Future<void> _showOptionsMenu(
+      BuildContext context, Ads ad) async {
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.whiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const SizedBox(height: 8),
+              _OptionTile(
+                icon: Icons.edit_outlined,
+                title: "تعديل الاعلان",
+                onTap: () async {
+                  Navigator.pop(sheetContext);
+                  final updated = await Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      child: EditAdView(ad: ad),
+                    ),
+                  );
+                  if (updated == true && context.mounted) {
+                    AdvertisementsCubit.get(context)
+                        .getAllMyAdsDataMethod(type: 0);
+                  }
+                },
+              ),
+              _OptionTile(
+                icon: Icons.delete_outline_rounded,
+                title: "حذف الاعلان",
+                danger: true,
+                onTap: () async {
+                  Navigator.pop(sheetContext);
+                  if (ad.id == null) return;
+                  final confirmed =
+                      await AppConfirmDialog.show(
+                    context,
+                    title: context.tr(LocaleKeys.deleteAd),
+                    message:
+                        context.tr(LocaleKeys.deleteAdConfirm),
+                    confirmText:
+                        context.tr(LocaleKeys.deleteAd),
+                    icon: Icons.delete_outline_rounded,
+                  );
+                  if (confirmed && context.mounted) {
+                    AdvertisementsCubit.get(context)
+                        .deleteAd(adId: ad.id!);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -293,13 +365,14 @@ class MyAdsListItem extends StatelessWidget {
                 return Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.settings_outlined,
-                          size: 18,
-                          color: AppColors.mainColor,
-                        ),
+                    child: OutlinedButton.icon(
+                      onPressed: () =>
+                          _showOptionsMenu(context, adsProduct),
+                      icon: const Icon(
+                        Icons.settings_outlined,
+                        size: 18,
+                        color: AppColors.mainColor,
+                      ),
                         label: const Text(
                           "خيارات",
                           style: TextStyle(
@@ -401,4 +474,61 @@ class _StatData {
     required this.label,
     required this.value,
   });
+}
+
+class _OptionTile extends StatelessWidget {
+  const _OptionTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    this.danger = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool danger;
+
+  @override
+  Widget build(BuildContext context) {
+    final color =
+        danger ? AppColors.redColor : AppColors.mainColor;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff1F2937),
+                ),
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 15,
+              color: Color(0xffD9DEE3),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

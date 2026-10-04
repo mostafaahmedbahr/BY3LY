@@ -131,6 +131,66 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
   }
 
   @override
+  Future<Either<Failure,GeneralModel>> editAd({
+    required int adId,
+    required String name,
+    required String description,
+    required String price,
+    String? discount,
+    required int isNegotiable,
+    required int isUrgent,
+    required int categoryId,
+    required int subCategoryId,
+    required String shippingType,
+    required String condition,
+    required int cityId,
+    required int centerId,
+    required List<dynamic> images,
+  }) async {
+    try {
+      FormData formData = FormData.fromMap({
+        'ad_id': adId,
+        'name': name,
+        'description': description,
+        'price': price,
+        if (discount != null && discount.trim().isNotEmpty)
+          'discount': discount,
+        'is_negotiable': isNegotiable,
+        'is_urgent': isUrgent,
+        'listing_type': 'sale',
+        'category_id': categoryId,
+        'sub_category_id': subCategoryId,
+        'shipping_type': shippingType,
+        'condition': condition,
+        'city_id': cityId,
+        'center_id': centerId,
+      });
+      for (var image in images) {
+        formData.files.add(MapEntry(
+          'images[]',
+          await MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last),
+        ));
+      }
+      var response = await apiService!.postData(
+        endPoint: EndPoints.editAd,
+        data: formData,
+      );
+      GeneralModel result = GeneralModel.fromJson(response.data);
+      debugPrint('AddAdvertisementsRepoImpl editAd: status=${result.status} msg=${result.message}');
+      return right(result);
+    } catch (e, s) {
+      debugPrint('AddAdvertisementsRepoImpl editAd error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
   Future<Either<Failure, GetCarMarkaModel>> getCarsMarka() async{
     try {
       var response = await apiService!.getData(

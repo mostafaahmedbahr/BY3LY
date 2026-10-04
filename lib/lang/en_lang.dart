@@ -263,6 +263,7 @@ class EnLang {
     "subCategory": "Sub-category",
     "selectImages": "Add photos (1-3)",
     "publishAd": "Publish ad",
+    "editAd": "Edit ad",
     "imagesRequired": "Please add at least one photo",
     "nameRequired": "Please enter the ad title",
     "descRequired": "Please enter the ad description",

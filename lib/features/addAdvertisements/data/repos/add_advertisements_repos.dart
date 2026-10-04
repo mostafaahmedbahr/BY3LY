@@ -30,7 +30,24 @@ abstract class AddAdvertisementsRepos{
   Future<Either<Failure,GetCarTypesModel>> getCarsTypes();
 
   /// New unified create-ad endpoint.
-  Future<Either<Failure,GeneralModel>> addNewAd({
+  Future<Either<Failure,GeneralModel>> addNewAd({    required String name,
+    required String description,
+    required String price,
+    String? discount,
+    required int isNegotiable,
+    required int isUrgent,
+    required int categoryId,
+    required int subCategoryId,
+    required String shippingType,
+    required String condition,
+    required int cityId,
+    required int centerId,
+    required List<dynamic> images,
+  });
+
+  /// Edit an existing ad (same fields + ad_id, new image files only).
+  Future<Either<Failure,GeneralModel>> editAd({
+    required int adId,
     required String name,
     required String description,
     required String price,

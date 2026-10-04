@@ -263,6 +263,7 @@ class ArLang {
     "subCategory": "القسم الفرعي",
     "selectImages": "أضف صور (1-3)",
     "publishAd": "نشر الإعلان",
+    "editAd": "تعديل الإعلان",
     "imagesRequired": "من فضلك أضف صورة واحدة على الأقل",
     "nameRequired": "من فضلك أدخل عنوان الإعلان",
     "descRequired": "من فضلك أدخل وصف الإعلان",

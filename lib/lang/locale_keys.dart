@@ -274,6 +274,7 @@ abstract class LocaleKeys {
   static const subCategory = "subCategory";
   static const selectImages = "selectImages";
   static const publishAd = "publishAd";
+  static const editAd = "editAd";
   static const imagesRequired = "imagesRequired";
   static const nameRequired = "nameRequired";
   static const descRequired = "descRequired";

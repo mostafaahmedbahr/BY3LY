@@ -48,6 +48,14 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   int? cityId;
   int? centerId;
 
+  /// Edit mode: id of the ad being edited + its current image urls.
+  int? editingAdId;
+  List<String> existingImages = [];
+
+  bool get isEditMode => editingAdId != null;
+
+  int get totalImagesCount => images.length + existingImages.length;
+
   @override
   Future<void> close() {
     nameCon.dispose();
@@ -65,7 +73,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
 
   Future<void> pickFromCamera(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
-    if (images.length >= maxImages) {
+    if (totalImagesCount >= maxImages) {
       messenger.showSnackBar(
         const SnackBar(content: Text('Max 3 images')),
       );
@@ -84,7 +92,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
         SnackBar(content: Text('Max 3 images'));
     final selected = await picker.pickMultiImage();
     if (selected.isEmpty) return;
-    final room = maxImages - images.length;
+    final room = maxImages - totalImagesCount;
     if (room <= 0) {
       messenger.showSnackBar(warning);
       emit(AddNewAdImagesChanged());
@@ -150,9 +158,56 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     emit(AddNewAdSelectionChanged());
   }
 
+  /// Pre-fill the form from an existing ad for editing.
+  /// City/center fall back to the user's profile data when the ad
+  /// doesn't carry them.
+  void fillForEdit({
+    required int adId,
+    String? name,
+    String? description,
+    String? price,
+    String? discount,
+    int? negotiable,
+    int? urgent,
+    int? categoryId,
+    int? subCategoryId,
+    String? shipping,
+    String? conditionValue,
+    int? cityIdValue,
+    int? centerIdValue,
+    List<String> imageUrls = const [],
+    int? profileCityId,
+    int? profileCenterId,
+  }) {
+    editingAdId = adId;
+    nameCon.text = name ?? '';
+    descCon.text = description ?? '';
+    priceCon.text = price ?? '';
+    discountCon.text = discount ?? '';
+    isNegotiable = negotiable ?? 0;
+    isUrgent = urgent ?? 0;
+    this.categoryId = categoryId;
+    this.subCategoryId = subCategoryId;
+    if (shipping == 'paid' || shipping == 'free') {
+      shippingType = shipping!;
+    }
+    if (conditionValue == 'new' || conditionValue == 'used') {
+      condition = conditionValue!;
+    }
+    cityId = cityIdValue ?? profileCityId;
+    centerId = centerIdValue ?? profileCenterId;
+    existingImages = imageUrls.where((u) => u.trim().isNotEmpty).toList();
+  }
+
+  void removeExistingImage(int index) {
+    if (index < 0 || index >= existingImages.length) return;
+    existingImages.removeAt(index);
+    emit(AddNewAdImagesChanged());
+  }
+
   /// Returns an error message key-free string when something is missing.
   String? validate() {
-    if (images.isEmpty) return 'imagesRequired';
+    if (totalImagesCount < 1) return 'imagesRequired';
     if (nameCon.text.trim().isEmpty) return 'nameRequired';
     if (descCon.text.trim().isEmpty) return 'descRequired';
     if (priceCon.text.trim().isEmpty) return 'priceRequired';
@@ -165,8 +220,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
 
   Future<void> submit() async {
     emit(AddNewAdLoading());
-    final result = await addAdvertisementsRepos!.addNewAd(
-      name: nameCon.text.trim(),
+    final result = await addAdvertisementsRepos!.addNewAd(      name: nameCon.text.trim(),
       description: descCon.text.trim(),
       price: priceCon.text.trim(),
       discount:
@@ -183,6 +237,42 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     );
     return result.fold((failure) {
       debugPrint('AddNewAdCubit submit failed: ${failure.errMessage}');
+      emit(AddNewAdError(failure.errMessage));
+    }, (data) {
+      if (data.status == true) {
+        emit(AddNewAdSuccess(data.message));
+      } else {
+        emit(AddNewAdError(data.message ?? 'Something went wrong'));
+      }
+    });
+  }
+
+  Future<void> submitEdit() async {
+    final adId = editingAdId;
+    if (adId == null) {
+      emit(AddNewAdError('Something went wrong'));
+      return;
+    }
+    emit(AddNewAdLoading());
+    final result = await addAdvertisementsRepos!.editAd(
+      adId: adId,
+      name: nameCon.text.trim(),
+      description: descCon.text.trim(),
+      price: priceCon.text.trim(),
+      discount:
+          discountCon.text.trim().isEmpty ? null : discountCon.text.trim(),
+      isNegotiable: isNegotiable,
+      isUrgent: isUrgent,
+      categoryId: categoryId!,
+      subCategoryId: subCategoryId!,
+      shippingType: shippingType,
+      condition: condition,
+      cityId: cityId!,
+      centerId: centerId!,
+      images: images,
+    );
+    return result.fold((failure) {
+      debugPrint('AddNewAdCubit submitEdit failed: ${failure.errMessage}');
       emit(AddNewAdError(failure.errMessage));
     }, (data) {
       if (data.status == true) {
