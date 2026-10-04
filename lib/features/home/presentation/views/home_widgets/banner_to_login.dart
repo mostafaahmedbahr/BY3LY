@@ -1,5 +1,6 @@
-import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../../../../main_importants.dart';
 import '../../view_model/home_cubit.dart';
 import '../../view_model/home_states.dart';
@@ -99,7 +100,13 @@ class BannerToLogin extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        context.read<LayoutCubit>().changeBottomNav(2, context);
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            child: const AddNewAdView(),
+          ),
+        );
       },
     );
 

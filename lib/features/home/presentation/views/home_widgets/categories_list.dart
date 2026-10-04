@@ -45,6 +45,7 @@ class CategoriesList extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context , index){
                       return CategoriesListItem(
+                        id: categories[index].id ?? 0,
                         image: categories[index].image ?? '',
                         name: categories[index].name ?? '',
                       );
