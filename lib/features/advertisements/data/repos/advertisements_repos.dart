@@ -5,7 +5,7 @@ import '../models/my_ads_data_model.dart';
 
 abstract class AdvertisementsRepo{
 
-   Future<Either<Failure,MyAdsDataModel>> getMyAdsData({required int type});
+   Future<Either<Failure,MyAdsDataModel>> getMyAdsData();
 
 
 

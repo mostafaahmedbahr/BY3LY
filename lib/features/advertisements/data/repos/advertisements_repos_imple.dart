@@ -1,6 +1,7 @@
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import '../models/my_ads_data_model.dart';
@@ -14,20 +15,17 @@ class AdvertisementsRepoImpl implements AdvertisementsRepo {
 
 
   @override
-  Future<Either<Failure, MyAdsDataModel>> getMyAdsData({
-    required int type,
-}) async{
+  Future<Either<Failure, MyAdsDataModel>> getMyAdsData() async{
     try {
       var response = await apiService!.getData(
         endPoint: EndPoints.myAds,
-        
-        query: {
-          "type" : type,
-        },
       );
       MyAdsDataModel result = MyAdsDataModel.fromJson(response.data);
+      debugPrint('AdvertisementsRepoImpl getMyAdsData: ${result.data?.ads?.length ?? 0} items');
       return right(result);
-    } catch (e) {
+    } catch (e, s) {
+      debugPrint('AdvertisementsRepoImpl getMyAdsData error: $e');
+      debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

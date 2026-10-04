@@ -1,4 +1,3 @@
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../../main_importants.dart';
  import '../../../../productDetails/presentation/views/product_details_view.dart';
@@ -6,7 +5,7 @@ import '../../../data/models/my_ads_data_model.dart';
 
 class MyAdsListItem extends StatelessWidget {
   const MyAdsListItem({super.key, required this.adsProduct});
-  final Products adsProduct;
+  final Ads adsProduct;
   @override
   Widget build(BuildContext context) {
     List<String> names = [

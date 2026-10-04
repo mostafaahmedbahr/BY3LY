@@ -25,7 +25,7 @@ class EndPoints {
   static const models = "models";
   static const typies = "typies";
   static const makePurchase = "makePurchase";
-  static const myAds = "myAds";
+  static const myAds = "getAllAds";
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
   static const sellerProduct = "sellerProduct";

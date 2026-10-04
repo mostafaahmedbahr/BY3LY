@@ -4,7 +4,7 @@ import 'my_ads_list_item.dart';
 
 class MyAdsList extends StatelessWidget {
   const MyAdsList({super.key,required this.products});
-  final List<Products> products;
+  final List<Ads> products;
   @override
   Widget build(BuildContext context) {
     return Expanded(
