@@ -26,3 +26,27 @@ class GetAllMyAdsDataErrorState extends AdvertisementsStates{
   String toString() => 'GetAllMyAdsDataErrorState(error: $error)';
 
 }
+
+class DeleteAdLoadingState extends AdvertisementsStates {
+  final int adId;
+  DeleteAdLoadingState(this.adId);
+
+  @override
+  String toString() => 'DeleteAdLoadingState(adId: $adId)';
+}
+
+class DeleteAdSuccessState extends AdvertisementsStates {
+  final String? message;
+  DeleteAdSuccessState(this.message);
+
+  @override
+  String toString() => 'DeleteAdSuccessState(message: $message)';
+}
+
+class DeleteAdErrorState extends AdvertisementsStates {
+  final String error;
+  DeleteAdErrorState(this.error);
+
+  @override
+  String toString() => 'DeleteAdErrorState(error: $error)';
+}

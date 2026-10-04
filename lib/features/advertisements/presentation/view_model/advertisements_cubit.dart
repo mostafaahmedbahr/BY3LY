@@ -12,6 +12,10 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
 
   static AdvertisementsCubit get(context) => BlocProvider.of(context);
 
+  AdvertisementsRepo? advertisementsRepo;
+  MyAdsDataModel? myAdsDataModel;
+
+  List<Ads> allMyAdsList = [];
 
   int advertisementsTypeIndex = 0 ;
   void changeAdvertisementsTypeIndexWay(index)
@@ -71,11 +75,27 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     emit(ChangeAdvertisementsTypeIndexState());
   }
 
+  int? deletingAdId;
 
-  AdvertisementsRepo? advertisementsRepo;
-  MyAdsDataModel? myAdsDataModel;
+  Future<void> deleteAd({required int adId}) async {
+    deletingAdId = adId;
+    emit(DeleteAdLoadingState(adId));
+    var result = await advertisementsRepo!.deleteAd(adId: adId);
+    return result.fold((failure) {
+      debugPrint('AdvertisementsCubit deleteAd failed: ${failure.errMessage}');
+      deletingAdId = null;
+      emit(DeleteAdErrorState(failure.errMessage));
+    }, (data) {
+      deletingAdId = null;
+      if (data.status == true) {
+        allMyAdsList.removeWhere((ad) => ad.id == adId);
+        emit(DeleteAdSuccessState(data.message));
+      } else {
+        emit(DeleteAdErrorState(data.message ?? 'Something went wrong'));
+      }
+    });
+  }
 
-  List<Ads> allMyAdsList=[];
   Future<void> getAllMyAdsDataMethod({
     required int type,
 }) async {

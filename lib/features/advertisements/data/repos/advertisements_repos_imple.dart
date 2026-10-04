@@ -1,4 +1,5 @@
 import 'package:by3ly/core/errors/failure.dart';
+import 'package:by3ly/core/general_models/general_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +26,31 @@ class AdvertisementsRepoImpl implements AdvertisementsRepo {
       return right(result);
     } catch (e, s) {
       debugPrint('AdvertisementsRepoImpl getMyAdsData error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, GeneralModel>> deleteAd({
+    required int adId,
+  }) async {
+    try {
+      var response = await apiService!.postData(
+        endPoint: EndPoints.deleteAds,
+        data: {
+          "ad_id": adId,
+        },
+      );
+      GeneralModel result = GeneralModel.fromJson(response.data);
+      debugPrint('AdvertisementsRepoImpl deleteAd: status=${result.status} msg=${result.message}');
+      return right(result);
+    } catch (e, s) {
+      debugPrint('AdvertisementsRepoImpl deleteAd error: $e');
       debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));

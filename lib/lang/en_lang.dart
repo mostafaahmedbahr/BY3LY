@@ -243,5 +243,7 @@ class EnLang {
     "dateAdded": "Date added",
     "descriptionLabel": "Description",
     "clearCompareConfirm": "Clear both products from comparison?",
+    "deleteAd": "Delete ad",
+    "deleteAdConfirm": "This ad will be permanently deleted. Continue?",
   };
 }

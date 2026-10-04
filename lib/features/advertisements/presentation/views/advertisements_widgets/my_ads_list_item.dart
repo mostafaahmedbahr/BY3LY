@@ -1,4 +1,10 @@
 
+import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import '../../../../../main_importants.dart';
 import '../../../data/models/my_ads_data_model.dart';
 
@@ -257,59 +263,118 @@ class MyAdsListItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10,),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.settings_outlined,
-                      size: 18,
-                      color: AppColors.mainColor,
-                    ),
-                    label: const Text(
-                      "خيارات",
-                      style: TextStyle(
-                        color: AppColors.mainColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                          color: AppColors.mainColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isActive
-                          ? AppColors.yellowColor
-                          : AppColors.mainColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 12),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      _isActive ? "وقف الاعلان" : "تفعيل الاعلان",
+            BlocConsumer<AdvertisementsCubit, AdvertisementsStates>(
+              listener: (context, state) {
+                if (state is DeleteAdSuccessState) {
+                  CherryToast.success(
+                    title: Text(
+                      (state.message?.trim().isNotEmpty ?? false)
+                          ? state.message!
+                          : context.tr(LocaleKeys.deleteAd),
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                          color: AppColors.mainColor),
+                    ),
+                  ).show(context);
+                } else if (state is DeleteAdErrorState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.error)),
+                  );
+                }
+              },
+              builder: (context, state) {
+                final deleting = state is DeleteAdLoadingState &&
+                    state.adId == adsProduct.id;
+                return Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.settings_outlined,
+                          size: 18,
+                          color: AppColors.mainColor,
+                        ),
+                        label: const Text(
+                          "خيارات",
+                          style: TextStyle(
+                            color: AppColors.mainColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                              color: AppColors.mainColor),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 11),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ],
+                    const SizedBox(width: 12,),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: deleting
+                            ? null
+                            : () async {
+                                if (adsProduct.id == null) return;
+                                final confirmed =
+                                    await AppConfirmDialog.show(
+                                  context,
+                                  title: context
+                                      .tr(LocaleKeys.deleteAd),
+                                  message: context.tr(
+                                      LocaleKeys.deleteAdConfirm),
+                                  confirmText: context
+                                      .tr(LocaleKeys.deleteAd),
+                                  icon:
+                                      Icons.delete_outline_rounded,
+                                );
+                                if (confirmed &&
+                                    context.mounted) {
+                                  AdvertisementsCubit.get(context)
+                                      .deleteAd(
+                                          adId: adsProduct.id!);
+                                }
+                              },
+                        icon: deleting
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.delete_outline_rounded,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                        label: Text(
+                          context.tr(LocaleKeys.deleteAd),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.redColor,
+                          disabledBackgroundColor: AppColors.redColor
+                              .withValues(alpha: 0.6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 11),
+                          elevation: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),

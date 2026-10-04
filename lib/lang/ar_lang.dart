@@ -243,5 +243,7 @@ class ArLang {
     "dateAdded": "تاريخ الإضافة",
     "descriptionLabel": "الوصف",
     "clearCompareConfirm": "مسح المنتجين من المقارنة؟",
+    "deleteAd": "حذف الإعلان",
+    "deleteAdConfirm": "سيتم حذف هذا الإعلان نهائيًا. متابعة؟",
   };
 }

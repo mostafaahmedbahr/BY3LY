@@ -254,6 +254,8 @@ abstract class LocaleKeys {
   static const dateAdded = "dateAdded";
   static const descriptionLabel = "descriptionLabel";
   static const clearCompareConfirm = "clearCompareConfirm";
+  static const deleteAd = "deleteAd";
+  static const deleteAdConfirm = "deleteAdConfirm";
 
 
 
