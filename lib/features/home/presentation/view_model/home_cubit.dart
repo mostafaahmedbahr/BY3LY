@@ -31,6 +31,12 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(GetHomeDataError(failure.errMessage));
     }, (data) {
       homeModel = data;
+      final ads = data.data?.ads ?? [];
+      debugPrint('HomeCubit getHome: categories=${data.data?.categories?.length ?? 0}, '
+          'bestView=${data.data?.bestView?.length ?? 0}, '
+          'ads=${ads.length}, '
+          'adsImages=${ads.map((a) => a.images?.length ?? 0).toList()}, '
+          'adsSingleImage=${ads.map((a) => a.image).toList()}');
        emit(GetHomeDataSuccess(data));
     });
   }

@@ -41,19 +41,21 @@ class CategoriesList extends StatelessWidget {
                   if (categories.isEmpty) {
                     return const SizedBox.shrink();
                   }
+                  // Show first 5 only, full list lives in see-all page.
+                  final visible = categories.take(5).toList();
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context , index){
                       return CategoriesListItem(
-                        id: categories[index].id ?? 0,
-                        image: categories[index].image ?? '',
-                        name: categories[index].name ?? '',
+                        id: visible[index].id ?? 0,
+                        image: visible[index].image ?? '',
+                        name: visible[index].name ?? '',
                       );
                     },
                     separatorBuilder: (context , index){
                       return   Gap(25.w);
                     },
-                    itemCount: categories.length,
+                    itemCount: visible.length,
                   );
                 }
 

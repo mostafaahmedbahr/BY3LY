@@ -8,8 +8,8 @@ import '../../view_model/home_cubit.dart';
 import '../../view_model/home_states.dart';
 
 class BannerAds extends StatefulWidget {
-  const BannerAds({super.key, this.images});
-  final List? images;
+  const BannerAds({super.key, required this.imageUrls});
+  final List<String> imageUrls;
 
   @override
   State<BannerAds> createState() => _BannerAdsState();
@@ -23,19 +23,21 @@ class _BannerAdsState extends State<BannerAds> {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        final images = widget.images;
-        if (images == null || images.isEmpty) {
+        final imageUrls = widget.imageUrls
+            .where((u) => u.trim().isNotEmpty)
+            .toList();
+        if (imageUrls.isEmpty) {
           return const SizedBox.shrink();
         }
         // If only one image, no need for infinite scroll / autoplay.
-        final bool singleItem = images.length == 1;
+        final bool singleItem = imageUrls.length == 1;
         return SizedBox(
           height: 140,
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
               CarouselSlider.builder(
-                itemCount: images.length,
+                itemCount: imageUrls.length,
                 itemBuilder: (BuildContext context, int index, int realIndex) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -43,7 +45,7 @@ class _BannerAdsState extends State<BannerAds> {
                       raduis: 10,
                       width: double.infinity,
                       fit: BoxFit.cover,
-                      imageUrl: "${images[index].image}",
+                      imageUrl: imageUrls[index],
                     ),
                   );
                 },
@@ -70,7 +72,7 @@ class _BannerAdsState extends State<BannerAds> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    images.length,
+                    imageUrls.length,
                     (index) => Container(
                       width: 8,
                       height: 8,
