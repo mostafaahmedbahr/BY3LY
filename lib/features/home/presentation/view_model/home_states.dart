@@ -25,3 +25,21 @@ class GetHomeDataError extends HomeStates {
   @override
   String toString() => 'GetHomeDataError(message: $message)';
 }
+
+class GetBannersLoading extends HomeStates {
+  @override
+  String toString() => 'GetBannersLoading';
+}
+
+class GetBannersSuccess extends HomeStates {
+  @override
+  String toString() => 'GetBannersSuccess';
+}
+
+class GetBannersError extends HomeStates {
+  final String message;
+  GetBannersError(this.message);
+
+  @override
+  String toString() => 'GetBannersError(message: $message)';
+}

@@ -6,6 +6,7 @@ import 'package:by3ly/main_importants.dart';
 import '../../../../../core/shared_widgets/container_search_widget.dart';
 import 'banner_ads.dart';
 import 'banner_to_login.dart';
+import 'home_banner_slider.dart';
 import 'home_loading_widget.dart';
 
 class HomeViewBody extends StatelessWidget {
@@ -29,9 +30,12 @@ class HomeViewBody extends StatelessWidget {
           (ads != null && ads.isNotEmpty) ? ads[0].images : null;
       return ListView(
                   children: [
+                    /// Banners slider (above the search).
+                    const HomeBannerSlider(),
+
                     /// search
                     Padding(
-                      padding: EdgeInsets.only(top: 20.h,bottom: 10.h,right: 20.w,left: 20.w),
+                      padding: EdgeInsets.only(top: 10.h,bottom: 10.h,right: 20.w,left: 20.w),
                       child: const ContainerSearchWidget(),
                     ),
 

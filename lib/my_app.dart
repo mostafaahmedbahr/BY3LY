@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => DeleteAccountCubit (getIt.get<DeleteAccountReposImple>()) ),
         BlocProvider(create: (context) => UpdateProfileDataCubit (getIt.get<UpdateProfileDataRepoImpl>()) ),
         BlocProvider(create: (context) => SellAllBestViewCubit(getIt.get<SellAllBestViewRepoImpl>())..getSellAllBestView() ),
-        BlocProvider(create: (context) => HomeCubit (getIt.get<HomeRepoImpl>())..getHome()),
+        BlocProvider(create: (context) => HomeCubit (getIt.get<HomeRepoImpl>())..getHome()..getBanners()),
         BlocProvider(create: (context) => CompareCubit (getIt.get<CompareReposImpl>(), getIt.get<ProductDetailsRepoImpl>())),
         BlocProvider(create: (context) => NotificationsCubit (getIt.get<NotificationsDataRepoImpl>())..getNotificationsData(type: "general")),
        ],
