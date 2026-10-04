@@ -27,6 +27,7 @@ class EndPoints {
   static const makePurchase = "makePurchase";
   static const myAds = "getAllAds";
   static const deleteAds = "deleteAds";
+  static const addNewAds = "addNewAds";
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
   static const sellerProduct = "sellerProduct";

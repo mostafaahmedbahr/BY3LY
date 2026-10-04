@@ -256,6 +256,32 @@ abstract class LocaleKeys {
   static const clearCompareConfirm = "clearCompareConfirm";
   static const deleteAd = "deleteAd";
   static const deleteAdConfirm = "deleteAdConfirm";
+  static const addNewAd = "addNewAd";
+  static const adName = "adName";
+  static const adDescription = "adDescription";
+  static const adPrice = "adPrice";
+  static const discount = "discount";
+  static const negotiable = "negotiable";
+  static const urgent = "urgent";
+  static const shippingType = "shippingType";
+  static const freeShipping = "freeShipping";
+  static const paidShipping = "paidShipping";
+  static const condition = "condition";
+  static const conditionNew = "conditionNew";
+  static const conditionUsed = "conditionUsed";
+  static const city = "city";
+  static const category = "category";
+  static const subCategory = "subCategory";
+  static const selectImages = "selectImages";
+  static const publishAd = "publishAd";
+  static const imagesRequired = "imagesRequired";
+  static const nameRequired = "nameRequired";
+  static const descRequired = "descRequired";
+  static const priceRequired = "priceRequired";
+  static const categoryRequired = "categoryRequired";
+  static const subCategoryRequired = "subCategoryRequired";
+  static const cityRequired = "cityRequired";
+  static const centerRequired = "centerRequired";
 
 
 

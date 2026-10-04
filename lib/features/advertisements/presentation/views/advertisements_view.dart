@@ -1,5 +1,5 @@
- import 'package:by3ly/core/utils/app_colors/app_colors.dart';
-import 'package:by3ly/features/allCategories/presentation/views/all_categories_view.dart';
+  import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -22,16 +22,13 @@ class AdvertisementsView extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          // Navigator.push(
-          //   context,
-          //   PageTransition(
-          //     type: PageTransitionType.fade,
-          //     child: const AllCategoriesView(
-          //       seeAllCategoriesWithSub: true,
-          //       addProduct : true,
-          //     ),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              child: const AddNewAdView(),
+            ),
+          );
         },
         backgroundColor: AppColors.mainColor,
         child: const Icon(Icons.add,
