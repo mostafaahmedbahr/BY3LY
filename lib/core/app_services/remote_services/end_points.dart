@@ -25,6 +25,7 @@ class EndPoints {
   static const models = "models";
   static const typies = "typies";
   static const makePurchase = "makePurchase";
+  static const purchaseInstructions = "purchaseInstructions";
   static const myAds = "getAllAds";
   static const deleteAds = "deleteAds";
   static const addNewAds = "addNewAds";

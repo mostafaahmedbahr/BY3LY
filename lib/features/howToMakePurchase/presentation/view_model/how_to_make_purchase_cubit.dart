@@ -1,8 +1,9 @@
- import 'package:by3ly/features/howToMakePurchase/data/models/how_to_make_purchase_model.dart';
- import 'package:flutter_bloc/flutter_bloc.dart';
+  import 'package:by3ly/features/howToMakePurchase/data/models/how_to_make_purchase_model.dart';
+  import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart';
 
-import '../../data/repos/how_to_make_purchase_repos.dart';
-import 'how_to_make_purchase_states.dart';
+import 'package:by3ly/features/howToMakePurchase/data/repos/how_to_make_purchase_repos.dart';
+import 'package:by3ly/features/howToMakePurchase/presentation/view_model/how_to_make_purchase_states.dart';
 
 
 class HowToMakePurchaseCubit extends Cubit<HowToMakePurchaseStates> {
@@ -12,21 +13,21 @@ class HowToMakePurchaseCubit extends Cubit<HowToMakePurchaseStates> {
 
   HowToMakePurchaseRepos? howToMakePurchaseRepos;
   HowToMakePurchaseModel? howToMakePurchaseModel;
-  List<Purchases> allDataHowToMakePurchaseList=[];
+
   Future<void> getHowToMakePurchaseData() async {
     emit(GetHowToMakePurchaseDataLoadingState());
     var result = await howToMakePurchaseRepos!.getHowToMakePurchaseData();
     return result.fold((failure) {
+      debugPrint('HowToMakePurchaseCubit failed: ${failure.errMessage}');
       emit(GetHowToMakePurchaseDataErrorState(failure.errMessage));
     }, (data) {
       if(data.status==true){
         howToMakePurchaseModel = data;
-        allDataHowToMakePurchaseList = allDataHowToMakePurchaseList +
-            howToMakePurchaseModel!.data!.purchases!;
         emit(GetHowToMakePurchaseDataSuccessState(data));
       }
       else{
-        emit(GetHowToMakePurchaseDataErrorState(data.message.toString()));
+        emit(GetHowToMakePurchaseDataErrorState(
+            data.message ?? 'Something went wrong'));
       }
     });
   }
