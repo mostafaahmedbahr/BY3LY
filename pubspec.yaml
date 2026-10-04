@@ -75,7 +75,7 @@ dependencies:
   gap: ^3.0.1
   firebase_core: ^4.15.0
   firebase_messaging:
-  flutter_html: ^3.0.0
+  flutter_html:
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +87,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+# flutter_html 3.0.0 relies on an internal `matches` helper that was
+# removed in html 0.15.7, so pin html to the last compatible version.
+dependency_overrides:
+  html: 0.15.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
