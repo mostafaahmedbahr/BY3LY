@@ -1,4 +1,5 @@
-  import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dart';
+  import 'package:by3ly/core/shared_widgets/full_screen_gallery.dart';
+import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dart';
 import 'package:by3ly/features/compare/presentation/view_model/compare_states.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
@@ -9,11 +10,17 @@ class ProductImage extends StatelessWidget {
   const ProductImage({
     super.key,
     required this.imageUrl,
-    required this.productId
+    required this.productId,
+    this.images = const [],
+    this.initialIndex = 0,
   });
 
   final String imageUrl;
   final int productId;
+
+  /// All gallery urls (falls back to [imageUrl] when empty).
+  final List<String> images;
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +51,23 @@ class ProductImage extends StatelessWidget {
           child: Stack(
             alignment: Alignment.bottomRight,
             children: [
-              CustomNetWorkImage(
-                height: 300,
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                raduis: 0,
+              InkWell(
+                onTap: () {
+                  final urls = images.isNotEmpty
+                      ? images
+                      : [imageUrl];
+                  FullScreenGallery.open(
+                    context,
+                    images: urls,
+                    initialIndex: initialIndex,
+                  );
+                },
+                child: CustomNetWorkImage(
+                  height: 300,
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
+                  raduis: 0,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),

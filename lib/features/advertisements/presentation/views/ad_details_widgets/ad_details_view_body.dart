@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
 import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
+import 'package:by3ly/core/shared_widgets/full_screen_gallery.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
@@ -104,29 +105,37 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Gallery.
+          // Gallery (tap to open fullscreen).
           Stack(
             children: [
-              SizedBox(
-                height: 260,
-                child: _gallery.isEmpty
-                    ? const CustomNetWorkImage(
-                        imageUrl: '',
-                        raduis: 16,
-                        fit: BoxFit.cover,
-                      )
-                    : PageView.builder(
-                        controller: _pageController,
-                        itemCount: _gallery.length,
-                        onPageChanged: (i) =>
-                            setState(() => _pageIndex = i),
-                        itemBuilder: (context, i) =>
-                            CustomNetWorkImage(
-                          imageUrl: _gallery[i],
+              InkWell(
+                onTap: () => FullScreenGallery.open(
+                  context,
+                  images: _gallery,
+                  initialIndex: _pageIndex,
+                ),
+                child: SizedBox(
+                  height: 260,
+                  width: double.infinity,
+                  child: _gallery.isEmpty
+                      ? const CustomNetWorkImage(
+                          imageUrl: '',
                           raduis: 16,
                           fit: BoxFit.cover,
+                        )
+                      : PageView.builder(
+                          controller: _pageController,
+                          itemCount: _gallery.length,
+                          onPageChanged: (i) =>
+                              setState(() => _pageIndex = i),
+                          itemBuilder: (context, i) =>
+                              CustomNetWorkImage(
+                            imageUrl: _gallery[i],
+                            raduis: 16,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
+                ),
               ),
               Positioned(
                 top: 12,

@@ -40,7 +40,11 @@ class ProductDetailsViewBody extends StatelessWidget {
           children: [
               ProductImage(
                   imageUrl: mainImage,
-              productId: product?.id ?? 0,),
+              productId: product?.id ?? 0,
+              images: [
+                for (final img in images) img.image.toString(),
+              ],
+              initialIndex: safeIndex,),
               Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Column(
