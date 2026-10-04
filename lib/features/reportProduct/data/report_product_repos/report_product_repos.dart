@@ -1,8 +1,10 @@
- import 'package:dartz/dartz.dart';
+  import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
-import '../report_product_models/add_complaint_model.dart';
-import '../report_product_models/report_product_model.dart';
+import '../../../../core/general_models/general_model.dart';
+import 'package:by3ly/features/reportProduct/data/report_product_models/add_complaint_model.dart';
+import 'package:by3ly/features/reportProduct/data/report_product_models/report_model.dart';
+import 'package:by3ly/features/reportProduct/data/report_product_models/report_product_model.dart';
 
 abstract class ReportProductsRepos{
 
@@ -10,6 +12,15 @@ abstract class ReportProductsRepos{
   Future<Either<Failure,AddComplaintModel>> addComplaint({
     int? sellerId, int? productId,
     required String message, required int complaintId
+  });
+
+  Future<Either<Failure,ReportModel>> getReportReasons();
+
+  Future<Either<Failure,GeneralModel>> reportAd({
+    required int sellerId,
+    required int productId,
+    required String reason,
+    required String description,
   });
 
 

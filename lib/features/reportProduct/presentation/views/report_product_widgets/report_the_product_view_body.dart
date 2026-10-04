@@ -12,8 +12,8 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../view_model/report_product_cubit.dart';
-import '../../view_model/report_product_states.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_cubit.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_states.dart';
 
 class ReportTheProductViewBody extends StatelessWidget {
   const ReportTheProductViewBody({super.key, this.sellerId, this.productId});

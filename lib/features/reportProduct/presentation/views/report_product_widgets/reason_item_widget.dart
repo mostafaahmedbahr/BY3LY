@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/utils/app_styles/app_styles.dart';
-import '../../view_model/report_product_cubit.dart';
-import '../../view_model/report_product_states.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_cubit.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_states.dart';
 
 class ReasonItemWidget extends StatelessWidget {
   final String title;

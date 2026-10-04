@@ -35,6 +35,8 @@ class EndPoints {
   static const notifications = "notifications";
   static const complaintsTypes = "complaintsTypes";
   static const addComplaint = "addComplaint";
+  static const reportReasons = "reportReasons";
+  static const reportAd = "reportAd";
   static const resendCode = "resendCode";
   static const updateProfile = "updateProfile";
   static const resetPassword = "resetPassword";

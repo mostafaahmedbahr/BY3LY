@@ -272,5 +272,8 @@ class ArLang {
     "subCategoryRequired": "من فضلك اختر القسم الفرعي",
     "cityRequired": "من فضلك اختر المحافظة",
     "centerRequired": "من فضلك اختر المركز",
+    "selectReason": "اختر سبب البلاغ",
+    "pleaseSelectReason": "من فضلك اختر السبب أولًا",
+    "reportSent": "تم إرسال البلاغ بنجاح",
   };
 }

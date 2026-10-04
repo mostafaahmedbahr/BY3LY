@@ -283,6 +283,9 @@ abstract class LocaleKeys {
   static const subCategoryRequired = "subCategoryRequired";
   static const cityRequired = "cityRequired";
   static const centerRequired = "centerRequired";
+  static const selectReason = "selectReason";
+  static const pleaseSelectReason = "pleaseSelectReason";
+  static const reportSent = "reportSent";
 
 
 

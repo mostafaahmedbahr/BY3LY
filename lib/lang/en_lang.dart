@@ -272,5 +272,8 @@ class EnLang {
     "subCategoryRequired": "Please choose a sub-category",
     "cityRequired": "Please choose a city",
     "centerRequired": "Please choose a center",
+    "selectReason": "Select report reason",
+    "pleaseSelectReason": "Please select a reason first",
+    "reportSent": "Report sent successfully",
   };
 }
