@@ -29,7 +29,7 @@ class EndPoints {
   static const myAds = "getAllAds";
   static const deleteAds = "deleteAds";
   static const addNewAds = "addNewAds";
-  static const editAd = "editAd";
+  static const editAd = "editAds";
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
   static const sellerProduct = "sellerProduct";

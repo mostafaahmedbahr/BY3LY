@@ -275,5 +275,8 @@ class ArLang {
     "selectReason": "اختر سبب البلاغ",
     "pleaseSelectReason": "من فضلك اختر السبب أولًا",
     "reportSent": "تم إرسال البلاغ بنجاح",
+    "filterAll": "الكل",
+    "filterRead": "المقروء",
+    "filterUnread": "الغير مقروء",
   };
 }

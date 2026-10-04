@@ -28,6 +28,30 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
   String get currentType =>
       buttonMap.values.elementAt(buttonIndex.clamp(0, buttonMap.length - 1));
 
+  /// Client-side read-status filter applied on top of the loaded pages.
+  /// 'all' | 'read' | 'unread'
+  String readFilter = 'all';
+
+  void setReadFilter(String value) {
+    readFilter = value;
+    emit(NotificationsButtonsToggleState());
+  }
+
+  List<Notifications> get filteredNotifications {
+    switch (readFilter) {
+      case 'read':
+        return notificationsList
+            .where((n) => n.isRead == true)
+            .toList();
+      case 'unread':
+        return notificationsList
+            .where((n) => n.isRead != true)
+            .toList();
+      default:
+        return notificationsList;
+    }
+  }
+
   NotificationsRepos? notificationsRepos;
   NotificationsModel? notificationsModel;
 

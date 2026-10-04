@@ -275,5 +275,8 @@ class EnLang {
     "selectReason": "Select report reason",
     "pleaseSelectReason": "Please select a reason first",
     "reportSent": "Report sent successfully",
+    "filterAll": "All",
+    "filterRead": "Read",
+    "filterUnread": "Unread",
   };
 }

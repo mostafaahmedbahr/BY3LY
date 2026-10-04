@@ -286,6 +286,9 @@ abstract class LocaleKeys {
   static const selectReason = "selectReason";
   static const pleaseSelectReason = "pleaseSelectReason";
   static const reportSent = "reportSent";
+  static const filterAll = "filterAll";
+  static const filterRead = "filterRead";
+  static const filterUnread = "filterUnread";
 
 
 

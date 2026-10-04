@@ -61,7 +61,7 @@ class _NotificationsListState extends State<NotificationsList> {
     return BlocBuilder<NotificationsCubit, NotificationsStates>(
       builder: (context, state) {
         final cubit = NotificationsCubit.get(context);
-        final items = cubit.notificationsList;
+        final items = cubit.filteredNotifications;
 
         if (items.isEmpty && !cubit.isLoadingMore) {
           return const NoDataWidget(
