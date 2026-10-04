@@ -5,6 +5,7 @@ import 'package:by3ly/features/advertisements/presentation/view_model/advertisem
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:by3ly/features/addAdvertisements/presentation/views/edit_ad_view.dart';
+import 'package:by3ly/features/advertisements/presentation/views/ad_details_view.dart';
 
 import '../../../../../main_importants.dart';
 import '../../../data/models/my_ads_data_model.dart';
@@ -109,11 +110,19 @@ class MyAdsListItem extends StatelessWidget {
       ),
     ];
     return InkWell(
-      onTap: () {
-        context.pushNamed(Routes.productDetailsView, arguments: {
-          "type": "home",
-          "productId": adsProduct.id ?? 0,
-        });
+      onTap: () async {
+        final changed = await Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            child: AdDetailsView(ad: adsProduct),
+          ),
+        );
+        // Edit/delete inside details refreshes the list on return.
+        if (changed == true && context.mounted) {
+          AdvertisementsCubit.get(context)
+              .getAllMyAdsDataMethod(type: 0);
+        }
       },
       borderRadius: BorderRadius.circular(18),
       child: Container(
