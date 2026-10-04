@@ -1,7 +1,6 @@
   import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
   import '../../../../../main_importants.dart';
-import '../../../data/repos/advertisements_repos_imple.dart';
 import '../../view_model/advertisements_cubit.dart';
 import 'add_bundle_button.dart';
 import 'ads_types.dart';
@@ -32,10 +31,9 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
-      create: (context)=>AdvertisementsCubit(
-          getIt.get<AdvertisementsRepoImpl>())..getAllMyAdsDataMethod(type: 0),
-      child: BlocConsumer<AdvertisementsCubit , AdvertisementsStates>(
+    // Cubit is provided above by AdvertisementsView (shared with the FAB
+    // so publishing a new ad can trigger a refresh here).
+    return BlocConsumer<AdvertisementsCubit , AdvertisementsStates>(
         listener: (context ,state){},
         builder: (context ,state){
           final advertisementsCubit = AdvertisementsCubit.get(context);
@@ -111,7 +109,6 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
           );
         },
 
-      ),
-    );
+      );
   }
 }

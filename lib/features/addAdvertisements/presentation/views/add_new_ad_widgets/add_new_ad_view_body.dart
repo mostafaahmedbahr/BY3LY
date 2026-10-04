@@ -6,6 +6,8 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_states.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
+import 'package:by3ly/features/advertisements/presentation/views/advertisements_view.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
