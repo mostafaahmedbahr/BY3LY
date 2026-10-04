@@ -22,15 +22,42 @@ class AdvertisementsViewBody extends StatelessWidget {
         builder: (context ,state){
           final advertisementsCubit = AdvertisementsCubit.get(context);
           final products = advertisementsCubit.filteredAds();
+          final hasSearch =
+              advertisementsCubit.searchQuery.trim().isNotEmpty;
           return   Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const AddBundleButton(),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 16,),
+                CustomTextFormField(
+                  keyboardType: TextInputType.text,
+                  hintText: "ابحث باسم الإعلان...",
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(AppImages.search),
+                  ),
+                  suffixIcon: hasSearch
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, size: 20),
+                          onPressed: () =>
+                              advertisementsCubit.setSearchQuery(''),
+                        )
+                      : null,
+                  onChanged: advertisementsCubit.setSearchQuery,
+                ),
+                const SizedBox(height: 16,),
                 const AdsTypes(),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 8,),
+                Text(
+                  "عدد الإعلانات (${products.length})",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xff9AA0A6),
+                  ),
+                ),
+                const SizedBox(height: 10,),
                 state is GetAllMyAdsDataLoadingState ? const Expanded(child: CustomLoading()):
                     state is GetAllMyAdsDataErrorState ? Expanded(
                       child: CustomErrorWidget(

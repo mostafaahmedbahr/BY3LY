@@ -50,14 +50,25 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   }
 
   List<Ads> filteredAds() {
-    switch (advertisementsTypeIndex) {
-      case 1:
-        return allMyAdsList.where(_isActive).toList();
-      case 2:
-        return allMyAdsList.where((ad) => !_isActive(ad)).toList();
-      default:
-        return allMyAdsList;
-    }
+    final query = searchQuery.trim().toLowerCase();
+    final byTab = switch (advertisementsTypeIndex) {
+      1 => allMyAdsList.where(_isActive).toList(),
+      2 => allMyAdsList.where((ad) => !_isActive(ad)).toList(),
+      _ => allMyAdsList,
+    };
+    if (query.isEmpty) return byTab;
+    return byTab.where((ad) {
+      final name = (ad.name ?? '').toLowerCase();
+      final desc = (ad.desc ?? '').toLowerCase();
+      return name.contains(query) || desc.contains(query);
+    }).toList();
+  }
+
+  String searchQuery = '';
+
+  void setSearchQuery(String query) {
+    searchQuery = query;
+    emit(ChangeAdvertisementsTypeIndexState());
   }
 
 
