@@ -1,4 +1,27 @@
 
+String? _asString(dynamic v) => v?.toString();
+
+int? _asInt(dynamic v) {
+  if (v == null) return null;
+  if (v is int) return v;
+  if (v is double) return v.toInt();
+  if (v is String) return int.tryParse(v);
+  if (v is bool) return v ? 1 : 0;
+  return null;
+}
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is int) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 class SellAllBestViewModel {
   bool? status;
   String? message;
@@ -7,8 +30,8 @@ class SellAllBestViewModel {
   SellAllBestViewModel({this.status, this.message, this.data});
 
   SellAllBestViewModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
+    status = _asBool(json["status"]) ?? json["status"] == 1;
+    message = _asString(json["message"]);
     data = json["data"] == null ? null : Data.fromJson(json["data"]);
   }
 
@@ -73,33 +96,33 @@ class Products {
   Products({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
 
   Products.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    uniqueNumber = json["unique_number"];
-    name = json["name"];
-    desc = json["desc"];
-    price = json["price"];
-    image = json["image"];
+    id = _asInt(json["id"]);
+    uniqueNumber = _asString(json["unique_number"]);
+    name = _asString(json["name"]);
+    desc = _asString(json["desc"]);
+    price = _asString(json["price"]);
+    image = _asString(json["image"]);
     images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
-    rate = (json["rate"] as num).toInt();
-    sellerRate = (json["seller_rate"] as num).toInt();
-    countCommenets = (json["countCommenets"] as num).toInt();
+    rate = _asInt(json["rate"]);
+    sellerRate = _asInt(json["seller_rate"]);
+    countCommenets = _asInt(json["countCommenets"]);
     commenets = json["commenets"] ?? [];
-    isFavourite = json["isFavourite"];
-    model = json["model"];
-    marka = json["marka"];
-    type = json["type"];
-    view = (json["view"] as num).toInt();
-    sellerId = (json["seller_id"] as num).toInt();
-    sellerName = json["seller_name"];
-    sellerImage = json["seller_image"];
-    sellerPhone = json["seller_phone"];
-    lat = json["lat"];
-    long = json["long"];
-    status = (json["status"] as num).toInt();
-    negotiable = (json["negotiable"] as num).toInt();
-    communication = (json["communication"] as num).toInt();
-    address = json["address"];
-    createdAt = json["created_at"];
+    isFavourite = _asBool(json["isFavourite"]);
+    model = _asString(json["model"]);
+    marka = _asString(json["marka"]);
+    type = _asString(json["type"]);
+    view = _asInt(json["view"]);
+    sellerId = _asInt(json["seller_id"]);
+    sellerName = _asString(json["seller_name"]);
+    sellerImage = _asString(json["seller_image"]);
+    sellerPhone = _asString(json["seller_phone"]);
+    lat = _asString(json["lat"]);
+    long = _asString(json["long"]);
+    status = _asInt(json["status"]);
+    negotiable = _asInt(json["negotiable"]);
+    communication = _asInt(json["communication"]);
+    address = _asString(json["address"]);
+    createdAt = _asString(json["created_at"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -146,8 +169,8 @@ class Images {
   Images({this.id, this.image});
 
   Images.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    image = json["image"];
+    id = _asInt(json["id"]);
+    image = _asString(json["image"]);
   }
 
   Map<String, dynamic> toJson() {

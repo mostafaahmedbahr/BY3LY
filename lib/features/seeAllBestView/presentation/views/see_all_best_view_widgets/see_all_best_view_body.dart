@@ -1,5 +1,4 @@
-  import 'package:by3ly/core/shared_widgets/container_search_widget.dart';
- import 'package:by3ly/features/seeAllBestView/presentation/views/see_all_best_view_widgets/see_all_best_view_body_list.dart';
+  import 'package:by3ly/features/seeAllBestView/presentation/views/see_all_best_view_widgets/see_all_best_view_body_list.dart';
   import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,14 +15,12 @@ class SeeAllBestViewBody extends StatelessWidget {
        builder:  (context ,state){
          return const Padding(
            padding: EdgeInsets.all(20.0),
-           child:  Column(
-             children: [
-               ContainerSearchWidget(),
-               SizedBox(height: 20,),
-               Expanded(child: SeeAllBestViewBodyList()),
+          child:  Column(
+              children: [
+                Expanded(child: SeeAllBestViewBodyList()),
 
-             ],
-           ),
+              ],
+            ),
          );
        },
 
