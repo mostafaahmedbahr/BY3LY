@@ -33,7 +33,11 @@ class EndPoints {
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
   static const sellerProduct = "sellerProduct";
+  /// Notifications: GET list, PATCH read, DELETE remove.
   static const notifications = "notifications";
+  static const notificationsReadAll = "notifications/read-all";
+  static String notificationRead(String id) => "notifications/$id/read";
+  static String notificationById(String id) => "notifications/$id";
   static const complaintsTypes = "complaintsTypes";
   static const addComplaint = "addComplaint";
   static const reportReasons = "reportReasons";

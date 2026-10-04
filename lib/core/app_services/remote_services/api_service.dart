@@ -130,6 +130,14 @@ class ApiService {
     return await _dio.put(endPoint, data: data, queryParameters: query);
   }
 
+  Future<Response> patchData({
+    required String endPoint,
+    dynamic data,
+    Map<String, dynamic>? query,
+  }) async {
+    return await _dio.patch(endPoint, data: data, queryParameters: query);
+  }
+
   Future<Response> deleteData({
     required String endPoint,
     dynamic data,

@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_states.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +41,24 @@ class LayoutViewState extends State<LayoutView> {
                 ),
                 FlashyTabBarItem(
                   activeColor: AppColors.mainColor,
-                  icon: const Icon(CupertinoIcons.chat_bubble, color: AppColors.mainColor),
+                  icon: BlocBuilder<NotificationsCubit,
+                      NotificationsStates>(
+                    builder: (context, state) {
+                      final unread = NotificationsCubit.get(context)
+                          .unreadCount;
+                      return Badge(
+                        isLabelVisible: unread > 0,
+                        label: Text(
+                          unread > 99 ? '99+' : '$unread',
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                        backgroundColor: AppColors.redColor,
+                        child: const Icon(
+                            CupertinoIcons.chat_bubble,
+                            color: AppColors.mainColor),
+                      );
+                    },
+                  ),
                   title: Text(context.tr(LocaleKeys.notifications)),
                 ),
                 FlashyTabBarItem(

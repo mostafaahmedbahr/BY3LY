@@ -1,4 +1,27 @@
 
+String? _asString(dynamic v) => v?.toString();
+
+int? _asInt(dynamic v) {
+  if (v == null) return null;
+  if (v is int) return v;
+  if (v is double) return v.toInt();
+  if (v is String) return int.tryParse(v);
+  if (v is bool) return v ? 1 : 0;
+  return null;
+}
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is int) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 class NotificationsModel {
   bool? status;
   String? message;
@@ -7,19 +30,9 @@ class NotificationsModel {
   NotificationsModel({this.status, this.message, this.data});
 
   NotificationsModel.fromJson(Map<String, dynamic> json) {
-    if(json["status"] is bool) {
-      status = json["status"];
-    }
-    if(json["message"] is String) {
-      message = json["message"];
-    }
-    if(json["data"] is Map) {
-      data = json["data"] == null ? null : Data.fromJson(json["data"]);
-    }
-  }
-
-  static List<NotificationsModel> fromList(List<Map<String, dynamic>> list) {
-    return list.map(NotificationsModel.fromJson).toList();
+    status = _asBool(json["status"]) ?? json["status"] == 1;
+    message = _asString(json["message"]);
+    data = json["data"] == null ? null : Data.fromJson(json["data"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -31,31 +44,19 @@ class NotificationsModel {
     }
     return _data;
   }
-
-  NotificationsModel copyWith({
-    bool? status,
-    String? message,
-    Data? data,
-  }) => NotificationsModel(
-    status: status ?? this.status,
-    message: message ?? this.message,
-    data: data ?? this.data,
-  );
 }
 
 class Data {
   List<Notifications>? notifications;
+  Pagination? pagination;
+  int? unreadCount;
 
-  Data({this.notifications});
+  Data({this.notifications, this.pagination, this.unreadCount});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["notifications"] is List) {
-      notifications = json["notifications"] == null ? null : (json["notifications"] as List).map((e) => Notifications.fromJson(e)).toList();
-    }
-  }
-
-  static List<Data> fromList(List<Map<String, dynamic>> list) {
-    return list.map(Data.fromJson).toList();
+    notifications = json["notifications"] == null ? null : (json["notifications"] as List).map((e) => Notifications.fromJson(e)).toList();
+    pagination = json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]);
+    unreadCount = _asInt(json["unread_count"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -63,96 +64,74 @@ class Data {
     if(notifications != null) {
       _data["notifications"] = notifications?.map((e) => e.toJson()).toList();
     }
+    if(pagination != null) {
+      _data["pagination"] = pagination?.toJson();
+    }
+    _data["unread_count"] = unreadCount;
     return _data;
   }
+}
 
-  Data copyWith({
-    List<Notifications>? notifications,
-  }) => Data(
-    notifications: notifications ?? this.notifications,
-  );
+class Pagination {
+  int? currentPage;
+  int? lastPage;
+  int? perPage;
+  int? total;
+
+  Pagination({this.currentPage, this.lastPage, this.perPage, this.total});
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    currentPage = _asInt(json["current_page"]);
+    lastPage = _asInt(json["last_page"]);
+    perPage = _asInt(json["per_page"]);
+    total = _asInt(json["total"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["current_page"] = currentPage;
+    _data["last_page"] = lastPage;
+    _data["per_page"] = perPage;
+    _data["total"] = total;
+    return _data;
+  }
 }
 
 class Notifications {
-  int? id;
-  String? title;
-  String? message;
-  int? userId;
-  String? userName;
-  String? userImage;
+  String? id;
   String? type;
-  int? status;
+  String? title;
+  String? body;
+  List<dynamic>? data;
+  bool? isRead;
+  dynamic readAt;
   String? createdAt;
 
-  Notifications({this.id, this.title, this.message, this.userId, this.userName, this.userImage, this.type, this.status, this.createdAt});
+  Notifications({this.id, this.type, this.title, this.body, this.data, this.isRead, this.readAt, this.createdAt});
 
   Notifications.fromJson(Map<String, dynamic> json) {
-    if(json["id"] is num) {
-      id = (json["id"] as num).toInt();
-    }
-    if(json["title"] is String) {
-      title = json["title"];
-    }
-    if(json["message"] is String) {
-      message = json["message"];
-    }
-    if(json["user_id"] is num) {
-      userId = (json["user_id"] as num).toInt();
-    }
-    if(json["user_name"] is String) {
-      userName = json["user_name"];
-    }
-    if(json["user_image"] is String) {
-      userImage = json["user_image"];
-    }
-    if(json["type"] is String) {
-      type = json["type"];
-    }
-    if(json["status"] is num) {
-      status = (json["status"] as num).toInt();
-    }
-    if(json["created_at"] is String) {
-      createdAt = json["created_at"];
-    }
-  }
-
-  static List<Notifications> fromList(List<Map<String, dynamic>> list) {
-    return list.map(Notifications.fromJson).toList();
+    id = _asString(json["id"]);
+    type = _asString(json["type"]);
+    title = _asString(json["title"]);
+    body = _asString(json["body"]);
+    data = json["data"] ?? [];
+    isRead = _asBool(json["is_read"]) ?? json["read_at"] != null;
+    readAt = json["read_at"];
+    createdAt = _asString(json["created_at"]);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
-    _data["title"] = title;
-    _data["message"] = message;
-    _data["user_id"] = userId;
-    _data["user_name"] = userName;
-    _data["user_image"] = userImage;
     _data["type"] = type;
-    _data["status"] = status;
+    _data["title"] = title;
+    _data["body"] = body;
+    if(data != null) {
+      _data["data"] = data;
+    }
+    _data["is_read"] = isRead;
+    _data["read_at"] = readAt;
     _data["created_at"] = createdAt;
     return _data;
   }
-
-  Notifications copyWith({
-    int? id,
-    String? title,
-    String? message,
-    int? userId,
-    String? userName,
-    String? userImage,
-    String? type,
-    int? status,
-    String? createdAt,
-  }) => Notifications(
-    id: id ?? this.id,
-    title: title ?? this.title,
-    message: message ?? this.message,
-    userId: userId ?? this.userId,
-    userName: userName ?? this.userName,
-    userImage: userImage ?? this.userImage,
-    type: type ?? this.type,
-    status: status ?? this.status,
-    createdAt: createdAt ?? this.createdAt,
-  );
 }
