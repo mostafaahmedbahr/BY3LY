@@ -1,7 +1,4 @@
 
-import 'package:by3ly/core/extensions/navigate.dart';
-import 'package:by3ly/core/routing/routes.dart';
-
 import '../../../../../main_importants.dart';
 import '../../../data/models/my_ads_data_model.dart';
 
@@ -16,16 +13,19 @@ class MyAdsListItem extends StatelessWidget {
     final stats = [
       _StatData(
         icon: AppImages.star,
+        tint: const Color(0xffFFF4D6),
         label: "التقييم",
         value: adsProduct.rate?.toString() ?? "-",
       ),
       _StatData(
         icon: "assets/images/Chat.svg",
+        tint: const Color(0xffE3F2FD),
         label: "التعليقات",
         value: adsProduct.countCommenets?.toString() ?? "-",
       ),
       _StatData(
         icon: "assets/images/eye (1).svg",
+        tint: const Color(0xffE6F4EF),
         label: "المراجعات",
         value: adsProduct.reviewsCount?.toString() ?? "-",
       ),
@@ -37,18 +37,18 @@ class MyAdsListItem extends StatelessWidget {
           "productId": adsProduct.id ?? 0,
         });
       },
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           color: Colors.white,
           border: Border.all(color: const Color(0xFFF0F0F0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],
@@ -62,30 +62,57 @@ class MyAdsListItem extends StatelessWidget {
                   children: [
                     CustomNetWorkImage(
                       imageUrl: adsProduct.image ?? '',
-                      raduis: 12,
+                      raduis: 14,
                       fit: BoxFit.cover,
-                      width: 110,
-                      height: 120,
+                      width: 104,
+                      height: 118,
                     ),
                     Positioned(
-                      top: 6,
-                      right: 6,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 6),
                         decoration: BoxDecoration(
-                          color: _isActive
-                              ? AppColors.mainColor
-                              : const Color(0xff9AA0A6),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          _isActive ? "نشط" : "غير نشط",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
+                          borderRadius:
+                              const BorderRadius.vertical(
+                            bottom: Radius.circular(14),
                           ),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.6),
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: _isActive
+                                    ? const Color(0xff34C759)
+                                    : Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              _isActive ? "نشط" : "غير نشط",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -102,9 +129,9 @@ class MyAdsListItem extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 13,
-                          height: 1.35,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 13.5,
+                          height: 1.4,
+                          fontWeight: FontWeight.w700,
                           color: Color(0xff1F2937),
                         ),
                       ),
@@ -128,7 +155,9 @@ class MyAdsListItem extends StatelessWidget {
                                   : "لا يوجد",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: AppStyles.textStyle10W400Green,
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xff9AA0A6)),
                             ),
                           ),
                         ],
@@ -150,61 +179,134 @@ class MyAdsListItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 17,
                           fontWeight: FontWeight.w800,
                           color: Color(0xff1F2937),
                         ),
-                      ),
-                      const CustomSizedBox(height: 2,),
-                      Text(
-                        adsProduct.createdAt ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 10, color: Color(0xffB0B5BB)),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10,),
-            Row(
-              children: [
-                for (int i = 0; i < stats.length; i++) ...[
-                  Expanded(child: _StatBox(stat: stats[i])),
-                  if (i != stats.length - 1) const SizedBox(width: 8),
+            const SizedBox(height: 12,),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xffF8FAF9),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  for (int i = 0; i < stats.length; i++) ...[
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: stats[i].tint,
+                              borderRadius:
+                                  BorderRadius.circular(9),
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                stats[i].icon,
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 7),
+                          Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                stats[i].value,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xff1F2937),
+                                ),
+                              ),
+                              Text(
+                                stats[i].label,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Color(0xff9AA0A6),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (i != stats.length - 1)
+                      Container(
+                        width: 1,
+                        height: 34,
+                        color: const Color(0xFFE5E7EB),
+                      ),
+                  ],
                 ],
-              ],
+              ),
             ),
             const SizedBox(height: 10,),
             Row(
               children: [
                 Expanded(
-                  child: CustomButton(
-                    btnText: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.arrow_drop_down_circle_sharp,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 6),
-                        const Text("خيارات",
-                          style: AppStyles.textStyle14W500White,),
-                      ],
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.settings_outlined,
+                      size: 18,
+                      color: AppColors.mainColor,
                     ),
-                    onPressed: (){},
+                    label: const Text(
+                      "خيارات",
+                      style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(
+                          color: AppColors.mainColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12,),
                 Expanded(
-                  child: CustomButton(
-                    btnColor: AppColors.yellowColor,
-                    borderColor: AppColors.yellowColor,
-                    btnText:  const Text("وقف الاعلان",
-                      style: AppStyles.textStyle14W500White,),
-                    onPressed: (){},
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isActive
+                          ? AppColors.yellowColor
+                          : AppColors.mainColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 12),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      _isActive ? "وقف الاعلان" : "تفعيل الاعلان",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -218,59 +320,14 @@ class MyAdsListItem extends StatelessWidget {
 
 class _StatData {
   final String icon;
+  final Color tint;
   final String label;
   final String value;
 
   const _StatData({
     required this.icon,
+    required this.tint,
     required this.label,
     required this.value,
   });
-}
-
-class _StatBox extends StatelessWidget {
-  const _StatBox({required this.stat});
-
-  final _StatData stat;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xffF8FAF9),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(stat.icon, width: 14, height: 14),
-              const SizedBox(width: 5,),
-              Expanded(
-                child: Text(
-                  stat.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppStyles.textStyle10W400Green,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            stat.value,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-              color: Color(0xff1F2937),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
