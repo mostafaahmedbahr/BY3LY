@@ -7,9 +7,27 @@ import 'add_bundle_button.dart';
 import 'ads_types.dart';
 import 'my_ads_list.dart';
 
-class AdvertisementsViewBody extends StatelessWidget {
+class AdvertisementsViewBody extends StatefulWidget {
   const AdvertisementsViewBody({super.key});
 
+
+  @override
+  State<AdvertisementsViewBody> createState() => _AdvertisementsViewBodyState();
+}
+
+class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _clearSearch(AdvertisementsCubit cubit) {
+    _searchController.clear();
+    cubit.setSearchQuery('');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +50,7 @@ class AdvertisementsViewBody extends StatelessWidget {
                 const AddBundleButton(),
                 const SizedBox(height: 16,),
                 CustomTextFormField(
+                  controller: _searchController,
                   keyboardType: TextInputType.text,
                   hintText: "ابحث باسم الإعلان...",
                   prefixIcon: Padding(
@@ -42,7 +61,7 @@ class AdvertisementsViewBody extends StatelessWidget {
                       ? IconButton(
                           icon: const Icon(Icons.clear, size: 20),
                           onPressed: () =>
-                              advertisementsCubit.setSearchQuery(''),
+                              _clearSearch(advertisementsCubit),
                         )
                       : null,
                   onChanged: advertisementsCubit.setSearchQuery,
