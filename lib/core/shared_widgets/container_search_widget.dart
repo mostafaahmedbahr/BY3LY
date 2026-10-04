@@ -12,16 +12,22 @@ class ContainerSearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomTextFormField(
-      readOnly: true,
-      onPressed: (){
-        LayoutCubit.get(context).changeBottomNav(LayoutCubit.pageIndex=2,context);
+    return InkWell(
+      onTap: () {
+        LayoutCubit.get(context)
+            .changeBottomNav(LayoutCubit.pageIndex = 2, context);
       },
-      keyboardType: TextInputType.text,
-      hintText:  context.tr(LocaleKeys.searchWithBy3ly),
-      prefixIcon: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SvgPicture.asset(AppImages.search),
+      borderRadius: BorderRadius.circular(10),
+      child: IgnorePointer(
+        child: CustomTextFormField(
+          readOnly: true,
+          keyboardType: TextInputType.text,
+          hintText: context.tr(LocaleKeys.searchWithBy3ly),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(AppImages.search),
+          ),
+        ),
       ),
     );
   }
