@@ -1,9 +1,8 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_cubit.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_states.dart';
-import 'package:by3ly/features/home/presentation/views/home_widgets/best_view_strip.dart';
+import 'package:by3ly/features/home/presentation/views/home_widgets/best_view_products.dart';
 import 'package:by3ly/features/home/presentation/views/home_widgets/categories_list.dart';
-import 'package:by3ly/features/home/presentation/views/home_widgets/home_ads_strip.dart';
 import 'package:by3ly/main_importants.dart';
 import '../../../../../core/shared_widgets/container_search_widget.dart';
 import 'banner_to_login.dart';
@@ -26,7 +25,6 @@ class HomeViewBody extends StatelessWidget {
           onTap: () => context.read<HomeCubit>().getHome(),
         );
       }
-      final ads = homeCubit.homeModel?.data?.ads ?? [];
       final bestView = homeCubit.homeModel?.data?.bestView ?? [];
       return ListView(
         children: [
@@ -45,11 +43,9 @@ class HomeViewBody extends StatelessWidget {
           ///BannerToLogin
           const BannerToLogin(),
 
-          /// BestView (title + horizontal, first 5).
-          if (bestView.isNotEmpty) BestViewStrip(bestView: bestView),
-
-          /// Ads (title + horizontal, first 5).
-          if (ads.isNotEmpty) HomeAdsStrip(ads: ads),
+          /// BestView grid (vertical scroll, all items).
+          if (bestView.isNotEmpty)
+            BestViewProducts(bestView: bestView),
         ],
       );
     });

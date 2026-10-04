@@ -14,7 +14,7 @@ class BestViewProductsList extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 0.66,
+        childAspectRatio: 0.72,
       ),
       itemCount: bestView!.length,
       itemBuilder: (context, index) {
