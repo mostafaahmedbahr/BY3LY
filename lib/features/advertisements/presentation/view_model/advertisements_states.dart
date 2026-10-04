@@ -36,16 +36,18 @@ class DeleteAdLoadingState extends AdvertisementsStates {
 }
 
 class DeleteAdSuccessState extends AdvertisementsStates {
+  final int adId;
   final String? message;
-  DeleteAdSuccessState(this.message);
+  DeleteAdSuccessState(this.adId, this.message);
 
   @override
-  String toString() => 'DeleteAdSuccessState(message: $message)';
+  String toString() => 'DeleteAdSuccessState(adId: $adId)';
 }
 
 class DeleteAdErrorState extends AdvertisementsStates {
   final String error;
-  DeleteAdErrorState(this.error);
+  final int? adId;
+  DeleteAdErrorState(this.error, {this.adId});
 
   @override
   String toString() => 'DeleteAdErrorState(error: $error)';

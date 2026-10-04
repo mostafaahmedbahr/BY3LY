@@ -265,7 +265,11 @@ class MyAdsListItem extends StatelessWidget {
             const SizedBox(height: 10,),
             BlocConsumer<AdvertisementsCubit, AdvertisementsStates>(
               listener: (context, state) {
-                if (state is DeleteAdSuccessState) {
+                // Guard by adId: every card listens to the same cubit,
+                // only the deleted card shows the toast (otherwise it
+                // appears once per visible card).
+                if (state is DeleteAdSuccessState &&
+                    state.adId == adsProduct.id) {
                   CherryToast.success(
                     title: Text(
                       (state.message?.trim().isNotEmpty ?? false)
@@ -275,7 +279,9 @@ class MyAdsListItem extends StatelessWidget {
                           color: AppColors.mainColor),
                     ),
                   ).show(context);
-                } else if (state is DeleteAdErrorState) {
+                } else if (state is DeleteAdErrorState &&
+                    (state.adId == null ||
+                        state.adId == adsProduct.id)) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error)),
                   );

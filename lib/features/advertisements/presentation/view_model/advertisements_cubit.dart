@@ -84,14 +84,16 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     return result.fold((failure) {
       debugPrint('AdvertisementsCubit deleteAd failed: ${failure.errMessage}');
       deletingAdId = null;
-      emit(DeleteAdErrorState(failure.errMessage));
+      emit(DeleteAdErrorState(failure.errMessage, adId: adId));
     }, (data) {
       deletingAdId = null;
       if (data.status == true) {
         allMyAdsList.removeWhere((ad) => ad.id == adId);
-        emit(DeleteAdSuccessState(data.message));
+        emit(DeleteAdSuccessState(adId, data.message));
       } else {
-        emit(DeleteAdErrorState(data.message ?? 'Something went wrong'));
+        emit(DeleteAdErrorState(
+            data.message ?? 'Something went wrong',
+            adId: adId));
       }
     });
   }
