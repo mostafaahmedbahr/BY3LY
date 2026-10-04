@@ -1,4 +1,5 @@
- import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
+  import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
   import '../../../../../main_importants.dart';
 import '../../../data/repos/advertisements_repos_imple.dart';
 import '../../view_model/advertisements_cubit.dart';
@@ -19,6 +20,8 @@ class AdvertisementsViewBody extends StatelessWidget {
       child: BlocConsumer<AdvertisementsCubit , AdvertisementsStates>(
         listener: (context ,state){},
         builder: (context ,state){
+          final advertisementsCubit = AdvertisementsCubit.get(context);
+          final products = advertisementsCubit.filteredAds();
           return   Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -29,14 +32,33 @@ class AdvertisementsViewBody extends StatelessWidget {
                 const AdsTypes(),
                 const SizedBox(height: 20,),
                 state is GetAllMyAdsDataLoadingState ? const Expanded(child: CustomLoading()):
-                    state is GetAllMyAdsDataErrorState ? Expanded(child: Text(state.error)):
-                    AdvertisementsCubit.get(context).allMyAdsList.isEmpty ? const Expanded(child:
-                    Center(child: Text("لا يوجد اعلانات سابقة",style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
-                    ),))):
+                    state is GetAllMyAdsDataErrorState ? Expanded(
+                      child: CustomErrorWidget(
+                        error: state.error,
+                        onTap: () => advertisementsCubit.getAllMyAdsDataMethod(
+                          type: advertisementsCubit.advertisementsTypeIndex,
+                        ),
+                      ),
+                    ):
+                    products.isEmpty ? const Expanded(child:
+                    Center(child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.campaign_outlined,
+                          size: 64,
+                          color: Color(0xffD9DEE3),
+                        ),
+                        SizedBox(height: 12),
+                        Text("لا يوجد اعلانات",style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Color(0xff1F2937),
+                        ),),
+                      ],
+                    ))):
                 MyAdsList(
-                  products: AdvertisementsCubit.get(context).allMyAdsList,
+                  products: products,
                 ),
               ],
             ),

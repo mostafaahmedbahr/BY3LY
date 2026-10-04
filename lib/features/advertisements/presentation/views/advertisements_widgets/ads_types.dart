@@ -19,36 +19,82 @@ class AdsTypes extends StatelessWidget {
             ),),
             const SizedBox(height: 10,),
             SizedBox(
-              height: 30,
-              child: ListView.builder(
+              height: 38,
+              child: ListView.separated(
                   itemCount: advertisementsCubit.types.length,
                   scrollDirection: Axis.horizontal,
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
                   itemBuilder: (context,index){
-                    return   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: InkWell(
-                        onTap: (){
-                          advertisementsCubit.changeAdvertisementsTypeIndexWay(advertisementsCubit.advertisementsTypeIndex=index);
-                          advertisementsCubit.getAllMyAdsDataMethod(type: advertisementsCubit.advertisementsTypeIndex);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          height: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color:advertisementsCubit.advertisementsTypeIndex==index  ?
-                              AppColors.mainColor : AppColors.whiteColor,
-                              border: Border.all(
-                                color:advertisementsCubit.advertisementsTypeIndex==index   ?
-                                AppColors.mainColor : const Color(0xffB6B6B6),
-                              )
-                          ),
-                          child:   Center(
-                              child: Text(advertisementsCubit.types[index],
+                    final selected =
+                        advertisementsCubit.advertisementsTypeIndex == index;
+                    final count =
+                        advertisementsCubit.countForTab(index);
+                    return InkWell(
+                      onTap: (){
+                        // Instant client-side filter (no refetch needed).
+                        advertisementsCubit.changeAdvertisementsTypeIndexWay(
+                            advertisementsCubit.advertisementsTypeIndex = index);
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        height: 38,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: selected
+                                ? AppColors.mainColor
+                                : AppColors.whiteColor,
+                            border: Border.all(
+                              color: selected
+                                  ? AppColors.mainColor
+                                  : const Color(0xffE3E6E9),
+                            ),
+                            boxShadow: selected
+                                ? [
+                                    BoxShadow(
+                                      color: AppColors.mainColor
+                                          .withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ]
+                                : null,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              advertisementsCubit.types[index],
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                color: selected
+                                    ? AppColors.whiteColor
+                                    : AppColors.greyColor,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: selected
+                                    ? Colors.white.withValues(alpha: 0.25)
+                                    : const Color(0xffF1F3F5),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '$count',
                                 style: TextStyle(
-                                  color: advertisementsCubit.advertisementsTypeIndex==index   ?
-                                  AppColors.whiteColor : AppColors.greyColor,
-                                ),)),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: selected
+                                      ? AppColors.whiteColor
+                                      : AppColors.mainColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );

@@ -25,8 +25,40 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   List<String> types = [
     "الكل",
     "النشط الان",
-    "السابقة",
+    "الغير نشط",
   ];
+
+  /// Backend rule: is_paused == true  -> paused (غير نشط),
+  ///               anything else      -> active (نشط).
+  bool _isActive(Ads ad) => ad.isPaused != true;
+
+  int get allAdsCount => allMyAdsList.length;
+
+  int get activeAdsCount => allMyAdsList.where(_isActive).length;
+
+  int get inactiveAdsCount => allMyAdsList.length - activeAdsCount;
+
+  int countForTab(int index) {
+    switch (index) {
+      case 1:
+        return activeAdsCount;
+      case 2:
+        return inactiveAdsCount;
+      default:
+        return allAdsCount;
+    }
+  }
+
+  List<Ads> filteredAds() {
+    switch (advertisementsTypeIndex) {
+      case 1:
+        return allMyAdsList.where(_isActive).toList();
+      case 2:
+        return allMyAdsList.where((ad) => !_isActive(ad)).toList();
+      default:
+        return allMyAdsList;
+    }
+  }
 
 
   AdvertisementsRepo? advertisementsRepo;
