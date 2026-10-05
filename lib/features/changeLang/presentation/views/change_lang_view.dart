@@ -1,3 +1,4 @@
+import 'package:by3ly/core/extensions/lang.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class ChangeLangView extends StatelessWidget {
                       ),
                       const SizedBox(width: 20),
                       Text(
-                        LocaleKeys.arabicLang.tr(),
+                        !context.isArabic ? "Arabic " :  "اللغة العربية",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -85,7 +86,7 @@ class ChangeLangView extends StatelessWidget {
                       ),
                       const SizedBox(width: 20),
                       Text(
-                        LocaleKeys.englishLang.tr(),
+                     context.isArabic ? "English " :  "اللغة الانجليزية",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
