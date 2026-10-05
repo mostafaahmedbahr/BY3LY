@@ -1,16 +1,14 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
-import '../../../../../core/shared_widgets/container_search_widget.dart';
 import '../../../../../core/shared_widgets/shimmer_loading.dart';
 import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../../core/utils/app_styles/app_styles.dart';
 import '../../../../../lang/locale_keys.dart';
-import '../../../../allCategories/presentation/views/all_categories_view.dart';
-import '../../../../seeAllBestView/presentation/views/see_all_best_view.dart';
 
+/// Loading skeleton that mirrors [HomeViewBody] section by section
+/// (slider -> search -> categories -> login banner -> best-view grid)
+/// with the same sizes, so the screen doesn't jump when data arrives.
 class HomeLoadingWidget extends StatelessWidget {
   const HomeLoadingWidget({super.key});
 
@@ -18,14 +16,21 @@ class HomeLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        /// search
+        /// 1. Banner slider skeleton (same size as the real carousel).
         const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: ContainerSearchWidget(),
+          padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
+          child: SimmerLoading(height: 185, raduis: 22),
         ),
-        /// CategoriesList
+
+        /// 2. Search bar skeleton.
+        const Padding(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: SimmerLoading(height: 52, raduis: 12),
+        ),
+
+        /// 3. Categories skeleton.
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               Row(
@@ -35,183 +40,116 @@ class HomeLoadingWidget extends StatelessWidget {
                     context.tr(LocaleKeys.categories),
                     style: AppStyles.textStyle16W600Black,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          child: const AllCategoriesView(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      context.tr(LocaleKeys.seeAll),
-                      style: const TextStyle(color: AppColors.mainColor),
-                    ),
+                  Text(
+                    context.tr(LocaleKeys.seeAll),
+                    style: const TextStyle(color: AppColors.mainColor),
                   ),
                 ],
               ),
+              const SizedBox(height: 8),
               SizedBox(
-                height: 70,
+                height: 80,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return const SimmerLoading(
-                      height: 70,
-                      width: 70,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      width: 25,
-                    );
-                  },
-                  itemCount: 10,
+                  itemCount: 5,
+                  separatorBuilder: (_, _) =>
+                      const SizedBox(width: 25),
+                  itemBuilder: (_, _) => const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SimmerLoading(height: 50, width: 60, raduis: 10),
+                      SizedBox(height: 6),
+                      SimmerLoading(height: 12, width: 48, raduis: 6),
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
-        ///BannerToLogin
-        const SimmerLoading(
-          height: 100,
+
+        /// 4. Login banner skeleton (full-bleed like the real banner).
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: SimmerLoading(height: 118, raduis: 0),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        ///BannerAds1
-        SizedBox(
-          height: 140,
-          child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return const SimmerLoading(
-                raduis: 10,
-                height: 140,
-              );
-            },
-            itemCount: 3,
-            viewportFraction: 0.8,
-            scale: 0.9,
-            pagination: const SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                activeColor: AppColors
-                    .mainColor, // Change this to your desired active color
-              ),
-              margin: EdgeInsets.all(10.0),
-            ),
-            loop: false,
-            autoplay: false,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        /// bestView
+
+        /// 5. Best-view grid skeleton (same grid metrics as the real one).
         Padding(
-          padding: const EdgeInsets.only(
-            bottom: 20, left: 20, right: 20,
-          ),
+          padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(context.tr(LocaleKeys.bestView),
-                    style: AppStyles.textStyle16W600Black,),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          child: const SeeAllView(),
-                        ),
-                      );
-                    },
-                    child: Text(context.tr(LocaleKeys.seeAll),
-                      style: const TextStyle(
-                          color: AppColors.mainColor
-                      ),),
+                  Text(
+                    context.tr(LocaleKeys.bestView),
+                    style: AppStyles.textStyle16W600Black,
+                  ),
+                  Text(
+                    context.tr(LocaleKeys.seeAll),
+                    style: const TextStyle(color: AppColors.mainColor),
                   ),
                 ],
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 0.7,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  mainAxisExtent: 235,
                 ),
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return const SimmerLoading(
-                    height: 120,
-                    raduis: 10,
-                  );
-                },
-              )
+                itemCount: 6,
+                itemBuilder: (_, _) => const _ProductCardSkeleton(),
+              ),
             ],
           ),
         ),
-        ///BannerAds2
-        SizedBox(
-          height: 140,
-          child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return const SimmerLoading(
-                raduis: 10,
-                height: 140,
-              );
-            },
-            itemCount: 3,
-            viewportFraction: 0.8,
-            scale: 0.9,
-            pagination: const SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                activeColor: AppColors
-                    .mainColor, // Change this to your desired active color
-              ),
-              margin: EdgeInsets.all(10.0),
-            ),
-            loop: false,
-            autoplay: false,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        ///BannerAds3
-        SizedBox(
-          height: 140,
-          child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return const SimmerLoading(
-                raduis: 10,
-                height: 140,
-              );
-            },
-            itemCount: 3,
-            viewportFraction: 0.8,
-            scale: 0.9,
-            pagination: const SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                activeColor: AppColors
-                    .mainColor, // Change this to your desired active color
-              ),
-              margin: EdgeInsets.all(10.0),
-            ),
-            loop: false,
-            autoplay: false,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
       ],
+    );
+  }
+}
+
+/// Skeleton shaped like a product card: image block + text lines.
+class _ProductCardSkeleton extends StatelessWidget {
+  const _ProductCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFF0F0F0)),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16),
+            ),
+            child: SimmerLoading(height: 140, raduis: 0),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 8, 10, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SimmerLoading(height: 12, raduis: 6),
+                SizedBox(height: 6),
+                SimmerLoading(height: 10, width: 90, raduis: 6),
+                SizedBox(height: 6),
+                SimmerLoading(height: 14, width: 70, raduis: 6),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

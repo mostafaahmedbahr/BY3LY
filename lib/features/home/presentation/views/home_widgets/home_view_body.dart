@@ -16,14 +16,22 @@ class HomeViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeStates>(builder: (context, state) {
       var homeCubit = context.read<HomeCubit>();
-      if (state is GetHomeDataLoading) {
-        return const HomeLoadingWidget();
-      }
-      if (state is GetHomeDataError) {
+      // Show the full-page shimmer whenever there is no home data yet,
+      // whatever the current state is (home loading, banners loading,
+      // or init). getHome() and getBanners() run in parallel and the last
+      // emitted state wins, so checking a single loading state would let
+      // an empty page flash with no shimmer at all.
+      final hasData = homeCubit.homeModel != null;
+      if (state is GetHomeDataError && !hasData) {
         return CustomErrorWidget(
           error: state.message.toString(),
-          onTap: () => context.read<HomeCubit>().getHome(),
+          onTap: () => context.read<HomeCubit>()
+            ..getHome()
+            ..getBanners(),
         );
+      }
+      if (!hasData) {
+        return const HomeLoadingWidget();
       }
       final bestView = homeCubit.homeModel?.data?.bestView ?? [];
       return ListView(
