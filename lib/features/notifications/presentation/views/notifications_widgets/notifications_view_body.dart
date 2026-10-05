@@ -8,7 +8,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'notifications_buttons_types.dart';
 import 'notifications_list.dart';
 
 class NotificationsViewBody extends StatefulWidget {
@@ -78,15 +77,15 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
                   child: TextButton(
-                    onPressed: () => cubit.markAllAsRead(),
-                    child: const Text(
-                      "تعليم الكل كمقروء",
-                      style: TextStyle(
-                        color: AppColors.mainColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                      onPressed: () => cubit.markAllAsRead(),
+                      child: Text(
+                        context.tr(LocaleKeys.markAllAsRead),
+                        style: const TextStyle(
+                          color: AppColors.mainColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
                   ),
                 ),
               const SizedBox(height: 4),

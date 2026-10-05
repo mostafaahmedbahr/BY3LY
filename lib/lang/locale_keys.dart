@@ -289,6 +289,11 @@ abstract class LocaleKeys {
   static const filterAll = "filterAll";
   static const filterRead = "filterRead";
   static const filterUnread = "filterUnread";
+  static const noNotificationsOfThisType = "noNotificationsOfThisType";
+  static const deleteNotification = "deleteNotification";
+  static const deleteNotificationConfirm = "deleteNotificationConfirm";
+  static const retry = "retry";
+  static const markAllAsRead = "markAllAsRead";
 
 
 

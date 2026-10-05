@@ -6,6 +6,8 @@ import 'package:by3ly/features/notifications/data/models/notifications_model.dar
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
 import 'package:by3ly/features/notifications/presentation/views/notifications_widgets/notifications_list_item.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,8 +50,8 @@ class _NotificationsListState extends State<NotificationsList> {
     if (n.id == null) return;
     final confirmed = await AppConfirmDialog.show(
       context,
-      title: "حذف الإشعار",
-      message: "سيتم حذف هذا الإشعار نهائيًا؟",
+      title: context.tr(LocaleKeys.deleteNotification),
+      message: context.tr(LocaleKeys.deleteNotificationConfirm),
     );
     if (confirmed && context.mounted) {
       NotificationsCubit.get(context).deleteNotification(n.id);
@@ -64,9 +66,9 @@ class _NotificationsListState extends State<NotificationsList> {
         final items = cubit.filteredNotifications;
 
         if (items.isEmpty && !cubit.isLoadingMore) {
-          return const NoDataWidget(
+          return NoDataWidget(
             image: "assets/images/Validation.svg",
-            text: "لا يوجد اشعارات من هذا النوع حاليا",
+            text: context.tr(LocaleKeys.noNotificationsOfThisType),
           );
         }
 
@@ -90,9 +92,9 @@ class _NotificationsListState extends State<NotificationsList> {
                     child: TextButton(
                       onPressed: () => cubit.getNotificationsData(
                           loadMore: true),
-                      child: const Text(
-                        "إعادة المحاولة",
-                        style: TextStyle(
+                      child: Text(
+                        context.tr(LocaleKeys.retry),
+                        style: const TextStyle(
                             color: AppColors.mainColor),
                       ),
                     ),

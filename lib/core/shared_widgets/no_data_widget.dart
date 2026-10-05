@@ -20,6 +20,7 @@ class NoDataWidget extends StatelessWidget {
           fit: BoxFit.cover,),
           const CustomSizedBox(height: 20,),
           Text(text,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             fontWeight: FontWeight.w600,
             color: AppColors.mainColor,

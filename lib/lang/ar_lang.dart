@@ -6,6 +6,8 @@ class ArLang {
     "areYouSureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج",
+    "changePassword": "تغيير كلمة المرور",
+    "changePasswordMsg": "أدخل كلمة المرور القديمة ثم اختر كلمة جديدة",
     "ageValidate": "العمر مطلوب",
     "ageTooYoung": "يجب ألا يقل العمر عن 18 سنة",
     "ageTooOld": "العمر غير صحيح",
@@ -76,7 +78,8 @@ class ArLang {
     "blockPhoneNumber": "حجب رقم الهاتف",
     "deleteAccount": "حذف الحساب",
     "deleteAccountAndStopAds": "حذف الحساب ووقف الاعلانات",
-    "notifications": "الاشعارات",
+    "notifications": ""
+        "اشعارات",
     "disableNotifications": "الغاء تفعيل الاشعارات",
     "enableNotifications": "تفعيل الاشعارات",
     "cancellation": "الغاء",
@@ -278,5 +281,21 @@ class ArLang {
     "filterAll": "الكل",
     "filterRead": "المقروء",
     "filterUnread": "الغير مقروء",
+    "noNotificationsOfThisType": "لا يوجد اشعارات من هذا النوع حاليا",
+    "deleteNotification": "حذف الإشعار",
+    "deleteNotificationConfirm": "سيتم حذف هذا الإشعار نهائيًا؟",
+    "retry": "إعادة المحاولة",
+    "markAllAsRead": "تعليم الكل كمقروء",
+    "done": "تم",
+    "theLinkCannotBeOpened": "تعذر فتح الرابط",
+    "theActivationCodeHasBeenSentToYourEmailAddress":
+        "تم إرسال كود التفعيل إلى بريدك الإلكتروني",
+    "code": "الكود",
+    "verificationCodeResent": "تمت إعادة إرسال كود التحقق",
+    "youLoggedOutPleaseLoginAgain":
+        "تم تسجيل خروجك، من فضلك سجل الدخول مجددًا",
+    "oldPassword": "كلمة المرور القديمة",
+    "newPassword": "كلمة المرور الجديدة",
+    "ageInvalid": "من فضلك أدخل عمرًا صحيحًا",
   };
 }

@@ -10,6 +10,8 @@ class EnLang {
     "areYouSureLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "cancel": "إلغاء",
     "logout": "تسجيل الخروج",
+    "changePassword": "Change password",
+    "changePasswordMsg": "Enter your old password, then choose a new one",
     "ageValidate": "Age is required",
     "ageInvalid": "Please enter a valid age",
     "ageTooYoung": "Age must be at least 18 years",
@@ -77,7 +79,7 @@ class EnLang {
     "blockPhoneNumber": "Block Phone Number",
     "deleteAccount": "Delete Account",
     "deleteAccountAndStopAds": "Delete Account and Stop Ads",
-    "notifications": "Notification",
+    "notifications": "Notify",
     "disableNotifications": "Disable Notifications",
     "enableNotifications": "Enable Notifications",
     "cancellation": "Cancellation",
@@ -278,5 +280,26 @@ class EnLang {
     "filterAll": "All",
     "filterRead": "Read",
     "filterUnread": "Unread",
+    "noNotificationsOfThisType":
+        "There are no notifications of this type at the moment",
+    "deleteNotification": "Delete notification",
+    "deleteNotificationConfirm":
+        "This notification will be permanently deleted?",
+    "retry": "Retry",
+    "markAllAsRead": "Mark all as read",
+    "done": "Done",
+    "theLinkCannotBeOpened": "The link cannot be opened",
+    "theActivationCodeHasBeenSentToYourEmailAddress":
+        "The activation code has been sent to your email address",
+    "code": "Code",
+    "verificationCodeResent": "Verification code resent",
+    "youLoggedOutPleaseLoginAgain":
+        "You have been logged out, please log in again",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "advertiseDes": "Advertise description",
+    "reportSeller": "Report seller",
+    "allProducts": "All products",
+    "sellerData": "Seller data",
   };
 }
