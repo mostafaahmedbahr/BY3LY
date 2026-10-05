@@ -284,7 +284,7 @@ class ProductGridCard extends StatelessWidget {
     this.rating,
     this.productId,
     this.initialIsFavourite = false,
-    this.imageHeight = 132,
+    this.imageHeight = 120,
     required this.onTap,
   });
 
@@ -353,15 +353,15 @@ class ProductGridCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 12.5,
-                      height: 1.35,
+                      fontSize: 12,
+                      height: 1.3,
                       fontWeight: FontWeight.w600,
                       color: Color(0xff1F2937),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   _locationRow(location),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   Row(
                     children: [
                       Expanded(

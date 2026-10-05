@@ -14,7 +14,9 @@ class BestViewProductsList extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 0.72,
+        // ارتفاع ثابت بدل نسبة: محتوى الكارت ارتفاعه ثابت تقريباً
+        // والنسبة كانت بتعمل overflow على الشاشات الضيقة وفراغ كبير على الواسعة
+        mainAxisExtent: 235,
       ),
       itemCount: bestView!.length,
       itemBuilder: (context, index) {

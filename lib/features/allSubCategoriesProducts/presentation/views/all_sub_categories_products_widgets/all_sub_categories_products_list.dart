@@ -308,7 +308,8 @@ class _AllSubCategoriesProductsListState
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.h,
                       crossAxisSpacing: 10.w,
-                      childAspectRatio: 0.65,
+                      // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
+                      mainAxisExtent: 235,
                     ),
                     itemCount: filtered.length,
                     itemBuilder: (context, index) {

@@ -50,7 +50,9 @@ class BestViewStrip extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 248.h,
+            // ارتفاع ثابت (مش .h) لأن محتوى الكارت بمقاسات ثابتة بالبكسل
+            // والـ .h كان بيصغر على الشاشات القصيرة ويعمل overflow
+            height: 235,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 20.w),

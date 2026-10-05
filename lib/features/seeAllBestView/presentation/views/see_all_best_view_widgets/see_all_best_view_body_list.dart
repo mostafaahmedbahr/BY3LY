@@ -99,7 +99,8 @@ class _SeeAllBestViewBodyListState
                       crossAxisCount: 2,
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
-                      childAspectRatio: 0.72,
+                      // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
+                      mainAxisExtent: 235,
                     ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
