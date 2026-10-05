@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
@@ -60,9 +61,12 @@ class _MinimalHeartState extends State<_MinimalHeart> {
       },
       builder: (context, state) {
         final cubit = FavCubit.get(context);
-        final isFav = _localFav ??
-            cubit.isFavourite(widget.productId) ||
-                widget.initialIsFavourite;
+        // Guests always see a plain (non-favourited) heart.
+        final isFav = GuestGuard.isGuest
+            ? false
+            : (_localFav ??
+                cubit.isFavourite(widget.productId) ||
+                    widget.initialIsFavourite);
         return Container(
           height: widget.size,
           width: widget.size,
@@ -89,7 +93,11 @@ class _MinimalHeartState extends State<_MinimalHeart> {
   }
 }
 
+/// Location row is hidden completely when there is no location.
 Widget _locationRow(String? location) {
+  if (location?.trim().isNotEmpty != true) {
+    return const SizedBox.shrink();
+  }
   return Row(
     children: [
       SvgPicture.asset(
@@ -100,7 +108,7 @@ Widget _locationRow(String? location) {
       const SizedBox(width: 4),
       Expanded(
         child: Text(
-          (location?.trim().isNotEmpty ?? false) ? location! : "لا يوجد",
+          location!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontSize: 11, color: Color(0xff9AA0A6)),

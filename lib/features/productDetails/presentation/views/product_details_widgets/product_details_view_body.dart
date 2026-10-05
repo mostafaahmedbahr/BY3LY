@@ -10,9 +10,10 @@ import 'package:by3ly/features/productDetails/presentation/views/product_details
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_seller_info.dart';
  import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/related_products_widget.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/tips_for_your_safety.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/reportProduct/presentation/views/report_the_product_view.dart';
 import 'package:easy_localization/easy_localization.dart';
- import '../../../../../main_importants.dart';
+  import '../../../../../main_importants.dart';
 
 class ProductDetailsViewBody extends StatelessWidget {
   const ProductDetailsViewBody(
@@ -116,7 +117,10 @@ class ProductDetailsViewBody extends StatelessWidget {
                     btnText:   Text( LocaleKeys.reportingAndSupport.tr(),style: const TextStyle(
                       color: AppColors.mainColor,
                     ),),
-                      onPressed: (){
+                      onPressed: () async {
+                        // Reporting needs an account: don't open it for guests.
+                        if (!await GuestGuard.requireLogin(context)) return;
+                        if (!context.mounted) return;
                         Navigator.push(
                           context,
                           PageTransition(

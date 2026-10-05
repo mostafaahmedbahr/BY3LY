@@ -18,24 +18,25 @@ class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
         const CustomSizedBox(
           height: 10,
         ),
-        Row(
-          children: [
-            SvgPicture.asset(AppImages.location),
-            const CustomSizedBox(
-              width: 10,
-            ),
-            Text(
-              (product?.location?.toString().trim().isNotEmpty ?? false)
-                  ? product!.location.toString()
-                  : "لا يوجد",
-              style: AppStyles.textStyle14W500White
-                  .copyWith(color: AppColors.mainColor),
-            ),
-          ],
-        ),
-        const CustomSizedBox(
-          height: 10,
-        ),
+        // Location is hidden completely when there is none.
+        if (product?.location?.toString().trim().isNotEmpty ?? false) ...[
+          Row(
+            children: [
+              SvgPicture.asset(AppImages.location),
+              const CustomSizedBox(
+                width: 10,
+              ),
+              Text(
+                product!.location.toString(),
+                style: AppStyles.textStyle14W500White
+                    .copyWith(color: AppColors.mainColor),
+              ),
+            ],
+          ),
+          const CustomSizedBox(
+            height: 10,
+          ),
+        ],
         Text(
           "${product!.price}",
         style: AppStyles.textStyle16W600Black,

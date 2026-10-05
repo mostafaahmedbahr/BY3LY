@@ -1,3 +1,4 @@
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
 import 'package:by3ly/main_importants.dart';
@@ -52,7 +53,11 @@ class HomeView extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: InkWell(
-                  onTap: () {
+                  // Choosing a delivery location is saved on the account:
+                  // don't open it for guests.
+                  onTap: () async {
+                    if (!await GuestGuard.requireLogin(context)) return;
+                    if (!context.mounted) return;
                     Navigator.push(
                       context,
                       PageTransition(

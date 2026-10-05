@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_button.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/core/utils/new_toast/toast.dart';
@@ -50,7 +51,10 @@ class _RateProductWidgetState extends State<RateProductWidget> {
     super.dispose();
   }
 
-  void _submit() {
+  void _submit() async {
+    // Rating needs an account: guests stay on the default state.
+    if (!await GuestGuard.requireLogin(context)) return;
+    if (!mounted) return;
     if (_stars < 1) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.tr(LocaleKeys.pleaseSelectStars))),
@@ -108,7 +112,12 @@ class _RateProductWidgetState extends State<RateProductWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                // Guests can't open the rating form at all.
+                onTap: () async {
+                  if (!await GuestGuard.requireLogin(context)) return;
+                  if (!mounted) return;
+                  setState(() => _expanded = !_expanded);
+                },
                 borderRadius: BorderRadius.circular(12),
                 child: Row(
                   children: [
