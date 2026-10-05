@@ -297,5 +297,11 @@ class ArLang {
     "oldPassword": "كلمة المرور القديمة",
     "newPassword": "كلمة المرور الجديدة",
     "ageInvalid": "من فضلك أدخل عمرًا صحيحًا",
+    "continueAsGuest": "الدخول كزائر",
+    "loginRequiredTitle": "تسجيل الدخول مطلوب",
+    "loginRequiredMessage": "تحتاج لتسجيل الدخول لاستخدام هذه الميزة",
+    "guestModeTitle": "أنت تتصفح كزائر",
+    "guestModeMessage":
+        "سجل الدخول لنشر الإعلانات وحفظ المفضلة وعرض إشعاراتك",
   };
 }

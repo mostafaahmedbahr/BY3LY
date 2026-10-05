@@ -1,3 +1,4 @@
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
 import 'package:by3ly/main_importants.dart';
@@ -44,13 +45,19 @@ class _FavHeartButtonState extends State<FavHeartButton> {
   /// True while this button's own request is in flight (for toast guarding).
   bool _waiting = false;
 
-  bool _isFav(FavCubit cubit) =>
-      _localFav ??
-      cubit.isFavourite(widget.productId) ||
-          widget.initialIsFavourite;
+  bool _isFav(FavCubit cubit) {
+    // Guests always see a plain (non-favourited) heart.
+    if (GuestGuard.isGuest) return false;
+    return _localFav ??
+        cubit.isFavourite(widget.productId) ||
+            widget.initialIsFavourite;
+  }
 
-  void _onTap() {
+  void _onTap() async {
     if (widget.productId == null || _waiting) return;
+    // Guests must log in before favouriting.
+    if (!await GuestGuard.requireLogin(context)) return;
+    if (!mounted) return;
     final cubit = FavCubit.get(context);
     final nowFav = _isFav(cubit);
     setState(() {

@@ -1,4 +1,5 @@
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../../main_importants.dart';
 import '../../view_model/home_cubit.dart';
@@ -193,7 +194,10 @@ class BannerToLogin extends StatelessWidget {
           ),
         ),
       ),
-      onPressed: () {
+      onPressed: () async {
+        // Guests are asked to log in before posting an ad.
+        if (!await GuestGuard.requireLogin(context)) return;
+        if (!context.mounted) return;
         Navigator.push(
           context,
           PageTransition(

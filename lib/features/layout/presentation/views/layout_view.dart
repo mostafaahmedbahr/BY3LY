@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_states.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
@@ -79,6 +80,12 @@ class LayoutViewState extends State<LayoutView> {
               ],
               showElevation: true,
               onItemSelected: (index) {
+                // Guests may only browse: home(0) and search(2) are open,
+                // notifications(1), ads(3) and account(4) need login.
+                if (GuestGuard.isGuest && (index == 1 || index == 3 || index == 4)) {
+                  GuestGuard.requireLogin(context);
+                  return;
+                }
                 layoutCubit.changeBottomNav(index,context);
               },
             ),

@@ -301,5 +301,11 @@ class EnLang {
     "reportSeller": "Report seller",
     "allProducts": "All products",
     "sellerData": "Seller data",
+    "continueAsGuest": "Continue as guest",
+    "loginRequiredTitle": "Login required",
+    "loginRequiredMessage": "You need to log in to use this feature",
+    "guestModeTitle": "You're browsing as a guest",
+    "guestModeMessage":
+        "Log in to post ads, save favorites and view your notifications",
   };
 }

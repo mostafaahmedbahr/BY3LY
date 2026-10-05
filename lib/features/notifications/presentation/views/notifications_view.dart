@@ -1,5 +1,6 @@
- import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
+  import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
 import 'package:by3ly/lang/locale_keys.dart';
@@ -37,34 +38,38 @@ class NotificationsView extends StatelessWidget {
             color: AppColors.mainColor,
             fontWeight: FontWeight.bold
         ),),
-        actions: [
-          BlocBuilder<NotificationsCubit, NotificationsStates>(
-            builder: (context, state) {
-              final cubit = NotificationsCubit.get(context);
-              if (cubit.unreadCount <= 0) {
-                return const SizedBox.shrink();
-              }
-              return IconButton(
-                tooltip: "تعليم الكل كمقروء",
-                onPressed: () => cubit.markAllAsRead(),
-                icon: const Icon(
-                  Icons.done_all_rounded,
-                  color: AppColors.mainColor,
+        actions: GuestGuard.isGuest
+            ? null
+            : [
+                BlocBuilder<NotificationsCubit, NotificationsStates>(
+                  builder: (context, state) {
+                    final cubit = NotificationsCubit.get(context);
+                    if (cubit.unreadCount <= 0) {
+                      return const SizedBox.shrink();
+                    }
+                    return IconButton(
+                      tooltip: "تعليم الكل كمقروء",
+                      onPressed: () => cubit.markAllAsRead(),
+                      icon: const Icon(
+                        Icons.done_all_rounded,
+                        color: AppColors.mainColor,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-          IconButton(
-            tooltip: "مسح الكل",
-            onPressed: () => _confirmClearAll(context),
-            icon: const Icon(
-              Icons.delete_sweep_outlined,
-              color: AppColors.mainColor,
-            ),
-          ),
-        ],
+                IconButton(
+                  tooltip: "مسح الكل",
+                  onPressed: () => _confirmClearAll(context),
+                  icon: const Icon(
+                    Icons.delete_sweep_outlined,
+                    color: AppColors.mainColor,
+                  ),
+                ),
+              ],
       ),
-      body: const NotificationsViewBody(),
+      body: GuestGuard.isGuest
+          ? const GuestPlaceholder()
+          : const NotificationsViewBody(),
     ));
   }
 }

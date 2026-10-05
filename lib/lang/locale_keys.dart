@@ -294,6 +294,11 @@ abstract class LocaleKeys {
   static const deleteNotificationConfirm = "deleteNotificationConfirm";
   static const retry = "retry";
   static const markAllAsRead = "markAllAsRead";
+  static const continueAsGuest = "continueAsGuest";
+  static const loginRequiredTitle = "loginRequiredTitle";
+  static const loginRequiredMessage = "loginRequiredMessage";
+  static const guestModeTitle = "guestModeTitle";
+  static const guestModeMessage = "guestModeMessage";
 
 
 

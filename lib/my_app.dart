@@ -32,6 +32,7 @@ import 'package:by3ly/features/reportProduct/data/report_product_repos/report_pr
 import 'package:by3ly/features/search/presentation/view_model/search_cubit.dart';
 import 'package:by3ly/features/updateProfile/data/repos/update_profile_data_repo_imple.dart';
 import 'package:by3ly/features/updateProfile/presentation/view_model/update_profile_data_cubit.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,14 +45,23 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthCubit()..checkAuthStatus(),
         ),
         BlocProvider(create: (context) => LayoutCubit()),
-        BlocProvider(create: (context) => ProfileCubit(getIt.get<ProfileRepoImpl>())..getProfile()),
+        BlocProvider(create: (context) {
+          // Guests have no token: skip account-only requests (they 401).
+          final cubit = ProfileCubit(getIt.get<ProfileRepoImpl>());
+          if (!GuestGuard.isGuest) cubit.getProfile();
+          return cubit;
+        }),
         BlocProvider(create: (context) => ReportProductCubit(getIt.get<ReportProductsReposImpl>())..getAllComplaintsTypesData()),
         BlocProvider(create: (context) => PrivacyCubit()),
         BlocProvider(create: (context) => HelpSupportCubit()),
         BlocProvider(create: (context) => AddBalanceCubit()),
         BlocProvider(create: (context) => HelpSupportChatCubit()),
         BlocProvider(create: (context) => ConfirmPaymentCubit()),
-        BlocProvider(create: (context) => FavCubit(getIt.get<FavDataRepoImpl>())..getFavData()),
+        BlocProvider(create: (context) {
+          final cubit = FavCubit(getIt.get<FavDataRepoImpl>());
+          if (!GuestGuard.isGuest) cubit.getFavData();
+          return cubit;
+        }),
         BlocProvider(create: (context) => SearchCubit (getIt.get<SearchReposImpl>())..getAllProductsForSearch()),
         BlocProvider(create: (context) => ChooseLocationCubit (getIt.get<ChooseLocationReposImpl>())..getAllCitiesAndCenters()),
         BlocProvider(create: (context) => LanguageCubit () ),
@@ -60,7 +70,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => SellAllBestViewCubit(getIt.get<SellAllBestViewRepoImpl>())..getSellAllBestView() ),
         BlocProvider(create: (context) => HomeCubit (getIt.get<HomeRepoImpl>())..getHome()..getBanners()),
         BlocProvider(create: (context) => CompareCubit (getIt.get<CompareReposImpl>(), getIt.get<ProductDetailsRepoImpl>())),
-        BlocProvider(create: (context) => NotificationsCubit (getIt.get<NotificationsDataRepoImpl>())..getNotificationsData(type: "general")),
+        BlocProvider(create: (context) {
+          final cubit = NotificationsCubit(getIt.get<NotificationsDataRepoImpl>());
+          if (!GuestGuard.isGuest) cubit.getNotificationsData(type: "general");
+          return cubit;
+        }),
        ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),

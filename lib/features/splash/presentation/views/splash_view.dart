@@ -1,3 +1,4 @@
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/layout/presentation/views/layout_view.dart';
 import '../../../../main_importants.dart';
 import '../../../onBoarding/presentation/views/on_boarding_view.dart';
@@ -32,8 +33,9 @@ class SplashViewState extends State<SplashView> with SingleTickerProviderStateMi
       if (status == AnimationStatus.completed) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) =>
-          CacheTokenManger.userToken!=null ? const LayoutView():
-          const OnBoardingView()), // Your next screen
+          (CacheTokenManger.userToken != null || GuestGuard.isGuest)
+              ? const LayoutView()
+              : const OnBoardingView()), // Your next screen
         );
       }
     });

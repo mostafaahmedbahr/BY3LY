@@ -1,6 +1,7 @@
- import 'package:by3ly/features/profile/presentation/views/profile_widgets/profile_view_body_2.dart';
+  import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/profile/presentation/views/profile_widgets/profile_view_body_2.dart';
 import 'package:easy_localization/easy_localization.dart';
- import '../../../../main_importants.dart';
+  import '../../../../main_importants.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -19,7 +20,9 @@ class ProfileView extends StatelessWidget {
             fontWeight: FontWeight.bold
         ),),
       ),
-      body: const ProfileViewBody2(),
+      body: GuestGuard.isGuest
+          ? const GuestPlaceholder()
+          : const ProfileViewBody2(),
     );
   }
 }

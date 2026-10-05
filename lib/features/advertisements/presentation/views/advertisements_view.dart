@@ -1,5 +1,6 @@
   import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
 import 'package:by3ly/features/advertisements/data/repos/advertisements_repos_imple.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
@@ -31,6 +32,8 @@ class AdvertisementsView extends StatelessWidget {
         builder: (fabContext) {
           return FloatingActionButton(
             onPressed: () async {
+              if (!await GuestGuard.requireLogin(fabContext)) return;
+              if (!fabContext.mounted) return;
               final created = await Navigator.push(
                 fabContext,
                 PageTransition(
