@@ -38,9 +38,12 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
         if (state is GetNotificationsDataLoading &&
             cubit.notificationsList.isEmpty) {
           return const Padding(
-            padding: EdgeInsets.all(20.0),
+            padding:   EdgeInsets.symmetric(horizontal: 20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 4),
                 _ReadStatusFilter(),
                 SizedBox(height: 20),
                 Expanded(child: CustomLoading()),
@@ -51,9 +54,13 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
         if (state is GetNotificationsDataError &&
             cubit.notificationsList.isEmpty) {
           return Padding(
-            padding: const EdgeInsets.all(20.0),
+
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 4),
                 _ReadStatusFilter(),
                 const SizedBox(height: 20),
                 Expanded(
