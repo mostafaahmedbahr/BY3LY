@@ -30,7 +30,7 @@ class CategoriesList extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 70.h,
+            height: 80.h,
             child:
             BlocConsumer<HomeCubit , HomeStates>(
                 listener:(context ,state){} ,
