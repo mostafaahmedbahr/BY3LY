@@ -23,6 +23,8 @@ class PackagesViewBody extends StatelessWidget {
                 : "تم الاشتراك بنجاح",
             context: context,
           );
+          // Refresh the packages page after a successful subscription.
+          context.read<PackagesCubit>().getPackages();
         } else if (state is SubscribePackageErrorState) {
           Toast.showErrorToast(msg: state.error, context: context);
         }

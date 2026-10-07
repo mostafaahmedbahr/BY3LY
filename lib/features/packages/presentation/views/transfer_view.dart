@@ -1,0 +1,337 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/shared_widgets/custom_button.dart';
+import '../../../../core/shared_widgets/custom_error_widget.dart';
+import '../../../../core/shared_widgets/custom_loading.dart';
+import '../../../../core/utils/app_colors/app_colors.dart';
+import '../../../../core/utils/new_toast/toast.dart';
+import '../../data/models/packages_model.dart';
+import '../view_model/packages_cubit.dart';
+import '../view_model/packages_states.dart';
+
+/// Transfer checkout page: pick a transfer method, upload the receipt,
+/// then confirm. On success it pops back and the packages page refreshes.
+class TransferView extends StatefulWidget {
+  const TransferView({super.key, required this.package});
+
+  final Packages package;
+
+  @override
+  State<TransferView> createState() => _TransferViewState();
+}
+
+class _TransferViewState extends State<TransferView> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = PackagesCubit.get(context);
+    cubit.clearTransferForm();
+    cubit.getPaymentMethods();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = PackagesCubit.get(context);
+    return Scaffold(
+      backgroundColor: AppColors.whiteColor,
+      appBar: AppBar(
+        backgroundColor: AppColors.whiteColor,
+        shadowColor: AppColors.mainColor,
+        surfaceTintColor: AppColors.mainColor,
+        title: const Text(
+          "إتمام الاشتراك",
+          style: TextStyle(
+            color: AppColors.mainColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: BlocConsumer<PackagesCubit, PackagesStates>(
+        listener: (context, state) {
+          if (state is SubscribePackageSuccessState) {
+            // The packages page shows the toast and refreshes.
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
+          final paying =
+              cubit.subscribingPackageId == widget.package.id;
+          final canConfirm = cubit.selectedMethod?.code != null &&
+              cubit.receiptImage != null &&
+              !paying;
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Package summary.
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color:
+                        AppColors.mainColor.withValues(alpha: 0.06),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.package.name ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff1F2937),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        widget.package.durationLabel,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.mainColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "اختر طريقة التحويل",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff1F2937),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                if (state is GetPaymentMethodsLoadingState)
+                  const Expanded(child: CustomLoading())
+                else if (state is GetPaymentMethodsErrorState)
+                  Expanded(
+                    child: CustomErrorWidget(
+                      error: state.error,
+                      onTap: () => cubit.getPaymentMethods(),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: cubit.paymentMethods.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "لا يوجد طرق تحويل متاحة",
+                              style: TextStyle(
+                                  color: Color(0xff9AA0A6)),
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: cubit.paymentMethods.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 10),
+                            itemBuilder: (context, index) {
+                              final method =
+                                  cubit.paymentMethods[index];
+                              final selected =
+                                  cubit.selectedMethod == method;
+                              return InkWell(
+                                onTap: () =>
+                                    cubit.selectMethod(method),
+                                borderRadius:
+                                    BorderRadius.circular(14),
+                                child: Container(
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: selected
+                                          ? AppColors.mainColor
+                                          : const Color(0xffE3E6E9),
+                                      width: selected ? 1.5 : 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        selected
+                                            ? Icons.radio_button_checked
+                                            : Icons
+                                                .radio_button_unchecked,
+                                        color: selected
+                                            ? AppColors.mainColor
+                                            : const Color(0xffB0B5BB),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              method.name ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight:
+                                                    FontWeight.bold,
+                                                color: Color(0xff1F2937),
+                                              ),
+                                            ),
+                                            if ((method.account?.trim()
+                                                    .isNotEmpty ??
+                                                false)) ...[
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                method.account!,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(
+                                                      0xff9AA0A6),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                      if ((method.account?.trim()
+                                              .isNotEmpty ??
+                                          false))
+                                        IconButton(
+                                          tooltip: "نسخ",
+                                          onPressed: () {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                  text:
+                                                      method.account!),
+                                            );
+                                            Toast.showSuccessToast(
+                                              msg: "تم نسخ الرقم",
+                                              context: context,
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.copy_rounded,
+                                            size: 18,
+                                            color: AppColors.mainColor,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                const SizedBox(height: 12),
+                // Receipt picker.
+                InkWell(
+                  onTap: paying ? null : () => cubit.pickReceipt(),
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                          color: const Color(0xffE3E6E9)),
+                    ),
+                    child: cubit.receiptImage == null
+                        ? const Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.cloud_upload_outlined,
+                                size: 34,
+                                color: AppColors.mainColor,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "ارفع صورة التحويل",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xff9AA0A6),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(13),
+                                child: Image.file(
+                                  File(cubit.receiptImage!.path),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                left: 8,
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black
+                                        .withValues(alpha: 0.6),
+                                    borderRadius:
+                                        BorderRadius.circular(10),
+                                  ),
+                                  child: const Text(
+                                    "تغيير الصورة",
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                CustomButton(
+                  btnText: paying
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          "تأكيد الاشتراك",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                  onPressed: () {
+                    if (!canConfirm ||
+                        widget.package.id == null) {
+                      return;
+                    }
+                    cubit.checkoutWithTransfer(
+                      packageId: widget.package.id!,
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

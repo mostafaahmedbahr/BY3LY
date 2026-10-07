@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/packages_model.dart';
+import '../../data/models/payment_methods_model.dart';
 import '../../data/repos/packages_repos.dart';
 import 'packages_states.dart';
 
@@ -60,15 +62,81 @@ class PackagesCubit extends Cubit<PackagesStates> {
   /// on its own button only).
   int? subscribingPackageId;
 
-  Future<void> subscribe({required int packageId}) async {
+  /// Wallet checkout: {package_id, payment_method: "wallet"}.
+  Future<void> checkoutWithWallet({required int packageId}) async {
     subscribingPackageId = packageId;
     emit(SubscribePackageLoadingState(packageId));
-    var result = await packagesRepos!.subscribe(packageId: packageId);
+    var result = await packagesRepos!.checkout(
+      packageId: packageId,
+      paymentMethod: 'wallet',
+    );
     subscribingPackageId = null;
     return result.fold((failure) {
       emit(SubscribePackageErrorState(failure.errMessage));
     }, (data) {
-      emit(SubscribePackageSuccessState(data.message ?? ''));
+      emit(SubscribePackageSuccessState(data));
+    });
+  }
+
+  // ----- Transfer flow -----
+
+  PaymentMethodsModel? paymentMethodsModel;
+
+  List<PaymentMethod> get paymentMethods =>
+      paymentMethodsModel?.data?.methods ?? [];
+
+  PaymentMethod? selectedMethod;
+
+  void selectMethod(PaymentMethod method) {
+    selectedMethod = method;
+    emit(PaymentMethodSelectedState());
+  }
+
+  Future<void> getPaymentMethods() async {
+    emit(GetPaymentMethodsLoadingState());
+    var result = await packagesRepos!.getPaymentMethods();
+    return result.fold((failure) {
+      emit(GetPaymentMethodsErrorState(failure.errMessage));
+    }, (data) {
+      paymentMethodsModel = data;
+      final methods = data.data?.methods ?? [];
+      selectedMethod = methods.isNotEmpty ? methods.first : null;
+      emit(GetPaymentMethodsSuccessState(data));
+    });
+  }
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? receiptImage;
+
+  Future<void> pickReceipt() async {
+    final picked =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+    receiptImage = picked;
+    emit(ReceiptPickedState());
+  }
+
+  void clearTransferForm() {
+    receiptImage = null;
+    selectedMethod = paymentMethods.isNotEmpty ? paymentMethods.first : null;
+  }
+
+  /// Transfer checkout: {package_id, payment_method, receipt image}.
+  Future<void> checkoutWithTransfer({required int packageId}) async {
+    final method = selectedMethod;
+    if (method?.code == null || receiptImage == null) return;
+    subscribingPackageId = packageId;
+    emit(SubscribePackageLoadingState(packageId));
+    var result = await packagesRepos!.checkout(
+      packageId: packageId,
+      paymentMethod: method!.code!,
+      receiptPath: receiptImage!.path,
+    );
+    subscribingPackageId = null;
+    return result.fold((failure) {
+      emit(SubscribePackageErrorState(failure.errMessage));
+    }, (data) {
+      emit(SubscribePackageSuccessState(data));
     });
   }
 }

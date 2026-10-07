@@ -54,8 +54,9 @@ class User {
   String? cityName;
   String? centerName;
   String? createdAt;
+  double? walletBalance;
 
-  User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
+  User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt, this.walletBalance});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -70,6 +71,12 @@ class User {
     cityName = json["cityName"];
     centerName = json["centerName"];
     createdAt = json["created_at"];
+    final rawBalance = json["wallet_balance"];
+    if (rawBalance is num) {
+      walletBalance = rawBalance.toDouble();
+    } else if (rawBalance is String) {
+      walletBalance = double.tryParse(rawBalance);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +93,7 @@ class User {
     _data["cityName"] = cityName;
     _data["centerName"] = centerName;
     _data["created_at"] = createdAt;
+    _data["wallet_balance"] = walletBalance;
     return _data;
   }
 }

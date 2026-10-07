@@ -52,6 +52,8 @@ class EndPoints {
   static const products = "products";
   static const subscriptionPackages = "subscriptionPackages";
   static const subscriptions = "subscriptions";
+  static const subscriptionsCheckout = "subscriptions/checkout";
+  static const paymentMethods = "payment-methods";
 
 
 }

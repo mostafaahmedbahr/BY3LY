@@ -1,4 +1,6 @@
 import '../../data/models/packages_model.dart';
+import '../../data/models/payment_methods_model.dart';
+import '../../data/models/subscribe_package_model.dart';
 
 abstract class PackagesStates {}
 
@@ -42,8 +44,10 @@ class SubscribePackageLoadingState extends PackagesStates {
 }
 
 class SubscribePackageSuccessState extends PackagesStates {
-  final String message;
-  SubscribePackageSuccessState(this.message);
+  final SubscribePackageModel model;
+  SubscribePackageSuccessState(this.model);
+
+  String get message => model.message ?? '';
 
   @override
   String toString() => 'SubscribePackageSuccessState';
@@ -55,4 +59,35 @@ class SubscribePackageErrorState extends PackagesStates {
 
   @override
   String toString() => 'SubscribePackageErrorState(error: $error)';
+}
+
+class GetPaymentMethodsLoadingState extends PackagesStates {
+  @override
+  String toString() => 'GetPaymentMethodsLoadingState';
+}
+
+class GetPaymentMethodsSuccessState extends PackagesStates {
+  final PaymentMethodsModel methodsModel;
+  GetPaymentMethodsSuccessState(this.methodsModel);
+
+  @override
+  String toString() => 'GetPaymentMethodsSuccessState';
+}
+
+class GetPaymentMethodsErrorState extends PackagesStates {
+  final String error;
+  GetPaymentMethodsErrorState(this.error);
+
+  @override
+  String toString() => 'GetPaymentMethodsErrorState(error: $error)';
+}
+
+class PaymentMethodSelectedState extends PackagesStates {
+  @override
+  String toString() => 'PaymentMethodSelectedState';
+}
+
+class ReceiptPickedState extends PackagesStates {
+  @override
+  String toString() => 'ReceiptPickedState';
 }
