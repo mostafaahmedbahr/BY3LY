@@ -50,6 +50,7 @@ class EndPoints {
 
   static const getBanners = "getBanners";
   static const products = "products";
+  static const subscriptionPackages = "subscriptionPackages";
 
 
 }

@@ -12,6 +12,7 @@ class Routes {
   static const String productDetailsView = '/productDetailsView';
   static const String allCategoriesView = '/allCategoriesView';
   static const String compareView = '/compareView';
+  static const String packagesView = '/packagesView';
 
 
 
