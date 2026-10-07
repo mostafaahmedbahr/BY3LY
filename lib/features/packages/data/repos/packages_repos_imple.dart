@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/general_models/general_model.dart';
 import '../models/packages_model.dart';
 import 'packages_repos.dart';
 
@@ -25,6 +26,30 @@ class PackagesRepoImpl implements PackagesRepos {
       return right(result);
     } catch (e, s) {
       debugPrint('PackagesRepo get error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, GeneralModel>> subscribe({
+    required int packageId,
+  }) async {
+    try {
+      var response = await apiService!.postData(
+        endPoint: EndPoints.subscriptions,
+        data: {
+          "package_id": packageId,
+        },
+      );
+      final result = GeneralModel.fromJson(response.data);
+      return right(result);
+    } catch (e, s) {
+      debugPrint('PackagesRepo subscribe error: $e');
       debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));

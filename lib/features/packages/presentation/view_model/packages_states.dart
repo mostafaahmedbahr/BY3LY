@@ -32,3 +32,27 @@ class GetPackagesErrorState extends PackagesStates {
   @override
   String toString() => 'GetPackagesErrorState(error: $error)';
 }
+
+class SubscribePackageLoadingState extends PackagesStates {
+  final int packageId;
+  SubscribePackageLoadingState(this.packageId);
+
+  @override
+  String toString() => 'SubscribePackageLoadingState(id: $packageId)';
+}
+
+class SubscribePackageSuccessState extends PackagesStates {
+  final String message;
+  SubscribePackageSuccessState(this.message);
+
+  @override
+  String toString() => 'SubscribePackageSuccessState';
+}
+
+class SubscribePackageErrorState extends PackagesStates {
+  final String error;
+  SubscribePackageErrorState(this.error);
+
+  @override
+  String toString() => 'SubscribePackageErrorState(error: $error)';
+}

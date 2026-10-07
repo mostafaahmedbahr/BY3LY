@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/shared_widgets/custom_button.dart';
 import '../../../../../core/utils/app_colors/app_colors.dart';
-import '../../../../../core/utils/new_toast/toast.dart';
 import '../../../data/models/packages_model.dart';
+import '../../view_model/packages_cubit.dart';
 
 /// Single subscription package card.
 class PackageCard extends StatelessWidget {
@@ -16,6 +16,10 @@ class PackageCard extends StatelessWidget {
     final isFree = package.isFree == true;
     final priceText =
         isFree ? 'مجاناً' : _formatPrice(package.price);
+    final cubit = PackagesCubit.get(context);
+    final subscribing =
+        cubit.subscribingPackageId != null &&
+            cubit.subscribingPackageId == package.id;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -157,20 +161,26 @@ class PackageCard extends StatelessWidget {
             ],
             const SizedBox(height: 8),
             CustomButton(
-              btnText: const Text(
-                "اشترك الآن",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
+              btnText: subscribing
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text(
+                      "اشترك الآن",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
               onPressed: () {
-                // TODO: wire the subscribe/payment flow when its API is ready.
-                Toast.showSuccessToast(
-                  msg: "تم اختيار باقة ${package.name ?? ''}",
-                  context: context,
-                );
+                if (subscribing || package.id == null) return;
+                cubit.subscribe(packageId: package.id!);
               },
             ),
           ],

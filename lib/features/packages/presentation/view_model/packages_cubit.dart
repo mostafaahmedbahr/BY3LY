@@ -55,4 +55,20 @@ class PackagesCubit extends Cubit<PackagesStates> {
       emit(GetPackagesSuccessState(data));
     });
   }
+
+  /// The package currently being subscribed to (shows a spinner
+  /// on its own button only).
+  int? subscribingPackageId;
+
+  Future<void> subscribe({required int packageId}) async {
+    subscribingPackageId = packageId;
+    emit(SubscribePackageLoadingState(packageId));
+    var result = await packagesRepos!.subscribe(packageId: packageId);
+    subscribingPackageId = null;
+    return result.fold((failure) {
+      emit(SubscribePackageErrorState(failure.errMessage));
+    }, (data) {
+      emit(SubscribePackageSuccessState(data.message ?? ''));
+    });
+  }
 }

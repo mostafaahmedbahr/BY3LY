@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_error_widget.dart';
 import '../../../../../core/shared_widgets/custom_loading.dart';
+import '../../../../../core/utils/new_toast/toast.dart';
 import '../../view_model/packages_cubit.dart';
 import '../../view_model/packages_states.dart';
 import 'duration_tabs.dart';
@@ -13,7 +14,19 @@ class PackagesViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PackagesCubit, PackagesStates>(
+    return BlocConsumer<PackagesCubit, PackagesStates>(
+      listener: (context, state) {
+        if (state is SubscribePackageSuccessState) {
+          Toast.showSuccessToast(
+            msg: state.message.isNotEmpty
+                ? state.message
+                : "تم الاشتراك بنجاح",
+            context: context,
+          );
+        } else if (state is SubscribePackageErrorState) {
+          Toast.showErrorToast(msg: state.error, context: context);
+        }
+      },
       builder: (context, state) {
         final cubit = PackagesCubit.get(context);
         if (state is GetPackagesLoadingState) {
