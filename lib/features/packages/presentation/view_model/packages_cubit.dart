@@ -92,7 +92,15 @@ class PackagesCubit extends Cubit<PackagesStates> {
     emit(PaymentMethodSelectedState());
   }
 
-  Future<void> getPaymentMethods() async {
+  /// Payment methods are cached for the session: no API call
+  /// on every open unless [forceRefresh] is true.
+  Future<void> getPaymentMethods({bool forceRefresh = false}) async {
+    if (!forceRefresh && paymentMethodsModel != null) {
+      final methods = paymentMethodsModel?.data?.methods ?? [];
+      selectedMethod ??=
+          methods.isNotEmpty ? methods.first : null;
+      return;
+    }
     emit(GetPaymentMethodsLoadingState());
     var result = await packagesRepos!.getPaymentMethods();
     return result.fold((failure) {

@@ -10,8 +10,55 @@ import '../../../../core/shared_widgets/custom_loading.dart';
 import '../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../core/utils/new_toast/toast.dart';
 import '../../data/models/packages_model.dart';
+import '../../data/models/payment_methods_model.dart';
 import '../view_model/packages_cubit.dart';
 import '../view_model/packages_states.dart';
+
+/// Brand identity per payment method (matched by code/name).
+class _Brand {
+  const _Brand(this.color, this.icon);
+  final Color color;
+  final IconData icon;
+}
+
+_Brand _brandFor(PaymentMethod method) {
+  final text =
+      '${method.code ?? ''} ${method.name ?? ''}'.toLowerCase();
+  if (text.contains('vodafone') || text.contains('فودافون')) {
+    return const _Brand(Color(0xffE60000), Icons.smartphone_rounded);
+  }
+  if (text.contains('orange') ||
+      text.contains('اورنج') ||
+      text.contains('أورانج')) {
+    return const _Brand(Color(0xffFF7900), Icons.smartphone_rounded);
+  }
+  if (text.contains('etisalat') ||
+      text.contains('اتصالات') ||
+      text.contains('e&')) {
+    return const _Brand(Color(0xff008A45), Icons.smartphone_rounded);
+  }
+  if (text.contains('instapay') || text.contains('انستا')) {
+    return const _Brand(Color(0xff00A9CE), Icons.bolt_rounded);
+  }
+  if (text.contains('fawry') || text.contains('فوري')) {
+    return const _Brand(Color(0xffB8860B), Icons.storefront_rounded);
+  }
+  if (text.contains('bank') ||
+      text.contains('بنك') ||
+      text.contains('iban') ||
+      text.contains('حساب بنكي')) {
+    return const _Brand(
+        Color(0xff1B3A6B), Icons.account_balance_rounded);
+  }
+  if (text.contains('wallet') || text.contains('محفظ')) {
+    return const _Brand(
+        AppColors.mainColor, Icons.account_balance_wallet_rounded);
+  }
+  if (text.contains('cash') || text.contains('كاش')) {
+    return const _Brand(Color(0xff2E7D32), Icons.payments_rounded);
+  }
+  return const _Brand(AppColors.mainColor, Icons.swap_horiz_rounded);
+}
 
 /// Transfer checkout page: pick a transfer method, upload the receipt,
 /// then confirm. On success it pops back and the packages page refreshes.
@@ -116,7 +163,8 @@ class _TransferViewState extends State<TransferView> {
                   Expanded(
                     child: CustomErrorWidget(
                       error: state.error,
-                      onTap: () => cubit.getPaymentMethods(),
+                      onTap: () =>
+                          cubit.getPaymentMethods(forceRefresh: true),
                     ),
                   )
                 else
@@ -138,33 +186,71 @@ class _TransferViewState extends State<TransferView> {
                                   cubit.paymentMethods[index];
                               final selected =
                                   cubit.selectedMethod == method;
+                              final brand = _brandFor(method);
                               return InkWell(
                                 onTap: () =>
                                     cubit.selectMethod(method),
                                 borderRadius:
-                                    BorderRadius.circular(14),
+                                    BorderRadius.circular(16),
                                 child: Container(
                                   padding: const EdgeInsets.all(14),
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                        BorderRadius.circular(14),
+                                        BorderRadius.circular(16),
+                                    color: selected
+                                        ? AppColors.mainColor
+                                            .withValues(alpha: 0.05)
+                                        : Colors.white,
                                     border: Border.all(
                                       color: selected
                                           ? AppColors.mainColor
                                           : const Color(0xffE3E6E9),
                                       width: selected ? 1.5 : 1,
                                     ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                            alpha: 0.03),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
                                   ),
                                   child: Row(
                                     children: [
-                                      Icon(
-                                        selected
-                                            ? Icons.radio_button_checked
-                                            : Icons
-                                                .radio_button_unchecked,
-                                        color: selected
-                                            ? AppColors.mainColor
-                                            : const Color(0xffB0B5BB),
+                                      // Company mark: brand-colored badge.
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            height: 52,
+                                            width: 52,
+                                            decoration: BoxDecoration(
+                                              color: brand.color
+                                                  .withValues(
+                                                      alpha: 0.12),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      15),
+                                            ),
+                                            child: Icon(
+                                              brand.icon,
+                                              size: 26,
+                                              color: brand.color,
+                                            ),
+                                          ),
+                                          if (selected)
+                                            const Positioned(
+                                              bottom: -4,
+                                              right: -4,
+                                              child: Icon(
+                                                Icons.check_circle_rounded,
+                                                size: 20,
+                                                color:
+                                                    AppColors.mainColor,
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                       const SizedBox(width: 12),
                                       Expanded(
@@ -175,7 +261,7 @@ class _TransferViewState extends State<TransferView> {
                                             Text(
                                               method.name ?? '',
                                               style: const TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 15,
                                                 fontWeight:
                                                     FontWeight.bold,
                                                 color: Color(0xff1F2937),
@@ -184,13 +270,31 @@ class _TransferViewState extends State<TransferView> {
                                             if ((method.account?.trim()
                                                     .isNotEmpty ??
                                                 false)) ...[
-                                              const SizedBox(height: 2),
-                                              Text(
-                                                method.account!,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Color(
-                                                      0xff9AA0A6),
+                                              const SizedBox(height: 4),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets
+                                                        .symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 3,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(
+                                                      0xffF1F3F5),
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .circular(8),
+                                                ),
+                                                child: Text(
+                                                  method.account!,
+                                                  style:
+                                                      const TextStyle(
+                                                    fontSize: 12.5,
+                                                    fontWeight:
+                                                        FontWeight.w600,
+                                                    color: Color(
+                                                        0xff1F2937),
+                                                  ),
                                                 ),
                                               ),
                                             ],
