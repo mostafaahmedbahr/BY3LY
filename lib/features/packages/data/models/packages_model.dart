@@ -1,202 +1,230 @@
-String? _asString(dynamic v) => v?.toString();
-
-int? _asInt(dynamic v) {
-  if (v == null) return null;
-  if (v is int) return v;
-  if (v is double) return v.toInt();
-  if (v is String) return int.tryParse(v);
-  if (v is bool) return v ? 1 : 0;
-  return null;
+String? _asString(dynamic value) {
+  if (value == null) return null;
+  return value.toString();
 }
 
-double? _asDouble(dynamic v) {
-  if (v == null) return null;
-  if (v is num) return v.toDouble();
-  if (v is String) return double.tryParse(v);
-  return null;
-}
+int? _asInt(dynamic value) {
+  if (value == null) return null;
 
-bool? _asBool(dynamic v) {
-  if (v == null) return null;
-  if (v is bool) return v;
-  if (v is int) return v != 0;
-  if (v is String) {
-    final lower = v.toLowerCase();
-    if (lower == 'true' || lower == '1') return true;
-    if (lower == 'false' || lower == '0') return false;
+  if (value is int) return value;
+  if (value is double) return value.toInt();
+  if (value is num) return value.toInt();
+
+  if (value is String) {
+    return int.tryParse(value);
   }
+
+  if (value is bool) {
+    return value ? 1 : 0;
+  }
+
   return null;
 }
 
-List<String>? _asStringList(dynamic v) {
-  if (v == null) return null;
-  if (v is List) {
-    return v
-        .map((e) {
-          if (e is String) return e.trim();
-          if (e is Map) {
-            // {title: ..} / {name: ..} / {feature: ..} shapes.
-            final m = e;
-            return (m['title'] ?? m['name'] ?? m['feature'] ?? m['text'])
+double? _asDouble(dynamic value) {
+  if (value == null) return null;
+
+  if (value is num) {
+    return value.toDouble();
+  }
+
+  if (value is String) {
+    return double.tryParse(value);
+  }
+
+  return null;
+}
+
+bool? _asBool(dynamic value) {
+  if (value == null) return null;
+
+  if (value is bool) return value;
+
+  if (value is int) {
+    return value != 0;
+  }
+
+  if (value is String) {
+    final lower = value.toLowerCase().trim();
+
+    if (lower == 'true' || lower == '1') {
+      return true;
+    }
+
+    if (lower == 'false' || lower == '0') {
+      return false;
+    }
+  }
+
+  return null;
+}
+
+List<String>? _asStringList(dynamic value) {
+  if (value == null) return null;
+
+  if (value is List) {
+    return value
+        .map((item) {
+          if (item is String) {
+            return item.trim();
+          }
+
+          if (item is Map) {
+            return (item['title'] ??
+                    item['name'] ??
+                    item['feature'] ??
+                    item['text'])
                 ?.toString()
                 .trim();
           }
-          return e?.toString().trim();
+
+          return item?.toString().trim();
         })
-        .where((e) => (e?.isNotEmpty ?? false))
-        .cast<String>()
+        .whereType<String>()
+        .where((item) => item.isNotEmpty)
         .toList();
   }
-  if (v is String && v.trim().isNotEmpty) {
-    return v
+
+  if (value is String && value.trim().isNotEmpty) {
+    return value
         .split(RegExp(r'\n|•|-'))
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
+        .map((item) => item.trim())
+        .where((item) => item.isNotEmpty)
         .toList();
   }
+
   return null;
 }
 
+/// Packages Model
 class PackagesModel {
-  bool? status;
-  String? message;
-  List<Package>? data;
+  final bool? status;
+  final String? message;
+  final Data? data;
 
   PackagesModel({this.status, this.message, this.data});
 
-  PackagesModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json['status']) ?? json['status'] == 1;
-    message = _asString(json['message']);
-    final raw = json['data'];
-    if (raw is List) {
-      data = raw.map((e) => Package.fromJson(e)).toList();
-    } else if (raw is Map<String, dynamic>) {
-      final list = raw['packages'] ?? raw['data'] ?? raw['items'];
-      if (list is List) {
-        data = list.map((e) => Package.fromJson(e)).toList();
-      }
-    } else if (json['packages'] is List) {
-      data =
-          (json['packages'] as List).map((e) => Package.fromJson(e)).toList();
-    }
+  factory PackagesModel.fromJson(Map<String, dynamic> json) {
+    return PackagesModel(
+      status: _asBool(json['status']),
+      message: _asString(json['message']),
+      data: json['data'] is Map
+          ? Data.fromJson(Map<String, dynamic>.from(json['data']))
+          : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = <String, dynamic>{};
-    map['status'] = status;
-    map['message'] = message;
-    if (data != null) {
-      map['data'] = data?.map((e) => e.toJson()).toList();
-    }
-    return map;
+    return {'status': status, 'message': message, 'data': data?.toJson()};
   }
 }
 
-class Package {
-  int? id;
-  String? name;
-  String? desc;
-  double? price;
-  double? oldPrice;
-  String? currency;
-  String? duration;
-  int? durationMonths;
-  String? durationLabel;
-  List<String>? features;
-  int? adsCount;
-  bool? isPopular;
+/// Data
+class Data {
+  final List<Packages>? packages;
 
-  Package({
-    this.id,
-    this.name,
-    this.desc,
-    this.price,
-    this.oldPrice,
-    this.currency,
-    this.duration,
-    this.durationMonths,
-    this.durationLabel,
-    this.features,
-    this.adsCount,
-    this.isPopular,
-  });
+  Data({this.packages});
 
-  Package.fromJson(Map<String, dynamic> json) {
-    id = _asInt(json['id']);
-    name = _asString(json['name'] ?? json['title'] ?? json['package_name']);
-    desc = _asString(
-        json['description'] ?? json['desc'] ?? json['details']);
-    price = _asDouble(json['price']);
-    oldPrice = _asDouble(json['old_price'] ?? json['oldPrice']);
-    currency = _asString(json['currency']);
-    duration = _asString(
-        json['duration'] ?? json['type'] ?? json['period']);
-    durationMonths = _asInt(json['duration_months'] ??
-        json['months'] ??
-        json['period_months']);
-    durationLabel = _asString(
-            json['duration_label'] ?? json['durationLabel']) ??
-        duration;
-    features = _asStringList(json['features'] ??
-        json['points'] ??
-        json['advantages'] ??
-        json['details_list']);
-    adsCount =
-        _asInt(json['ads_count'] ?? json['adsCount'] ?? json['ads_number']);
-    isPopular = _asBool(json['is_popular'] ??
-            json['isPopular'] ??
-            json['is_recommended'] ??
-            json['popular'] ??
-            json['recommended'] ??
-            json['best_seller']) ??
-        false;
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      packages: json['packages'] is List
+          ? (json['packages'] as List)
+                .whereType<Map>()
+                .map(
+                  (item) => Packages.fromJson(Map<String, dynamic>.from(item)),
+                )
+                .toList()
+          : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> map = <String, dynamic>{};
-    map['id'] = id;
-    map['name'] = name;
-    map['description'] = desc;
-    map['price'] = price;
-    map['old_price'] = oldPrice;
-    map['currency'] = currency;
-    map['duration'] = duration;
-    map['duration_months'] = durationMonths;
-    map['duration_label'] = durationLabel;
-    map['features'] = features;
-    map['ads_count'] = adsCount;
-    map['is_popular'] = isPopular;
-    return map;
+    return {'packages': packages?.map((item) => item.toJson()).toList()};
+  }
+}
+
+/// Package
+class Packages {
+  final int? id;
+  final String? code;
+  final String? name;
+  final String? description;
+  final double? price;
+  final String? currency;
+  final int? durationDays;
+  final int? adsLimit;
+  final bool? isFree;
+  final List<String>? features;
+
+  Packages({
+    this.id,
+    this.code,
+    this.name,
+    this.description,
+    this.price,
+    this.currency,
+    this.durationDays,
+    this.adsLimit,
+    this.isFree,
+    this.features,
+  });
+
+  factory Packages.fromJson(Map<String, dynamic> json) {
+    return Packages(
+      id: _asInt(json['id']),
+      code: _asString(json['code']),
+      name: _asString(json['name']),
+      description: _asString(json['description']),
+      price: _asDouble(json['price']),
+      currency: _asString(json['currency']),
+      durationDays: _asInt(json['duration_days']),
+      adsLimit: _asInt(json['ads_limit']),
+      isFree: _asBool(json['is_free']),
+      features: _asStringList(json['features']),
+    );
   }
 
-  /// Whether this package carries any duration info to filter on.
-  bool get hasDurationInfo =>
-      (duration?.trim().isNotEmpty ?? false) || durationMonths != null;
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'code': code,
+      'name': name,
+      'description': description,
+      'price': price,
+      'currency': currency,
+      'duration_days': durationDays,
+      'ads_limit': adsLimit,
+      'is_free': isFree,
+      'features': features,
+    };
+  }
+}
 
-  /// Matches a package against a duration tab (months: 1 / 3 / 6 / 12).
-  bool matchesDuration(int months) {
-    if (durationMonths != null) return durationMonths == months;
-    final d = (duration ?? '').trim().toLowerCase();
-    if (d.isEmpty) return false;
-    // Explicit number in the text (1 / 3 / 6 / 12 ...).
-    final digit = RegExp(r'\d+').firstMatch(d);
-    if (digit != null) {
-      final n = int.tryParse(digit.group(0)!);
-      if (n != null) return n == months;
+extension PackagesX on Packages {
+  /// Maps [durationDays] to the duration tabs (1 / 3 / 6 / 12 months).
+  int? get durationMonths {
+    final d = durationDays;
+    if (d == null) return null;
+    if (d <= 31) return 1;
+    if (d <= 93) return 3;
+    if (d <= 186) return 6;
+    return 12;
+  }
+
+  /// Arabic label for the duration chip.
+  String get durationLabel {
+    switch (durationMonths) {
+      case 1:
+        return 'شهرى';
+      case 3:
+        return '3 شهور';
+      case 6:
+        return '6 شهور';
+      case 12:
+        return 'سنوى';
+      default:
+        if (durationDays != null) return '$durationDays يوم';
+        return '';
     }
-    if (months == 1) {
-      return d.contains('month') || d.contains('شهر');
-    }
-    if (months == 3) {
-      return d.contains('quarter');
-    }
-    if (months == 6) {
-      return d.contains('semi') ||
-          d.contains('half') ||
-          d.contains('نصف');
-    }
-    return d.contains('year') ||
-        d.contains('annual') ||
-        d.contains('سنو');
   }
 }

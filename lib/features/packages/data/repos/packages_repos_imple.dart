@@ -21,7 +21,7 @@ class PackagesRepoImpl implements PackagesRepos {
       );
       PackagesModel result = PackagesModel.fromJson(response.data);
       debugPrint(
-          'PackagesRepo get: ${(result.data ?? []).length} packages');
+          'PackagesRepo get: ${(result.data?.packages ?? []).length} packages');
       return right(result);
     } catch (e, s) {
       debugPrint('PackagesRepo get error: $e');

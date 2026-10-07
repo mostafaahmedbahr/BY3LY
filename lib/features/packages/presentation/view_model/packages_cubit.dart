@@ -30,18 +30,19 @@ class PackagesCubit extends Cubit<PackagesStates> {
     emit(PackagesDurationChangedState());
   }
 
-  List<Package> get allPackages => packagesModel?.data ?? [];
+  List<Packages> get allPackages => packagesModel?.data?.packages ?? [];
 
-  /// Client-side filter by the selected duration tab.
-  /// If no package carries duration info, everything is shown under
-  /// every tab so the screen never ends up empty because of filtering.
-  List<Package> get filteredPackages {
+  /// Client-side filter by the selected duration tab (durationDays
+  /// mapped to 1 / 3 / 6 / 12 months). If no package carries duration
+  /// info, everything is shown under every tab so the screen never
+  /// ends up empty because of filtering.
+  List<Packages> get filteredPackages {
     final all = allPackages;
     if (all.isEmpty) return all;
     final months = durations[selectedDurationIndex]['months'] as int;
-    final hasInfo = all.any((p) => p.hasDurationInfo);
+    final hasInfo = all.any((p) => p.durationMonths != null);
     if (!hasInfo) return all;
-    return all.where((p) => p.matchesDuration(months)).toList();
+    return all.where((p) => p.durationMonths == months).toList();
   }
 
   Future<void> getPackages() async {
