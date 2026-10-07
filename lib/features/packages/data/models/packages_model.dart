@@ -202,13 +202,20 @@ class Packages {
 
 extension PackagesX on Packages {
   /// Maps [durationDays] to the duration tabs (1 / 3 / 6 / 12 months).
+  /// 30 days = month, 90 = 3 months, 180 = 6 months, 365 = year.
   int? get durationMonths {
     final d = durationDays;
     if (d == null) return null;
-    if (d <= 31) return 1;
-    if (d <= 93) return 3;
-    if (d <= 186) return 6;
-    return 12;
+    const exact = {30: 1, 90: 3, 180: 6, 360: 12, 365: 12};
+    if (exact.containsKey(d)) return exact[d];
+    // Fallback for any other value: nearest tab.
+    const tabs = [1, 3, 6, 12];
+    final approx = (d / 30).round();
+    var nearest = tabs.first;
+    for (final t in tabs) {
+      if ((t - approx).abs() < (nearest - approx).abs()) nearest = t;
+    }
+    return nearest;
   }
 
   /// Arabic label for the duration chip.
