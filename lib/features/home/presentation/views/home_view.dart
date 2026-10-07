@@ -18,11 +18,15 @@ class HomeView extends StatelessWidget {
           children: [
             SvgPicture.asset(AppImages.healthiconsMarket),
             Gap(10.w),
-            Text(
-              context.tr(LocaleKeys.appName),
-              style: const TextStyle(
-                color: AppColors.yellowColor,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                context.tr(LocaleKeys.appName),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColors.yellowColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -67,6 +71,7 @@ class HomeView extends StatelessWidget {
                     );
                   },
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset(
                         AppImages.location,
@@ -83,11 +88,15 @@ class HomeView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        cityName.isNotEmpty ? cityName : "No City",
-                        style: const TextStyle(
-                          color: AppColors.mainColor,
-                          fontWeight: FontWeight.bold,
+                      Flexible(
+                        child: Text(
+                          cityName.isNotEmpty ? cityName : "No City",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.mainColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
