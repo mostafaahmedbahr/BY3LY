@@ -155,11 +155,42 @@ class PackageCard extends StatelessWidget {
                 ),
               ),
             ],
+            // Current subscription info (only when subscribed).
+            if (package.isSubscriped == true) ...[
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.mainColor.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    _InfoRow(
+                      icon: Icons.calendar_month_outlined,
+                      label: 'تاريخ الانتهاء',
+                      value: _formatDate(package.endsAt),
+                    ),
+                    const SizedBox(height: 6),
+                    _InfoRow(
+                      icon: Icons.campaign_outlined,
+                      label: 'الإعلانات المتبقية',
+                      value: package.remainingAds != null
+                          ? '${package.remainingAds} إعلان'
+                          : '...',
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 8),
             CustomButton(
-              btnText: const Text(
-                "اشترك الآن",
-                style: TextStyle(
+              btnText: Text(
+                package.isSubscriped == true
+                    ? "تجديد الاشتراك"
+                    : "اشترك الآن",
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -181,5 +212,52 @@ class PackageCard extends StatelessWidget {
       return value.toInt().toString();
     }
     return value.toString();
+  }
+
+  /// Shows only the date part of "ends_at" (2026-12-31 ...).
+  String _formatDate(String? value) {
+    final v = value?.trim() ?? '';
+    if (v.isEmpty) return '...';
+    if (v.length > 10) return v.substring(0, 10);
+    return v;
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: AppColors.mainColor),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12.5,
+              color: Color(0xff9AA0A6),
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff1F2937),
+          ),
+        ),
+      ],
+    );
   }
 }
