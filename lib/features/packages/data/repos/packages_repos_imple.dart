@@ -7,6 +7,7 @@ import '../../../../core/app_services/remote_services/end_points.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/general_models/general_model.dart';
 import '../models/packages_model.dart';
+import '../models/subscribe_package_model.dart';
 import 'packages_repos.dart';
 
 class PackagesRepoImpl implements PackagesRepos {
@@ -36,7 +37,7 @@ class PackagesRepoImpl implements PackagesRepos {
   }
 
   @override
-  Future<Either<Failure, GeneralModel>> subscribe({
+  Future<Either<Failure, SubscribePackageModel>> subscribe({
     required int packageId,
   }) async {
     try {
@@ -46,7 +47,7 @@ class PackagesRepoImpl implements PackagesRepos {
           "package_id": packageId,
         },
       );
-      final result = GeneralModel.fromJson(response.data);
+      final result = SubscribePackageModel.fromJson(response.data);
       return right(result);
     } catch (e, s) {
       debugPrint('PackagesRepo subscribe error: $e');
