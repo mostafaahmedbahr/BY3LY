@@ -303,5 +303,15 @@ class ArLang {
     "guestModeTitle": "أنت تتصفح كزائر",
     "guestModeMessage":
         "سجل الدخول لنشر الإعلانات وحفظ المفضلة وعرض إشعاراتك",
+    "statusPending": "قيد المراجعة",
+    "statusApproved": "مقبول",
+    "statusRejected": "مرفوض",
+    "payVodafoneCash": "فودافون كاش",
+    "payEtisalatCash": "اتصالات كاش",
+    "payOrangeCash": "أورانج كاش",
+    "payInstapay": "انستاباي",
+    "payBankTransfer": "تحويل بنكي",
+    "payWallet": "محفظة",
+    "payFawry": "فوري",
   };
 }

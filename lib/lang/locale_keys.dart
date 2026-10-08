@@ -299,6 +299,16 @@ abstract class LocaleKeys {
   static const loginRequiredMessage = "loginRequiredMessage";
   static const guestModeTitle = "guestModeTitle";
   static const guestModeMessage = "guestModeMessage";
+  static const statusPending = "statusPending";
+  static const statusApproved = "statusApproved";
+  static const statusRejected = "statusRejected";
+  static const payVodafoneCash = "payVodafoneCash";
+  static const payEtisalatCash = "payEtisalatCash";
+  static const payOrangeCash = "payOrangeCash";
+  static const payInstapay = "payInstapay";
+  static const payBankTransfer = "payBankTransfer";
+  static const payWallet = "payWallet";
+  static const payFawry = "payFawry";
 
 
 

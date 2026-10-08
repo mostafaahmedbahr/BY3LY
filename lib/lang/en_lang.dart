@@ -307,5 +307,15 @@ class EnLang {
     "guestModeTitle": "You're browsing as a guest",
     "guestModeMessage":
         "Log in to post ads, save favorites and view your notifications",
+    "statusPending": "Pending",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "payVodafoneCash": "Vodafone Cash",
+    "payEtisalatCash": "Etisalat Cash",
+    "payOrangeCash": "Orange Cash",
+    "payInstapay": "InstaPay",
+    "payBankTransfer": "Bank transfer",
+    "payWallet": "Wallet",
+    "payFawry": "Fawry",
   };
 }

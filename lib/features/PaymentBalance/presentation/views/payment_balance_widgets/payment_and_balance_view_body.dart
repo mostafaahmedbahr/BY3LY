@@ -237,24 +237,24 @@ class PaymentAndBalanceViewBody extends StatelessWidget {
   }
 }
 
-String _methodName(String? code) {
+String _methodName(BuildContext context, String? code) {
   switch ((code ?? '').trim().toLowerCase()) {
     case 'vodafone_cash':
-      return 'فودافون كاش';
+      return context.tr(LocaleKeys.payVodafoneCash);
     case 'etisalat_cash':
-      return 'اتصالات كاش';
+      return context.tr(LocaleKeys.payEtisalatCash);
     case 'orange_cash':
     case 'orange_money':
-      return 'أورانج كاش';
+      return context.tr(LocaleKeys.payOrangeCash);
     case 'instapay':
-      return 'انستاباي';
+      return context.tr(LocaleKeys.payInstapay);
     case 'bank':
     case 'bank_transfer':
-      return 'تحويل بنكي';
+      return context.tr(LocaleKeys.payBankTransfer);
     case 'wallet':
-      return 'محفظة';
+      return context.tr(LocaleKeys.payWallet);
     case 'fawry':
-      return 'فوري';
+      return context.tr(LocaleKeys.payFawry);
     default:
       return (code ?? '').trim();
   }
@@ -495,7 +495,7 @@ class _HistoryItem extends StatelessWidget {
         : '${amount == amount.roundToDouble() ? amount.toInt() : amount} ج.م';
     final accent =
         credit ? AppColors.mainColor : AppColors.redColor;
-    final methodName = _methodName(item.paymentMethod);
+    final methodName = _methodName(context, item.paymentMethod);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(14),
@@ -663,7 +663,8 @@ class _StatusPill extends StatelessWidget {
   final String? status;
   final String? label;
 
-  Color get _color {
+  /// Normalized status group: approved / rejected / pending / unknown.
+  String get _group {
     final v = '${status ?? ''} ${label ?? ''}'.toLowerCase();
     if (v.contains('approve') ||
         v.contains('success') ||
@@ -671,7 +672,7 @@ class _StatusPill extends StatelessWidget {
         v.contains('مقبول') ||
         v.contains('ناجح') ||
         v.contains('مكتمل')) {
-      return const Color(0xff1B9E4B);
+      return 'approved';
     }
     if (v.contains('reject') ||
         v.contains('fail') ||
@@ -679,7 +680,7 @@ class _StatusPill extends StatelessWidget {
         v.contains('مرفوض') ||
         v.contains('فاشل') ||
         v.contains('ملغي')) {
-      return AppColors.redColor;
+      return 'rejected';
     }
     if (v.contains('pend') ||
         v.contains('review') ||
@@ -687,16 +688,42 @@ class _StatusPill extends StatelessWidget {
         v.contains('قيد') ||
         v.contains('انتظار') ||
         v.contains('مراجعة')) {
-      return const Color(0xffE8930C);
+      return 'pending';
     }
-    return const Color(0xff9AA0A6);
+    return 'unknown';
+  }
+
+  Color get _color {
+    switch (_group) {
+      case 'approved':
+        return const Color(0xff1B9E4B);
+      case 'rejected':
+        return AppColors.redColor;
+      case 'pending':
+        return const Color(0xffE8930C);
+      default:
+        return const Color(0xff9AA0A6);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final text = (label?.trim().isNotEmpty ?? false)
-        ? label!
-        : ((status ?? '').trim().isNotEmpty ? status! : '');
+    String text;
+    switch (_group) {
+      case 'approved':
+        text = context.tr(LocaleKeys.statusApproved);
+        break;
+      case 'rejected':
+        text = context.tr(LocaleKeys.statusRejected);
+        break;
+      case 'pending':
+        text = context.tr(LocaleKeys.statusPending);
+        break;
+      default:
+        text = (label?.trim().isNotEmpty ?? false)
+            ? label!
+            : (status ?? '').trim();
+    }
     if (text.isEmpty) return const SizedBox.shrink();
     final color = _color;
     return Container(
