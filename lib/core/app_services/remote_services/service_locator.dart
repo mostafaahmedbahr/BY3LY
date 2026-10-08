@@ -23,6 +23,7 @@ import '../../../../features/updateProfile/data/repos/update_profile_data_repo_i
 import '../../../features/changePassword/data/repos/change_password_repo_imple.dart';
 import '../../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../../features/packages/data/repos/packages_repos_imple.dart';
+import '../../../features/PaymentBalance/data/repos/wallet_repos_imple.dart';
 import '../../../features/register/data/repos/register_repo_imple.dart';
 import 'api_service.dart';
 //dependency Injection
@@ -112,6 +113,9 @@ void setup() {
     getIt.get<ApiService>(),
   ));
   getIt.registerSingleton<PackagesRepoImpl>(PackagesRepoImpl(
+    getIt.get<ApiService>(),
+  ));
+  getIt.registerSingleton<WalletRepoImpl>(WalletRepoImpl(
     getIt.get<ApiService>(),
   ));
 
