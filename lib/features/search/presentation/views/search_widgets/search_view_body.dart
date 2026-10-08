@@ -78,6 +78,23 @@ class _SearchViewBodyState extends State<SearchViewBody> {
       if (filter.type != null && (p.type ?? '').trim() != filter.type) {
         return false;
       }
+      // Server keys (local fallback for already-loaded pages).
+      if (filter.categoryId != null &&
+          !_matchesId(p.categoryId, filter.categoryId!)) {
+        return false;
+      }
+      if (filter.subCategoryId != null &&
+          !_matchesId(p.subCategoryId, filter.subCategoryId!)) {
+        return false;
+      }
+      if (filter.shippingType != null) {
+        final s = (p.shippingType ?? '').trim().toLowerCase();
+        if (s.isNotEmpty && s != filter.shippingType) return false;
+      }
+      if (filter.condition != null) {
+        final c = (p.condition ?? '').trim().toLowerCase();
+        if (c.isNotEmpty && c != filter.condition) return false;
+      }
       if (filter.minPrice != null || filter.maxPrice != null) {
         final price = _productPrice(p);
         if (price == null) return false;
@@ -90,8 +107,13 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                 (p.location?.toString() ?? '')
                     .contains(filter.cityName!));
         if (!cityMatch) return false;
-        if (filter.centerId != null &&
-            filter.centerName != null &&
+        if (filter.centerId != null) {
+          final centerOk = _matchesId(p.centerId, filter.centerId!) ||
+              (filter.centerName != null &&
+                  (p.location?.toString() ?? '')
+                      .contains(filter.centerName!));
+          if (!centerOk) return false;
+        } else if (filter.centerName != null &&
             !(p.location?.toString() ?? '')
                 .contains(filter.centerName!)) {
           return false;
@@ -261,18 +283,30 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
+                            if (filter.categoryId != null)
+                              _ActiveFilterChip(
+                                label: filter.categoryName ??
+                                    '${filter.categoryId}',
+                                onDeleted: () => cubit.applySearchFilter(
+                                  filter.copyWith(
+                                    clearCategory: true,
+                                    clearSubCategory: true,
+                                  ),
+                                ),
+                              ),
+                            if (filter.subCategoryId != null)
+                              _ActiveFilterChip(
+                                label: filter.subCategoryName ??
+                                    '${filter.subCategoryId}',
+                                onDeleted: () => cubit.applySearchFilter(
+                                  filter.copyWith(clearSubCategory: true),
+                                ),
+                              ),
                             if (filter.type != null)
                               _ActiveFilterChip(
                                 label: filter.type!,
                                 onDeleted: () => cubit.applySearchFilter(
-                                  ProductsFilter(
-                                    minPrice: filter.minPrice,
-                                    maxPrice: filter.maxPrice,
-                                    cityId: filter.cityId,
-                                    cityName: filter.cityName,
-                                    centerId: filter.centerId,
-                                    centerName: filter.centerName,
-                                  ),
+                                  filter.copyWith(clearType: true),
                                 ),
                               ),
                             if (filter.minPrice != null ||
@@ -281,24 +315,28 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                 label:
                                     '${filter.minPrice?.toStringAsFixed(0) ?? ''} - ${filter.maxPrice?.toStringAsFixed(0) ?? ''}',
                                 onDeleted: () => cubit.applySearchFilter(
-                                  ProductsFilter(
-                                    type: filter.type,
-                                    cityId: filter.cityId,
-                                    cityName: filter.cityName,
-                                    centerId: filter.centerId,
-                                    centerName: filter.centerName,
-                                  ),
+                                  filter.copyWith(clearPrice: true),
                                 ),
                               ),
                             if (filter.cityId != null)
                               _ActiveFilterChip(
                                 label: filter.placeLabel,
                                 onDeleted: () => cubit.applySearchFilter(
-                                  ProductsFilter(
-                                    type: filter.type,
-                                    minPrice: filter.minPrice,
-                                    maxPrice: filter.maxPrice,
-                                  ),
+                                  filter.copyWith(clearPlace: true),
+                                ),
+                              ),
+                            if (filter.shippingType != null)
+                              _ActiveFilterChip(
+                                label: filter.shippingType!,
+                                onDeleted: () => cubit.applySearchFilter(
+                                  filter.copyWith(clearShipping: true),
+                                ),
+                              ),
+                            if (filter.condition != null)
+                              _ActiveFilterChip(
+                                label: filter.condition!,
+                                onDeleted: () => cubit.applySearchFilter(
+                                  filter.copyWith(clearCondition: true),
                                 ),
                               ),
                           ],

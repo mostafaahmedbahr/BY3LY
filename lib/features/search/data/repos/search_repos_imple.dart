@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
+import '../../../allSubCategoriesProducts/presentation/views/all_sub_categories_products_widgets/products_filter_sheet.dart';
 import '../models/all_products_search_model.dart';
 
 
@@ -16,14 +17,20 @@ class SearchReposImpl implements SearchRepos {
 
 
   @override
-  Future<Either<Failure, AllProductsSearchModel>> getAllProductsForSearch({int page = 1}) async{
+  Future<Either<Failure, AllProductsSearchModel>> getAllProductsForSearch({
+    int page = 1,
+    ProductsFilter? filter,
+  }) async{
     try {
+      final query = <String, dynamic>{'page': page};
+      // Server-side filter keys (both = omitted).
+      if (filter != null) query.addAll(filter.toQueryParams());
       var response = await apiService!.getData(
         endPoint: EndPoints.products,
-        query: {'page': page},
+        query: query,
       );
       AllProductsSearchModel result = AllProductsSearchModel.fromJson(response.data);
-      debugPrint("SearchReposImpl getAllProductsForSearch page=$page");
+      debugPrint("SearchReposImpl getAllProductsForSearch page=$page query=$query");
       return right(result);
     } catch (e, s) {
       debugPrint('SearchReposImpl getAllProductsForSearch error: $e');

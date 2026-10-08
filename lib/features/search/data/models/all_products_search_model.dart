@@ -114,6 +114,7 @@ class Products {
   String? image;
   dynamic location;
   dynamic cityId;
+  dynamic centerId;
   int? categoryId;
   String? categoryType;
   int? subCategoryId;
@@ -130,8 +131,10 @@ class Products {
   String? marka;
   String? type;
   String? createdAt;
+  String? shippingType;
+  String? condition;
 
-  Products({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt});
+  Products({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.centerId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt, this.shippingType, this.condition});
 
   Products.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -153,6 +156,7 @@ class Products {
     image = _asString(json["image"]);
     location = json["location"];
     cityId = json["city_id"];
+    centerId = json["center_id"];
     categoryId = _asInt(json["category_id"]);
     categoryType = _asString(json["category_type"]);
     subCategoryId = _asInt(json["sub_category_id"]);
@@ -169,6 +173,8 @@ class Products {
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
     createdAt = _asString(json["created_at"]);
+    shippingType = _asString(json["shipping_type"]);
+    condition = _asString(json["condition"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -194,6 +200,7 @@ class Products {
     _data["image"] = image;
     _data["location"] = location;
     _data["city_id"] = cityId;
+    _data["center_id"] = centerId;
     _data["category_id"] = categoryId;
     _data["category_type"] = categoryType;
     _data["sub_category_id"] = subCategoryId;
@@ -216,6 +223,8 @@ class Products {
     _data["marka"] = marka;
     _data["type"] = type;
     _data["created_at"] = createdAt;
+    _data["shipping_type"] = shippingType;
+    _data["condition"] = condition;
     return _data;
   }
 }

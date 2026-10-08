@@ -262,11 +262,14 @@ class SearchCubit extends Cubit<SearchStates> {
   void applySearchFilter(ProductsFilter filter) {
     searchFilter = filter;
     emit(SearchFilterChanged());
+    // Server-side filter: refetch page 1 with the new query params.
+    getAllProductsForSearch();
   }
 
   void clearSearchFilter() {
     searchFilter = const ProductsFilter.empty();
     emit(SearchFilterChanged());
+    getAllProductsForSearch();
   }
 
   Future<void> getAllProductsForSearch({bool loadMore = false}) async {
@@ -280,7 +283,10 @@ class SearchCubit extends Cubit<SearchStates> {
       emit(GetAllProductsForSearchLoading());
     }
     final int page = loadMore ? currentPage + 1 : 1;
-    var result = await searchRepos!.getAllProductsForSearch(page: page);
+    var result = await searchRepos!.getAllProductsForSearch(
+      page: page,
+      filter: searchFilter,
+    );
     return result.fold((failure) {
       debugPrint('SearchCubit getAllProductsForSearch failed: ${failure.errMessage}');
       isLoadingMore = false;

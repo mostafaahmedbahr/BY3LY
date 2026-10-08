@@ -1,6 +1,11 @@
+import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart' as cats;
+import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart' as subs;
+import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
+import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
 import 'package:by3ly/features/chooseLocation/data/models/cities_centers_model.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_cubit.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_states.dart';
+import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +18,10 @@ import '../../../../../lang/locale_keys.dart';
 
 /// Immutable holder for the filters applied on the products grid.
 ///
+/// Server keys: category_id, sub_category_id, min_price, max_price,
+/// city_id, center_id, shipping_type (free/paid), condition (new/used).
+/// `both` for shipping/condition means "no filter" (null).
+///
 /// The place filter uses the same cities/centers data as the
 /// ChooseLocation screen and account creation (ChooseLocationCubit).
 class ProductsFilter {
@@ -23,6 +32,12 @@ class ProductsFilter {
   final String? cityName;
   final int? centerId;
   final String? centerName;
+  final int? categoryId;
+  final String? categoryName;
+  final int? subCategoryId;
+  final String? subCategoryName;
+  final String? shippingType; // 'free' | 'paid' | null(=both)
+  final String? condition; // 'new' | 'used' | null(=both)
 
   const ProductsFilter({
     this.type,
@@ -32,6 +47,12 @@ class ProductsFilter {
     this.cityName,
     this.centerId,
     this.centerName,
+    this.categoryId,
+    this.categoryName,
+    this.subCategoryId,
+    this.subCategoryName,
+    this.shippingType,
+    this.condition,
   });
 
   const ProductsFilter.empty()
@@ -41,25 +62,94 @@ class ProductsFilter {
         cityId = null,
         cityName = null,
         centerId = null,
-        centerName = null;
+        centerName = null,
+        categoryId = null,
+        categoryName = null,
+        subCategoryId = null,
+        subCategoryName = null,
+        shippingType = null,
+        condition = null;
 
   bool get isEmpty =>
       type == null &&
       minPrice == null &&
       maxPrice == null &&
-      cityId == null;
+      cityId == null &&
+      categoryId == null &&
+      subCategoryId == null &&
+      shippingType == null &&
+      condition == null;
 
   int get activeCount =>
       (type != null ? 1 : 0) +
       (minPrice != null ? 1 : 0) +
       (maxPrice != null ? 1 : 0) +
-      (cityId != null ? 1 : 0);
+      (cityId != null ? 1 : 0) +
+      (categoryId != null ? 1 : 0) +
+      (subCategoryId != null ? 1 : 0) +
+      (shippingType != null ? 1 : 0) +
+      (condition != null ? 1 : 0);
 
   /// Label shown on the active-filter chip, e.g. "القاهرة - مدينة نصر".
   String get placeLabel {
     if (cityName == null) return '';
     if (centerName != null) return '$cityName - $centerName';
     return cityName!;
+  }
+
+  /// Query params for GET products? — nulls omitted, `both` already null.
+  Map<String, dynamic> toQueryParams() {
+    final map = <String, dynamic>{};
+    if (categoryId != null) map['category_id'] = categoryId;
+    if (subCategoryId != null) map['sub_category_id'] = subCategoryId;
+    if (minPrice != null) map['min_price'] = minPrice;
+    if (maxPrice != null) map['max_price'] = maxPrice;
+    if (cityId != null) map['city_id'] = cityId;
+    if (centerId != null) map['center_id'] = centerId;
+    if (shippingType != null) map['shipping_type'] = shippingType;
+    if (condition != null) map['condition'] = condition;
+    return map;
+  }
+
+  ProductsFilter copyWith({
+    String? type,
+    double? minPrice,
+    double? maxPrice,
+    int? cityId,
+    String? cityName,
+    int? centerId,
+    String? centerName,
+    int? categoryId,
+    String? categoryName,
+    int? subCategoryId,
+    String? subCategoryName,
+    String? shippingType,
+    String? condition,
+    bool clearType = false,
+    bool clearPrice = false,
+    bool clearPlace = false,
+    bool clearCategory = false,
+    bool clearSubCategory = false,
+    bool clearShipping = false,
+    bool clearCondition = false,
+  }) {
+    return ProductsFilter(
+      type: clearType ? null : (type ?? this.type),
+      minPrice: clearPrice ? null : (minPrice ?? this.minPrice),
+      maxPrice: clearPrice ? null : (maxPrice ?? this.maxPrice),
+      cityId: clearPlace ? null : (cityId ?? this.cityId),
+      cityName: clearPlace ? null : (cityName ?? this.cityName),
+      centerId: clearPlace ? null : (centerId ?? this.centerId),
+      centerName: clearPlace ? null : (centerName ?? this.centerName),
+      categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+      categoryName: clearCategory ? null : (categoryName ?? this.categoryName),
+      subCategoryId:
+          clearSubCategory ? null : (subCategoryId ?? this.subCategoryId),
+      subCategoryName:
+          clearSubCategory ? null : (subCategoryName ?? this.subCategoryName),
+      shippingType: clearShipping ? null : (shippingType ?? this.shippingType),
+      condition: clearCondition ? null : (condition ?? this.condition),
+    );
   }
 }
 
@@ -104,8 +194,18 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
   String? _type;
   int? _cityId;
   int? _centerId;
+  int? _categoryId;
+  int? _subCategoryId;
+  String? _shippingType; // null = both
+  String? _condition; // null = both
   late final TextEditingController _minController;
   late final TextEditingController _maxController;
+
+  List<cats.Categories> _categories = [];
+  List<subs.SubCategories> _subCategories = [];
+  bool _loadingCats = false;
+  bool _loadingSubs = false;
+  String? _catsError;
 
   List<Centers> _centersForCity(List<Cities> cities, int? cityId) {
     if (cityId == null) return const [];
@@ -121,6 +221,10 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     _type = widget.initial.type;
     _cityId = widget.initial.cityId;
     _centerId = widget.initial.centerId;
+    _categoryId = widget.initial.categoryId;
+    _subCategoryId = widget.initial.subCategoryId;
+    _shippingType = widget.initial.shippingType;
+    _condition = widget.initial.condition;
     _minController = TextEditingController(
       text: widget.initial.minPrice?.toStringAsFixed(0) ?? '',
     );
@@ -133,6 +237,79 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     if (locationCubit.allCitiesList.isEmpty) {
       locationCubit.getAllCitiesAndCenters();
     }
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _loadingCats = true;
+      _catsError = null;
+    });
+    try {
+      final result =
+          await getIt<AllCategoriesRepoImpl>().getAllCategories();
+      result.fold(
+        (failure) {
+          if (!mounted) return;
+          setState(() {
+            _loadingCats = false;
+            _catsError = failure.errMessage;
+          });
+        },
+        (data) {
+          if (!mounted) return;
+          setState(() {
+            _loadingCats = false;
+            _categories = data.data?.categories ?? [];
+          });
+          // Load sub-categories if a category was pre-selected.
+          if (_categoryId != null) _loadSubCategories(_categoryId!);
+        },
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loadingCats = false;
+        _catsError = e.toString();
+      });
+    }
+  }
+
+  Future<void> _loadSubCategories(int categoryId) async {
+    setState(() {
+      _loadingSubs = true;
+      _subCategories = [];
+    });
+    try {
+      final result = await getIt<AllSubCategoriesRepoImpl>()
+          .getAllSubCategoriesData(categoryId: categoryId);
+      result.fold(
+        (failure) {
+          if (!mounted) return;
+          setState(() => _loadingSubs = false);
+        },
+        (data) {
+          if (!mounted) return;
+          setState(() {
+            _loadingSubs = false;
+            _subCategories = data.data?.subCategories ?? [];
+          });
+        },
+      );
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loadingSubs = false);
+    }
+  }
+
+  void _onCategoryChanged(int? value) {
+    setState(() {
+      _categoryId = value;
+      // Reset dependent sub-category when the category changes.
+      _subCategoryId = null;
+      _subCategories = [];
+    });
+    if (value != null) _loadSubCategories(value);
   }
 
   @override
@@ -147,6 +324,11 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       _type = null;
       _cityId = null;
       _centerId = null;
+      _categoryId = null;
+      _subCategoryId = null;
+      _subCategories = [];
+      _shippingType = null;
+      _condition = null;
       _minController.clear();
       _maxController.clear();
     });
@@ -170,6 +352,28 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
         break;
       }
     }
+    String? categoryName;
+    for (final c in _categories) {
+      if (c.id == _categoryId) {
+        categoryName = c.name;
+        break;
+      }
+    }
+    String? subCategoryName;
+    for (final s in _subCategories) {
+      if (s.id == _subCategoryId) {
+        subCategoryName = s.name;
+        break;
+      }
+    }
+    // Fall back to initial names when lists haven't loaded yet
+    // (e.g. reopening the sheet offline with an active filter).
+    categoryName ??= widget.initial.categoryId == _categoryId
+        ? widget.initial.categoryName
+        : null;
+    subCategoryName ??= widget.initial.subCategoryId == _subCategoryId
+        ? widget.initial.subCategoryName
+        : null;
     Navigator.pop(
       context,
       ProductsFilter(
@@ -177,9 +381,15 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
         minPrice: double.tryParse(_minController.text.trim()),
         maxPrice: double.tryParse(_maxController.text.trim()),
         cityId: _cityId,
-        cityName: cityName,
+        cityName: cityName ?? widget.initial.cityName,
         centerId: _centerId,
-        centerName: centerName,
+        centerName: centerName ?? widget.initial.centerName,
+        categoryId: _categoryId,
+        categoryName: categoryName,
+        subCategoryId: _subCategoryId,
+        subCategoryName: subCategoryName,
+        shippingType: _shippingType,
+        condition: _condition,
       ),
     );
   }
@@ -247,6 +457,123 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 ],
               ),
               const SizedBox(height: 8),
+
+              /// Category (from app categories API).
+              Text(
+                context.tr(LocaleKeys.chooseCategory),
+                style: AppStyles.textStyle14W500White.copyWith(
+                  color: AppColors.blackColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (_loadingCats)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                )
+              else if (_catsError != null && _categories.isEmpty)
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _catsError!,
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: _loadCategories,
+                      child: Text(context.tr(LocaleKeys.apply)),
+                    ),
+                  ],
+                )
+              else
+                Builder(
+                  builder: (context) {
+                    final ids =
+                        _categories.map((c) => c.id).toSet();
+                    final safeCat =
+                        ids.contains(_categoryId) ? _categoryId : null;
+                    return DropdownButtonFormField<int>(
+                      key: ValueKey('filter_cat_$safeCat'),
+                      initialValue: safeCat,
+                      items: _categories.map((c) {
+                        return DropdownMenuItem<int>(
+                          value: c.id,
+                          child: Text(c.name ?? ''),
+                        );
+                      }).toList(),
+                      onChanged: _onCategoryChanged,
+                      decoration: _dropdownDecoration(
+                        context.tr(LocaleKeys.chooseCategory),
+                      ),
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+
+              /// Sub-category (depends on selected category).
+              Text(
+                context.tr(LocaleKeys.chooseSubCategory),
+                style: AppStyles.textStyle14W500White.copyWith(
+                  color: AppColors.blackColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (_categoryId == null)
+                Text(
+                  '-',
+                  style: TextStyle(color: Colors.grey.shade500),
+                )
+              else if (_loadingSubs)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                )
+              else if (_subCategories.isEmpty)
+                Text(
+                  '-',
+                  style: TextStyle(color: Colors.grey.shade500),
+                )
+              else
+                Builder(
+                  builder: (context) {
+                    final ids =
+                        _subCategories.map((s) => s.id).toSet();
+                    final safeSub =
+                        ids.contains(_subCategoryId) ? _subCategoryId : null;
+                    return DropdownButtonFormField<int>(
+                      key: ValueKey('filter_sub_${_categoryId}_$safeSub'),
+                      initialValue: safeSub,
+                      items: _subCategories.map((s) {
+                        return DropdownMenuItem<int>(
+                          value: s.id,
+                          child: Text(s.name ?? ''),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() => _subCategoryId = value);
+                      },
+                      decoration: _dropdownDecoration(
+                        context.tr(LocaleKeys.chooseSubCategory),
+                      ),
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
 
               /// Type
               Text(
@@ -364,12 +691,18 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     );
                   }
                   final centers = _centersForCity(cities, _cityId);
+                  final cityIds = cities.map((c) => c.id).toSet();
+                  final safeCity =
+                      cityIds.contains(_cityId) ? _cityId : null;
+                  final centerIds = centers.map((c) => c.id).toSet();
+                  final safeCenter =
+                      centerIds.contains(_centerId) ? _centerId : null;
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<int>(
-                        key: ValueKey('city_$_cityId'),
-                        initialValue: _cityId,
+                        key: ValueKey('city_$safeCity'),
+                        initialValue: safeCity,
                         items: cities.map((city) {
                           return DropdownMenuItem<int>(
                             value: city.id,
@@ -387,11 +720,11 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                           context.tr(LocaleKeys.chooseGovernment),
                         ),
                       ),
-                      if (_cityId != null && centers.isNotEmpty) ...[
+                      if (safeCity != null && centers.isNotEmpty) ...[
                         const SizedBox(height: 12),
                         DropdownButtonFormField<int>(
-                          key: ValueKey('center_${_cityId}_$_centerId'),
-                          initialValue: _centerId,
+                          key: ValueKey('center_${safeCity}_$safeCenter'),
+                          initialValue: safeCenter,
                           items: centers.map((center) {
                             return DropdownMenuItem<int>(
                               value: center.id,
@@ -409,6 +742,70 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     ],
                   );
                 },
+              ),
+              const SizedBox(height: 16),
+
+              /// Shipping type: both (no filter) / free / paid.
+              Text(
+                context.tr(LocaleKeys.chooseShippingType),
+                style: AppStyles.textStyle14W500White.copyWith(
+                  color: AppColors.blackColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.all),
+                    selected: _shippingType == null,
+                    onSelected: () => setState(() => _shippingType = null),
+                  ),
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.freeShipping),
+                    selected: _shippingType == 'free',
+                    onSelected: () => setState(() => _shippingType = 'free'),
+                  ),
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.paidShipping),
+                    selected: _shippingType == 'paid',
+                    onSelected: () => setState(() => _shippingType = 'paid'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              /// Condition: both (no filter) / new / used.
+              Text(
+                context.tr(LocaleKeys.chooseProductStatus),
+                style: AppStyles.textStyle14W500White.copyWith(
+                  color: AppColors.blackColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.all),
+                    selected: _condition == null,
+                    onSelected: () => setState(() => _condition = null),
+                  ),
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.conditionNew),
+                    selected: _condition == 'new',
+                    onSelected: () => setState(() => _condition = 'new'),
+                  ),
+                  _FilterChip(
+                    label: context.tr(LocaleKeys.conditionUsed),
+                    selected: _condition == 'used',
+                    onSelected: () => setState(() => _condition = 'used'),
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
               CustomButton(

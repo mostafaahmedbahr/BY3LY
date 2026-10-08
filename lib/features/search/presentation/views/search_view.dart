@@ -23,22 +23,22 @@ class SearchView extends StatelessWidget {
             color: AppColors.mainColor,
             fontWeight: FontWeight.bold
         ),),
-        actions: [
-         Padding(
-           padding: const EdgeInsets.only(left: 20),
-           child: InkWell(
-               onTap: (){
-                 Navigator.push(
-                   context,
-                   PageTransition(
-                     type: PageTransitionType.rightToLeft,
-                     child: const SearchFilterView(),
-                   ),
-                 );
-               },
-               child: SvgPicture.asset(AppImages.filter)),
-         ),
-        ],
+        // actions: [
+        //  Padding(
+        //    padding: const EdgeInsets.only(left: 20),
+        //    child: InkWell(
+        //        onTap: (){
+        //          Navigator.push(
+        //            context,
+        //            PageTransition(
+        //              type: PageTransitionType.rightToLeft,
+        //              child: const SearchFilterView(),
+        //            ),
+        //          );
+        //        },
+        //        child: SvgPicture.asset(AppImages.filter)),
+        //  ),
+        // ],
       ),
       body: const SearchViewBody(),
     ));

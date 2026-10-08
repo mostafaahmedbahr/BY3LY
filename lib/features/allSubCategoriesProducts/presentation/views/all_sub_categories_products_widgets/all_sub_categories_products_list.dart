@@ -63,6 +63,22 @@ class _AllSubCategoriesProductsListState
       if (_filter.type != null && (p.type ?? '').trim() != _filter.type) {
         return false;
       }
+      if (_filter.categoryId != null &&
+          !_matchesId(p.categoryId, _filter.categoryId!)) {
+        return false;
+      }
+      if (_filter.subCategoryId != null &&
+          !_matchesId(p.subCategoryId, _filter.subCategoryId!)) {
+        return false;
+      }
+      if (_filter.shippingType != null) {
+        final s = (p.shippingType ?? '').trim().toLowerCase();
+        if (s.isNotEmpty && s != _filter.shippingType) return false;
+      }
+      if (_filter.condition != null) {
+        final c = (p.condition ?? '').trim().toLowerCase();
+        if (c.isNotEmpty && c != _filter.condition) return false;
+      }
       // Price range filter.
       if (_filter.minPrice != null || _filter.maxPrice != null) {
         final price = _productPrice(p);
@@ -81,8 +97,13 @@ class _AllSubCategoriesProductsListState
                 (p.location?.toString() ?? '')
                     .contains(_filter.cityName!));
         if (!cityMatch) return false;
-        if (_filter.centerId != null &&
-            _filter.centerName != null &&
+        if (_filter.centerId != null) {
+          final centerOk = _matchesId(p.centerId, _filter.centerId!) ||
+              (_filter.centerName != null &&
+                  (p.location?.toString() ?? '')
+                      .contains(_filter.centerName!));
+          if (!centerOk) return false;
+        } else if (_filter.centerName != null &&
             !(p.location?.toString() ?? '')
                 .contains(_filter.centerName!)) {
           return false;
@@ -209,18 +230,30 @@ class _AllSubCategoriesProductsListState
                 spacing: 8,
                 runSpacing: 8,
                 children: [
+                  if (_filter.categoryId != null)
+                    _ActiveFilterChip(
+                      label: _filter.categoryName ?? '${_filter.categoryId}',
+                      onDeleted: () => setState(
+                        () => _filter = _filter.copyWith(
+                          clearCategory: true,
+                          clearSubCategory: true,
+                        ),
+                      ),
+                    ),
+                  if (_filter.subCategoryId != null)
+                    _ActiveFilterChip(
+                      label: _filter.subCategoryName ??
+                          '${_filter.subCategoryId}',
+                      onDeleted: () => setState(
+                        () => _filter =
+                            _filter.copyWith(clearSubCategory: true),
+                      ),
+                    ),
                   if (_filter.type != null)
                     _ActiveFilterChip(
                       label: _filter.type!,
                       onDeleted: () => setState(
-                        () => _filter = ProductsFilter(
-                          minPrice: _filter.minPrice,
-                          maxPrice: _filter.maxPrice,
-                          cityId: _filter.cityId,
-                          cityName: _filter.cityName,
-                          centerId: _filter.centerId,
-                          centerName: _filter.centerName,
-                        ),
+                        () => _filter = _filter.copyWith(clearType: true),
                       ),
                     ),
                   if (_filter.minPrice != null || _filter.maxPrice != null)
@@ -228,24 +261,28 @@ class _AllSubCategoriesProductsListState
                       label:
                           '${_filter.minPrice?.toStringAsFixed(0) ?? ''} - ${_filter.maxPrice?.toStringAsFixed(0) ?? ''}',
                       onDeleted: () => setState(
-                        () => _filter = ProductsFilter(
-                          type: _filter.type,
-                          cityId: _filter.cityId,
-                          cityName: _filter.cityName,
-                          centerId: _filter.centerId,
-                          centerName: _filter.centerName,
-                        ),
+                        () => _filter = _filter.copyWith(clearPrice: true),
                       ),
                     ),
                   if (_filter.cityId != null)
                     _ActiveFilterChip(
                       label: _filter.placeLabel,
                       onDeleted: () => setState(
-                        () => _filter = ProductsFilter(
-                          type: _filter.type,
-                          minPrice: _filter.minPrice,
-                          maxPrice: _filter.maxPrice,
-                        ),
+                        () => _filter = _filter.copyWith(clearPlace: true),
+                      ),
+                    ),
+                  if (_filter.shippingType != null)
+                    _ActiveFilterChip(
+                      label: _filter.shippingType!,
+                      onDeleted: () => setState(
+                        () => _filter = _filter.copyWith(clearShipping: true),
+                      ),
+                    ),
+                  if (_filter.condition != null)
+                    _ActiveFilterChip(
+                      label: _filter.condition!,
+                      onDeleted: () => setState(
+                        () => _filter = _filter.copyWith(clearCondition: true),
                       ),
                     ),
                 ],
