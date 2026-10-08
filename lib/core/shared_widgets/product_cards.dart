@@ -356,38 +356,48 @@ class ProductGridCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      height: 1.3,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff1F2937),
+                  // Fixed title height (2 lines) so all cards stay equal,
+                  // no jitter / no extra space when title is short.
+                  SizedBox(
+                    height: 32,
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        height: 1.3,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xff1F2937),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 3),
-                  _locationRow(location),
-                  const SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          price ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xff1F2937),
+                  // Location takes space ONLY when it exists.
+                  if (_hasValue(location)) ...[
+                    const SizedBox(height: 3),
+                    _locationRow(location),
+                  ],
+                  const SizedBox(height: 4),
+                  if (_hasValue(price) ||
+                      (_hasValue(rating) && rating != '-'))
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            price ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xff1F2937),
+                            ),
                           ),
                         ),
-                      ),
-                      if (_hasValue(rating) && rating != '-')
-                        _ratingChip(rating!),
-                    ],
-                  ),
+                        if (_hasValue(rating) && rating != '-')
+                          _ratingChip(rating!),
+                      ],
+                    ),
                   if (_hasValue(date)) ...[
                     const SizedBox(height: 2),
                     Text(

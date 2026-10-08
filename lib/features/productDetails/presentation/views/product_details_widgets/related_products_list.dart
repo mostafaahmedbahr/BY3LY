@@ -11,10 +11,15 @@ class RelatedProductsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = relatedProductsList ?? [];
     if (items.isEmpty) return const SizedBox.shrink();
+    // Card height breakdown (tight, no dead space):
+    // image 110 + padding 18 + title 32 + spacing 4 + price ~21 + date ~14 = ~199
+    // + location (~16) when present = ~215. 240 fits tallest case safely,
+    // old 300 left ~60-85px empty gap under every card.
     return SizedBox(
-      height: 300,
+      height: 240,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
         itemBuilder:  (context , index ){
           final item = items[index];
           return SizedBox(
