@@ -13,19 +13,26 @@ import '../../data/models/packages_model.dart';
 import '../../data/models/payment_methods_model.dart';
 import '../view_model/packages_cubit.dart';
 import '../view_model/packages_states.dart';
+import 'packages_widgets/brand_logo.dart';
 
 /// Brand identity per payment method (matched by code/name).
 class _Brand {
-  const _Brand(this.color, this.icon);
+  const _Brand(this.color, this.icon,
+      [this.kind = BrandLogoKind.generic]);
   final Color color;
   final IconData icon;
+  final BrandLogoKind kind;
 }
 
 _Brand _brandFor(PaymentMethod method) {
   final text =
       '${method.code ?? ''} ${method.name ?? ''}'.toLowerCase();
   if (text.contains('vodafone') || text.contains('فودافون')) {
-    return const _Brand(Color(0xffE60000), Icons.smartphone_rounded);
+    return const _Brand(
+      Color(0xffE60000),
+      Icons.smartphone_rounded,
+      BrandLogoKind.vodafone,
+    );
   }
   if (text.contains('orange') ||
       text.contains('اورنج') ||
@@ -34,11 +41,22 @@ _Brand _brandFor(PaymentMethod method) {
   }
   if (text.contains('etisalat') ||
       text.contains('اتصالات') ||
-      text.contains('e&')) {
-    return const _Brand(Color(0xff008A45), Icons.smartphone_rounded);
+      text.contains('e&') ||
+      text.contains('إي_اند')) {
+    return const _Brand(
+      Colors.black,
+      Icons.smartphone_rounded,
+      BrandLogoKind.etisalat,
+    );
   }
-  if (text.contains('instapay') || text.contains('انستا')) {
-    return const _Brand(Color(0xff00A9CE), Icons.bolt_rounded);
+  if (text.contains('instapay') ||
+      text.contains('انستا') ||
+      text.contains('insta_pay')) {
+    return const _Brand(
+      Color(0xff5B2C86),
+      Icons.bolt_rounded,
+      BrandLogoKind.instapay,
+    );
   }
   if (text.contains('fawry') || text.contains('فوري')) {
     return const _Brand(Color(0xffB8860B), Icons.storefront_rounded);
@@ -197,13 +215,10 @@ class _TransferViewState extends State<TransferView> {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.circular(16),
-                                    color: selected
-                                        ? AppColors.mainColor
-                                            .withValues(alpha: 0.05)
-                                        : Colors.white,
+                                    color: Colors.white,
                                     border: Border.all(
                                       color: selected
-                                          ? AppColors.mainColor
+                                          ? brand.color
                                           : const Color(0xffE3E6E9),
                                       width: selected ? 1.5 : 1,
                                     ),
@@ -218,36 +233,30 @@ class _TransferViewState extends State<TransferView> {
                                   ),
                                   child: Row(
                                     children: [
-                                      // Company mark: brand-colored badge.
+                                      // Official company logo.
                                       Stack(
                                         clipBehavior: Clip.none,
                                         children: [
-                                          Container(
-                                            height: 52,
-                                            width: 52,
-                                            decoration: BoxDecoration(
-                                              color: brand.color
-                                                  .withValues(
-                                                      alpha: 0.12),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      15),
-                                            ),
-                                            child: Icon(
-                                              brand.icon,
-                                              size: 26,
-                                              color: brand.color,
-                                            ),
+                                          BrandLogo(
+                                            kind: brand.kind,
+                                            fallbackIcon: brand.icon,
+                                            fallbackColor: brand.color,
                                           ),
                                           if (selected)
-                                            const Positioned(
+                                            Positioned(
                                               bottom: -4,
                                               right: -4,
-                                              child: Icon(
-                                                Icons.check_circle_rounded,
-                                                size: 20,
-                                                color:
-                                                    AppColors.mainColor,
+                                              child: Container(
+                                                decoration:
+                                                    const BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Icon(
+                                                  Icons.check_circle_rounded,
+                                                  size: 20,
+                                                  color: brand.color,
+                                                ),
                                               ),
                                             ),
                                         ],
@@ -260,11 +269,11 @@ class _TransferViewState extends State<TransferView> {
                                           children: [
                                             Text(
                                               method.name ?? '',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 15,
                                                 fontWeight:
                                                     FontWeight.bold,
-                                                color: Color(0xff1F2937),
+                                                color: brand.color,
                                               ),
                                             ),
                                             if ((method.account?.trim()
@@ -287,13 +296,11 @@ class _TransferViewState extends State<TransferView> {
                                                 ),
                                                 child: Text(
                                                   method.account!,
-                                                  style:
-                                                      const TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 12.5,
                                                     fontWeight:
                                                         FontWeight.w600,
-                                                    color: Color(
-                                                        0xff1F2937),
+                                                    color: brand.color,
                                                   ),
                                                 ),
                                               ),
@@ -317,10 +324,10 @@ class _TransferViewState extends State<TransferView> {
                                               context: context,
                                             );
                                           },
-                                          icon: const Icon(
+                                          icon: Icon(
                                             Icons.copy_rounded,
                                             size: 18,
-                                            color: AppColors.mainColor,
+                                            color: brand.color,
                                           ),
                                         ),
                                     ],
