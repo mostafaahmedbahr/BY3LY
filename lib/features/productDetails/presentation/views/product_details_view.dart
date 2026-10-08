@@ -2,6 +2,7 @@ import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
+import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_details_loading.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_details_view_body.dart';
 import '../../../../main_importants.dart';
 
@@ -21,7 +22,7 @@ class ProductDetailsView extends StatelessWidget {
         var productDetailsCubit = ProductDetailsCubit.get(context);
         if (state is GetProductDetailsDataLoadingState &&
             productDetailsCubit.productDetailsModel?.data?.product == null) {
-          return const Scaffold(body: CustomLoading());
+          return const ProductDetailsLoading();
         }
         if (state is GetProductDetailsDataErrorState &&
             productDetailsCubit.productDetailsModel?.data?.product == null) {
