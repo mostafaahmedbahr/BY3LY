@@ -34,7 +34,7 @@ class CustomPinCodeFieldState extends State<CustomPinCodeField> {
             return null;
           }
         },
-        length: 4,
+        length: 6,
         obscureText: false,
         animationType: AnimationType.fade,
         pinTheme: PinTheme(

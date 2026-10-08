@@ -103,8 +103,8 @@ class RegisterCubit extends Cubit<RegisterStates> {
     }, (data) async {
       if (data.status == true) {
         signUpModel = data;
-        await CacheTokenManger.saveUserToken("${data.data!.user!.token}");
-        CacheHelper.saveData(key: "email", value: "${data.data!.user!.email}");
+        final resolvedEmail = data.data?.resolvedEmail ?? email;
+        await CacheHelper.saveData(key: "email", value: resolvedEmail);
         emit(SignUpSuccess(data));
       } else {
         emit(SignUpError(data.message.toString()));

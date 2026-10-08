@@ -1,3 +1,4 @@
+import '../../../../core/utils/app_consts/storage_keys.dart';
 import '../../../../main_importants.dart';
 import '../../data/models/otp_model.dart';
 import '../../data/models/resend_otp_model.dart';
@@ -22,9 +23,20 @@ class OtpCubit extends Cubit<OtpStates> {
     );
     return result.fold((failure) {
       emit(VerifyOtpErrorState(failure.errMessage));
-    }, (data) {
+    }, (data) async {
       if(data.status == true){
         otpModel = data;
+        // Save token after OTP success (supports token in data OR data.user)
+        final token = data.data?.resolvedToken;
+        if (token != null && token.isNotEmpty && token != "null") {
+          await CacheTokenManger.saveUserToken(token);
+          await CacheHelper.saveData(key: StorageKeys.userToken, value: token);
+          await CacheHelper.saveData(key: StorageKeys.isGuest, value: false);
+        }
+        final emailToSave = data.data?.resolvedEmail ?? email;
+        if (emailToSave.isNotEmpty) {
+          await CacheHelper.saveData(key: "email", value: emailToSave);
+        }
          emit(VerifyOtpSuccessState(data));
       }else{
         emit(VerifyOtpErrorState(data.message.toString()));

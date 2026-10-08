@@ -19,13 +19,19 @@ class RegisterButtons extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is SignUpSuccess) {
+          final otp = state.registerModel.data?.activationCode;
+          final email =
+              state.registerModel.data?.resolvedEmail ?? "";
+          final baseMsg =
+              state.registerModel.message ?? "";
           Toast.showSuccessToast(
               duration: const Duration(seconds: 10),
-              msg: state.registerModel.message! +
-                  state.registerModel.data!.code.toString(),
+              msg: otp != null && otp.isNotEmpty
+                  ? "$baseMsg\nOTP : $otp"
+                  : baseMsg,
               context: context);
           context.pushNamed(Routes.otpView,
-            arguments: state.registerModel.data!.user!.email,
+            arguments: email,
           );
           context.read<RegisterCubit>().clearData();
         } else if (state is SignUpError) {

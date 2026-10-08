@@ -5,7 +5,9 @@ import 'package:by3ly/features/profile/presentation/view_model/profile_states.da
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/app_services/local_services/cache_helper.dart';
 import '../../../../core/app_services/local_services/cache_token.dart';
+import '../../../../core/utils/app_consts/storage_keys.dart';
 import '../../../deleteAccount/data/models/delete_account_model.dart';
 import '../../data/models/logout_model.dart';
 
@@ -44,6 +46,13 @@ class ProfileCubit extends Cubit<ProfileStates> {
   ProfileRepos? profileRepos;
   ProfileModel? profileModel;
 
+  /// Clear cached profile (call on logout / before fresh login).
+  void clearProfile() {
+    profileModel = null;
+    file = null;
+    emit(ProfileInitState());
+  }
+
   Future<void> getProfile() async {
     emit(GetProfileDataLoadingState());
     var result = await profileRepos!.getProfileData();
@@ -65,8 +74,15 @@ class ProfileCubit extends Cubit<ProfileStates> {
       emit(LogoutErrorState(failure.errMessage));
     }, (data) async {
       logoutModel = data;
-      emit(LogoutSuccessState(data));
+      // Clear everything BEFORE emitting success so no stale data remains.
+      profileModel = null;
+      file = null;
+      CacheTokenManger.userToken = null;
       await CacheTokenManger.clearUserToken();
+      await CacheHelper.removeData(key: StorageKeys.userToken);
+      await CacheHelper.removeData(key: StorageKeys.isGuest);
+      await CacheHelper.removeData(key: "email");
+      emit(LogoutSuccessState(data));
     });
   }
 
@@ -81,8 +97,14 @@ class ProfileCubit extends Cubit<ProfileStates> {
       emit(DeleteAccountErrorState(failure.errMessage));
     }, (data) async {
       deleteAccountModel = data;
-      emit(DeleteAccountSuccessState(data));
+      profileModel = null;
+      file = null;
+      CacheTokenManger.userToken = null;
       await CacheTokenManger.clearUserToken();
+      await CacheHelper.removeData(key: StorageKeys.userToken);
+      await CacheHelper.removeData(key: StorageKeys.isGuest);
+      await CacheHelper.removeData(key: "email");
+      emit(DeleteAccountSuccessState(data));
     });
   }
 

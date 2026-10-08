@@ -27,14 +27,43 @@ class Data {
   User? user;
   bool? isActive;
   String? code;
+  // Flexible fields - backend may return token/email at data level
+  String? email;
+  String? token;
+  bool? requiresOtp;
+  String? otp;
+  String? nextStep;
 
-  Data({this.user, this.isActive, this.code});
+  Data({
+    this.user,
+    this.isActive,
+    this.code,
+    this.email,
+    this.token,
+    this.requiresOtp,
+    this.otp,
+    this.nextStep,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     user = json["user"] == null ? null : User.fromJson(json["user"]);
-    isActive = json["isActive"];
-    code = json["code"];
+    isActive = json["isActive"] ?? json["is_active"];
+    code = json["code"]?.toString() ?? json["otp"]?.toString();
+    email = json["email"]?.toString() ?? user?.email;
+    // token can be top-level in data OR inside user
+    token = json["token"]?.toString() ??
+        json["access_token"]?.toString() ??
+        user?.token;
+    requiresOtp = json["requires_otp"];
+    otp = json["otp"]?.toString();
+    nextStep = json["next_step"]?.toString();
   }
+
+  /// Token whatever shape the backend used.
+  String? get resolvedToken => token ?? user?.token;
+
+  /// Email whatever shape the backend used.
+  String? get resolvedEmail => email ?? user?.email;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
@@ -43,6 +72,11 @@ class Data {
     }
     _data["isActive"] = isActive;
     _data["code"] = code;
+    _data["email"] = email;
+    _data["token"] = token;
+    _data["requires_otp"] = requiresOtp;
+    _data["otp"] = otp;
+    _data["next_step"] = nextStep;
     return _data;
   }
 }
@@ -63,17 +97,24 @@ class User {
   User({this.id, this.name, this.email, this.phone, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    name = json["name"];
-    email = json["email"];
-    phone = json["phone"];
-    image = json["image"];
-    token = json["token"];
-    centerId = (json["center_id"] as num).toInt();
-    cityId = (json["city_id"] as num).toInt();
-    cityName = json["cityName"];
-    centerName = json["centerName"];
-    createdAt = json["created_at"];
+    id = json["id"] is num
+        ? (json["id"] as num).toInt()
+        : int.tryParse(json["id"]?.toString() ?? "");
+    name = json["name"]?.toString();
+    email = json["email"]?.toString();
+    phone = json["phone"]?.toString();
+    image = json["image"]?.toString();
+    token = json["token"]?.toString() ?? json["access_token"]?.toString();
+    centerId = json["center_id"] is num
+        ? (json["center_id"] as num).toInt()
+        : int.tryParse(json["center_id"]?.toString() ?? "");
+    cityId = json["city_id"] is num
+        ? (json["city_id"] as num).toInt()
+        : int.tryParse(json["city_id"]?.toString() ?? "");
+    cityName = json["cityName"]?.toString() ?? json["city_name"]?.toString();
+    centerName =
+        json["centerName"]?.toString() ?? json["center_name"]?.toString();
+    createdAt = json["created_at"]?.toString();
   }
 
   Map<String, dynamic> toJson() {

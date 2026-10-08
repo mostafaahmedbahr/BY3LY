@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_cubits/auth_cubit/auth_cubit.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../../main_importants.dart';
 import '../../view_model/login_cubit.dart';
@@ -18,6 +19,10 @@ class LoginButtonsWidget extends StatelessWidget {
           // Real login ends any previous guest mode.
           final token = state.loginModel.data?.user?.token?.toString() ?? '';
           context.read<AuthCubit>().loginWithToken(token);
+          // Fetch fresh profile from the start (clears any previous user data).
+          try {
+            context.read<ProfileCubit>().getProfile();
+          } catch (_) {}
           context.pushNamedAndRemoveAll(Routes.layoutView);
           Toast.showSuccessToast(
               msg: state.loginModel.message!, context: context);
@@ -50,13 +55,13 @@ class LoginButtonsWidget extends StatelessWidget {
                       style: AppStyles.textStyle14W500White,
                     ),
                     onPressed: () {
-                      loginCubit.phoneCon.text = "01000000000";
-                      loginCubit.passwordCon.text = "12345678";
+                      // loginCubit.phoneCon.text = "01000000000";
+                      // loginCubit.passwordCon.text = "12345678";
                       if (formKey.currentState!.validate()) {
                         loginCubit.login(
                            phone: loginCubit.phoneCon.text,
                           password: loginCubit.passwordCon.text,
-                          deviceToken: CacheHelper.getData(key: "fcmToken")
+                          deviceToken: CacheHelper.getData(key: "fcmToken")??""
                         );
                       }
                     },

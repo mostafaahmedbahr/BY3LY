@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_cubits/auth_cubit/auth_cubit.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,14 +9,21 @@ import '../../view_model/profile_states.dart';
 void showLogoutDialog(BuildContext context) {
   showCupertinoDialog(
     context: context,
-    builder: (context) => BlocConsumer<ProfileCubit, ProfileStates>(
+    builder: (dialogContext) => BlocConsumer<ProfileCubit, ProfileStates>(
       listener: (context, state) {
         if (state is LogoutSuccessState) {
-          CacheTokenManger.userToken=null;
-          CacheTokenManger.clearUserToken();
+          // Cubit already cleared token + profileModel + CacheHelper.
+          // Sync Auth state + reset nav, then go to login.
+          try {
+            context.read<AuthCubit>().logout();
+          } catch (_) {}
+          try {
+            context.read<ProfileCubit>().clearProfile();
+          } catch (_) {}
+          CacheTokenManger.userToken = null;
           Toast.showSuccessToast(msg: state.logoutModel.message!, context: context);
-          context.pushNamedAndRemoveAll(Routes.loginView);
           LayoutCubit.pageIndex = 0;
+          context.pushNamedAndRemoveAll(Routes.loginView);
         } else if (state is LogoutErrorState) {
           Toast.showErrorToast(msg: state.error.toString(), context: context);
         }

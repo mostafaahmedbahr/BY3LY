@@ -19,7 +19,8 @@ class ProfileDataWidget extends StatelessWidget {
         debugPrint(CacheTokenManger.userToken);
         debugPrint("ProfileDataWidget");
         var profileCubit = ProfileCubit.get(context);
-        if(state is GetProfileDataLoadingState){
+        final user = profileCubit.profileModel?.data?.user;
+        if(state is GetProfileDataLoadingState || user == null){
           return const SimmerLoading(
             height: 44,
           );
@@ -61,11 +62,11 @@ class ProfileDataWidget extends StatelessWidget {
                         color: const Color(0xffEFEFEF),
                       )
                   ),
-                 child:CustomNetWorkImage(
-                   imageUrl: profileCubit.profileModel!.data!.user!.image!,
-                   raduis: 50,
-                   fit: BoxFit.cover,
-                 ),
+                  child:CustomNetWorkImage(
+                    imageUrl: user.image ?? '',
+                    raduis: 50,
+                    fit: BoxFit.cover,
+                  ),
                 )  ,
                 InkWell(
                   onTap: () {
@@ -84,8 +85,8 @@ class ProfileDataWidget extends StatelessWidget {
               Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${profileCubit.profileModel!.data!.user!.name!} - ( ${profileCubit.profileModel!.data!.user!.phone!} )",style: AppStyles.textStyle16W600Black,),
-                Text(" ${context.tr(LocaleKeys.memberFrom)} ${profileCubit.profileModel!.data!.user!.createdAt}",style: AppStyles.textStyle10W400Gray,),
+                Text("${user.name ?? ''} - ( ${user.phone ?? ''} )",style: AppStyles.textStyle16W600Black,),
+                Text(" ${context.tr(LocaleKeys.memberFrom)} ${user.createdAt ?? ''}",style: AppStyles.textStyle10W400Gray,),
               ],
             ),
             IconButton(
