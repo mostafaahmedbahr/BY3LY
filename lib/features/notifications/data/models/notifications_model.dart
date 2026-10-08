@@ -102,7 +102,7 @@ class Notifications {
   String? type;
   String? title;
   String? body;
-  List<dynamic>? data;
+  dynamic data;
   bool? isRead;
   dynamic readAt;
   String? createdAt;
@@ -114,7 +114,8 @@ class Notifications {
     type = _asString(json["type"]);
     title = _asString(json["title"]);
     body = _asString(json["body"]);
-    data = json["data"] ?? [];
+    // Payload can be a Map, a List or null depending on the type.
+    data = json["data"];
     isRead = _asBool(json["is_read"]) ?? json["read_at"] != null;
     readAt = json["read_at"];
     createdAt = _asString(json["created_at"]);

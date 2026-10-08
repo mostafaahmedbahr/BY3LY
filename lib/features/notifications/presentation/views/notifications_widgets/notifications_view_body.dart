@@ -1,5 +1,4 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/core/shared_widgets/custom_loading.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
@@ -8,7 +7,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'notifications_list.dart';
+import 
+'notifications_list.dart';
+import 
+'notifications_loading.dart';
 
 class NotificationsViewBody extends StatefulWidget {
   const NotificationsViewBody({super.key});
@@ -46,7 +48,7 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
                 const SizedBox(height: 4),
                 _ReadStatusFilter(),
                 SizedBox(height: 20),
-                Expanded(child: CustomLoading()),
+                const Expanded(child: NotificationsLoading()),
               ],
             ),
           );

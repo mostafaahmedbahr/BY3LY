@@ -5,6 +5,7 @@ import '../../view_model/advertisements_cubit.dart';
 import 'add_bundle_button.dart';
 import 'ads_types.dart';
 import 'my_ads_list.dart';
+import 'my_ads_loading.dart';
 
 class AdvertisementsViewBody extends StatefulWidget {
   const AdvertisementsViewBody({super.key});
@@ -75,7 +76,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                   ),
                 ),
                 const SizedBox(height: 10,),
-                state is GetAllMyAdsDataLoadingState ? const Expanded(child: CustomLoading()):
+                state is GetAllMyAdsDataLoadingState ? const MyAdsLoading():
                     state is GetAllMyAdsDataErrorState ? Expanded(
                       child: CustomErrorWidget(
                         error: state.error,
