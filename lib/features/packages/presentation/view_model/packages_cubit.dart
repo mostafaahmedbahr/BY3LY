@@ -92,11 +92,15 @@ class PackagesCubit extends Cubit<PackagesStates> {
     emit(PaymentMethodSelectedState());
   }
 
-  /// Payment methods are cached for the session: no API call
-  /// on every open unless [forceRefresh] is true.
+  /// Session-wide cache shared by every instance: the API is called
+  /// once, later opens reuse it unless [forceRefresh] is true.
+  static PaymentMethodsModel? cachedMethods;
+
   Future<void> getPaymentMethods({bool forceRefresh = false}) async {
-    if (!forceRefresh && paymentMethodsModel != null) {
-      final methods = paymentMethodsModel?.data?.methods ?? [];
+    final cached = cachedMethods ?? paymentMethodsModel;
+    if (!forceRefresh && cached != null) {
+      paymentMethodsModel = cached;
+      final methods = cached.data?.methods ?? [];
       selectedMethod ??=
           methods.isNotEmpty ? methods.first : null;
       return;
@@ -107,6 +111,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
       emit(GetPaymentMethodsErrorState(failure.errMessage));
     }, (data) {
       paymentMethodsModel = data;
+      cachedMethods = data;
       final methods = data.data?.methods ?? [];
       selectedMethod = methods.isNotEmpty ? methods.first : null;
       emit(GetPaymentMethodsSuccessState(data));

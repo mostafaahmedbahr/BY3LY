@@ -1,6 +1,7 @@
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
-import 'package:by3ly/features/confirmPayment/presentation/view_model/confirm_payment_states.dart';
+import 
+'../../view_model/confirm_payment_states.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

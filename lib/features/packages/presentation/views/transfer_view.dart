@@ -7,8 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/shared_widgets/custom_button.dart';
 import '../../../../core/shared_widgets/custom_error_widget.dart';
 import '../../../../core/shared_widgets/custom_loading.dart';
+import '../../../../core/shared_widgets/custom_text_form_filed.dart';
 import '../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../core/utils/new_toast/toast.dart';
+import '../../../PaymentBalance/presentation/view_model/wallet_cubit.dart';
+import '../../../PaymentBalance/presentation/view_model/wallet_states.dart';
 import '../../data/models/packages_model.dart';
 import '../../data/models/payment_methods_model.dart';
 import '../view_model/packages_cubit.dart';
@@ -78,18 +81,28 @@ _Brand _brandFor(PaymentMethod method) {
   return const _Brand(AppColors.mainColor, Icons.swap_horiz_rounded);
 }
 
-/// Transfer checkout page: pick a transfer method, upload the receipt,
-/// then confirm. On success it pops back and the packages page refreshes.
+/// One payment-methods page for both flows (same page, same look):
+/// - Subscription mode ([package] set): transfer checkout for a package.
+///   On success it pops back and the packages page refreshes.
+/// - Wallet top-up mode ([topUpMode] true): amount + method + receipt,
+///   posted to wallet/top-up. On success it pops back and the history
+///   refreshes.
 class TransferView extends StatefulWidget {
-  const TransferView({super.key, required this.package});
+  const TransferView({super.key, this.package, this.topUpMode = false})
+      : assert(
+            (package == null) == topUpMode,
+            'Pass either package or topUpMode');
 
-  final Packages package;
+  final Packages? package;
+  final bool topUpMode;
 
   @override
   State<TransferView> createState() => _TransferViewState();
 }
 
 class _TransferViewState extends State<TransferView> {
+  final TextEditingController _amountController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -99,17 +112,24 @@ class _TransferViewState extends State<TransferView> {
   }
 
   @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cubit = PackagesCubit.get(context);
-    return Scaffold(
+    final topUpMode = widget.topUpMode;
+    final scaffold = Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         backgroundColor: AppColors.whiteColor,
         shadowColor: AppColors.mainColor,
         surfaceTintColor: AppColors.mainColor,
-        title: const Text(
-          "إتمام الاشتراك",
-          style: TextStyle(
+        title: Text(
+          topUpMode ? "شحن رصيد المحفظة" : "إتمام الاشتراك",
+          style: const TextStyle(
             color: AppColors.mainColor,
             fontWeight: FontWeight.bold,
           ),
@@ -123,48 +143,58 @@ class _TransferViewState extends State<TransferView> {
           }
         },
         builder: (context, state) {
-          final paying =
-              cubit.subscribingPackageId == widget.package.id;
+          final package = widget.package;
+          final paying = !topUpMode &&
+              cubit.subscribingPackageId != null &&
+              cubit.subscribingPackageId == package?.id;
           final canConfirm = cubit.selectedMethod?.code != null &&
               cubit.receiptImage != null &&
-              !paying;
+              !paying &&
+              (topUpMode || package?.id != null);
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Package summary.
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color:
-                        AppColors.mainColor.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.package.name ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff1F2937),
+                // Package summary / wallet amount.
+                if (topUpMode)
+                  CustomTextFormField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    hintText: "المبلغ",
+                  )
+                else
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color:
+                          AppColors.mainColor.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            package?.name ?? '',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff1F2937),
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        widget.package.durationLabel,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.mainColor,
+                        Text(
+                          package?.durationLabel ?? '',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.mainColor,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
                 const SizedBox(height: 16),
                 const Text(
                   "اختر طريقة التحويل",
@@ -410,39 +440,123 @@ class _TransferViewState extends State<TransferView> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                CustomButton(
-                  btnText: paying
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text(
-                          "تأكيد الاشتراك",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                  onPressed: () {
-                    if (!canConfirm ||
-                        widget.package.id == null) {
-                      return;
-                    }
-                    cubit.checkoutWithTransfer(
-                      packageId: widget.package.id!,
-                    );
-                  },
-                ),
+                if (topUpMode)
+                  BlocBuilder<WalletCubit, WalletStates>(
+                    builder: (context, walletState) {
+                      final walletPaying =
+                          walletState is TopUpLoadingState;
+                      return _ConfirmButton(
+                        loading: walletPaying,
+                        label: "تأكيد الشحن",
+                        onPressed: walletPaying
+                            ? null
+                            : () {
+                                final amount = _amountController
+                                    .text
+                                    .trim();
+                                if (amount.isEmpty ||
+                                    double.tryParse(amount) ==
+                                        null) {
+                                  Toast.showErrorToast(
+                                    msg: "من فضلك أدخل المبلغ",
+                                    context: context,
+                                  );
+                                  return;
+                                }
+                                final method =
+                                    cubit.selectedMethod;
+                                final receipt =
+                                    cubit.receiptImage;
+                                if (method?.code == null ||
+                                    receipt == null) {
+                                  return;
+                                }
+                                context
+                                    .read<WalletCubit>()
+                                    .topUp(
+                                      amount: amount,
+                                      paymentMethod:
+                                          method!.code!,
+                                      receiptPath: receipt.path,
+                                    );
+                              },
+                      );
+                    },
+                  )
+                else
+                  _ConfirmButton(
+                    loading: paying,
+                    label: "تأكيد الاشتراك",
+                    onPressed: !canConfirm || package?.id == null
+                        ? null
+                        : () => cubit.checkoutWithTransfer(
+                              packageId: package!.id!,
+                            ),
+                  ),
               ],
             ),
           );
         },
       ),
+    );
+    // Wallet mode: top-up result pops back + refreshes the history.
+    if (topUpMode) {
+      return BlocListener<WalletCubit, WalletStates>(
+        listener: (context, state) {
+          if (state is TopUpSuccessState) {
+            Toast.showSuccessToast(
+              msg: state.message.isNotEmpty
+                  ? state.message
+                  : "تم إرسال طلب الشحن بنجاح",
+              context: context,
+            );
+            context.read<WalletCubit>().getHistory();
+            Navigator.pop(context);
+          } else if (state is TopUpErrorState) {
+            Toast.showErrorToast(
+                msg: state.error, context: context);
+          }
+        },
+        child: scaffold,
+      );
+    }
+    return scaffold;
+  }
+}
+
+/// Shared confirm button with loading state.
+class _ConfirmButton extends StatelessWidget {
+  const _ConfirmButton({
+    required this.loading,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final bool loading;
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomButton(
+      btnText: loading
+          ? const SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                color: Colors.white,
+              ),
+            )
+          : Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+      onPressed: onPressed ?? () {},
     );
   }
 }

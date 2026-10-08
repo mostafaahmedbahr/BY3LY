@@ -26,4 +26,22 @@ class WalletCubit extends Cubit<WalletStates> {
       emit(GetWalletHistorySuccessState(data));
     });
   }
+
+  Future<void> topUp({
+    required String amount,
+    required String paymentMethod,
+    required String receiptPath,
+  }) async {
+    emit(TopUpLoadingState());
+    var result = await walletRepos!.topUp(
+      amount: amount,
+      paymentMethod: paymentMethod,
+      receiptPath: receiptPath,
+    );
+    return result.fold((failure) {
+      emit(TopUpErrorState(failure.errMessage));
+    }, (data) {
+      emit(TopUpSuccessState(data.message ?? ''));
+    });
+  }
 }

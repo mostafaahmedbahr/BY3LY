@@ -15,3 +15,15 @@ class GetWalletHistoryErrorState extends WalletStates {
   final String error;
   GetWalletHistoryErrorState(this.error);
 }
+
+class TopUpLoadingState extends WalletStates {}
+
+class TopUpSuccessState extends WalletStates {
+  final String message;
+  TopUpSuccessState(this.message);
+}
+
+class TopUpErrorState extends WalletStates {
+  final String error;
+  TopUpErrorState(this.error);
+}
