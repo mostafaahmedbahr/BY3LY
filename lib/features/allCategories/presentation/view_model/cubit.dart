@@ -2,6 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
 import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/errors/failure.dart';
 
 
 class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
@@ -16,16 +19,24 @@ class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
   /// reuse them instead of calling the API on every open.
   static AllCategoriesModel? cachedModel;
 
+  /// In-flight request shared by all instances: parallel callers join
+  /// it instead of firing duplicate network calls.
+  static Future<Either<Failure, AllCategoriesModel>>? _inFlight;
+
   Future<void> getAllCategories({bool forceRefresh = false}) async {
-    final cached = forceRefresh ? null : (cachedModel ?? allCategoriesModel);
-    if (cached?.data?.categories?.isNotEmpty == true) {
-      allCategoriesModel = cached;
-      allCategoriesList = [...cached!.data!.categories!];
-      emit(GetAllCategoriesSuccess(cached!));
-      return;
+    if (!forceRefresh) {
+      final cached = cachedModel ?? allCategoriesModel;
+      if (cached?.data?.categories?.isNotEmpty == true) {
+        allCategoriesModel = cached;
+        allCategoriesList = [...cached!.data!.categories!];
+        emit(GetAllCategoriesSuccess(cached!));
+        return;
+      }
     }
     emit(GetAllCategoriesLoading());
-    var result = await allCategoriesRepo!.getAllCategories();
+    _inFlight ??= allCategoriesRepo!.getAllCategories();
+    final result = await _inFlight!;
+    _inFlight = null;
     return result.fold((failure) {
       emit(GetAllCategoriesError(failure.errMessage));
     }, (data) {

@@ -71,11 +71,11 @@ class _AllSubCategoriesProductsListState
           !_matchesId(p.subCategoryId, _filter.subCategoryId!)) {
         return false;
       }
-      if (_filter.shippingType != null) {
+      if (_filter.shippingType != null && _filter.shippingType != 'both') {
         final s = (p.shippingType ?? '').trim().toLowerCase();
         if (s.isNotEmpty && s != _filter.shippingType) return false;
       }
-      if (_filter.condition != null) {
+      if (_filter.condition != null && _filter.condition != 'both') {
         final c = (p.condition ?? '').trim().toLowerCase();
         if (c.isNotEmpty && c != _filter.condition) return false;
       }

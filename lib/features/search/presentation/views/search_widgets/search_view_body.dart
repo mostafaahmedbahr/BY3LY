@@ -87,11 +87,11 @@ class _SearchViewBodyState extends State<SearchViewBody> {
           !_matchesId(p.subCategoryId, filter.subCategoryId!)) {
         return false;
       }
-      if (filter.shippingType != null) {
+      if (filter.shippingType != null && filter.shippingType != 'both') {
         final s = (p.shippingType ?? '').trim().toLowerCase();
         if (s.isNotEmpty && s != filter.shippingType) return false;
       }
-      if (filter.condition != null) {
+      if (filter.condition != null && filter.condition != 'both') {
         final c = (p.condition ?? '').trim().toLowerCase();
         if (c.isNotEmpty && c != filter.condition) return false;
       }
