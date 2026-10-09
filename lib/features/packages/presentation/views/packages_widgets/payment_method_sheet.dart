@@ -35,7 +35,7 @@ class PaymentMethodSheet extends StatelessWidget {
 
   final Packages package;
 
-  String _formatBalance(double? value) {
+  String _formatBalance(num? value) {
     if (value == null) return '...';
     if (value == value.roundToDouble()) {
       return value.toInt().toString();

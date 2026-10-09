@@ -219,7 +219,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   }
 
   Future<void> submit({
-    required String paymentMethod,
+    String? paymentMethod,
     String? receiptPath,
   }) async {
     emit(AddNewAdLoading());

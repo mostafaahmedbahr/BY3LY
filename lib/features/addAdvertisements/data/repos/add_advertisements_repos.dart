@@ -30,6 +30,10 @@ abstract class AddAdvertisementsRepos{
   Future<Either<Failure,GetCarTypesModel>> getCarsTypes();
 
   /// New unified create-ad endpoint.
+  ///
+  /// [paymentMethod] is omitted when the user publishes under an active
+  /// subscription package; otherwise 'wallet' or a transfer method code
+  /// (+ [receiptPath] for transfers).
   Future<Either<Failure,GeneralModel>> addNewAd({    required String name,
     required String description,
     required String price,
@@ -43,7 +47,7 @@ abstract class AddAdvertisementsRepos{
     required int cityId,
     required int centerId,
     required List<dynamic> images,
-    required String paymentMethod,
+    String? paymentMethod,
     String? receiptPath,
   });
 

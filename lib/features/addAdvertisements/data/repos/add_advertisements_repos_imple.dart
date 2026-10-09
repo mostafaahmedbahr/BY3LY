@@ -87,7 +87,7 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
     required int cityId,
     required int centerId,
     required List<dynamic> images,
-    required String paymentMethod,
+    String? paymentMethod,
     String? receiptPath,
   }) async {
     try {
@@ -106,7 +106,9 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         'condition': condition,
         'city_id': cityId,
         'center_id': centerId,
-        'payment_method': paymentMethod,
+        // Omitted when publishing under an active subscription package.
+        if (paymentMethod != null && paymentMethod.trim().isNotEmpty)
+          'payment_method': paymentMethod,
       });
       for (var image in images) {
         formData.files.add(MapEntry(

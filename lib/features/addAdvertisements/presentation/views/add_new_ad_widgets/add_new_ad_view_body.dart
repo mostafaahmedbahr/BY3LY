@@ -31,6 +31,10 @@ class AddNewAdViewBody extends StatefulWidget {
 }
 
 class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
+  /// True while refreshing the profile to check the subscription
+  /// package before deciding (direct publish vs payment sheet).
+  bool _checkingPackage = false;
+
   @override
   void initState() {
     super.initState();
@@ -368,7 +372,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
               ),
             ),
             CustomButton(
-              btnText: submitting
+              btnText: (submitting || _checkingPackage)
                   ? const SizedBox(
                       width: 22,
                       height: 22,
@@ -399,9 +403,9 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                         ),
                       ],
                     ),
-              onPressed: submitting
+              onPressed: (submitting || _checkingPackage)
                   ? () {}
-                  : () {
+                  : () async {
                       final error = cubit.validate();
                       if (error != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -413,9 +417,30 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                       }
                       if (cubit.isEditMode) {
                         cubit.submitEdit();
+                        return;
+                      }
+                      // Has an active subscription package? Publish directly.
+                      // Otherwise take a payment method (wallet / transfer).
+                      final profileCubit = context.read<ProfileCubit>();
+                      var hasPackage = profileCubit.profileModel?.data?.user
+                              ?.subscriptionPackage !=
+                          null;
+                      if (!hasPackage) {
+                        // Refresh once in case a package was bought elsewhere.
+                        setState(() => _checkingPackage = true);
+                        try {
+                          await profileCubit.getProfile();
+                        } catch (_) {}
+                        if (!mounted) return;
+                        setState(() => _checkingPackage = false);
+                        hasPackage = profileCubit.profileModel?.data?.user
+                                ?.subscriptionPackage !=
+                            null;
+                      }
+                      if (!mounted) return;
+                      if (hasPackage) {
+                        cubit.submit();
                       } else {
-                        // New ad: choose wallet (go ahead) or transfer
-                        // (method + receipt photo) in the bottom sheet.
                         showAdPaymentSheet(context);
                       }
                     },

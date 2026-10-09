@@ -51,7 +51,7 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
   /// false = choose step, true = transfer form expanded inline.
   bool _showTransfer = false;
 
-  String _formatBalance(double? value) {
+  String _formatBalance(num? value) {
     if (value == null) return '...';
     if (value == value.roundToDouble()) return value.toInt().toString();
     return value.toString();
