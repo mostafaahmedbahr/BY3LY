@@ -218,7 +218,10 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     return null;
   }
 
-  Future<void> submit() async {
+  Future<void> submit({
+    required String paymentMethod,
+    String? receiptPath,
+  }) async {
     emit(AddNewAdLoading());
     final result = await addAdvertisementsRepos!.addNewAd(      name: nameCon.text.trim(),
       description: descCon.text.trim(),
@@ -234,6 +237,8 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       cityId: cityId!,
       centerId: centerId!,
       images: images,
+      paymentMethod: paymentMethod,
+      receiptPath: receiptPath,
     );
     return result.fold((failure) {
       debugPrint('AddNewAdCubit submit failed: ${failure.errMessage}');

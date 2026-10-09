@@ -87,6 +87,8 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
     required int cityId,
     required int centerId,
     required List<dynamic> images,
+    required String paymentMethod,
+    String? receiptPath,
   }) async {
     try {
       FormData formData = FormData.fromMap({
@@ -104,12 +106,21 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         'condition': condition,
         'city_id': cityId,
         'center_id': centerId,
+        'payment_method': paymentMethod,
       });
       for (var image in images) {
         formData.files.add(MapEntry(
           'images[]',
           await MultipartFile.fromFile(image.path,
               filename: image.path.split('/').last),
+        ));
+      }
+      // Transfer receipt (required when payment_method != wallet).
+      if (receiptPath != null && receiptPath.isNotEmpty) {
+        formData.files.add(MapEntry(
+          'receipt',
+          await MultipartFile.fromFile(receiptPath,
+              filename: receiptPath.split('/').last),
         ));
       }
       var response = await apiService!.postData(

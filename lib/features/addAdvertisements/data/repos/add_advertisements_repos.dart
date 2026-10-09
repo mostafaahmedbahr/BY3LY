@@ -43,6 +43,8 @@ abstract class AddAdvertisementsRepos{
     required int cityId,
     required int centerId,
     required List<dynamic> images,
+    required String paymentMethod,
+    String? receiptPath,
   });
 
   /// Edit an existing ad (same fields + ad_id, new image files only).

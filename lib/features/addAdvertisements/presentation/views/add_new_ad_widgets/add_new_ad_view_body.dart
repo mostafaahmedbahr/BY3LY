@@ -10,6 +10,7 @@ import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart'
 import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_states.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/ad_payment_sheet.dart';
 import 'package:by3ly/features/chooseLocation/data/models/cities_centers_model.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
@@ -413,7 +414,9 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                       if (cubit.isEditMode) {
                         cubit.submitEdit();
                       } else {
-                        cubit.submit();
+                        // New ad: choose wallet (go ahead) or transfer
+                        // (method + receipt photo) in the bottom sheet.
+                        showAdPaymentSheet(context);
                       }
                     },
             ),
