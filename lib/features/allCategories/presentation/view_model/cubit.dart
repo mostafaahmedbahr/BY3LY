@@ -11,14 +11,27 @@ class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
   AllCategoriesModel? allCategoriesModel;
 
   List<Categories> allCategoriesList=[];
-  Future<void> getAllCategories() async {
+
+  /// Session-wide cache: categories are fetched once, later screens
+  /// reuse them instead of calling the API on every open.
+  static AllCategoriesModel? cachedModel;
+
+  Future<void> getAllCategories({bool forceRefresh = false}) async {
+    final cached = forceRefresh ? null : (cachedModel ?? allCategoriesModel);
+    if (cached?.data?.categories?.isNotEmpty == true) {
+      allCategoriesModel = cached;
+      allCategoriesList = [...cached!.data!.categories!];
+      emit(GetAllCategoriesSuccess(cached!));
+      return;
+    }
     emit(GetAllCategoriesLoading());
     var result = await allCategoriesRepo!.getAllCategories();
     return result.fold((failure) {
       emit(GetAllCategoriesError(failure.errMessage));
     }, (data) {
       allCategoriesModel = data;
-      allCategoriesList = allCategoriesList + allCategoriesModel!.data!.categories!;
+      cachedModel = data;
+      allCategoriesList = [...?data.data?.categories];
       emit(GetAllCategoriesSuccess(data));
     });
   }

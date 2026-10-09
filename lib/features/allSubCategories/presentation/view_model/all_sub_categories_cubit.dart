@@ -12,9 +12,26 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
   AllSubCategoriesModel? allSubCategoriesModel;
 
   List<SubCategories> allSubCategoriesList=[];
+
+  /// Session-wide per-category cache: sub-categories are fetched once
+  /// per category instead of on every screen open.
+  static final Map<int, AllSubCategoriesModel> _cache = {};
+
+  /// Cached sub-categories for [categoryId], if already fetched.
+  static AllSubCategoriesModel? cachedFor(int categoryId) =>
+      _cache[categoryId];
+
   Future<void> getAllSubCategories({
     required int categoryId,
-}) async {
+    bool forceRefresh = false,
+  }) async {
+    final cached = forceRefresh ? null : _cache[categoryId];
+    if (cached?.data?.subCategories != null) {
+      allSubCategoriesModel = cached;
+      allSubCategoriesList = [...cached!.data!.subCategories!];
+      emit(GetAllSubCategoriesSuccess(cached!));
+      return;
+    }
     emit(GetAllSubCategoriesLoading());
     var result = await allSubCategoriesRepos!.getAllSubCategoriesData(
         categoryId: categoryId);
@@ -22,7 +39,8 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
       emit(GetAllSubCategoriesError(failure.errMessage));
     }, (data) {
       allSubCategoriesModel = data;
-      allSubCategoriesList = allSubCategoriesList + allSubCategoriesModel!.data!.subCategories!;
+      _cache[categoryId] = data;
+      allSubCategoriesList = [...?data.data?.subCategories];
       emit(GetAllSubCategoriesSuccess(data));
     });
   }

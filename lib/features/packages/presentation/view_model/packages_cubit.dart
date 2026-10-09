@@ -99,10 +99,14 @@ class PackagesCubit extends Cubit<PackagesStates> {
   Future<void> getPaymentMethods({bool forceRefresh = false}) async {
     final cached = cachedMethods ?? paymentMethodsModel;
     if (!forceRefresh && cached != null) {
+      // Serve once-fetched methods instantly (one network call
+      // per session) and still notify listeners so fresh cubits
+      // (e.g. the add-ad sheet) render them.
       paymentMethodsModel = cached;
       final methods = cached.data?.methods ?? [];
       selectedMethod ??=
           methods.isNotEmpty ? methods.first : null;
+      emit(GetPaymentMethodsSuccessState(cached));
       return;
     }
     emit(GetPaymentMethodsLoadingState());

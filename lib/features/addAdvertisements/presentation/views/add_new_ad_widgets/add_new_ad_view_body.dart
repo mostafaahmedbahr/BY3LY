@@ -844,9 +844,14 @@ class _CategoryDropdown extends StatelessWidget {
                     ?.data
                     ?.categories ??
                 [];
+            // Guard: passing a value that is not in items crashes
+            // DropdownButtonFormField (assertion). Fall back to null.
+            final catIds = categories.map((c) => c.id).toSet();
+            final safeCat =
+                catIds.contains(adCubit.categoryId) ? adCubit.categoryId : null;
             return DropdownButtonFormField<int>(
-              key: ValueKey('cat_${adCubit.categoryId}'),
-              initialValue: adCubit.categoryId,
+              key: ValueKey('cat_$safeCat'),
+              initialValue: safeCat,
               items: categories.map((c) {
                 return DropdownMenuItem<int>(
                   value: c.id,
@@ -913,10 +918,16 @@ class _SubCategoryDropdown extends StatelessWidget {
                     ?.data
                     ?.subCategories ??
                 [];
+            // Guard: a stale subCategoryId (e.g. category just changed
+            // and the new list hasn't arrived) crashes the dropdown.
+            final subIds = subs.map((s) => s.id).toSet();
+            final safeSub = subIds.contains(adCubit.subCategoryId)
+                ? adCubit.subCategoryId
+                : null;
             return DropdownButtonFormField<int>(
               key: ValueKey(
-                  'sub_${adCubit.categoryId}_${adCubit.subCategoryId}'),
-              initialValue: adCubit.subCategoryId,
+                  'sub_${adCubit.categoryId}_$safeSub'),
+              initialValue: safeSub,
               items: subs.map((s) {
                 return DropdownMenuItem<int>(
                   value: s.id,
@@ -962,7 +973,9 @@ class _CityDropdown extends StatelessWidget {
         }
         return DropdownButtonFormField<int>(
           key: ValueKey('city_${adCubit.cityId}'),
-          initialValue: adCubit.cityId,
+          initialValue: cities.map((c) => c.id).contains(adCubit.cityId)
+              ? adCubit.cityId
+              : null,
           items: cities.map((city) {
             return DropdownMenuItem<int>(
               value: city.id,
@@ -1017,7 +1030,9 @@ class _CenterDropdown extends StatelessWidget {
         return DropdownButtonFormField<int>(
           key: ValueKey(
               'center_${adCubit.cityId}_${adCubit.centerId}'),
-          initialValue: adCubit.centerId,
+          initialValue: centers.map((c) => c.id).contains(adCubit.centerId)
+              ? adCubit.centerId
+              : null,
           items: centers.map((c) {
             return DropdownMenuItem<int>(
               value: c.id,

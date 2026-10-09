@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/app_services/remote_services/service_locator.dart';
@@ -12,6 +11,7 @@ import '../../../../../core/utils/new_toast/toast.dart';
 import '../../../../packages/data/repos/packages_repos_imple.dart';
 import '../../../../packages/presentation/view_model/packages_cubit.dart';
 import '../../../../packages/presentation/view_model/packages_states.dart';
+import '../../../../packages/presentation/views/packages_widgets/transfer_method_card.dart';
 import '../../../../profile/presentation/view_model/profile_cubit.dart';
 import '../../view_model/add_new_ad_cubit.dart';
 import '../../view_model/add_new_ad_states.dart';
@@ -61,7 +61,12 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
     adCubit.submit(paymentMethod: 'wallet');
   }
 
-  void _submitTransfer(AddNewAdCubit adCubit, PackagesCubit payCubit) {
+  void _submitTransfer(
+    AddNewAdCubit adCubit,
+    PackagesCubit payCubit, {
+    required bool submitting,
+  }) {
+    if (submitting) return;
     final method = payCubit.selectedMethod;
     final receipt = payCubit.receiptImage;
     if (method?.code == null) {
@@ -187,6 +192,7 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                             onConfirm: () => _submitTransfer(
                               adCubit,
                               context.read<PackagesCubit>(),
+                              submitting: submitting,
                             ),
                           ),
                         ],
@@ -240,9 +246,6 @@ class _TransferForm extends StatelessWidget {
             ),
           );
         }
-        final canConfirm = payCubit.selectedMethod?.code != null &&
-            payCubit.receiptImage != null &&
-            !submitting;
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,83 +259,16 @@ class _TransferForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
+            // Same method cards as the packages transfer page.
             ...payCubit.paymentMethods.map((method) {
               final selected = payCubit.selectedMethod == method;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: InkWell(
-                  onTap: submitting
-                      ? null
-                      : () => payCubit.selectMethod(method),
-                  borderRadius: BorderRadius.circular(14),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: selected
-                            ? AppColors.mainColor
-                            : const Color(0xffE3E6E9),
-                        width: selected ? 1.5 : 1,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          selected
-                              ? Icons.radio_button_checked_rounded
-                              : Icons.radio_button_off_rounded,
-                          color: selected
-                              ? AppColors.mainColor
-                              : const Color(0xffB0B5BB),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                method.name ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff1F2937),
-                                ),
-                              ),
-                              if ((method.account?.trim().isNotEmpty ??
-                                  false))
-                                Text(
-                                  method.account!,
-                                  style: const TextStyle(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.mainColor,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if ((method.account?.trim().isNotEmpty ?? false))
-                          IconButton(
-                            tooltip: 'نسخ',
-                            onPressed: () {
-                              Clipboard.setData(
-                                ClipboardData(text: method.account!),
-                              );
-                              Toast.showSuccessToast(
-                                msg: 'تم نسخ الرقم',
-                                context: context,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.copy_rounded,
-                              size: 18,
-                              color: AppColors.mainColor,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                padding: const EdgeInsets.only(bottom: 10),
+                child: TransferMethodCard(
+                  method: method,
+                  selected: selected,
+                  enabled: !submitting,
+                  onTap: () => payCubit.selectMethod(method),
                 ),
               );
             }),
@@ -387,6 +323,7 @@ class _TransferForm extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+            // Select a method + attach receipt, then publish the ad.
             CustomButton(
               btnText: submitting
                   ? const SizedBox(
@@ -398,14 +335,14 @@ class _TransferForm extends StatelessWidget {
                       ),
                     )
                   : const Text(
-                      'تأكيد النشر',
+                      'نشر الإعلان',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
                     ),
-              onPressed: canConfirm ? onConfirm : () {},
+              onPressed: onConfirm,
             ),
           ],
         );

@@ -1,7 +1,9 @@
 import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart' as cats;
 import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart' as subs;
 import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
 import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
+import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
 import 'package:by3ly/features/chooseLocation/data/models/cities_centers_model.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_cubit.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_states.dart';
@@ -241,6 +243,18 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
   }
 
   Future<void> _loadCategories() async {
+    // Reuse the once-fetched session cache when available.
+    final cachedCats =
+        AllCategoriesCubit.cachedModel?.data?.categories ?? [];
+    if (cachedCats.isNotEmpty) {
+      if (!mounted) return;
+      setState(() {
+        _loadingCats = false;
+        _categories = cachedCats;
+      });
+      if (_categoryId != null) _loadSubCategories(_categoryId!);
+      return;
+    }
     setState(() {
       _loadingCats = true;
       _catsError = null;
@@ -276,6 +290,19 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
   }
 
   Future<void> _loadSubCategories(int categoryId) async {
+    // Reuse the once-fetched session cache when available.
+    final cachedSubs = AllSubCategoriesCubit.cachedFor(categoryId)
+            ?.data
+            ?.subCategories ??
+        [];
+    if (cachedSubs.isNotEmpty) {
+      if (!mounted) return;
+      setState(() {
+        _loadingSubs = false;
+        _subCategories = cachedSubs;
+      });
+      return;
+    }
     setState(() {
       _loadingSubs = true;
       _subCategories = [];
