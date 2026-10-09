@@ -8,6 +8,7 @@ import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_
 import 'package:by3ly/features/chooseLocation/data/models/cities_centers_model.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_cubit.dart';
 import 'package:by3ly/features/chooseLocation/presentation/view_model/choose_location_states.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -181,26 +182,35 @@ Future<ProductsFilter?> showProductsFilterSheet({
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (_) => MultiBlocProvider(
-      providers: [
-        // No auto-fetch here: _loadCategories() in initState drives the
-        // single fetch (avoids two parallel network calls on open).
-        BlocProvider(
-          create: (_) => AllCategoriesCubit(
-            getIt.get<AllCategoriesRepoImpl>(),
+    builder: (sheetContext) {
+      // Fixed sheet height (80% of the screen) so it never jumps
+      // while dropdowns load; content is compacted to fit it.
+      final sheetHeight =
+          MediaQuery.of(sheetContext).size.height * 0.8;
+      return MultiBlocProvider(
+        providers: [
+          // No auto-fetch here: _loadCategories() in initState drives the
+          // single fetch (avoids two parallel network calls on open).
+          BlocProvider(
+            create: (_) => AllCategoriesCubit(
+              getIt.get<AllCategoriesRepoImpl>(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => AllSubCategoriesCubit(
+              getIt.get<AllSubCategoriesRepoImpl>(),
+            ),
+          ),
+        ],
+        child: SizedBox(
+          height: sheetHeight,
+          child: ProductsFilterSheet(
+            initial: initial,
+            availableTypes: availableTypes,
           ),
         ),
-        BlocProvider(
-          create: (_) => AllSubCategoriesCubit(
-            getIt.get<AllSubCategoriesRepoImpl>(),
-          ),
-        ),
-      ],
-      child: ProductsFilterSheet(
-        initial: initial,
-        availableTypes: availableTypes,
-      ),
-    ),
+      );
+    },
   );
 }
 
@@ -261,6 +271,19 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     _maxController = TextEditingController(
       text: widget.initial.maxPrice?.toStringAsFixed(0) ?? '',
     );
+    // Default place = the user's own data (changeable below).
+    // Only when the incoming filter has no place selected.
+    if (_cityId == null) {
+      try {
+        final user =
+            context.read<ProfileCubit>().profileModel?.data?.user;
+        final profileCityId = _asInt(user?.cityId);
+        if (profileCityId != null) {
+          _cityId = profileCityId;
+          _centerId ??= _asInt(user?.centerId);
+        }
+      } catch (_) {}
+    }
     // If the shared cities list hasn't loaded yet (slow network on app
     // start), fetch it now so the dropdowns appear without reopening.
     final locationCubit = ChooseLocationCubit.get(context);
@@ -268,6 +291,14 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       locationCubit.getAllCitiesAndCenters();
     }
     _loadCategories();
+  }
+
+  int? _asInt(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    if (v is double) return v.toInt();
+    if (v is String) return int.tryParse(v);
+    return null;
   }
 
   Future<void> _loadCategories() async {
@@ -435,10 +466,14 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     return DropdownButtonFormField<int>(
       key: ValueKey('filter_cat_$safeCat'),
       initialValue: safeCat,
+      isExpanded: true,
       items: _categories.map((c) {
         return DropdownMenuItem<int>(
           value: c.id,
-          child: Text(c.name ?? ''),
+          child: Text(
+            c.name ?? '',
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       }).toList(),
       onChanged: _onCategoryChanged,
@@ -455,7 +490,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
   Widget _subCategoryField() {
     if (_categoryId == null) {
-      return _DisabledHint(text: context.tr(LocaleKeys.chooseCategory));
+      return _DisabledHint(text: context.tr(LocaleKeys.chooseSubCategory));
     }
     if (_loadingSubs) {
       return const Center(
@@ -480,10 +515,14 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     return DropdownButtonFormField<int>(
       key: ValueKey('filter_sub_${_categoryId}_$safeSub'),
       initialValue: safeSub,
+      isExpanded: true,
       items: _subCategories.map((s) {
         return DropdownMenuItem<int>(
           value: s.id,
-          child: Text(s.name ?? ''),
+          child: Text(
+            s.name ?? '',
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       }).toList(),
       onChanged: (value) {
@@ -566,9 +605,9 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       filled: true,
       prefixIcon: prefix,
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.mainColor, fontSize: 13),
+      labelStyle: const TextStyle(color: AppColors.mainColor, fontSize: 12),
       contentPadding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide.none,
@@ -609,23 +648,23 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Container(
-                    height: 44,
-                    width: 44,
+                    height: 40,
+                    width: 40,
                     decoration: BoxDecoration(
                       color: AppColors.mainColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.tune_rounded,
                       color: AppColors.mainColor,
-                      size: 22,
+                      size: 20,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -633,7 +672,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                         Text(
                           context.tr(LocaleKeys.filter),
                           style: const TextStyle(
-                            fontSize: 17,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff1F2937),
                           ),
@@ -662,23 +701,22 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
 
-              /// Category (from app categories API).
+              /// Category + sub-category side by side (related fields).
               _SectionCard(
                 icon: Icons.grid_view_rounded,
                 title: context.tr(LocaleKeys.chooseCategory),
-                child: _categoryField(),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _categoryField()),
+                    const SizedBox(width: 10),
+                    Expanded(child: _subCategoryField()),
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
-
-              /// Sub-category (depends on selected category).
-              _SectionCard(
-                icon: Icons.account_tree_outlined,
-                title: context.tr(LocaleKeys.chooseSubCategory),
-                child: _subCategoryField(),
-              ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
               /// Type
               if (widget.availableTypes.isNotEmpty)
@@ -705,7 +743,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   ),
                 ),
               if (widget.availableTypes.isNotEmpty)
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
 
               /// Price range
               _SectionCard(
@@ -743,7 +781,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
               /// Place (governorate + center from shared cities list).
               /// Listens to ChooseLocationCubit so the dropdowns appear as
@@ -797,64 +835,89 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   final centerIds = centers.map((c) => c.id).toSet();
                   final safeCenter =
                       centerIds.contains(_centerId) ? _centerId : null;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
+                  // City + center side by side (related fields).
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DropdownButtonFormField<int>(
-                        key: ValueKey('city_$safeCity'),
-                        initialValue: safeCity,
-                        items: cities.map((city) {
-                          return DropdownMenuItem<int>(
-                            value: city.id,
-                            child: Text(city.name ?? ''),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _cityId = value;
-                            // Reset center when the city changes.
-                            _centerId = null;
-                          });
-                        },
-                        decoration: _dropdownDecoration(
-                          context.tr(LocaleKeys.chooseGovernment),
-                          prefix: const Icon(
-                            Icons.location_city_outlined,
-                            color: AppColors.mainColor,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      if (safeCity != null && centers.isNotEmpty) ...[
-                        const SizedBox(height: 12),
-                        DropdownButtonFormField<int>(
-                          key: ValueKey('center_${safeCity}_$safeCenter'),
-                          initialValue: safeCenter,
-                          items: centers.map((center) {
+                      Expanded(
+                        child: DropdownButtonFormField<int>(
+                          key: ValueKey('city_$safeCity'),
+                          initialValue: safeCity,
+                          isExpanded: true,
+                          items: cities.map((city) {
                             return DropdownMenuItem<int>(
-                              value: center.id,
-                              child: Text(center.name ?? ''),
+                              value: city.id,
+                              child: Text(
+                                city.name ?? '',
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                           onChanged: (value) {
-                            setState(() => _centerId = value);
+                            setState(() {
+                              _cityId = value;
+                              // Reset center when the city changes.
+                              _centerId = null;
+                            });
                           },
                           decoration: _dropdownDecoration(
-                            context.tr(LocaleKeys.chooseCenter),
+                            context.tr(LocaleKeys.chooseGovernment),
                             prefix: const Icon(
-                              Icons.my_location_outlined,
+                              Icons.location_city_outlined,
                               color: AppColors.mainColor,
                               size: 20,
                             ),
                           ),
                         ),
-                      ],
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: (safeCity == null || centers.isEmpty)
+                            ? DropdownButtonFormField<int>(
+                                items: const [],
+                                onChanged: null,
+                                decoration: _dropdownDecoration(
+                                  context.tr(LocaleKeys.chooseCenter),
+                                  prefix: const Icon(
+                                    Icons.my_location_outlined,
+                                    color: AppColors.mainColor,
+                                    size: 20,
+                                  ),
+                                ),
+                              )
+                            : DropdownButtonFormField<int>(
+                                key: ValueKey(
+                                    'center_${safeCity}_$safeCenter'),
+                                initialValue: safeCenter,
+                                isExpanded: true,
+                                items: centers.map((center) {
+                                  return DropdownMenuItem<int>(
+                                    value: center.id,
+                                    child: Text(
+                                      center.name ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() => _centerId = value);
+                                },
+                                decoration: _dropdownDecoration(
+                                  context.tr(LocaleKeys.chooseCenter),
+                                  prefix: const Icon(
+                                    Icons.my_location_outlined,
+                                    color: AppColors.mainColor,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                      ),
                     ],
                   );
                 },
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
               /// Shipping type: both (no filter) / free / paid.
               _SectionCard(
@@ -885,7 +948,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
               /// Condition: both (no filter) / new / used.
               _SectionCard(
@@ -916,7 +979,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 10),
               CustomButton(
                 btnText: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -964,7 +1027,7 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
@@ -984,20 +1047,20 @@ class _SectionCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                height: 32,
-                width: 32,
+                height: 28,
+                width: 28,
                 decoration: BoxDecoration(
                   color: AppColors.mainColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(icon, color: AppColors.mainColor, size: 18),
+                child: Icon(icon, color: AppColors.mainColor, size: 16),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: Color(0xff1F2937),
                   ),
@@ -1005,7 +1068,7 @@ class _SectionCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           child,
         ],
       ),
