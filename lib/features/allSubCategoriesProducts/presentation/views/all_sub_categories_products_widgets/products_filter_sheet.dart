@@ -415,6 +415,8 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       _minController.clear();
       _maxController.clear();
     });
+    // Close the sheet and reset any active filter.
+    Navigator.pop(context, const ProductsFilter.empty());
   }
 
   /// Live count of what the user picked in this sheet opening.
@@ -579,24 +581,27 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     subCategoryName ??= widget.initial.subCategoryId == _subCategoryId
         ? widget.initial.subCategoryName
         : null;
-    Navigator.pop(
-      context,
-      ProductsFilter(
-        type: _type,
-        minPrice: double.tryParse(_minController.text.trim()),
-        maxPrice: double.tryParse(_maxController.text.trim()),
-        cityId: _cityId,
-        cityName: cityName ?? widget.initial.cityName,
-        centerId: _centerId,
-        centerName: centerName ?? widget.initial.centerName,
-        categoryId: _categoryId,
-        categoryName: categoryName,
-        subCategoryId: _subCategoryId,
-        subCategoryName: subCategoryName,
-        shippingType: _shippingType,
-        condition: _condition,
-      ),
+    final filter = ProductsFilter(
+      type: _type,
+      minPrice: double.tryParse(_minController.text.trim()),
+      maxPrice: double.tryParse(_maxController.text.trim()),
+      cityId: _cityId,
+      cityName: cityName ?? widget.initial.cityName,
+      centerId: _centerId,
+      centerName: centerName ?? widget.initial.centerName,
+      categoryId: _categoryId,
+      categoryName: categoryName,
+      subCategoryId: _subCategoryId,
+      subCategoryName: subCategoryName,
+      shippingType: _shippingType,
+      condition: _condition,
     );
+    // Nothing selected: just close, don't fire any filter call.
+    if (filter.isEmpty && _centerId == null) {
+      Navigator.pop(context);
+      return;
+    }
+    Navigator.pop(context, filter);
   }
 
   InputDecoration _dropdownDecoration(String label, {Widget? prefix}) {
