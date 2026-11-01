@@ -37,7 +37,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
         ),
       ),
       child: Card(
-        color: AppColors.whiteColor,
+        color: AppColors.surface,
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: ListTile(
           title: Text(_items[index]),

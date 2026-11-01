@@ -31,7 +31,7 @@ class NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
         title: Text(context.tr(LocaleKeys.notifications),style: const TextStyle(

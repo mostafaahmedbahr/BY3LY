@@ -55,8 +55,8 @@ class LoginButtonsWidget extends StatelessWidget {
                       style: AppStyles.textStyle14W500White,
                     ),
                     onPressed: () {
-                      // loginCubit.phoneCon.text = "01000000000";
-                      // loginCubit.passwordCon.text = "12345678";
+                      loginCubit.phoneCon.text = "01000000000";
+                      loginCubit.passwordCon.text = "12345678";
                       if (formKey.currentState!.validate()) {
                         loginCubit.login(
                            phone: loginCubit.phoneCon.text,
@@ -86,12 +86,12 @@ class LoginButtonsWidget extends StatelessWidget {
                 ),
               ),
               CustomButton(
-                borderColor: AppColors.mainColor,
-                btnColor: AppColors.whiteColor,
+                borderColor: AppColors.accent,
+                btnColor: AppColors.surface,
                 btnText: Text(
                   context.tr(LocaleKeys.continueAsGuest),
                   style: AppStyles.textStyle14W500White.copyWith(
-                    color: AppColors.mainColor,
+                    color: AppColors.accent,
                   ),
                 ),
                 onPressed: () => GuestGuard.enterAsGuest(context),

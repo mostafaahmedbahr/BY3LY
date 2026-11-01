@@ -43,11 +43,11 @@ class AdsTypes extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                             color: selected
                                 ? AppColors.mainColor
-                                : AppColors.whiteColor,
+                                : AppColors.surface,
                             border: Border.all(
                               color: selected
                                   ? AppColors.mainColor
-                                  : const Color(0xffE3E6E9),
+                                  : AppColors.border,
                             ),
                             boxShadow: selected
                                 ? [
@@ -70,7 +70,7 @@ class AdsTypes extends StatelessWidget {
                                 fontSize: 13,
                                 color: selected
                                     ? AppColors.whiteColor
-                                    : AppColors.greyColor,
+                                    : AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(width: 6),
@@ -80,7 +80,7 @@ class AdsTypes extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: selected
                                     ? Colors.white.withValues(alpha: 0.25)
-                                    : const Color(0xffF1F3F5),
+                                    : AppColors.surfaceVariant,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(

@@ -22,8 +22,8 @@ class CustomErrorWidget extends StatelessWidget {
           InkWell(
               onTap: onTap,
               child:   Text(error ?? "Server Error , Please Try Again !!",
-              style: const TextStyle(
-                color: AppColors.mainColor,
+              style: TextStyle(
+                color: AppColors.accent,
               ),),),
         ],
       ),

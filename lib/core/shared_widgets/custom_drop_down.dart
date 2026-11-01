@@ -10,9 +10,9 @@ class CustomDropdown<T> extends StatelessWidget {
   final double borderRadius;
   final EdgeInsetsGeometry padding;
   final String Function(T) itemDisplayBuilder; // Function to customize item display
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color hintColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? hintColor;
 
   const CustomDropdown({
     Key? key,
@@ -24,9 +24,9 @@ class CustomDropdown<T> extends StatelessWidget {
     this.height = 56.0,
     this.borderRadius = 16.0,
     this.padding = const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-    this.backgroundColor = AppColors.whiteColor,  // Default background color
-    this.borderColor = const Color.fromRGBO(208, 208, 208, 1), // Default border color
-    this.hintColor = const Color.fromRGBO(150, 150, 150, 1), // Default hint color
+    this.backgroundColor,  // Defaults to the active theme surface
+    this.borderColor, // Defaults to the active theme border
+    this.hintColor, // Defaults to the active theme hint color
   }) : super(key: key);
 
   @override
@@ -35,8 +35,8 @@ class CustomDropdown<T> extends StatelessWidget {
       width: double.infinity, // Full width
       height: height, // Fixed height
       decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(color: borderColor), // Border color
+        color: backgroundColor ?? AppColors.surface,
+        border: Border.all(color: borderColor ?? AppColors.border), // Border color
         borderRadius: BorderRadius.circular(borderRadius), // Rounded corners
       ),
       child: DropdownButton<T>(
@@ -46,10 +46,10 @@ class CustomDropdown<T> extends StatelessWidget {
         value: value,
         hint: Text(
           hint,
-          style: TextStyle(color: hintColor), // Hint color for consistency
+          style: TextStyle(color: hintColor ?? AppColors.textSecondary), // Hint color for consistency
         ),
-        style: const TextStyle(
-          color: AppColors.blackColor, // Consistent text color for all fields
+        style: TextStyle(
+          color: AppColors.text, // Consistent text color for all fields
           fontSize: 16,
         ),
         items: items.map((T item) {

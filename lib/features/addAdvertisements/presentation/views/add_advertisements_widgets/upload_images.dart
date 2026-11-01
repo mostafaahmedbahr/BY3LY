@@ -22,7 +22,13 @@ class UploadImages extends StatelessWidget {
               onTap: (){
                 AddAdvertisementsCubit.get(context).pickImages(context);
               },
-              child: SvgPicture.asset(AppImages.camera),
+              child: SvgPicture.asset(
+                AppImages.camera,
+                colorFilter: ColorFilter.mode(
+                  AppColors.text,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
           Center(
@@ -52,10 +58,10 @@ class UploadImages extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: AppColors.whiteColor,
+                        color: AppColors.surface,
                       ),
                       padding: const EdgeInsets.all(2),
-                      child: const Icon(Icons.close,color: Colors.black87,size: 18,),
+                      child: Icon(Icons.close,color: AppColors.text,size: 18,),
                     ),
                     onTap: (){
                       addAdvertisementsCubit.deleteImage(index);

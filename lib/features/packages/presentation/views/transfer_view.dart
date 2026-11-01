@@ -57,9 +57,9 @@ class _TransferViewState extends State<TransferView> {
     final cubit = PackagesCubit.get(context);
     final topUpMode = widget.topUpMode;
     final scaffold = Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor: AppColors.mainColor,
         title: Text(
@@ -112,10 +112,10 @@ class _TransferViewState extends State<TransferView> {
                         Expanded(
                           child: Text(
                             package?.name ?? '',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff1F2937),
+                              color: AppColors.text,
                             ),
                           ),
                         ),
@@ -131,12 +131,12 @@ class _TransferViewState extends State<TransferView> {
                     ),
                   ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   "اختر طريقة التحويل",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1F2937),
+                    color: AppColors.text,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -153,11 +153,11 @@ class _TransferViewState extends State<TransferView> {
                 else
                   Expanded(
                     child: cubit.paymentMethods.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
                               "لا يوجد طرق تحويل متاحة",
                               style: TextStyle(
-                                  color: Color(0xff9AA0A6)),
+                                  color: AppColors.textSecondary),
                             ),
                           )
                         : ListView.separated(
@@ -189,25 +189,25 @@ class _TransferViewState extends State<TransferView> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                          color: const Color(0xffE3E6E9)),
+                          color: AppColors.border),
                     ),
                     child: cubit.receiptImage == null
-                        ? const Column(
+                        ? Column(
                             mainAxisAlignment:
                                 MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.cloud_upload_outlined,
                                 size: 34,
                                 color: AppColors.mainColor,
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 "ارفع صورة التحويل",
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xff9AA0A6),
+                                  color: AppColors.textSecondary,
                                 ),
                               ),
                             ],

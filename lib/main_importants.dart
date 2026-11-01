@@ -30,6 +30,7 @@ export 'package:by3ly/core/extensions/lang.dart';
 export 'package:gap/gap.dart';
 export 'package:by3ly/core/utils/new_toast/toast.dart';
 export 'package:by3ly/core/errors/error_handler.dart';
+export 'package:by3ly/core/utils/app_theme/app_theme_extension.dart';
 
 
 

@@ -106,7 +106,7 @@ class PaymentAndBalanceViewBody extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.surface,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                       color: AppColors.mainColor
@@ -126,10 +126,10 @@ class PaymentAndBalanceViewBody extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'الباقة الحالية: ${pkg.name ?? ''}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xff1F2937),
+                              color: AppColors.text,
                             ),
                           ),
                         ),
@@ -141,9 +141,9 @@ class PaymentAndBalanceViewBody extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'ينتهي في: ${endsAt.isNotEmpty ? endsAt : '...'}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12.5,
-                              color: Color(0xff9AA0A6),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ),
@@ -183,10 +183,10 @@ class PaymentAndBalanceViewBody extends StatelessWidget {
                 }
                 final history = cubit.history;
                 if (history.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       "لا يوجد عمليات سابقة",
-                      style: TextStyle(color: Color(0xff9AA0A6)),
+                      style: TextStyle(color: AppColors.textSecondary),
                     ),
                   );
                 }
@@ -264,7 +264,7 @@ void _showReceipt(BuildContext context, String url) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -354,17 +354,17 @@ class _ReceiptSheetState extends State<_ReceiptSheet> {
               width: 44,
               height: 5,
               decoration: BoxDecoration(
-                color: const Color(0xffE3E6E9),
+                color: AppColors.border,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'إيصال التحويل',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             ),
             const SizedBox(height: 12),
@@ -435,11 +435,11 @@ class _SheetAction extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: filled ? AppColors.mainColor : Colors.white,
+          color: filled ? AppColors.mainColor : AppColors.surface,
           border: Border.all(
             color: filled
                 ? AppColors.mainColor
-                : const Color(0xffE3E6E9),
+                : AppColors.border,
           ),
         ),
         child: busy
@@ -500,9 +500,9 @@ class _HistoryItem extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -557,10 +557,10 @@ class _HistoryItem extends StatelessWidget {
                             : (credit ? 'إيداع' : 'خصم'),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xff1F2937),
+                          color: AppColors.text,
                         ),
                       ),
                     ),
@@ -578,17 +578,17 @@ class _HistoryItem extends StatelessWidget {
                 Row(
                   children: [
                     if (item.dateLabel.isNotEmpty) ...[
-                      const Icon(
+                      Icon(
                         Icons.calendar_month_outlined,
                         size: 13,
-                        color: Color(0xffB0B5BB),
+                        color: AppColors.textSecondary,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         item.dateLabel,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11.5,
-                          color: Color(0xff9AA0A6),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -602,16 +602,16 @@ class _HistoryItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     methodName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff6B7280),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
                 if ((item.receiptUrl?.trim().isNotEmpty ?? false)) ...[
                   const SizedBox(height: 8),
-                  const Divider(height: 1, color: Color(0xFFF0F0F0)),
+                  Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 8),
                   InkWell(
                     onTap: () =>
@@ -702,7 +702,7 @@ class _StatusPill extends StatelessWidget {
       case 'pending':
         return const Color(0xffE8930C);
       default:
-        return const Color(0xff9AA0A6);
+        return AppColors.textSecondary;
     }
   }
 

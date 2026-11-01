@@ -178,7 +178,7 @@ Future<ProductsFilter?> showProductsFilterSheet({
   return showModalBottomSheet<ProductsFilter>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: const Color(0xffF4F6F5),
+    backgroundColor: AppColors.surfaceVariant,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -453,7 +453,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
           Expanded(
             child: Text(
               _catsError!,
-              style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: AppColors.textSecondary),
             ),
           ),
           TextButton(
@@ -509,7 +509,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     if (_subCategories.isEmpty) {
       return Text(
         '-',
-        style: TextStyle(color: Colors.grey.shade500),
+        style: TextStyle(color: AppColors.textSecondary),
       );
     }
     final ids = _subCategories.map((s) => s.id).toSet();
@@ -606,11 +606,11 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
   InputDecoration _dropdownDecoration(String label, {Widget? prefix}) {
     return InputDecoration(
-      fillColor: const Color(0xffF8FAF9),
+      fillColor: AppColors.surfaceVariant,
       filled: true,
       prefixIcon: prefix,
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.mainColor, fontSize: 12),
+      labelStyle: TextStyle(color: AppColors.accent, fontSize: 12),
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       border: OutlineInputBorder(
@@ -648,7 +648,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                   width: 44,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xffE3E6E9),
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -676,19 +676,19 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                       children: [
                         Text(
                           context.tr(LocaleKeys.filter),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff1F2937),
+                            color: AppColors.text,
                           ),
                         ),
                         Text(
                           _activeCount == 0
                               ? context.tr(LocaleKeys.all)
                               : '$_activeCount ${context.tr(LocaleKeys.filter)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Color(0xff9AA0A6),
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -701,7 +701,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.redColor,
                       disabledForegroundColor:
-                          const Color(0xffD0D0D0),
+                          AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -770,7 +770,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                         height: 2,
                         width: 14,
                         decoration: BoxDecoration(
-                          color: const Color(0xffD0D0D0),
+                          color: AppColors.border,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -817,7 +817,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                           Expanded(
                             child: Text(
                               state.message,
-                              style: TextStyle(color: Colors.grey.shade600),
+                              style: TextStyle(color: AppColors.textSecondary),
                             ),
                           ),
                           TextButton(
@@ -830,7 +830,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     }
                     return Text(
                       '-',
-                      style: TextStyle(color: Colors.grey.shade500),
+                      style: TextStyle(color: AppColors.textSecondary),
                     );
                   }
                   final centers = _centersForCity(cities, _cityId);
@@ -1034,9 +1034,9 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -1058,16 +1058,16 @@ class _SectionCard extends StatelessWidget {
                   color: AppColors.mainColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(icon, color: AppColors.mainColor, size: 16),
+                child: Icon(icon, color: AppColors.accent, size: 16),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1F2937),
+                    color: AppColors.text,
                   ),
                 ),
               ),
@@ -1092,12 +1092,12 @@ class _DisabledHint extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
       decoration: BoxDecoration(
-        color: const Color(0xffF8FAF9),
+        color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 12.5, color: Color(0xff9AA0A6)),
+        style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
       ),
     );
   }
@@ -1139,16 +1139,16 @@ class _FilterChip extends StatelessWidget {
       selected: selected,
       onSelected: (_) => onSelected(),
       selectedColor: AppColors.mainColor,
-      backgroundColor: const Color(0xffF4F6F5),
+      backgroundColor: AppColors.surfaceVariant,
       labelStyle: TextStyle(
-        color: selected ? AppColors.whiteColor : const Color(0xff1F2937),
+        color: selected ? AppColors.whiteColor : AppColors.text,
         fontSize: 12.5,
         fontWeight: FontWeight.w600,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(22),
         side: BorderSide(
-          color: selected ? AppColors.mainColor : const Color(0xffE3E6E9),
+          color: selected ? AppColors.mainColor : AppColors.border,
           width: selected ? 1.2 : 1,
         ),
       ),

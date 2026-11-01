@@ -12,6 +12,7 @@ class OnBoardingView extends StatelessWidget {
     logSuccess(CacheTokenManger.userToken);
     logSuccess("OnBoardingView");
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: BlocProvider(
         create: (context) => OnBoardingCubit(),
         child: BlocBuilder<OnBoardingCubit, OnBoardingStates>(
@@ -27,12 +28,12 @@ class OnBoardingView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              next: const Icon(Icons.arrow_forward, color: AppColors.mainColor),
+              next: Icon(Icons.arrow_forward, color: AppColors.accent),
               done: Text(
                 context.tr(LocaleKeys.done),
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.mainColor,
+                  color: AppColors.accent,
                 ),
               ),
               onDone: () {
@@ -43,12 +44,12 @@ class OnBoardingView extends StatelessWidget {
               },
               dotsDecorator: DotsDecorator(
                 size: Size(10.0.w, 10.0.h),
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
                 activeSize: Size(22.0.w, 10.0.h),
                 activeShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25.0.r),
                 ),
-                activeColor: AppColors.mainColor,
+                activeColor: AppColors.accent,
               ),
             );
           },

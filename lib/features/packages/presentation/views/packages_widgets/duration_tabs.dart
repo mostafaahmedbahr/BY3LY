@@ -37,11 +37,11 @@ class DurationTabs extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                         color: selected
                             ? AppColors.mainColor
-                            : AppColors.whiteColor,
+                            : AppColors.surface,
                         border: Border.all(
                           color: selected
                               ? AppColors.mainColor
-                              : const Color(0xffE3E6E9),
+                              : AppColors.border,
                         ),
                         boxShadow: selected
                             ? [
@@ -63,7 +63,7 @@ class DurationTabs extends StatelessWidget {
                           fontSize: 13,
                           color: selected
                               ? AppColors.whiteColor
-                              : AppColors.greyColor,
+                              : AppColors.textSecondary,
                         ),
                       ),
                     ),

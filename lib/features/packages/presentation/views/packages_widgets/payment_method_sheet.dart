@@ -19,7 +19,7 @@ Future<void> showPaymentMethodSheet(
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -72,7 +72,7 @@ class PaymentMethodSheet extends StatelessWidget {
                   width: 44,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xffE3E6E9),
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -80,18 +80,18 @@ class PaymentMethodSheet extends StatelessWidget {
                 Text(
                   'اشترك في باقة ${package.name ?? ''}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1F2937),
+                    color: AppColors.text,
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
+                Text(
                   'اختر طريقة الدفع',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xff9AA0A6),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -110,10 +110,10 @@ class PaymentMethodSheet extends StatelessWidget {
                             color: AppColors.mainColor,
                           ),
                         )
-                      : const Icon(
+                      : Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 16,
-                          color: Color(0xffB0B5BB),
+                          color: AppColors.textSecondary,
                         ),
                   onTap: paying || package.id == null
                       ? null
@@ -127,10 +127,10 @@ class PaymentMethodSheet extends StatelessWidget {
                   icon: Icons.swap_horiz_rounded,
                   title: 'تحويل',
                   subtitle: 'تحويل بنكي أو محافظ إلكترونية',
-                  trailing: const Icon(
+                  trailing: Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
-                    color: Color(0xffB0B5BB),
+                    color: AppColors.textSecondary,
                   ),
                   onTap: paying
                       ? null
@@ -182,7 +182,7 @@ class _OptionTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xffE3E6E9)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
@@ -205,18 +205,18 @@ class _OptionTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: Color(0xff9AA0A6),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],

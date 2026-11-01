@@ -15,7 +15,7 @@ class Toast
        CherryToast.success(
          toastDuration : duration??const Duration(milliseconds: 3000),
          width: MediaQuery.of(context).size.width*0.8,
-         title:  Text(msg, style: const TextStyle(color: AppColors.blackColor)),
+         title:  Text(msg, style: TextStyle(color: AppColors.text)),
        ).show(context);
 
 
@@ -25,7 +25,7 @@ class Toast
    }) =>
        CherryToast.error(
          width: MediaQuery.of(context).size.width*0.8,
-         title:  Text(msg, style: const TextStyle(color: AppColors.blackColor)),
+         title:  Text(msg, style: TextStyle(color: AppColors.text)),
        ).show(context);
  }
 

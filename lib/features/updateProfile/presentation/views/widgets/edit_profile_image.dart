@@ -27,7 +27,7 @@ class EditProfileImage extends StatelessWidget {
                 width: 84,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.whiteColor,
+                  color: AppColors.surfaceVariant,
                   image: updateProfileDataCubit.profileImage != null
                       ? DecorationImage(
                     image: FileImage(updateProfileDataCubit.profileImage!),
@@ -49,7 +49,13 @@ class EditProfileImage extends StatelessWidget {
                 )
                     : Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: SvgPicture.asset(AppImages.camera),
+                  child: SvgPicture.asset(
+                    AppImages.camera,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.text,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -59,7 +65,9 @@ class EditProfileImage extends StatelessWidget {
               children: [
                 Text(
                LocaleKeys.profilePhoto.tr(),
-                  style: AppStyles.textStyle16W500Black,
+                  style: AppStyles.textStyle16W500Black.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 Row(
                   children: [
@@ -70,7 +78,9 @@ class EditProfileImage extends StatelessWidget {
                       ),
                       child: Text(
                           LocaleKeys.change.tr(),
-                        style: AppStyles.textStyle16W500Black,
+                        style: AppStyles.textStyle16W500Black.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ),
                     if (updateProfileDataCubit.profileImage != null)

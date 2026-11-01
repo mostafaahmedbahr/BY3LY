@@ -23,7 +23,7 @@ Future<void> showAdPaymentSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -114,26 +114,26 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                   width: 44,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xffE3E6E9),
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'اختر طريقة الدفع',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1F2937),
+                    color: AppColors.text,
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
+                Text(
                   'ادفع من المحفظة أو حول وأرفق صورة التحويل',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xff9AA0A6),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -158,10 +158,10 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                                     color: AppColors.mainColor,
                                   ),
                                 )
-                              : const Icon(
+                              : Icon(
                                   Icons.arrow_forward_ios_rounded,
                                   size: 16,
-                                  color: Color(0xffB0B5BB),
+                                  color: AppColors.textSecondary,
                                 ),
                           onTap: submitting
                               ? null
@@ -237,12 +237,12 @@ class _TransferForm extends StatelessWidget {
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xffE3E6E9)),
+              border: Border.all(color: AppColors.border),
             ),
-            child: const Text(
+            child: Text(
               'لا يوجد طرق تحويل متاحة',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xff9AA0A6)),
+              style: TextStyle(color: AppColors.textSecondary),
             ),
           );
         }
@@ -250,12 +250,12 @@ class _TransferForm extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'اختر طريقة التحويل',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             ),
             const SizedBox(height: 8),
@@ -281,24 +281,24 @@ class _TransferForm extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xffE3E6E9)),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: payCubit.receiptImage == null
-                    ? const Column(
+                    ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.cloud_upload_outlined,
                             size: 34,
                             color: AppColors.mainColor,
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'ارفع صورة التحويل',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xff9AA0A6),
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -394,7 +394,7 @@ class _OptionTile extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xffE3E6E9)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
@@ -405,7 +405,7 @@ class _OptionTile extends StatelessWidget {
                 color: AppColors.mainColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: AppColors.mainColor),
+              child: Icon(icon, color: AppColors.accent),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -414,18 +414,18 @@ class _OptionTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: Color(0xff9AA0A6),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],

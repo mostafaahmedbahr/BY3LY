@@ -26,7 +26,7 @@ class MainCategoryInfo extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color : Colors.white,
+              color : AppColors.surface,
             ),
             height: 54,
             width: 54,

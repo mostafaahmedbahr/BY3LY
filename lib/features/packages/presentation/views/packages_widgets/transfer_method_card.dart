@@ -93,6 +93,11 @@ class TransferMethodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = brandForPaymentMethod(method);
+    // Dark brand colors (e.g. Etisalat black) need a readable shade
+    // on the dark surface.
+    final brandColor = AppColors.isDark && brand.color.computeLuminance() < 0.25
+        ? AppColors.text
+        : brand.color;
     return InkWell(
       onTap: enabled ? onTap : null,
       borderRadius: BorderRadius.circular(16),
@@ -100,9 +105,9 @@ class TransferMethodCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
+          color: AppColors.surface,
           border: Border.all(
-            color: selected ? brand.color : const Color(0xffE3E6E9),
+            color: selected ? brandColor : AppColors.border,
             width: selected ? 1.5 : 1,
           ),
           boxShadow: [
@@ -152,7 +157,7 @@ class TransferMethodCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: brand.color,
+                      color: brandColor,
                     ),
                   ),
                   if ((method.account?.trim().isNotEmpty ?? false)) ...[
@@ -163,7 +168,7 @@ class TransferMethodCard extends StatelessWidget {
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xffF1F3F5),
+                        color: AppColors.surfaceVariant,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -171,7 +176,7 @@ class TransferMethodCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.w600,
-                          color: brand.color,
+                          color: brandColor,
                         ),
                       ),
                     ),
@@ -194,7 +199,7 @@ class TransferMethodCard extends StatelessWidget {
                 icon: Icon(
                   Icons.copy_rounded,
                   size: 18,
-                  color: brand.color,
+                  color: brandColor,
                 ),
               ),
           ],

@@ -33,7 +33,7 @@ class DeleteAccountViewBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const CircleAvatar(radius: 5,backgroundColor: Colors.black87,),
+              CircleAvatar(radius: 5,backgroundColor: AppColors.text,),
               const CustomSizedBox(width: 10,),
               Expanded(
                 child: Text(context.tr(LocaleKeys.accountDeletionWarning),
@@ -47,7 +47,7 @@ class DeleteAccountViewBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const CircleAvatar(radius: 5,backgroundColor: Colors.black87,),
+              CircleAvatar(radius: 5,backgroundColor: AppColors.text,),
               const CustomSizedBox(width: 10,),
               Expanded(
                 child: Text(context.tr(LocaleKeys.accountRestorationInfo),

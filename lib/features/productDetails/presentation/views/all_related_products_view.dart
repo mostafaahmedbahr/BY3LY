@@ -10,7 +10,7 @@ class AllRelatedProductsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
         title:  Text(LocaleKeys.likesProduct.tr(),

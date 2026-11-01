@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../utils/app_colors/app_colors.dart';
+
 class ProfileInfoShimmer extends StatelessWidget {
   const ProfileInfoShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: isDark ? const Color(0xFF1E293B) : Colors.grey[300]!,
+      highlightColor: isDark ? const Color(0xFF2C3A50) : Colors.grey[100]!,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -18,9 +21,9 @@ class ProfileInfoShimmer extends StatelessWidget {
               Container(
                 height: 40,
                 width: 40,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: AppColors.surface,
                 ),
               ),
               const SizedBox(width: 6),
@@ -33,7 +36,7 @@ class ProfileInfoShimmer extends StatelessWidget {
                     height: 16,
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -43,7 +46,7 @@ class ProfileInfoShimmer extends StatelessWidget {
                     width: 160,
                     height: 6,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -55,8 +58,8 @@ class ProfileInfoShimmer extends StatelessWidget {
           Container(
             width: 24,
             height: 24,
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: AppColors.surface,
               shape: BoxShape.circle,
             ),
           ),

@@ -24,11 +24,11 @@ class NotificationsListItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           color: unread
               ? AppColors.mainColor.withValues(alpha: 0.07)
-              : const Color.fromRGBO(248, 248, 248, 1),
+              : AppColors.surfaceVariant,
           border: Border.all(
             color: unread
                 ? AppColors.mainColor.withValues(alpha: 0.25)
-                : const Color(0xFFF0F0F0),
+                : AppColors.border,
           ),
         ),
         child: Row(
@@ -40,7 +40,7 @@ class NotificationsListItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: unread
                     ? AppColors.mainColor
-                    : const Color(0xffE8E8E8),
+                    : AppColors.surfaceVariant,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -48,7 +48,7 @@ class NotificationsListItem extends StatelessWidget {
                 size: 20,
                 color: unread
                     ? Colors.white
-                    : const Color(0xff9AA0A6),
+                    : AppColors.textSecondary,
               ),
             ),
             const SizedBox(width: 10),
@@ -60,19 +60,19 @@ class NotificationsListItem extends StatelessWidget {
                     notification.title ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     notification.body ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       height: 1.5,
-                      color: Color(0xff5B6570),
+                      color: AppColors.textSecondary,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -81,7 +81,7 @@ class NotificationsListItem extends StatelessWidget {
                   Text(
                     notification.createdAt ?? '',
                     style: AppStyles.textStyle10W400Green.copyWith(
-                      color: const Color(0xff9AA0A6),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],

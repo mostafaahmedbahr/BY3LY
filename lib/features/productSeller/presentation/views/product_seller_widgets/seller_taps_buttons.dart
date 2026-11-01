@@ -22,16 +22,16 @@ class SellerTapsButtons extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color:productSellerCubit.sellerDataIndex==1  ?
-                    AppColors.mainColor : AppColors.whiteColor,
+                    AppColors.mainColor : AppColors.surface,
                     border: Border.all(
                       color:productSellerCubit.sellerDataIndex==1  ?
-                      AppColors.mainColor : const Color(0xffB6B6B6),
+                      AppColors.mainColor : AppColors.border,
                     )
                 ),
                 child:   Center(child: Text("بيانات البائع",
                   style: TextStyle(
                     color: productSellerCubit.sellerDataIndex==1  ?
-                    AppColors.whiteColor : AppColors.greyColor,
+                    AppColors.whiteColor : AppColors.textSecondary,
                   ),)),
               ),
             ),
@@ -46,16 +46,16 @@ class SellerTapsButtons extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color:productSellerCubit.sellerDataIndex==2  ?
-                    AppColors.mainColor : AppColors.whiteColor,
+                    AppColors.mainColor : AppColors.surface,
                     border: Border.all(
                       color:productSellerCubit.sellerDataIndex==2  ?
-                      AppColors.mainColor : const Color(0xffB6B6B6),
+                      AppColors.mainColor : AppColors.border,
                     )
                 ),
                 child:   Center(child: Text("المعروض الان",
                   style: TextStyle(
                     color: productSellerCubit.sellerDataIndex==2  ?
-                    AppColors.whiteColor : AppColors.greyColor,
+                    AppColors.whiteColor : AppColors.textSecondary,
                   ),)),
               ),
             ),
@@ -70,16 +70,16 @@ class SellerTapsButtons extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: productSellerCubit.sellerDataIndex==3  ?
-                    AppColors.mainColor : AppColors.whiteColor,
+                    AppColors.mainColor : AppColors.surface,
                     border: Border.all(
                       color:productSellerCubit.sellerDataIndex==3  ?
-                      AppColors.mainColor : const Color(0xffB6B6B6),
+                      AppColors.mainColor : AppColors.border,
                     )
                 ),
                 child:   Center(child: Text("المبيعات السابقة",
                   style: TextStyle(
                     color: productSellerCubit.sellerDataIndex==3  ?
-                    AppColors.whiteColor : AppColors.greyColor,
+                    AppColors.whiteColor : AppColors.textSecondary,
                   ),)),
               ),
             ),

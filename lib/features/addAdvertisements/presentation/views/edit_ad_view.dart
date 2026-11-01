@@ -37,15 +37,15 @@ class EditAdView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.background,
         appBar: AppBar(
-          backgroundColor: AppColors.whiteColor,
+          backgroundColor: AppColors.surface,
           shadowColor: AppColors.mainColor,
           surfaceTintColor: AppColors.mainColor,
           title: Text(
             context.tr(LocaleKeys.editAd),
-            style: const TextStyle(
-              color: AppColors.blackColor,
+            style: TextStyle(
+              color: AppColors.text,
               fontWeight: FontWeight.bold,
             ),
           ),

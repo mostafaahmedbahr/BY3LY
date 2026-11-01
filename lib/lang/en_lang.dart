@@ -16,7 +16,7 @@ class EnLang {
     "ageInvalid": "Please enter a valid age",
     "ageTooYoung": "Age must be at least 18 years",
     "ageTooOld": "Invalid age",
-    "age" : "Age",
+    "age": "Age",
 
     "acceptable": "Negotiable",
     "both": "Both",
@@ -75,6 +75,9 @@ class EnLang {
     "favorite": "Favorite",
     "reportingAndSupport": "Reporting and Support",
     "settings": "Settings",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
     "privacy": "Privacy",
     "blockPhoneNumber": "Block Phone Number",
     "deleteAccount": "Delete Account",
@@ -89,7 +92,8 @@ class EnLang {
     "confirm": "Confirm",
     "complaints": "Complaints",
     "youWillSellAndFindEverything": "You will sell and find everything",
-    "enjoySafeAndReliableShoppingExperience": "Enjoy a safe and reliable shopping experience with the best price guarantee.",
+    "enjoySafeAndReliableShoppingExperience":
+        "Enjoy a safe and reliable shopping experience with the best price guarantee.",
     "easyAndFastPurchaseProcess": "Easy and fast purchase process",
     "compareProductsBeforeBuying":
         "Compare different products before buying and pay the seller directly",
@@ -102,7 +106,8 @@ class EnLang {
     "englishLang": "English",
     "changeLangYouWant": "Change Language You Want",
     'tipsForYourSafety': "Tips for your safety",
-    "inspectProductThoroughlyBeforeBuying": "Inspect the product thoroughly before buying and make sure the price is appropriate.",
+    "inspectProductThoroughlyBeforeBuying":
+        "Inspect the product thoroughly before buying and make sure the price is appropriate.",
     "takeSomeoneWithYou":
         "Take someone with you when going to meet the seller.",
     "dontPayUntilEnsuringSafety":
@@ -158,7 +163,8 @@ class EnLang {
     "helpAndSupportChat": "Help and Support (Chat)",
     "writeYourProblemHere": "Write your problem here ...",
     "reasonForReport": "What is the reason for the report?",
-    "tellUsWhatHappened": "Tell us what happened and why you are reporting the product. You can add any information in the notes box.",
+    "tellUsWhatHappened":
+        "Tell us what happened and why you are reporting the product. You can add any information in the notes box.",
     "notes": "Notes",
     "writeReasonForReport": "Write the reason for the report...",
     "fakeProduct": "Fake Product",
@@ -172,7 +178,8 @@ class EnLang {
     "notice": "Notice",
     "accountDeletionWarning":
         "All your displayed ads will be paused if you delete your account.",
-    "accountRestorationInfo": "You can restore your account within 90 days or it will be permanently deleted.",
+    "accountRestorationInfo":
+        "You can restore your account within 90 days or it will be permanently deleted.",
     "deleteNow": "Delete Now",
     "categories": "Categories",
     "joinNow": "Join Now",

@@ -12,11 +12,11 @@ class DeleteAccountView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title: Text(context.tr(LocaleKeys.settingsDeleteAccount),style: const TextStyle(
-            color: AppColors.blackColor,
+        title: Text(context.tr(LocaleKeys.settingsDeleteAccount),style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold
         ),),
       ),

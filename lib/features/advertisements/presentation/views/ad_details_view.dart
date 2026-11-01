@@ -19,17 +19,17 @@ class AdDetailsView extends StatelessWidget {
       create: (context) => AdvertisementsCubit(
           getIt.get<AdvertisementsRepoImpl>()),
       child: Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor: AppColors.mainColor,
         title: Text(
           ad.name ?? '',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: AppColors.blackColor,
+          style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold,
           ),
         ),

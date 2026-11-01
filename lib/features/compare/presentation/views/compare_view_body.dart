@@ -93,14 +93,14 @@ class _EmptyBasket extends StatelessWidget {
             Icon(
               Icons.compare_arrows_rounded,
               size: 72,
-              color: Colors.grey.shade300,
+              color: AppColors.border,
             ),
             const SizedBox(height: 16),
             Text(
               context.tr(LocaleKeys.pickSecondProduct),
               textAlign: TextAlign.center,
               style: AppStyles.textStyle14W500White.copyWith(
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -108,7 +108,7 @@ class _EmptyBasket extends StatelessWidget {
               onPressed: onBrowse,
               child: Text(
                 context.tr(LocaleKeys.back),
-                style: const TextStyle(color: AppColors.mainColor),
+                style: TextStyle(color: AppColors.accent),
               ),
             ),
           ],
@@ -248,7 +248,7 @@ class _EmptySlot extends StatelessWidget {
       child: Container(
         height: 170,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppColors.mainColor.withValues(alpha: 0.4),
@@ -278,9 +278,9 @@ class _EmptySlot extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
-                  color: AppColors.greyColor,
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -311,9 +311,9 @@ class _ProductHeader extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFF0F0F0)),
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
@@ -364,10 +364,10 @@ class _ProductHeader extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             ),
           ],
@@ -402,9 +402,9 @@ class _SpecCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
@@ -416,9 +416,9 @@ class _SpecCard extends StatelessWidget {
                 children: [
                   Text(
                     rows[i].label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: Color(0xff9AA0A6),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -434,7 +434,7 @@ class _SpecCard extends StatelessWidget {
                             : FontWeight.w500,
                         color: rows[i].highlight
                             ? AppColors.mainColor
-                            : const Color(0xff1F2937),
+                            : AppColors.text,
                         decoration: rows[i].strikethrough
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
@@ -454,7 +454,7 @@ class _SpecCard extends StatelessWidget {
                                   : FontWeight.w500,
                               color: rows[i].highlight
                                   ? AppColors.mainColor
-                                  : const Color(0xff1F2937),
+                                  : AppColors.text,
                               decoration: rows[i].strikethrough
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,
@@ -464,7 +464,7 @@ class _SpecCard extends StatelessWidget {
                         Container(
                           width: 1,
                           height: 20,
-                          color: const Color(0xFFF0F0F0),
+                          color: AppColors.border,
                         ),
                         Expanded(
                           child: Text(
@@ -477,7 +477,7 @@ class _SpecCard extends StatelessWidget {
                                   : FontWeight.w500,
                               color: rows[i].highlight
                                   ? AppColors.mainColor
-                                  : const Color(0xff1F2937),
+                                  : AppColors.text,
                               decoration: rows[i].strikethrough
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,
@@ -490,7 +490,7 @@ class _SpecCard extends StatelessWidget {
               ),
             ),
             if (i != rows.length - 1)
-              const Divider(height: 1, color: Color(0xFFF0F0F0)),
+              Divider(height: 1, color: AppColors.border),
           ],
         ],
       ),
@@ -509,18 +509,18 @@ class _DescCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             context.tr(LocaleKeys.descriptionLabel),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
-              color: Color(0xff9AA0A6),
+              color: AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -532,10 +532,10 @@ class _DescCard extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 8,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 height: 1.5,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             )
           else
@@ -550,17 +550,17 @@ class _DescCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 8,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       height: 1.5,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                 ),
                 Container(
                   width: 1,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
-                  color: const Color(0xFFF0F0F0),
+                  color: AppColors.border,
                 ),
                 Expanded(
                   child: Text(
@@ -570,10 +570,10 @@ class _DescCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 8,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       height: 1.5,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                 ),

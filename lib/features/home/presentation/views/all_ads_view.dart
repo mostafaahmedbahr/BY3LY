@@ -16,15 +16,15 @@ class AllAdsView extends StatelessWidget {
     final withImages =
         ads.where((ad) => HomeAdsStrip.urlsOf(ad).isNotEmpty).toList();
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor: AppColors.mainColor,
         title: Text(
           context.tr(LocaleKeys.ads),
-          style: const TextStyle(
-            color: AppColors.blackColor,
+          style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -33,8 +33,8 @@ class AllAdsView extends StatelessWidget {
           ? Center(
               child: Text(
                 context.tr(LocaleKeys.noResults),
-                style: const TextStyle(
-                  color: AppColors.greyColor,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
                   fontSize: 14,
                 ),
               ),

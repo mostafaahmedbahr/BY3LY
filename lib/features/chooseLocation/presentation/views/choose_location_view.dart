@@ -10,7 +10,7 @@ class ChooseLocationView extends StatelessWidget {
     debugPrint(CacheTokenManger.userToken);
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
         actions: [
@@ -21,8 +21,8 @@ class ChooseLocationView extends StatelessWidget {
             child: SvgPicture.asset(AppImages.currentLocation),
           ),
         ],
-        title:   Text(LocaleKeys.chooseYourLocation.tr(),style: const TextStyle(
-            color: AppColors.blackColor,
+        title:   Text(LocaleKeys.chooseYourLocation.tr(),style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold
         ),),
       ),

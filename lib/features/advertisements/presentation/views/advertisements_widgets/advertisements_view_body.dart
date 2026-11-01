@@ -70,9 +70,9 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                 const SizedBox(height: 8,),
                 Text(
                   "عدد الإعلانات (${products.length})",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: Color(0xff9AA0A6),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 10,),
@@ -85,20 +85,20 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                         ),
                       ),
                     ):
-                    products.isEmpty ? const Expanded(child:
+                    products.isEmpty ? Expanded(child:
                     Center(child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
                           Icons.campaign_outlined,
                           size: 64,
-                          color: Color(0xffD9DEE3),
+                          color: AppColors.border,
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Text("لا يوجد اعلانات",style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Color(0xff1F2937),
+                          color: AppColors.text,
                         ),),
                       ],
                     ))):

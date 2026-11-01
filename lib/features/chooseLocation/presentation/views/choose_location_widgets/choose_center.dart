@@ -46,7 +46,7 @@ class ChooseCenter extends StatelessWidget {
                       Text(
                         chooseLocationCubit.selectedCenter,
                         style: AppStyles.textStyle16W600Black.copyWith(
-                          color: AppColors.mainColor,
+                          color: AppColors.accent,
                         ),
                       ),
                     ],
@@ -60,14 +60,14 @@ class ChooseCenter extends StatelessWidget {
                         Text(
                           context.tr(LocaleKeys.change),
                           style: AppStyles.textStyle16W500Black.copyWith(
-                            color: AppColors.blackColor,
+                            color: AppColors.text,
                           ),
                         ),
                         const SizedBox(width: 5),
                         SvgPicture.asset(
                           AppImages.globe,
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.text,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -102,7 +102,7 @@ class ChooseCenter extends StatelessWidget {
                         color: chooseLocationCubit.selectedCenter ==
                             center.name
                             ? const Color.fromRGBO(14, 133, 101, 0.25)
-                            : const Color(0xffF8F8F8),
+                            : AppColors.surfaceVariant,
                       ),
                       child: Row(
                         children: [
@@ -112,7 +112,7 @@ class ChooseCenter extends StatelessWidget {
                             center.name.toString(),
                             style: AppStyles.textStyle16W600Black
                                 .copyWith(
-                                color: AppColors.mainColor),
+                                color: AppColors.accent),
                           ),
                         ],
                       ),

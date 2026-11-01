@@ -50,7 +50,7 @@ class _ChooseGovernmentState extends State<ChooseGovernment> {
                       const SizedBox(width: 10,),
                       Text(
                         chooseLocationCubit.selectedCity,
-                        style: AppStyles.textStyle16W600Black.copyWith(color: AppColors.mainColor),
+                        style: AppStyles.textStyle16W600Black.copyWith(color: AppColors.accent),
                       ),
                     ],
                   ),
@@ -65,12 +65,12 @@ class _ChooseGovernmentState extends State<ChooseGovernment> {
                         Text(
                           context.tr(LocaleKeys.change),
                           style: AppStyles.textStyle16W500Black.copyWith(
-                              color: AppColors.blackColor),
+                              color: AppColors.text),
                         ),
                         const SizedBox(width: 5,),
                         SvgPicture.asset(AppImages.globe,
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.text,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -103,7 +103,7 @@ class _ChooseGovernmentState extends State<ChooseGovernment> {
                         borderRadius: BorderRadius.circular(10),
                         color: chooseLocationCubit.selectedCity == city.name
                             ? const Color.fromRGBO(14, 133, 101, 0.25)
-                            : const Color(0xffF8F8F8),
+                            : AppColors.surfaceVariant,
                       ),
                       child: Row(
                         children: [
@@ -111,7 +111,7 @@ class _ChooseGovernmentState extends State<ChooseGovernment> {
                           const SizedBox(width: 10,),
                           Text(
                             city.name.toString(),
-                            style: AppStyles.textStyle16W600Black.copyWith(color: AppColors.mainColor),
+                            style: AppStyles.textStyle16W600Black.copyWith(color: AppColors.accent),
                           ),
                         ],
                       ),

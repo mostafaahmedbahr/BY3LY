@@ -23,15 +23,15 @@ class CompareView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor: AppColors.mainColor,
         title: Text(
           context.tr(LocaleKeys.comparison),
-          style: const TextStyle(
-            color: AppColors.blackColor,
+          style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Shimmer skeleton mirroring [NotificationsListItem].
@@ -18,8 +19,8 @@ class NotificationsLoading extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: const Color.fromRGBO(248, 248, 248, 1),
-          border: Border.all(color: const Color(0xFFF0F0F0)),
+          color: AppColors.surfaceVariant,
+          border: Border.all(color: AppColors.border),
         ),
         child: const Row(
           crossAxisAlignment: CrossAxisAlignment.start,

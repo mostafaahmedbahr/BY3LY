@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_error_widget.dart';
 import '../../../../../core/shared_widgets/custom_loading.dart';
+import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../../core/utils/new_toast/toast.dart';
 import '../../view_model/packages_cubit.dart';
 import '../../view_model/packages_states.dart';
@@ -50,7 +51,7 @@ class PackagesViewBody extends StatelessWidget {
               const DurationTabs(),
               const SizedBox(height: 16),
               if (packages.isEmpty)
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -58,15 +59,15 @@ class PackagesViewBody extends StatelessWidget {
                         Icon(
                           Icons.card_membership_outlined,
                           size: 64,
-                          color: Color(0xffD9DEE3),
+                          color: AppColors.border,
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Text(
                           "لا يوجد باقات لهذه المدة",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Color(0xff1F2937),
+                            color: AppColors.text,
                           ),
                         ),
                       ],

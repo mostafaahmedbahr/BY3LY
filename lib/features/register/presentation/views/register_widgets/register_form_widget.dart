@@ -74,7 +74,7 @@ class RegisterForm extends StatelessWidget {
                     return MyValidators.passwordValidator(value);
                   },
                   suffixIcon: IconButton(
-                    color: AppColors.greyColor,
+                    color: AppColors.textSecondary,
                     icon: registerCubit.isVisible
                         ? const Icon(Icons.visibility_off)
                         : const Icon(Icons.visibility),
@@ -99,7 +99,7 @@ class RegisterForm extends StatelessWidget {
                     );
                   },
                   suffixIcon: IconButton(
-                    color: AppColors.greyColor,
+                    color: AppColors.textSecondary,
                     icon: registerCubit.isVisible2
                         ? const Icon(Icons.visibility_off)
                         : const Icon(Icons.visibility),

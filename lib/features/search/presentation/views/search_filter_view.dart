@@ -10,11 +10,11 @@ class SearchFilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title: const Text("فلتر",style: TextStyle(
-            color: AppColors.blackColor,
+        title: Text("فلتر",style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold
         ),),
       ),

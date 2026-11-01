@@ -20,7 +20,7 @@ class AdvertisementsView extends StatelessWidget {
           getIt.get<AdvertisementsRepoImpl>())..getAllMyAdsDataMethod(type: 0),
       child: SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
         title: const Text("الاعلانات و الباقات",style: TextStyle(

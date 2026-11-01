@@ -19,7 +19,7 @@ class SelectMarkaModelType extends StatelessWidget {
          crossAxisAlignment:  CrossAxisAlignment.start,
          children: [
            /// الماركة
-           const Text(
+           Text(
              "اختر الماركة",
              style: AppStyles.textStyle16W500Black,
            ),
@@ -37,7 +37,7 @@ class SelectMarkaModelType extends StatelessWidget {
            ),
            const CustomSizedBox(height: 10,),
            /// المودل
-           const Text(
+           Text(
              "اختر المودل",
              style: AppStyles.textStyle16W500Black,
            ),
@@ -55,7 +55,7 @@ class SelectMarkaModelType extends StatelessWidget {
            ),
            const CustomSizedBox(height: 10,),
            /// النوع
-           const Text(
+           Text(
              "اختر النوع",
              style: AppStyles.textStyle16W500Black,
            ),

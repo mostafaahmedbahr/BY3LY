@@ -18,9 +18,9 @@ class PackageCard extends StatelessWidget {
         isFree ? 'مجاناً' : _formatPrice(package.price);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -39,10 +39,10 @@ class PackageCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     package.name ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                 ),
@@ -70,10 +70,10 @@ class PackageCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 package.description!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12.5,
                   height: 1.6,
-                  color: Color(0xff9AA0A6),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ],
@@ -97,9 +97,9 @@ class PackageCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       package.currency!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xff9AA0A6),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -110,7 +110,7 @@ class PackageCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: const Color(0xffF1F3F5),
+                      color: AppColors.surfaceVariant,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -126,7 +126,7 @@ class PackageCard extends StatelessWidget {
             ),
             if ((package.features?.isNotEmpty ?? false)) ...[
               const SizedBox(height: 12),
-              const Divider(height: 1, color: Color(0xFFF0F0F0)),
+              Divider(height: 1, color: AppColors.border),
               const SizedBox(height: 12),
               ...package.features!.map(
                 (f) => Padding(
@@ -143,10 +143,10 @@ class PackageCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           f,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
                             height: 1.5,
-                            color: Color(0xff1F2937),
+                            color: AppColors.text,
                           ),
                         ),
                       ),
@@ -238,23 +238,23 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.mainColor),
+        Icon(icon, size: 18, color: AppColors.accent),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12.5,
-              color: Color(0xff9AA0A6),
+              color: AppColors.textSecondary,
             ),
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: Color(0xff1F2937),
+            color: AppColors.text,
           ),
         ),
       ],

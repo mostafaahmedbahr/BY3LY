@@ -36,16 +36,16 @@ class CommunicationMethod extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color:privacyCubit.wayIndex==1  ?
-                            AppColors.mainColor : AppColors.whiteColor,
+                            AppColors.mainColor : AppColors.surface,
                             border: Border.all(
                               color:privacyCubit.wayIndex==1  ?
-                              AppColors.mainColor : const Color(0xffB6B6B6),
+                              AppColors.mainColor : AppColors.border,
                             )
                         ),
                         child:   Center(child: Text(LocaleKeys.by3lyChat.tr(),
                           style: TextStyle(
                             color: privacyCubit.wayIndex==1  ?
-                            AppColors.whiteColor : AppColors.greyColor,
+                            AppColors.whiteColor : AppColors.textSecondary,
                           ),)),
                       ),
                     ),
@@ -60,16 +60,16 @@ class CommunicationMethod extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color:privacyCubit.wayIndex==2  ?
-                            AppColors.mainColor : AppColors.whiteColor,
+                            AppColors.mainColor : AppColors.surface,
                             border: Border.all(
                               color:privacyCubit.wayIndex==2  ?
-                              AppColors.mainColor : const Color(0xffB6B6B6),
+                              AppColors.mainColor : AppColors.border,
                             )
                         ),
                         child:   Center(child: Text(LocaleKeys.phone.tr(),
                           style: TextStyle(
                             color: privacyCubit.wayIndex==2  ?
-                            AppColors.whiteColor : AppColors.greyColor,
+                            AppColors.whiteColor : AppColors.textSecondary,
                           ),)),
                       ),
                     ),
@@ -84,16 +84,16 @@ class CommunicationMethod extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: privacyCubit.wayIndex==3  ?
-                            AppColors.mainColor : AppColors.whiteColor,
+                            AppColors.mainColor : AppColors.surface,
                             border: Border.all(
                               color:privacyCubit.wayIndex==3  ?
-                              AppColors.mainColor : const Color(0xffB6B6B6),
+                              AppColors.mainColor : AppColors.border,
                             )
                         ),
                         child:   Center(child: Text(LocaleKeys.both.tr(),
                           style: TextStyle(
                             color: privacyCubit.wayIndex==3  ?
-                            AppColors.whiteColor : AppColors.greyColor,
+                            AppColors.whiteColor : AppColors.textSecondary,
                           ),)),
                       ),
                     ),

@@ -35,7 +35,7 @@ class HelpSupportListItemWidget extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: const Color(0xffF8F8F8),
+              color: AppColors.surfaceVariant,
             ),
             child: Row(
               children: [
@@ -48,7 +48,7 @@ class HelpSupportListItemWidget extends StatelessWidget {
                   children: [
                     Text(title,
                         style: AppStyles.textStyle14W500White.copyWith(
-                          color: AppColors.blackColor,
+                          color: AppColors.text,
                         )),
                     Text(subTitle, style: AppStyles.textStyle10W400Green.copyWith(
                       fontSize: 12,
@@ -56,10 +56,10 @@ class HelpSupportListItemWidget extends StatelessWidget {
                   ],
                 ),
                 const Spacer(),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
-                  color: AppColors.blackColor,
+                  color: AppColors.text,
                 ),
                 const CustomSizedBox(
                   width: 8,

@@ -116,11 +116,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
 
   InputDecoration _dropdownDecoration(String label, {Widget? prefix}) {
     return InputDecoration(
-      fillColor: const Color(0xffF8FAF9),
+      fillColor: AppColors.surfaceVariant,
       filled: true,
       prefixIcon: prefix,
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.mainColor),
+      labelStyle: TextStyle(color: AppColors.accent),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -140,7 +140,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
       BuildContext context, AddNewAdCubit cubit) async {
     await showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -154,7 +154,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -336,10 +336,10 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                   const SizedBox(height: 16),
                   Text(
                     context.tr(LocaleKeys.condition),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -471,9 +471,9 @@ class _FormCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -509,10 +509,10 @@ class _FormCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1F2937),
+                    color: AppColors.text,
                   ),
                 ),
               ),
@@ -545,9 +545,9 @@ class _SourceOption extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: const Color(0xffF8FAF9),
+          color: AppColors.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8E8E8)),
+          border: Border.all(color: AppColors.border),
         ),
         child: Column(
           children: [
@@ -568,10 +568,10 @@ class _SourceOption extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             ),
           ],
@@ -619,7 +619,7 @@ class _ImagesPicker extends StatelessWidget {
                         errorBuilder: (_, __, ___) => Container(
                           width: 100,
                           height: 100,
-                          color: const Color(0xffF1F3F5),
+                          color: AppColors.surfaceVariant,
                           child: const Icon(
                               Icons.broken_image_outlined),
                         ),
@@ -738,7 +738,7 @@ class _ImagesPicker extends StatelessWidget {
                 child: Container(
                   width: 100,
                   decoration: BoxDecoration(
-                    color: const Color(0xffF8FAF9),
+                    color: AppColors.surfaceVariant,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: AppColors.mainColor
@@ -753,7 +753,7 @@ class _ImagesPicker extends StatelessWidget {
                       Icon(
                         Icons.add_a_photo_outlined,
                         color: full
-                            ? Colors.grey.shade400
+                            ? AppColors.textSecondary
                             : AppColors.mainColor,
                         size: 26,
                       ),
@@ -764,7 +764,7 @@ class _ImagesPicker extends StatelessWidget {
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
                           color: full
-                              ? Colors.grey.shade400
+                              ? AppColors.textSecondary
                               : AppColors.mainColor,
                         ),
                       ),
@@ -802,7 +802,7 @@ class _SwitchRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: value
             ? AppColors.mainColor.withValues(alpha: 0.07)
-            : const Color(0xffF8FAF9),
+            : AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: value ? AppColors.mainColor : Colors.transparent,
@@ -814,7 +814,7 @@ class _SwitchRow extends StatelessWidget {
               size: 20,
               color: value
                   ? AppColors.mainColor
-                  : const Color(0xff9AA0A6)),
+                  : AppColors.textSecondary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -824,7 +824,7 @@ class _SwitchRow extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: value
                     ? AppColors.mainColor
-                    : const Color(0xff1F2937),
+                    : AppColors.text,
               ),
             ),
           ),
@@ -1106,11 +1106,11 @@ class _ChipsRow extends StatelessWidget {
               selected: selected == o.value,
               onSelected: (_) => onSelected(o.value),
               selectedColor: AppColors.mainColor,
-              backgroundColor: const Color(0xffF1F3F5),
+              backgroundColor: AppColors.surfaceVariant,
               labelStyle: TextStyle(
                 color: selected == o.value
                     ? Colors.white
-                    : const Color(0xff1F2937),
+                    : AppColors.text,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -1119,7 +1119,7 @@ class _ChipsRow extends StatelessWidget {
                 side: BorderSide(
                   color: selected == o.value
                       ? AppColors.mainColor
-                      : const Color(0xffD0D0D0),
+                      : AppColors.border,
                 ),
               ),
               showCheckmark: false,

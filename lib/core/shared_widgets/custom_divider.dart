@@ -6,9 +6,9 @@ class CustomDividerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    return Divider(
       height: 2,
-      color: AppColors.greyColor,
+      color: AppColors.border,
     );
   }
 }

@@ -11,7 +11,7 @@ class ArLang {
     "ageValidate": "العمر مطلوب",
     "ageTooYoung": "يجب ألا يقل العمر عن 18 سنة",
     "ageTooOld": "العمر غير صحيح",
-    "age" : "العمر",
+    "age": "العمر",
 
     "writeYourPhoneNumberHere": "اكتب رقم الهاتف هنا",
     "uploadImages": "قم بتحميل ما يصل الي 10 صوره",
@@ -74,11 +74,15 @@ class ArLang {
     "favorite": "المفضلة",
     "reportingAndSupport": "الابلاغ والدعم",
     "settings": "الاعدادات",
+    "theme": "المظهر",
+    "darkMode": "الوضع الليلي",
+    "lightMode": "الوضع النهاري",
     "privacy": "الخصوصية",
     "blockPhoneNumber": "حجب رقم الهاتف",
     "deleteAccount": "حذف الحساب",
     "deleteAccountAndStopAds": "حذف الحساب ووقف الاعلانات",
-    "notifications": ""
+    "notifications":
+        ""
         "اشعارات",
     "disableNotifications": "الغاء تفعيل الاشعارات",
     "enableNotifications": "تفعيل الاشعارات",
@@ -161,7 +165,8 @@ class ArLang {
     "helpAndSupportChat": "المساعدة والدعم ( المحادثة )",
     "writeYourProblemHere": "اكتب مشكلتك هنا ...",
     "reasonForReport": "ما هو سبب البلاغ؟",
-    "tellUsWhatHappened": "اخبرنا ماذا حدث وما هو سبب البلاغ عن المنتج يمكنك اضافه اي معلومات في صندوق الملاحظات.",
+    "tellUsWhatHappened":
+        "اخبرنا ماذا حدث وما هو سبب البلاغ عن المنتج يمكنك اضافه اي معلومات في صندوق الملاحظات.",
     "notes": "الملاحظات",
     "writeReasonForReport": "اكتب سبب البلاغ...",
     "fakeProduct": "منتج غير حقيقي",
@@ -292,8 +297,7 @@ class ArLang {
         "تم إرسال كود التفعيل إلى بريدك الإلكتروني",
     "code": "الكود",
     "verificationCodeResent": "تمت إعادة إرسال كود التحقق",
-    "youLoggedOutPleaseLoginAgain":
-        "تم تسجيل خروجك، من فضلك سجل الدخول مجددًا",
+    "youLoggedOutPleaseLoginAgain": "تم تسجيل خروجك، من فضلك سجل الدخول مجددًا",
     "oldPassword": "كلمة المرور القديمة",
     "newPassword": "كلمة المرور الجديدة",
     "ageInvalid": "من فضلك أدخل عمرًا صحيحًا",
@@ -301,8 +305,7 @@ class ArLang {
     "loginRequiredTitle": "تسجيل الدخول مطلوب",
     "loginRequiredMessage": "تحتاج لتسجيل الدخول لاستخدام هذه الميزة",
     "guestModeTitle": "أنت تتصفح كزائر",
-    "guestModeMessage":
-        "سجل الدخول لنشر الإعلانات وحفظ المفضلة وعرض إشعاراتك",
+    "guestModeMessage": "سجل الدخول لنشر الإعلانات وحفظ المفضلة وعرض إشعاراتك",
     "statusPending": "قيد المراجعة",
     "statusApproved": "مقبول",
     "statusRejected": "مرفوض",

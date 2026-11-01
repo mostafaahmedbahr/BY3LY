@@ -8,8 +8,8 @@ class Logout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding:   EdgeInsets.symmetric(vertical: 5.h),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
       child: InkWell(
         onTap: () {
           showLogoutDialog(context);
@@ -26,16 +26,18 @@ class Logout extends StatelessWidget {
             height: 56.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
-              color: const Color(0xffF8F8F8),
+              color: Theme.of(context).cardColor,
             ),
             child: Row(
               children: [
                 SvgPicture.asset(AppImages.logout),
                 Gap(20.w),
-                Text(LocaleKeys.signOut.tr(),
-                    style: AppStyles.textStyle14W500White.copyWith(
-                      color: AppColors.redColor,
-                    )),
+                Text(
+                  LocaleKeys.signOut.tr(),
+                  style: AppStyles.textStyle14W500White.copyWith(
+                    color: AppColors.redColor,
+                  ),
+                ),
               ],
             ),
           ),

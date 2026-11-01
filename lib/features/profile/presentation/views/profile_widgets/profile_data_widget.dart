@@ -1,10 +1,10 @@
 import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_nav/new_app_nav.dart';
-  import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
- import 'package:easy_localization/easy_localization.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-  import '../../../../../main_importants.dart';
+import '../../../../../main_importants.dart';
 import '../../../../updateProfile/presentation/views/update_profile_data_view.dart';
 import '../../view_model/profile_cubit.dart';
 
@@ -13,92 +13,101 @@ class ProfileDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit , ProfileStates>(
-      listener: (context , state ){},
-      builder: (context , state ){
+    return BlocConsumer<ProfileCubit, ProfileStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         debugPrint(CacheTokenManger.userToken);
         debugPrint("ProfileDataWidget");
         var profileCubit = ProfileCubit.get(context);
         final user = profileCubit.profileModel?.data?.user;
-        if(state is GetProfileDataLoadingState || user == null){
-          return const SimmerLoading(
-            height: 44,
-          );
+        if (state is GetProfileDataLoadingState || user == null) {
+          return const SimmerLoading(height: 44);
         }
-        if(state is GetProfileDataSuccessState && state.profileModel.status==false){
-          return const SimmerLoading(
-            height: 44,
-          );
-        }
-        else if(state is GetProfileDataErrorState ){
+        if (state is GetProfileDataSuccessState &&
+            state.profileModel.status == false) {
+          return const SimmerLoading(height: 44);
+        } else if (state is GetProfileDataErrorState) {
           return const Text("Error");
         }
-        return  Row(
+        return Row(
           children: [
             Stack(
               alignment: Alignment.bottomLeft,
               children: [
-                profileCubit.file != null && profileCubit.file!.path !="" ?
-                Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.file(
-                        profileCubit.file!,
-                        fit: BoxFit.cover,
+                profileCubit.file != null && profileCubit.file!.path != ""
+                    ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.file(
+                            profileCubit.file!,
+                            fit: BoxFit.cover,
+                            height: 44,
+                            width: 44,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        //padding: const EdgeInsets.all(20),
                         height: 44,
                         width: 44,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: AppColors.surfaceVariant,
+                          border: Border.all(color: AppColors.surfaceVariant),
+                        ),
+                        child: CustomNetWorkImage(
+                          imageUrl: user.image ?? '',
+                          raduis: 50,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    )):
-                Container(
-                  //padding: const EdgeInsets.all(20),
-                  height: 44,
-                  width: 44,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: const Color(0xffEFEFEF),
-                      border: Border.all(
-                        color: const Color(0xffEFEFEF),
-                      )
-                  ),
-                  child:CustomNetWorkImage(
-                    imageUrl: user.image ?? '',
-                    raduis: 50,
-                    fit: BoxFit.cover,
-                  ),
-                )  ,
                 InkWell(
                   onTap: () {
                     profileCubit.uploadOnlyImage();
-                  }, child: const CircleAvatar(
-                  backgroundColor: AppColors.mainColor,
-                  radius: 10,
-                  child: Icon(
-                    size : 14,
-                    Icons.camera_alt, color: AppColors.whiteColor,),
-                ),
+                  },
+                  child: const CircleAvatar(
+                    backgroundColor: AppColors.mainColor,
+                    radius: 10,
+                    child: Icon(
+                      size: 14,
+                      Icons.camera_alt,
+                      color: AppColors.whiteColor,
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(width: 10,),
-              Column(
+            const SizedBox(width: 10),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${user.name ?? ''} - ( ${user.phone ?? ''} )",style: AppStyles.textStyle16W600Black,),
-                Text(" ${context.tr(LocaleKeys.memberFrom)} ${user.createdAt ?? ''}",style: AppStyles.textStyle10W400Gray,),
+                Text(
+                  "${user.name ?? ''} - ( ${user.phone ?? ''} )",
+                  style: AppStyles.textStyle16W600Black.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                Text(
+                  " ${context.tr(LocaleKeys.memberFrom)} ${user.createdAt ?? ''}",
+                  style: AppStyles.textStyle10W400Gray,
+                ),
               ],
             ),
             IconButton(
-              onPressed: (){
-                NewAppNav.customNavigator(context: context, screen: const UpdateProfileDataView());
+              onPressed: () {
+                NewAppNav.customNavigator(
+                  context: context,
+                  screen: const UpdateProfileDataView(),
+                );
               },
-              icon: const Icon(Icons.update,color: AppColors.yellowColor,),
+              icon: const Icon(Icons.update, color: AppColors.yellowColor),
             ),
           ],
         );
       },
-
     );
   }
 }

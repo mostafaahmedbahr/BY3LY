@@ -89,14 +89,14 @@ class AppBarWithUploadImage extends StatelessWidget {
                             width: 120.w,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100.r),
-                                color: const Color(0xffEFEFEF),
+                                color: AppColors.surfaceVariant,
                                 border: Border.all(
-                                  color: const Color(0xffEFEFEF),
+                                  color: AppColors.border,
                                 )),
                             child: Icon(
                               Icons.person,
                               size: 50.sp,
-                              color: AppColors.mainColor,
+                              color: AppColors.accent,
                             ),
                           ),
                     InkWell(

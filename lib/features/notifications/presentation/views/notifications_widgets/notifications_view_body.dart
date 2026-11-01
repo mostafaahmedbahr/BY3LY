@@ -136,11 +136,11 @@ class _ReadStatusFilter extends StatelessWidget {
                       cubit.setReadFilter(o.$1),
                   selectedColor: AppColors.mainColor,
                   backgroundColor:
-                      const Color(0xffF1F3F5),
+                      AppColors.surfaceVariant,
                   labelStyle: TextStyle(
                     color: cubit.readFilter == o.$1
                         ? Colors.white
-                        : const Color(0xff1F2937),
+                        : AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -149,7 +149,7 @@ class _ReadStatusFilter extends StatelessWidget {
                     side: BorderSide(
                       color: cubit.readFilter == o.$1
                           ? AppColors.mainColor
-                          : const Color(0xffD0D0D0),
+                          : AppColors.border,
                     ),
                   ),
                   showCheckmark: false,

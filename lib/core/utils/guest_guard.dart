@@ -81,20 +81,20 @@ class GuestPlaceholder extends StatelessWidget {
             Text(
               context.tr(LocaleKeys.guestModeTitle),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: Color(0xff1F2937),
+                color: AppColors.text,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               context.tr(LocaleKeys.guestModeMessage),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
                 height: 1.6,
-                color: Color(0xff9AA0A6),
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 24),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/utils/app_colors/app_colors.dart';
+
 /// Which company mark to draw.
 enum BrandLogoKind { generic, vodafone, etisalat, instapay }
 
@@ -55,9 +57,9 @@ class BrandLogo extends StatelessWidget {
       height: size,
       width: size,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(size * 0.28),
-        border: Border.all(color: const Color(0xffF0F0F0)),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),

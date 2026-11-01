@@ -95,7 +95,7 @@ class ProductDetailsViewBody extends StatelessWidget {
                     height: 20,
                   ),
                   CustomButton(
-                    btnColor: AppColors.whiteColor,
+                    btnColor: AppColors.surface,
                       btnText: const Text("كيم تتم عملية الشراء !",style: TextStyle(
                         color: AppColors.mainColor,
                       ),),
@@ -113,7 +113,7 @@ class ProductDetailsViewBody extends StatelessWidget {
                     height: 20,
                   ),
                   CustomButton(
-                    btnColor: AppColors.whiteColor,
+                    btnColor: AppColors.surface,
                     btnText:   Text( LocaleKeys.reportingAndSupport.tr(),style: const TextStyle(
                       color: AppColors.mainColor,
                     ),),

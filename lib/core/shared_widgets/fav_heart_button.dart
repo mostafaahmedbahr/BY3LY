@@ -107,7 +107,7 @@ class _FavHeartButtonState extends State<FavHeartButton> {
                 child: Icon(
                   key: ValueKey(isFav),
                   isFav ? Icons.favorite : Icons.favorite_border,
-                  color: isFav ? widget.favIconColor : Colors.grey,
+                  color: isFav ? widget.favIconColor : AppColors.textSecondary,
                   size: widget.iconSize,
                 ),
         );

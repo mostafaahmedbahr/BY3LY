@@ -13,7 +13,7 @@ class PreviousPaymentActivitiesItem extends StatelessWidget {
       width: double.infinity,
       child: Row(
         children: [
-          const Icon(Icons.add,color: AppColors.mainColor,),
+          Icon(Icons.add,color: AppColors.accent,),
           const SizedBox(width: 20,),
           Expanded(
             child: Column(
@@ -24,7 +24,7 @@ class PreviousPaymentActivitiesItem extends StatelessWidget {
                style: AppStyles.textStyle14W500White.copyWith(
                  color: AppColors.mainColor,
                ),),
-               const Text("12/1/2024",
+               Text("12/1/2024",
                style: AppStyles.textStyle10W400Gray,),
              ],
             ),

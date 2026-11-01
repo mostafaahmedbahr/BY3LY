@@ -9,13 +9,13 @@ class ProductSellerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.sellerData.tr(),style: const TextStyle(
-            color: AppColors.blackColor,
-            fontWeight: FontWeight.bold
-        ),),
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
+        title: Text(LocaleKeys.sellerData.tr(),style: TextStyle(
+            color: AppColors.text,
+            fontWeight: FontWeight.bold
+        ),),
       ),
       body: ProductSellerViewBody(
         sellerId: sellerId,

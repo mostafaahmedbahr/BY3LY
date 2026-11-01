@@ -189,19 +189,19 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                           decoration: BoxDecoration(
                             color: active
                                 ? AppColors.mainColor
-                                : AppColors.whiteColor,
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: active
                                   ? AppColors.mainColor
-                                  : const Color.fromRGBO(208, 208, 208, 1),
+                                  : AppColors.border,
                             ),
                           ),
                           child: Icon(
                             Icons.tune,
                             color: active
                                 ? AppColors.whiteColor
-                                : AppColors.mainColor,
+                                : AppColors.accent,
                           ),
                         ),
                       ),
@@ -350,7 +350,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                       child: Text(
                         '${context.tr(LocaleKeys.productsShow)} (${items.length})',
                         style: AppStyles.textStyle14W500White.copyWith(
-                          color: AppColors.greyColor,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
@@ -365,7 +365,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                   Icon(
                                     Icons.search_off,
                                     size: 64,
-                                    color: Colors.grey.shade400,
+                                    color: AppColors.textSecondary,
                                   ),
                                   const CustomSizedBox(height: 12),
                                   Text(
@@ -373,7 +373,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                     textAlign: TextAlign.center,
                                     style: AppStyles.textStyle14W500White
                                         .copyWith(
-                                      color: AppColors.greyColor,
+                                      color: AppColors.textSecondary,
                                     ),
                                   ),
                                   const CustomSizedBox(height: 12),
@@ -386,8 +386,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                       },
                                       child: Text(
                                         context.tr(LocaleKeys.clearAll),
-                                        style: const TextStyle(
-                                          color: AppColors.mainColor,
+                                        style: TextStyle(
+                                          color: AppColors.accent,
                                         ),
                                       ),
                                     ),
@@ -423,8 +423,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                                     loadMore: true),
                                             child: Text(
                                               context.tr(LocaleKeys.search),
-                                              style: const TextStyle(
-                                                color: AppColors.mainColor,
+                                              style: TextStyle(
+                                                color: AppColors.accent,
                                               ),
                                             ),
                                           ),

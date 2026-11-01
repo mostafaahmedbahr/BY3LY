@@ -26,7 +26,7 @@ class NotificationsButtonsTypesItem extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color:notificationsCubit.buttonIndex==index+1  ?
-                  AppColors.mainColor : AppColors.whiteColor,
+                  AppColors.mainColor : AppColors.surface,
                   border: Border.all(
                     color:notificationsCubit.buttonIndex==index+1  ?
                     AppColors.mainColor : const Color(0xffB6B6B6),
@@ -35,7 +35,7 @@ class NotificationsButtonsTypesItem extends StatelessWidget {
               child:   Center(child: Text(buttonLabel,
                 style: TextStyle(
                   color: notificationsCubit.buttonIndex==index+1  ?
-                  AppColors.whiteColor : AppColors.greyColor,
+                  AppColors.whiteColor : AppColors.textSecondary,
                 ),)),
             ),
           );

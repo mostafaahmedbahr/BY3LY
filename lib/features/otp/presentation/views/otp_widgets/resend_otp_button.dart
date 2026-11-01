@@ -43,9 +43,9 @@ class _ResendOtpButtonState extends State<ResendOtpButton> {
             builder: (context){
               return TextButton(
                 onPressed: widget.onPressed,
-                child: const Text(
+                child: Text(
                   "Resend Code",
-                  style: TextStyle(color: AppColors.mainColor),
+                  style: TextStyle(color: AppColors.accent),
                 ),
               );
             },
@@ -53,7 +53,7 @@ class _ResendOtpButtonState extends State<ResendOtpButton> {
           )
               : Text(
             "Resend code in ${widget.secondsRemaining} s",
-            style: const TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppColors.textSecondary),
           ),
         );
       },

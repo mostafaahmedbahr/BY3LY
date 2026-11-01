@@ -65,10 +65,10 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                        color: const Color(0xFFF0F0F0)),
+                        color: AppColors.border),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black
@@ -84,7 +84,7 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
                       "body": Style(
                         fontSize: FontSize(14),
                         lineHeight: const LineHeight(1.8),
-                        color: const Color(0xff1F2937),
+                        color: AppColors.text,
                         margin: Margins.zero,
                         padding: HtmlPaddings.zero,
                       ),
@@ -101,7 +101,7 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
                       "h3": Style(
                         fontSize: FontSize(16),
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xff1F2937),
+                        color: AppColors.text,
                       ),
                       "a": Style(
                         color: AppColors.mainColor,

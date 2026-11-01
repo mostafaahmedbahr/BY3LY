@@ -117,7 +117,7 @@ class _AllSubCategoriesProductsListState
     final result = await showModalBottomSheet<ProductsFilter>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -179,12 +179,12 @@ class _AllSubCategoriesProductsListState
                       decoration: BoxDecoration(
                         color: hasActiveFilter
                             ? AppColors.mainColor
-                            : AppColors.whiteColor,
+                            : AppColors.surface,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: hasActiveFilter
                               ? AppColors.mainColor
-                              : const Color.fromRGBO(208, 208, 208, 1),
+                              : AppColors.border,
                         ),
                       ),
                       child: Icon(
@@ -296,7 +296,7 @@ class _AllSubCategoriesProductsListState
             child: Text(
               '${context.tr(LocaleKeys.productsShow)} (${filtered.length})',
               style: AppStyles.textStyle14W500White.copyWith(
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
               ),
             ),
           ),
@@ -311,14 +311,14 @@ class _AllSubCategoriesProductsListState
                         Icon(
                           Icons.search_off,
                           size: 64.sp,
-                          color: Colors.grey.shade400,
+                          color: AppColors.textSecondary,
                         ),
                         Gap(12.h),
                         Text(
                           context.tr(LocaleKeys.noResults),
                           textAlign: TextAlign.center,
                           style: AppStyles.textStyle14W500White.copyWith(
-                            color: AppColors.greyColor,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         Gap(12.h),

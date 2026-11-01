@@ -8,6 +8,7 @@ import '../../../../changeLang/presentation/views/change_lang_view.dart';
 import '../../../../deleteAccount/presentation/views/delete_account_view.dart';
 import '../../../../privacy/presentation/views/privacy_view.dart';
 import 'logout.dart';
+import 'theme_mode_switch.dart';
 
 class SettingsListWidget extends StatelessWidget {
   const SettingsListWidget({super.key});
@@ -19,7 +20,9 @@ class SettingsListWidget extends StatelessWidget {
       children: [
         Text(
           context.tr(LocaleKeys.settings),
-          style: AppStyles.textStyle16W500Black,
+          style: AppStyles.textStyle16W500Black.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
         Gap(10.h),
         SettingsItemWidget(
@@ -50,6 +53,8 @@ class SettingsListWidget extends StatelessWidget {
             );
           },
         ),
+        const ThemeModeSwitch(),
+
         /// change password
         SettingsItemWidget(
           title: LocaleKeys.changePassword.tr(),
@@ -76,6 +81,7 @@ class SettingsListWidget extends StatelessWidget {
         BlocConsumer<ProfileCubit, ProfileStates>(
           listener: (context, state) {},
           builder: (context, state) {
+            final theme = Theme.of(context);
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Card(
@@ -90,32 +96,35 @@ class SettingsListWidget extends StatelessWidget {
                   height: 56,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffF8F8F8),
+                    color: theme.cardColor,
                   ),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         AppImages.notification,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.text,
+                          BlendMode.srcIn,
+                        ),
                       ),
-                      const CustomSizedBox(
-                        width: 8,
-                      ),
-                      const CustomSizedBox(
-                        width: 10,
-                      ),
+                      const CustomSizedBox(width: 8),
+                      const CustomSizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(LocaleKeys.notifications.tr(),
-                              style: AppStyles.textStyle14W500White.copyWith(
-                                color: AppColors.blackColor,
-                              )),
                           Text(
-                              ProfileCubit.get(context).switchValue == false
-                                  ? LocaleKeys.enableNotifications.tr()
-                                  : LocaleKeys.disableNotifications.tr(),
-                              style: AppStyles.textStyle10W400Gray),
+                            LocaleKeys.notifications.tr(),
+                            style: AppStyles.textStyle14W500White.copyWith(
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                          Text(
+                            ProfileCubit.get(context).switchValue == false
+                                ? LocaleKeys.enableNotifications.tr()
+                                : LocaleKeys.disableNotifications.tr(),
+                            style: AppStyles.textStyle10W400Gray,
+                          ),
                         ],
                       ),
                       const Spacer(),
@@ -123,13 +132,12 @@ class SettingsListWidget extends StatelessWidget {
                         activeColor: AppColors.mainColor,
                         value: ProfileCubit.get(context).switchValue,
                         onChanged: (value) {
-                          ProfileCubit.get(context)
-                              .changeNotificationValue(value);
+                          ProfileCubit.get(
+                            context,
+                          ).changeNotificationValue(value);
                         },
                       ),
-                      const CustomSizedBox(
-                        width: 8,
-                      ),
+                      const CustomSizedBox(width: 8),
                     ],
                   ),
                 ),
@@ -146,7 +154,6 @@ class SettingsListWidget extends StatelessWidget {
         // ),
         const Gap(10),
         Logout(),
-
       ],
     );
   }

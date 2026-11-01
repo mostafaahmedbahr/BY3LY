@@ -32,7 +32,7 @@ class ChangePasswordForm extends StatelessWidget {
               //   return MyValidators.passwordValidator(value);
               // },
               suffixIcon: IconButton(
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
                 icon: changePasswordCubit.isOldPasswordVisible
                     ? const Icon(Icons.visibility_off)
                     : const Icon(Icons.visibility),
@@ -60,7 +60,7 @@ class ChangePasswordForm extends StatelessWidget {
                 return MyValidators.passwordValidator(value);
               },
               suffixIcon: IconButton(
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
                 icon: changePasswordCubit.isNewPasswordVisible
                     ? const Icon(Icons.visibility_off)
                     : const Icon(Icons.visibility),
@@ -88,7 +88,7 @@ class ChangePasswordForm extends StatelessWidget {
                 );
               },
               suffixIcon: IconButton(
-                color: AppColors.greyColor,
+                color: AppColors.textSecondary,
                 icon: changePasswordCubit.isConfirmNewPasswordVisible
                     ? const Icon(Icons.visibility_off)
                     : const Icon(Icons.visibility),

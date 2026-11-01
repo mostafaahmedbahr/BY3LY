@@ -50,10 +50,10 @@ class ChangeLangView extends StatelessWidget {
                       const SizedBox(width: 20),
                       Text(
                         !context.isArabic ? "Arabic " :  "اللغة العربية",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -87,10 +87,10 @@ class ChangeLangView extends StatelessWidget {
                       const SizedBox(width: 20),
                       Text(
                      context.isArabic ? "English " :  "اللغة الانجليزية",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],

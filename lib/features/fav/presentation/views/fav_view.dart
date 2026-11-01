@@ -12,11 +12,11 @@ class FavView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title:   Text(context.tr(LocaleKeys.favoriteAds),style: const TextStyle(
-            color: AppColors.blackColor,
+        title:   Text(context.tr(LocaleKeys.favoriteAds),style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold
         ),),
       ),

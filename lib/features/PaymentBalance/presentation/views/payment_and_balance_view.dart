@@ -17,11 +17,11 @@ class PaymentAndBalanceView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title:   Text(LocaleKeys.paymentAndBalance.tr(),style: const TextStyle(
-            color: AppColors.blackColor,
+        title:   Text(LocaleKeys.paymentAndBalance.tr(),style: TextStyle(
+            color: AppColors.text,
             fontWeight: FontWeight.bold
         ),),
       ),

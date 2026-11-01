@@ -1,4 +1,3 @@
-import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/allCategories/presentation/views/all_categories_widgets/all_sub_categories_view_body.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +12,11 @@ class AllSubCategoriesView extends StatelessWidget {
   final int mainCategoryId;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title:   Text(mainCategoryName,style: const TextStyle(
-            color: AppColors.blackColor,
+        title:   Text(mainCategoryName,style: TextStyle(
+            color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold
         ),),
       ),

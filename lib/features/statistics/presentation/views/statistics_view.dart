@@ -11,11 +11,11 @@ class StatisticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title:   Text(LocaleKeys.statistics.tr(),style: const TextStyle(
-            color: AppColors.mainColor,
+        title:   Text(LocaleKeys.statistics.tr(),style: TextStyle(
+            color: AppColors.accent,
             fontWeight: FontWeight.bold
         ),),
       ),

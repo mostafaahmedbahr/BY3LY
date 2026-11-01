@@ -96,7 +96,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
               if (reasons.isEmpty)
                 Text(
                   '-',
-                  style: TextStyle(color: Colors.grey.shade500),
+                  style: TextStyle(color: AppColors.textSecondary),
                 )
               else
                 ...reasons.map((reason) {
@@ -118,13 +118,13 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                           color: selected
                               ? AppColors.mainColor
                                   .withValues(alpha: 0.07)
-                              : Colors.white,
+                              : AppColors.surface,
                           borderRadius:
                               BorderRadius.circular(14),
                           border: Border.all(
                             color: selected
                                 ? AppColors.mainColor
-                                : const Color(0xFFE3E6E9),
+                                : AppColors.border,
                             width: selected ? 1.5 : 1,
                           ),
                         ),
@@ -140,7 +140,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                                       : FontWeight.w500,
                                   color: selected
                                       ? AppColors.mainColor
-                                      : const Color(0xff1F2937),
+                                      : AppColors.text,
                                 ),
                               ),
                             ),
@@ -155,7 +155,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                                 border: Border.all(
                                   color: selected
                                       ? AppColors.mainColor
-                                      : const Color(0xffD0D0D0),
+                                      : AppColors.border,
                                   width: 1.5,
                                 ),
                               ),

@@ -39,7 +39,7 @@ class ProductSellerReviewsInfo extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("الاسم",style: AppStyles.textStyle10W400Gray,),
+                          Text("الاسم",style: AppStyles.textStyle10W400Gray,),
                           Text("${seller.name}",style: AppStyles.textStyle10W400Green.copyWith(
                               fontSize: 14
                           ),),
@@ -71,7 +71,7 @@ class ProductSellerReviewsInfo extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("الايميل",style: AppStyles.textStyle10W400Gray,),
+                          Text("الايميل",style: AppStyles.textStyle10W400Gray,),
                           Text("${seller.email}",style: AppStyles.textStyle10W400Green.copyWith(
                               fontSize: 14
                           ),),
@@ -106,7 +106,7 @@ class ProductSellerReviewsInfo extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("الرقم",style: AppStyles.textStyle10W400Gray,),
+                          Text("الرقم",style: AppStyles.textStyle10W400Gray,),
                           Text("${seller.phone}",style: AppStyles.textStyle10W400Green.copyWith(
                               fontSize: 14
                           ),),
@@ -134,7 +134,7 @@ class ProductSellerReviewsInfo extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("الموقع",style: AppStyles.textStyle10W400Gray,),
+                          Text("الموقع",style: AppStyles.textStyle10W400Gray,),
                           Text("${seller.cityName} / ${seller.centerName}",style: AppStyles.textStyle10W400Green.copyWith(
                               fontSize: 14
                           ),),
@@ -151,7 +151,7 @@ class ProductSellerReviewsInfo extends StatelessWidget {
               children: [
                   Row(
                   children: [
-                    const Text("تقييمات البائع",style: AppStyles.textStyle16W600Black,),
+                    Text("تقييمات البائع",style: AppStyles.textStyle16W600Black,),
                     const CustomSizedBox(width: 6),
                     Text("( ${seller.countCommenets} )"),
                   ],
@@ -224,9 +224,9 @@ class ProductSellerReviewsInfo extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0),
                         child: Text(
                           "${seller.commenets![index].commenet}", // Here you can use a dynamic comment from the model
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: Colors.black54,
+                            color: AppColors.text,
                             height: 1.5, // Set the line height to give space between lines
                           ),
                           maxLines: 3, // Limit the lines to 3

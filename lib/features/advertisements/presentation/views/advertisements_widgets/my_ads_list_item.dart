@@ -20,7 +20,7 @@ class MyAdsListItem extends StatelessWidget {
       BuildContext context, Ads ad) async {
     await showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -34,7 +34,7 @@ class MyAdsListItem extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -130,8 +130,8 @@ class MyAdsListItem extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFF0F0F0)),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -215,11 +215,11 @@ class MyAdsListItem extends StatelessWidget {
                         adsProduct.name ?? '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13.5,
                           height: 1.4,
                           fontWeight: FontWeight.w700,
-                          color: Color(0xff1F2937),
+                          color: AppColors.text,
                         ),
                       ),
                       const CustomSizedBox(height: 4,),
@@ -242,9 +242,9 @@ class MyAdsListItem extends StatelessWidget {
                                   : "لا يوجد",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 11,
-                                  color: Color(0xff9AA0A6)),
+                                  color: AppColors.textSecondary),
                             ),
                           ),
                         ],
@@ -257,18 +257,18 @@ class MyAdsListItem extends StatelessWidget {
                             .join('  •  '),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 11, color: Color(0xff9AA0A6)),
+                        style: TextStyle(
+                            fontSize: 11, color: AppColors.textSecondary),
                       ),
                       const CustomSizedBox(height: 6,),
                       Text(
                         adsProduct.price ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xff1F2937),
+                          color: AppColors.text,
                         ),
                       ),
                     ],
@@ -280,7 +280,7 @@ class MyAdsListItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: const Color(0xffF8FAF9),
+                color: AppColors.surfaceVariant,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
@@ -315,17 +315,17 @@ class MyAdsListItem extends StatelessWidget {
                             children: [
                               Text(
                                 stats[i].value,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w800,
-                                  color: Color(0xff1F2937),
+                                  color: AppColors.text,
                                 ),
                               ),
                               Text(
                                 stats[i].label,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 10,
-                                  color: Color(0xff9AA0A6),
+                                  color: AppColors.textSecondary,
                                 ),
                               ),
                             ],
@@ -337,7 +337,7 @@ class MyAdsListItem extends StatelessWidget {
                       Container(
                         width: 1,
                         height: 34,
-                        color: const Color(0xFFE5E7EB),
+                        color: AppColors.border,
                       ),
                   ],
                 ],
@@ -523,17 +523,17 @@ class _OptionTile extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xff1F2937),
+                  color: AppColors.text,
                 ),
               ),
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios_rounded,
               size: 15,
-              color: Color(0xffD9DEE3),
+              color: AppColors.textSecondary,
             ),
           ],
         ),

@@ -42,7 +42,7 @@ class HomeLoadingWidget extends StatelessWidget {
                   ),
                   Text(
                     context.tr(LocaleKeys.seeAll),
-                    style: const TextStyle(color: AppColors.mainColor),
+                    style: TextStyle(color: AppColors.accent),
                   ),
                 ],
               ),
@@ -88,7 +88,7 @@ class HomeLoadingWidget extends StatelessWidget {
                   ),
                   Text(
                     context.tr(LocaleKeys.seeAll),
-                    style: const TextStyle(color: AppColors.mainColor),
+                    style: TextStyle(color: AppColors.accent),
                   ),
                 ],
               ),
@@ -122,9 +122,9 @@ class _ProductCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF0F0F0)),
+        border: Border.all(color: AppColors.border),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,

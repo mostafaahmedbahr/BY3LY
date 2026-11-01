@@ -24,20 +24,20 @@ class ReasonItemWidget extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               color:  ReportProductCubit.get(context).reasonIndex == index ?
-              AppColors.mainColor  : AppColors.whiteColor,
+              AppColors.mainColor  : AppColors.surface,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                   color:
                   ReportProductCubit.get(context).reasonIndex == index ?
                    AppColors.mainColor  :
-                  const Color(0xffB6B6B6)
+                  AppColors.border
               ),
             ),
             child: Center(child: Text(title,
               style:
               AppStyles.textStyle14W500White.copyWith(
                 color: ReportProductCubit.get(context).reasonIndex == index ?
-                  AppColors.whiteColor  : const Color(0xffB6B6B6),
+                  AppColors.whiteColor  : AppColors.textSecondary,
               ),)),
           ),
         );

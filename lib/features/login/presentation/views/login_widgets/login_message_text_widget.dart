@@ -20,8 +20,8 @@ class LoginMessageTextWidget extends StatelessWidget {
         ),
         Gap(10.h),
         Text(context.tr(LocaleKeys.loginMsg2),
-        style: const TextStyle(
-          color: AppColors.greyColor
+        style: TextStyle(
+          color: AppColors.textSecondary
         ),),
         Gap(40.h),
       ],

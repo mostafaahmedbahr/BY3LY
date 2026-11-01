@@ -16,11 +16,11 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title:   Text(context.tr(LocaleKeys.search),style: const TextStyle(
-            color: AppColors.mainColor,
+        title:   Text(context.tr(LocaleKeys.search),style: TextStyle(
+            color: AppColors.accent,
             fontWeight: FontWeight.bold
         ),),
         // actions: [

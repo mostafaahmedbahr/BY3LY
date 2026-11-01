@@ -12,15 +12,17 @@ class SettingsItemWidget extends StatelessWidget {
   final String image;
   void Function() onTap;
 
-  SettingsItemWidget(
-      {super.key,
-      required this.title,
-      required this.onTap,
-      required this.subTitle,
-      required this.image});
+  SettingsItemWidget({
+    super.key,
+    required this.title,
+    required this.onTap,
+    required this.subTitle,
+    required this.image,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
@@ -37,34 +39,34 @@ class SettingsItemWidget extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: const Color(0xffF8F8F8),
+              color: theme.cardColor,
             ),
             child: Row(
               children: [
-                image.contains("png") ?
-                Image.asset(image,height: 20,) :
-                SvgPicture.asset(image),
+                image.contains("png")
+                    ? Image.asset(image, height: 20)
+                    : SvgPicture.asset(image),
                 Gap(18.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(title,
-                        style: AppStyles.textStyle14W500White.copyWith(
-                          color: AppColors.blackColor,
-                        )),
+                    Text(
+                      title,
+                      style: AppStyles.textStyle14W500White.copyWith(
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
                     Text(subTitle, style: AppStyles.textStyle10W400Gray),
                   ],
                 ),
                 const Spacer(),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
-                  color: AppColors.blackColor,
+                  color: theme.colorScheme.onSurface,
                 ),
-                const CustomSizedBox(
-                  width: 8,
-                ),
+                const CustomSizedBox(width: 8),
               ],
             ),
           ),

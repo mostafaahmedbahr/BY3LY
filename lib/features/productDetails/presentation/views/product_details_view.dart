@@ -27,6 +27,7 @@ class ProductDetailsView extends StatelessWidget {
         if (state is GetProductDetailsDataErrorState &&
             productDetailsCubit.productDetailsModel?.data?.product == null) {
           return Scaffold(
+            backgroundColor: AppColors.background,
             body: CustomErrorWidget(
               error: state.error.toString(),
               onTap: () => context
@@ -43,6 +44,7 @@ class ProductDetailsView extends StatelessWidget {
             [];
         if (product == null) {
           return Scaffold(
+            backgroundColor: AppColors.background,
             body: CustomErrorWidget(
               onTap: () => context
                   .read<ProductDetailsCubit>()
@@ -52,14 +54,15 @@ class ProductDetailsView extends StatelessWidget {
           );
         }
         return Scaffold(
+          backgroundColor: AppColors.background,
           appBar: AppBar(
-            backgroundColor: AppColors.whiteColor,
+            backgroundColor: AppColors.surface,
             shadowColor: AppColors.mainColor,
             surfaceTintColor: AppColors.mainColor,
             title: Text(
               product.name ?? '',
-              style: const TextStyle(
-                  color: AppColors.blackColor, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: AppColors.text, fontWeight: FontWeight.bold),
             ),
                       actions: [
                         Container(
@@ -67,10 +70,10 @@ class ProductDetailsView extends StatelessWidget {
                           width: 36,
                           margin: const EdgeInsets.only(left: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.whiteColor,
+                            color: AppColors.surface,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color(0xFFE8E8E8),
+                              color: AppColors.border,
                               width: 1.2,
                             ),
                           ),

@@ -15,12 +15,12 @@ class OnBoardingCubit extends Cubit<OnBoardingStates> {
       image: Image.asset(AppImages.onBoarding1),
       decoration: PageDecoration(
         titleTextStyle: TextStyle(
-          color: AppColors.mainColor,
+          color: AppColors.accent,
           fontWeight: FontWeight.w600,
           fontSize: 20.sp,
         ),
         bodyTextStyle: TextStyle(
-          color: AppColors.greyColor,
+          color: AppColors.textSecondary,
           fontWeight: FontWeight.w500,
           fontSize: 14.sp,
         ),
@@ -32,12 +32,12 @@ class OnBoardingCubit extends Cubit<OnBoardingStates> {
       image: Image.asset(AppImages.onBoarding2),
       decoration: PageDecoration(
         titleTextStyle:   TextStyle(
-          color: AppColors.mainColor,
+          color: AppColors.accent,
           fontWeight: FontWeight.w600,
           fontSize: 20.sp,
         ),
         bodyTextStyle:   TextStyle(
-          color: AppColors.greyColor,
+          color: AppColors.textSecondary,
           fontWeight: FontWeight.w500,
           fontSize: 14.sp,
         ),
@@ -49,12 +49,12 @@ class OnBoardingCubit extends Cubit<OnBoardingStates> {
       image: Image.asset(AppImages.onBoarding3),
       decoration: PageDecoration(
         titleTextStyle: TextStyle(
-          color: AppColors.mainColor,
+          color: AppColors.accent,
           fontWeight: FontWeight.w600,
           fontSize: 20.sp,
         ),
         bodyTextStyle: TextStyle(
-          color: AppColors.greyColor,
+          color: AppColors.textSecondary,
           fontWeight: FontWeight.w500,
           fontSize: 14.sp,
         ),

@@ -52,7 +52,7 @@ class AllSubCategoriesList extends StatelessWidget {
               children: [
                 Text(
                   allSubCategoriesList[index].name.toString(),
-                  style:   TextStyle(color: Colors.black87, fontSize: 18.sp),
+                  style:   TextStyle(color: AppColors.text, fontSize: 18.sp),
                 ),
                   Text("( ${allSubCategoriesList[index].productsCount} منتج )"),
               ],

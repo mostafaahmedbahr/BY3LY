@@ -12,7 +12,7 @@ class AllSubCategoriesProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           "${context.tr(LocaleKeys.allProducts)} ( $subCategoryName )",

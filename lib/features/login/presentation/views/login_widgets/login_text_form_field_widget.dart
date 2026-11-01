@@ -50,7 +50,7 @@ class LoginTextFormFieldWidget extends StatelessWidget {
                 //   return MyValidators.passwordValidator(value);
                 // },
                 suffixIcon: IconButton(
-                  color: AppColors.greyColor,
+                  color: AppColors.textSecondary,
                   icon: context.read<LoginCubit>().isPasswordVisible
                       ? const Icon(Icons.visibility_off)
                       : const Icon(Icons.visibility),

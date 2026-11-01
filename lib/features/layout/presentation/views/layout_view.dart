@@ -24,6 +24,9 @@ class LayoutViewState extends State<LayoutView> {
   Widget build(BuildContext context) {
     debugPrint(CacheTokenManger.userToken);
     debugPrint("LayoutView");
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final inactiveNavColor =
+        isDarkMode ? AppColors.textSecondary : AppColors.mainColor;
     return BlocBuilder<LayoutCubit, LayoutStates>(
       builder: (context, state) {
         var layoutCubit = LayoutCubit.get(context);
@@ -34,14 +37,17 @@ class LayoutViewState extends State<LayoutView> {
             body: layoutCubit.screens[LayoutCubit.pageIndex],
             bottomNavigationBar: FlashyTabBar(
               selectedIndex: LayoutCubit.pageIndex,
+              backgroundColor: AppColors.surface,
               items: [
                 FlashyTabBarItem(
-                  activeColor: AppColors.mainColor,
-                  icon: const Icon(Icons.home_filled, color: AppColors.mainColor),
+                  activeColor: AppColors.accent,
+                  inactiveColor: inactiveNavColor,
+                  icon: const Icon(Icons.home_filled),
                   title: Text(context.tr(LocaleKeys.home)),
                 ),
                 FlashyTabBarItem(
-                  activeColor: AppColors.mainColor,
+                  activeColor: AppColors.accent,
+                  inactiveColor: inactiveNavColor,
                   icon: BlocBuilder<NotificationsCubit,
                       NotificationsStates>(
                     builder: (context, state) {
@@ -55,26 +61,28 @@ class LayoutViewState extends State<LayoutView> {
                         ),
                         backgroundColor: AppColors.redColor,
                         child: const Icon(
-                            CupertinoIcons.chat_bubble,
-                            color: AppColors.mainColor),
+                            CupertinoIcons.chat_bubble),
                       );
                     },
                   ),
                   title: Text(context.tr(LocaleKeys.notifications)),
                 ),
                 FlashyTabBarItem(
-                  activeColor: AppColors.mainColor,
-                  icon: const Icon(CupertinoIcons.search, color: AppColors.mainColor),
+                  activeColor: AppColors.accent,
+                  inactiveColor: inactiveNavColor,
+                  icon: const Icon(CupertinoIcons.search),
                   title: Text(context.tr(LocaleKeys.search)),
                 ),
                 FlashyTabBarItem(
-                  activeColor: AppColors.mainColor,
-                  icon: const Icon(CupertinoIcons.square_list, color: AppColors.mainColor),
+                  activeColor: AppColors.accent,
+                  inactiveColor: inactiveNavColor,
+                  icon: const Icon(CupertinoIcons.square_list),
                   title: Text(context.tr(LocaleKeys.ads)),
                 ),
                 FlashyTabBarItem(
-                  activeColor: AppColors.mainColor,
-                  icon: const Icon(CupertinoIcons.person, color: AppColors.mainColor),
+                  activeColor: AppColors.accent,
+                  inactiveColor: inactiveNavColor,
+                  icon: const Icon(CupertinoIcons.person),
                   title: Text(context.tr(LocaleKeys.account)),
                 ),
               ],

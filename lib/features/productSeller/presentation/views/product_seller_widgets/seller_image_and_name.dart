@@ -15,9 +15,9 @@ class SellerImageAndName extends StatelessWidget {
           width: 44,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: const Color(0xffEFEFEF),
+              color: AppColors.surfaceVariant,
               border: Border.all(
-                color: const Color(0xffEFEFEF),
+                color: AppColors.surfaceVariant,
               )),
           child: CustomNetWorkImage(
             imageUrl:
@@ -44,8 +44,8 @@ class SellerImageAndName extends StatelessWidget {
                 ),
                 const SizedBox(width: 4,),
                 Text("( ${seller.countCommenets} )",
-                  style: const TextStyle(
-                    color: AppColors.greyColor,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
                   ),),
               ],
             ) ,

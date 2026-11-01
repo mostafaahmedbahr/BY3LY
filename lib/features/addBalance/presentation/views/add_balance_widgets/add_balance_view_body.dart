@@ -28,7 +28,7 @@ class AddBalanceViewBody extends StatelessWidget {
                 onTap: () {
                   AddBalanceCubit.get(context).showPhoneNumbersDialog(context);
                 },
-                tileColor: const Color(0xffF8F8F8),
+                tileColor: AppColors.surfaceVariant,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -40,10 +40,10 @@ class AddBalanceViewBody extends StatelessWidget {
                     style: AppStyles.textStyle14W500White.copyWith(
                       color: AppColors.mainColor,
                     )),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
-                  color: AppColors.blackColor,
+                  color: AppColors.text,
                 ),
               ),
             ),
@@ -54,13 +54,13 @@ class AddBalanceViewBody extends StatelessWidget {
               width: double.infinity,
               height: 56,
               child: ListTile(
-                tileColor: const Color(0xffF8F8F8),
+                tileColor: AppColors.surfaceVariant,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 onTap: () {
                   showModalBottomSheet(
-                    backgroundColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.surface,
                     context: context,
                     builder: (BuildContext context) {
                       return Padding(
@@ -185,10 +185,10 @@ class AddBalanceViewBody extends StatelessWidget {
                     style: AppStyles.textStyle14W500White.copyWith(
                       color: AppColors.mainColor,
                     )),
-                trailing: const Icon(
+                trailing: Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
-                  color: AppColors.blackColor,
+                  color: AppColors.text,
                 ),
               ),
             ),

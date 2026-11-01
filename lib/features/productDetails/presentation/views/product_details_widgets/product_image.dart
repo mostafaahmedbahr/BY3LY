@@ -103,12 +103,12 @@ class ProductImage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: inBasket
                               ? AppColors.mainColor
-                              : Colors.white,
+                              : AppColors.surface,
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
                             color: inBasket
                                 ? AppColors.mainColor
-                                : const Color(0xFFE8E8E8),
+                                : AppColors.border,
                             width: 1.2,
                           ),
                           boxShadow: [
@@ -130,7 +130,7 @@ class ProductImage extends StatelessWidget {
                               colorFilter: ColorFilter.mode(
                                 inBasket
                                     ? Colors.white
-                                    : AppColors.mainColor,
+                                    : AppColors.accent,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -140,7 +140,7 @@ class ProductImage extends StatelessWidget {
                               style: AppStyles.textStyle12W600Gary.copyWith(
                                 color: inBasket
                                     ? Colors.white
-                                    : const Color(0xff1F2937),
+                                    : AppColors.text,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

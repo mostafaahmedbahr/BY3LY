@@ -41,7 +41,7 @@ class AddBalanceCubit extends Cubit<AddBalanceStates> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.surface,
           title:   Text(context.tr(LocaleKeys.numbersConversionInfo)),
           content: Column(
             mainAxisSize: MainAxisSize.min,

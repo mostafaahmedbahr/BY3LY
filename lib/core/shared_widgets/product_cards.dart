@@ -24,7 +24,7 @@ List<BoxShadow> get _cardShadow => [
       ),
     ];
 
-const _cardBorder = BorderSide(color: Color(0xFFF0F0F0), width: 1);
+BorderSide get _cardBorder => BorderSide(color: AppColors.border, width: 1);
 
 /// Minimal heart: white circle, hairline frame (always), grey outline
 /// heart that flips to a solid red heart instantly on toggle.
@@ -71,11 +71,10 @@ class _MinimalHeartState extends State<_MinimalHeart> {
           height: widget.size,
           width: widget.size,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.surface,
             shape: BoxShape.circle,
             border: Border.all(
-              color:
-                  isFav ? AppColors.redColor : const Color(0xFFE8E8E8),
+              color: isFav ? AppColors.redColor : AppColors.border,
               width: 1.2,
             ),
           ),
@@ -111,7 +110,7 @@ Widget _locationRow(String? location) {
           location!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 11, color: Color(0xff9AA0A6)),
+          style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
         ),
       ),
     ],
@@ -126,10 +125,10 @@ Widget _ratingChip(String rating) {
       const SizedBox(width: 2),
       Text(
         rating,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: Color(0xff1F2937),
+          color: AppColors.text,
         ),
       ),
     ],
@@ -180,7 +179,7 @@ class ProductRowCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.fromBorderSide(_cardBorder),
           boxShadow: _cardShadow,
@@ -205,11 +204,11 @@ class ProductRowCard extends StatelessWidget {
                     title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13.5,
                       height: 1.4,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -221,8 +220,8 @@ class ProductRowCard extends StatelessWidget {
                         .join('  •  '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 11, color: Color(0xff9AA0A6)),
+                    style: TextStyle(
+                        fontSize: 11, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -232,10 +231,10 @@ class ProductRowCard extends StatelessWidget {
                           price ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w800,
-                            color: Color(0xff1F2937),
+                            color: AppColors.text,
                           ),
                         ),
                       ),
@@ -258,8 +257,10 @@ class ProductRowCard extends StatelessWidget {
                       date!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 10, color: Color(0xffB0B5BB)),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                   if (bottomWidget != null) ...[
@@ -316,7 +317,7 @@ class ProductGridCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.fromBorderSide(_cardBorder),
           boxShadow: _cardShadow,
@@ -364,11 +365,11 @@ class ProductGridCard extends StatelessWidget {
                       title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         height: 1.3,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xff1F2937),
+                        color: AppColors.text,
                       ),
                     ),
                   ),
@@ -387,10 +388,10 @@ class ProductGridCard extends StatelessWidget {
                             price ?? '',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xff1F2937),
+                              color: AppColors.text,
                             ),
                           ),
                         ),
@@ -404,8 +405,10 @@ class ProductGridCard extends StatelessWidget {
                       date!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 10, color: Color(0xffB0B5BB)),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ],

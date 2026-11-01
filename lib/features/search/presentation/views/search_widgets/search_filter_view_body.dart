@@ -38,27 +38,27 @@ class SearchFilterViewBody extends StatelessWidget {
                       .selectGovernorate(value);
                 },
                 decoration: InputDecoration(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   labelText: LocaleKeys.chooseGovernment.tr(),
-                  labelStyle: const TextStyle(
-                    color: AppColors.mainColor,
+                  labelStyle: TextStyle(
+                    color: AppColors.accent,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                 ),
@@ -78,27 +78,27 @@ class SearchFilterViewBody extends StatelessWidget {
                   BlocProvider.of<SearchCubit>(context).selectCenter(value);
                 },
                 decoration: InputDecoration(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   labelText: LocaleKeys.chooseCenter.tr(),
-                  labelStyle: const TextStyle(
-                    color: AppColors.mainColor,
+                  labelStyle: TextStyle(
+                    color: AppColors.accent,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                 ),
@@ -119,27 +119,27 @@ class SearchFilterViewBody extends StatelessWidget {
                   searchCubit.selectCategory(value);
                 },
                 decoration: InputDecoration(
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
                   labelText: LocaleKeys.chooseCategory.tr(),
-                  labelStyle: const TextStyle(
-                    color: AppColors.mainColor,
+                  labelStyle: TextStyle(
+                    color: AppColors.accent,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                 ),
@@ -159,27 +159,27 @@ class SearchFilterViewBody extends StatelessWidget {
                     searchCubit.selectSubCategory(value);
                   },
                   decoration: InputDecoration(
-                    fillColor: Colors.white,
+                    fillColor: AppColors.surface,
                     labelText: LocaleKeys.chooseSubCategory.tr(),
-                    labelStyle: const TextStyle(
-                         color: AppColors.mainColor,
+                    labelStyle: TextStyle(
+                         color: AppColors.accent,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Color.fromRGBO(208, 208, 208, 1),
+                      borderSide: BorderSide(
+                        color: AppColors.border,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Color.fromRGBO(208, 208, 208, 1),
+                      borderSide: BorderSide(
+                        color: AppColors.border,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Color.fromRGBO(208, 208, 208, 1),
+                      borderSide: BorderSide(
+                        color: AppColors.border,
                       ),
                     ),
                   ),
@@ -200,27 +200,27 @@ class SearchFilterViewBody extends StatelessWidget {
                   searchCubit.selectShippingOption(value);
                 },
                 decoration: InputDecoration(
-                  fillColor: AppColors.whiteColor,
+                  fillColor: AppColors.surface,
                   labelText: LocaleKeys.chooseShippingType.tr(),
-                  labelStyle: const TextStyle(
-                    color: AppColors.mainColor,
+                  labelStyle: TextStyle(
+                    color: AppColors.accent,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                 ),
@@ -242,27 +242,27 @@ class SearchFilterViewBody extends StatelessWidget {
                   searchCubit.selectConditionOption(value);
                 },
                 decoration: InputDecoration(
-                  fillColor: AppColors.whiteColor,
+                  fillColor: AppColors.surface,
                   labelText: LocaleKeys.chooseProductStatus.tr(),
-                  labelStyle: const TextStyle(
-                    color: AppColors.mainColor,
+                  labelStyle: TextStyle(
+                    color: AppColors.accent,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(208, 208, 208, 1),
+                    borderSide: BorderSide(
+                      color: AppColors.border,
                     ),
                   ),
                 ),

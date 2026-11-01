@@ -92,7 +92,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
                   ? state.message!
                   : context.tr(LocaleKeys.deleteAd),
               style:
-                  const TextStyle(color: AppColors.mainColor),
+                  TextStyle(color: AppColors.accent),
             ),
           ).show(context);
           Navigator.pop(context, true);
@@ -205,10 +205,10 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
           // Title + price.
           Text(
             widget.ad.name ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w800,
-              color: Color(0xff1F2937),
+              color: AppColors.text,
             ),
           ),
           const SizedBox(height: 6),
@@ -276,16 +276,16 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
                       : "لا يوجد",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 12,
-                      color: Color(0xff9AA0A6)),
+                      color: AppColors.textSecondary),
                 ),
               ),
               Text(
                 widget.ad.createdAt ?? '',
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 11,
-                    color: Color(0xffB0B5BB)),
+                    color: AppColors.textSecondary),
               ),
             ],
           ),
@@ -302,10 +302,10 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
               width: double.infinity,
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
                 border:
-                    Border.all(color: const Color(0xFFF0F0F0)),
+                    Border.all(color: AppColors.border),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,10 +320,10 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
                             false)
                         ? widget.ad.desc!
                         : widget.ad.description ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       height: 1.6,
-                      color: Color(0xff1F2937),
+                      color: AppColors.text,
                     ),
                   ),
                 ],
@@ -445,7 +445,7 @@ class _StatsStrip extends StatelessWidget {
       padding:
           const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
       decoration: BoxDecoration(
-        color: const Color(0xffF8FAF9),
+        color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -476,17 +476,17 @@ class _StatsStrip extends StatelessWidget {
                     children: [
                       Text(
                         stats[i].value,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xff1F2937),
+                          color: AppColors.text,
                         ),
                       ),
                       Text(
                         stats[i].label,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10,
-                          color: Color(0xff9AA0A6),
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -498,7 +498,7 @@ class _StatsStrip extends StatelessWidget {
               Container(
                 width: 1,
                 height: 36,
-                color: const Color(0xFFE5E7EB),
+                color: AppColors.border,
               ),
           ],
         ],

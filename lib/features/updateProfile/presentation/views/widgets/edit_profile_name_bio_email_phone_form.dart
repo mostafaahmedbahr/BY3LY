@@ -67,8 +67,8 @@ class _EditProfileNameBioEmailPhoneFormState extends State<EditProfileNameBioEma
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: SvgPicture.asset(AppImages.phone,
-                  colorFilter: const ColorFilter.mode(
-                      AppColors.greyColor, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(
+                      AppColors.textSecondary, BlendMode.srcIn),
                 ),
               ),
               validator: (String? value) {

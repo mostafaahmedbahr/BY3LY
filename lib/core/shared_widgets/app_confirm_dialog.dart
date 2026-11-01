@@ -79,8 +79,8 @@ class AppConfirmDialog extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.blackColor,
+              style: TextStyle(
+                color: AppColors.text,
                 fontWeight: FontWeight.bold,
                 fontSize: 17,
               ),
@@ -89,8 +89,8 @@ class AppConfirmDialog extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.greyColor,
+              style: TextStyle(
+                color: AppColors.textSecondary,
                 fontSize: 13,
                 height: 1.5,
               ),
@@ -103,7 +103,7 @@ class AppConfirmDialog extends StatelessWidget {
                     onPressed: () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
                       side:
-                          const BorderSide(color: Color(0xFFE0E0E0)),
+                          BorderSide(color: AppColors.border),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -112,8 +112,8 @@ class AppConfirmDialog extends StatelessWidget {
                     ),
                     child: Text(
                       context.tr(LocaleKeys.cancel),
-                      style: const TextStyle(
-                        color: AppColors.blackColor,
+                      style: TextStyle(
+                        color: AppColors.text,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

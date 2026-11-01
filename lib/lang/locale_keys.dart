@@ -1,10 +1,9 @@
 abstract class LocaleKeys {
-
-
   static const skip = "skip";
   static const done = "done";
   static const theLinkCannotBeOpened = "theLinkCannotBeOpened";
-  static const theActivationCodeHasBeenSentToYourEmailAddress = "theActivationCodeHasBeenSentToYourEmailAddress";
+  static const theActivationCodeHasBeenSentToYourEmailAddress =
+      "theActivationCodeHasBeenSentToYourEmailAddress";
   static const code = "code";
   static const verificationCodeResent = "verificationCodeResent";
   static const confirmLogout = "confirmLogout";
@@ -21,7 +20,6 @@ abstract class LocaleKeys {
   static const ageTooYoung = "ageTooYoung";
   static const ageTooOld = "ageTooOld";
   static const age = "age";
-
 
   static const appName = "appName";
   static const writeYourPhoneNumberHere = "writeYourPhoneNumberHere";
@@ -85,6 +83,9 @@ abstract class LocaleKeys {
   static const statistics = "statistics";
   static const reportingAndSupport = "reportingAndSupport";
   static const settings = "settings";
+  static const theme = "theme";
+  static const darkMode = "darkMode";
+  static const lightMode = "lightMode";
   static const privacy = "privacy";
   static const blockPhoneNumber = "blockPhoneNumber";
   static const deleteAccount = "deleteAccount";
@@ -94,57 +95,62 @@ abstract class LocaleKeys {
   static const enableNotifications = "enableNotifications";
   static const cancellation = "cancellation";
   static const signOut = "signOut";
-  static const areYouSureYouWantToExitTheApplication = "areYouSureYouWantToExitTheApplication";
+  static const areYouSureYouWantToExitTheApplication =
+      "areYouSureYouWantToExitTheApplication";
   static const confirm = "confirm";
   static const complaints = "complaints";
   static const youWillSellAndFindEverything = "youWillSellAndFindEverything";
-  static const enjoySafeAndReliableShoppingExperience = "enjoySafeAndReliableShoppingExperience";
+  static const enjoySafeAndReliableShoppingExperience =
+      "enjoySafeAndReliableShoppingExperience";
   static const easyAndFastPurchaseProcess = "easyAndFastPurchaseProcess";
   static const compareProductsBeforeBuying = "compareProductsBeforeBuying";
   static const startYourBusinessNow = "startYourBusinessNow";
-  static const easiestWayToStartOnlineBusiness = "easiestWayToStartOnlineBusiness";
+  static const easiestWayToStartOnlineBusiness =
+      "easiestWayToStartOnlineBusiness";
   static const addAnAd = "addAnAd";
   static const changeLang = "changeLang";
   static const arabicLang = "arabicLang";
   static const englishLang = "englishLang";
   static const changeLangYouWant = "changeLangYouWant";
   static const tipsForYourSafety = "tipsForYourSafety";
-  static const  inspectProductThoroughlyBeforeBuying = 'inspectProductThoroughlyBeforeBuying';
-  static const  takeSomeoneWithYou = 'takeSomeoneWithYou';
-  static const  dontPayUntilEnsuringSafety = 'dontPayUntilEnsuringSafety';
-  static const  meetSellerInPublicPlace = 'meetSellerInPublicPlace';
-  static const  seeAll = 'seeAll';
-  static const  loginTermsMsg1 = 'loginTermsMsg1';
-  static const  loginTermsMsg2 = 'loginTermsMsg2';
-  static const  login = 'login';
-  static const  register = 'register';
-  static const  or = 'or';
-  static const  loginLater = 'loginLater';
-  static const  loginMsg1 = 'loginMsg1';
-  static const  loginMsg2 = 'loginMsg2';
-  static const  register2 = 'register2';
-  static const  confirmPassword = 'confirmPassword';
-  static const  password = 'password';
-  static const  email = 'email';
-  static const  name = 'name';
-  static const  confirmEmail = 'confirmEmail';
-  static const  weHaveSentTo = 'weHaveSentTo';
-  static const  numberMustBeAtLeast4Digits = 'numberMustBeAtLeast4Digits';
-  static const  selectYourGeographicLocation = 'selectYourGeographicLocation';
-  static const  selectYourGovernorateFromTheFollowingList = 'selectYourGovernorateFromTheFollowingList';
-  static const  governorate = 'governorate';
-  static const  choose = 'choose';
-  static const  selectGovernorate = 'selectGovernorate';
-  static const  center = 'center';
-  static const  change = 'change';
-  static const  home = 'home';
-  static const  ads = 'ads';
-  static const  deliveryTo = 'deliveryTo';
-  static const  paymentMethods = 'paymentMethods';
-  static const  numbersConversionInfo = 'numbersConversionInfo';
-  static const  numberCopied = 'numberCopied';
-  static const  back = 'back';
-  static const  sendReceiptPicture = 'sendReceiptPicture';
+  static const inspectProductThoroughlyBeforeBuying =
+      'inspectProductThoroughlyBeforeBuying';
+  static const takeSomeoneWithYou = 'takeSomeoneWithYou';
+  static const dontPayUntilEnsuringSafety = 'dontPayUntilEnsuringSafety';
+  static const meetSellerInPublicPlace = 'meetSellerInPublicPlace';
+  static const seeAll = 'seeAll';
+  static const loginTermsMsg1 = 'loginTermsMsg1';
+  static const loginTermsMsg2 = 'loginTermsMsg2';
+  static const login = 'login';
+  static const register = 'register';
+  static const or = 'or';
+  static const loginLater = 'loginLater';
+  static const loginMsg1 = 'loginMsg1';
+  static const loginMsg2 = 'loginMsg2';
+  static const register2 = 'register2';
+  static const confirmPassword = 'confirmPassword';
+  static const password = 'password';
+  static const email = 'email';
+  static const name = 'name';
+  static const confirmEmail = 'confirmEmail';
+  static const weHaveSentTo = 'weHaveSentTo';
+  static const numberMustBeAtLeast4Digits = 'numberMustBeAtLeast4Digits';
+  static const selectYourGeographicLocation = 'selectYourGeographicLocation';
+  static const selectYourGovernorateFromTheFollowingList =
+      'selectYourGovernorateFromTheFollowingList';
+  static const governorate = 'governorate';
+  static const choose = 'choose';
+  static const selectGovernorate = 'selectGovernorate';
+  static const center = 'center';
+  static const change = 'change';
+  static const home = 'home';
+  static const ads = 'ads';
+  static const deliveryTo = 'deliveryTo';
+  static const paymentMethods = 'paymentMethods';
+  static const numbersConversionInfo = 'numbersConversionInfo';
+  static const numberCopied = 'numberCopied';
+  static const back = 'back';
+  static const sendReceiptPicture = 'sendReceiptPicture';
   static const uploadImageFromCamera = "uploadImageFromCamera";
   static const uploadImageFromGallery = "uploadImageFromGallery";
   static const balance = "balance";
@@ -225,11 +231,6 @@ abstract class LocaleKeys {
   static const profilePhoto = "profilePhoto";
   static const delete = "delete";
 
-
-
-
-
-
   static const goBackExit = "goBackExit";
   static const allProducts = "allProducts";
   static const sellerData = "sellerData";
@@ -309,15 +310,4 @@ abstract class LocaleKeys {
   static const payBankTransfer = "payBankTransfer";
   static const payWallet = "payWallet";
   static const payFawry = "payFawry";
-
-
-
-
-
-
-
-
-
-
-
 }
