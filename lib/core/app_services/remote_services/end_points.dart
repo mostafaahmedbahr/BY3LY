@@ -12,6 +12,7 @@ class EndPoints {
   static const verifyCode = "verifyCode";
   static const getCities = "getCities";
   static const addLocation = "addLocation";
+
   /// Favourites: GET = all, POST = add, DELETE = remove.
   static const favourites = "favourites";
   static const searchProducts = "searchProducts";
@@ -33,6 +34,7 @@ class EndPoints {
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
   static const sellerProduct = "sellerProduct";
+
   /// Notifications: GET list, PATCH read, DELETE remove.
   static const notifications = "notifications";
   static const notificationsReadAll = "notifications/read-all";
@@ -47,15 +49,15 @@ class EndPoints {
   static const resetPassword = "resetPassword";
   static const changePassword = "changePassword";
 
-
   static const getBanners = "getBanners";
   static const products = "products";
   static const subscriptionPackages = "subscriptionPackages";
   static const subscriptions = "subscriptions";
-  static const subscriptionsCheckout = 
-"subscriptions/checkout";
+  static const subscriptionsCheckout = "subscriptions/checkout";
   static const paymentMethods = "payment-methods";
   static const walletTopUp = "wallet/top-up";
   static const walletHistory = "wallet/history";
 
+  /// Seller statistics: `?month=YYYY-MM`, `?date=YYYY-MM-DD`, `?page=`.
+  static const statistics = "statistics";
 }

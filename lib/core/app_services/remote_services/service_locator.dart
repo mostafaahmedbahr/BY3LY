@@ -25,6 +25,7 @@ import '../../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../../features/packages/data/repos/packages_repos_imple.dart';
 import '../../../features/PaymentBalance/data/repos/wallet_repos_imple.dart';
 import '../../../features/register/data/repos/register_repo_imple.dart';
+import '../../../features/statistics/data/repos/statistics_repos_imple.dart';
 import 'api_service.dart';
 //dependency Injection
 
@@ -118,6 +119,7 @@ void setup() {
   getIt.registerSingleton<WalletRepoImpl>(WalletRepoImpl(
     getIt.get<ApiService>(),
   ));
-
-
+  getIt.registerSingleton<StatisticsRepoImpl>(StatisticsRepoImpl(
+    getIt.get<ApiService>(),
+  ));
 }

@@ -56,6 +56,10 @@ abstract class LocaleKeys {
   static const all = "all";
   static const productsShow = "productsShow";
   static const intrestedPeople = "intrestedPeople";
+  static const salesAmount = "salesAmount";
+  static const salesCount = "salesCount";
+  static const favourites = "favourites";
+  static const periodTotal = "periodTotal";
   static const to = "to";
   static const search = "search";
   static const priceFrom = "priceFrom";

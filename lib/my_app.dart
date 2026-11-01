@@ -111,8 +111,9 @@ class MyApp extends StatelessWidget {
             final cubit = NotificationsCubit(
               getIt.get<NotificationsDataRepoImpl>(),
             );
-            if (!GuestGuard.isGuest)
+            if (!GuestGuard.isGuest) {
               cubit.getNotificationsData(type: "general");
+            }
             return cubit;
           },
         ),
