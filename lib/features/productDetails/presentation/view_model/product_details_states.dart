@@ -1,10 +1,11 @@
-
 import 'package:by3ly/features/productDetails/data/models/add_product_to_compare_model.dart';
+import 'package:by3ly/features/productDetails/data/models/pause_resume_ad_model.dart'
+    show PauseAdResumeAdModel;
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 
-abstract class ProductDetailsStates{}
+abstract class ProductDetailsStates {}
 
-class ProductDetailsInitState extends ProductDetailsStates{}
+class ProductDetailsInitState extends ProductDetailsStates {}
 
 class ProductDetailsToggleBetweenImageState extends ProductDetailsStates {
   @override
@@ -15,7 +16,8 @@ class GetProductDetailsDataLoadingState extends ProductDetailsStates {
   @override
   String toString() => 'GetProductDetailsDataLoadingState';
 }
-class GetProductDetailsDataSuccessState extends ProductDetailsStates{
+
+class GetProductDetailsDataSuccessState extends ProductDetailsStates {
   final ProductDetailsModel productDetailsModel;
   GetProductDetailsDataSuccessState(this.productDetailsModel);
 
@@ -23,7 +25,8 @@ class GetProductDetailsDataSuccessState extends ProductDetailsStates{
   String toString() =>
       'GetProductDetailsDataSuccessState(status: ${productDetailsModel.status})';
 }
-class GetProductDetailsDataErrorState extends ProductDetailsStates{
+
+class GetProductDetailsDataErrorState extends ProductDetailsStates {
   final String error;
   GetProductDetailsDataErrorState(this.error);
 
@@ -35,14 +38,16 @@ class AddProductToCompareLoadingState extends ProductDetailsStates {
   @override
   String toString() => 'AddProductToCompareLoadingState';
 }
-class AddProductToCompareSuccessState extends ProductDetailsStates{
+
+class AddProductToCompareSuccessState extends ProductDetailsStates {
   final AddProductToCompareModel addProductToCompareModel;
   AddProductToCompareSuccessState(this.addProductToCompareModel);
 
   @override
   String toString() => 'AddProductToCompareSuccessState';
 }
-class AddProductToCompareErrorState extends ProductDetailsStates{
+
+class AddProductToCompareErrorState extends ProductDetailsStates {
   final String error;
   AddProductToCompareErrorState(this.error);
 
@@ -69,4 +74,26 @@ class RateProductErrorState extends ProductDetailsStates {
 
   @override
   String toString() => 'RateProductErrorState(error: $error)';
+}
+
+class PauseResumeAdLoadingState extends ProductDetailsStates {
+  @override
+  String toString() => 'PauseResumeAdLoadingState';
+}
+
+class PauseResumeAdSuccessState extends ProductDetailsStates {
+  final PauseAdResumeAdModel pauseAdResumeAdModel;
+  PauseResumeAdSuccessState(this.pauseAdResumeAdModel);
+
+  @override
+  String toString() =>
+      'PauseResumeAdSuccessState(isPaused: ${pauseAdResumeAdModel.data?.isPaused})';
+}
+
+class PauseResumeAdErrorState extends ProductDetailsStates {
+  final String error;
+  PauseResumeAdErrorState(this.error);
+
+  @override
+  String toString() => 'PauseResumeAdErrorState(error: $error)';
 }

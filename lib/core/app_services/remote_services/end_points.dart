@@ -19,6 +19,10 @@ class EndPoints {
   static const deleteAccount = "deleteAccount";
   static const productDetials = "productDetials";
   static const rateProduct = "rateProduct";
+
+  /// Pause / resume the seller's own ad.
+  static const pauseAd = "pauseAd";
+  static const resumeAd = "resumeAd";
   static const compareProducts = "compareProducts";
   static const addCompare = "addCompare";
   static const addProduct = "addProduct";

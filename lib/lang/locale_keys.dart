@@ -261,6 +261,10 @@ abstract class LocaleKeys {
   static const clearCompareConfirm = "clearCompareConfirm";
   static const deleteAd = "deleteAd";
   static const deleteAdConfirm = "deleteAdConfirm";
+  static const pauseAd = "pauseAd";
+  static const resumeAd = "resumeAd";
+  static const pauseAdConfirm = "pauseAdConfirm";
+  static const resumeAdConfirm = "resumeAdConfirm";
   static const addNewAd = "addNewAd";
   static const adName = "adName";
   static const adDescription = "adDescription";

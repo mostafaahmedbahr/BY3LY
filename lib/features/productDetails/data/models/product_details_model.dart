@@ -628,6 +628,7 @@ class Product {
   List<Reviews>? reviews;
   int? reviewsCount;
   bool? isFavourite;
+  bool? isPaused;
   String? model;
   String? marka;
   String? type;
@@ -637,7 +638,7 @@ class Product {
   ProductMap? map;
   List<String>? safetyTips;
 
-  Product({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt, this.views, this.specifications, this.map, this.safetyTips});
+  Product({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.isPaused, this.model, this.marka, this.type, this.createdAt, this.views, this.specifications, this.map, this.safetyTips});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -671,6 +672,7 @@ class Product {
     reviews = json["reviews"] == null ? null : (json["reviews"] as List).map((e) => Reviews.fromJson(e)).toList();
     reviewsCount = _asInt(json["reviews_count"]);
     isFavourite = _asBool(json["isFavourite"]);
+    isPaused = _asBool(json["is_paused"]);
     model = _asString(json["model"]);
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
@@ -722,6 +724,7 @@ class Product {
     }
     _data["reviews_count"] = reviewsCount;
     _data["isFavourite"] = isFavourite;
+    _data["is_paused"] = isPaused;
     _data["model"] = model;
     _data["marka"] = marka;
     _data["type"] = type;
