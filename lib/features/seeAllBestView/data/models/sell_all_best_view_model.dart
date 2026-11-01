@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -39,7 +38,7 @@ class SellAllBestViewModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["status"] = status;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     return _data;
@@ -52,12 +51,14 @@ class Data {
   Data({this.products});
 
   Data.fromJson(Map<String, dynamic> json) {
-    products = json["products"] == null ? null : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
+    products = json["products"] == null
+        ? null
+        : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(products != null) {
+    if (products != null) {
       _data["products"] = products?.map((e) => e.toJson()).toList();
     }
     return _data;
@@ -92,8 +93,40 @@ class Products {
   int? communication;
   String? address;
   String? createdAt;
+  bool? isUrgent;
+  int? views;
 
-  Products({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
+  Products({
+    this.id,
+    this.uniqueNumber,
+    this.name,
+    this.desc,
+    this.price,
+    this.image,
+    this.images,
+    this.rate,
+    this.sellerRate,
+    this.countCommenets,
+    this.commenets,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.view,
+    this.sellerId,
+    this.sellerName,
+    this.sellerImage,
+    this.sellerPhone,
+    this.lat,
+    this.long,
+    this.status,
+    this.negotiable,
+    this.communication,
+    this.address,
+    this.createdAt,
+    this.isUrgent,
+    this.views,
+  });
 
   Products.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -102,7 +135,9 @@ class Products {
     desc = _asString(json["desc"]);
     price = _asString(json["price"]);
     image = _asString(json["image"]);
-    images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     rate = _asInt(json["rate"]);
     sellerRate = _asInt(json["seller_rate"]);
     countCommenets = _asInt(json["countCommenets"]);
@@ -123,6 +158,8 @@ class Products {
     communication = _asInt(json["communication"]);
     address = _asString(json["address"]);
     createdAt = _asString(json["created_at"]);
+    isUrgent = _asBool(json["is_urgent"]);
+    views = _asInt(json["views"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -133,13 +170,13 @@ class Products {
     _data["desc"] = desc;
     _data["price"] = price;
     _data["image"] = image;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images?.map((e) => e.toJson()).toList();
     }
     _data["rate"] = rate;
     _data["seller_rate"] = sellerRate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
     _data["isFavourite"] = isFavourite;
@@ -158,6 +195,8 @@ class Products {
     _data["communication"] = communication;
     _data["address"] = address;
     _data["created_at"] = createdAt;
+    _data["is_urgent"] = isUrgent;
+    _data["views"] = views;
     return _data;
   }
 }

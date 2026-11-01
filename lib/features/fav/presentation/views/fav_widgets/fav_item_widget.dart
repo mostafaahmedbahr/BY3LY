@@ -1,5 +1,6 @@
 import 'package:by3ly/core/extensions/navigate.dart';
 import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ class FavItemWidget extends StatelessWidget {
       rating: favourite.rate?.toString(),
       productId: favourite.id,
       initialIsFavourite: true,
+      isUrgent: favourite.isUrgent == true,
+      topRated: isTopRated(favourite.rate),
+      views: favourite.views,
       onTap: () {
         context.pushNamed(Routes.productDetailsView, arguments: {
           "type": "home",

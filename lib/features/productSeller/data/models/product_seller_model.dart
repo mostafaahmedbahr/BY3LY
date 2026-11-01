@@ -1,3 +1,10 @@
+/// Safe number parsing: the API sends the same field as `int`, `String` or
+/// `null` depending on the endpoint.
+int? _toInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString());
+}
 
 class ProductSellerModel {
   bool? status;
@@ -16,7 +23,7 @@ class ProductSellerModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["status"] = status;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     return _data;
@@ -31,15 +38,17 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     seller = json["seller"] == null ? null : Seller.fromJson(json["seller"]);
-    products = json["products"] == null ? null : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
+    products = json["products"] == null
+        ? null
+        : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
-    if(products != null) {
+    if (products != null) {
       _data["products"] = products?.map((e) => e.toJson()).toList();
     }
     return _data;
@@ -74,8 +83,40 @@ class Products {
   int? communication;
   String? address;
   String? createdAt;
+  bool? isUrgent;
+  int? views;
 
-  Products({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
+  Products({
+    this.id,
+    this.uniqueNumber,
+    this.name,
+    this.desc,
+    this.price,
+    this.image,
+    this.images,
+    this.rate,
+    this.sellerRate,
+    this.countCommenets,
+    this.commenets,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.view,
+    this.sellerId,
+    this.sellerName,
+    this.sellerImage,
+    this.sellerPhone,
+    this.lat,
+    this.long,
+    this.status,
+    this.negotiable,
+    this.communication,
+    this.address,
+    this.createdAt,
+    this.isUrgent,
+    this.views,
+  });
 
   Products.fromJson(Map<String, dynamic> json) {
     id = (json["id"] as num).toInt();
@@ -84,7 +125,9 @@ class Products {
     desc = json["desc"];
     price = json["price"];
     image = json["image"];
-    images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     rate = (json["rate"] as num).toInt();
     sellerRate = (json["seller_rate"] as num).toInt();
     countCommenets = (json["countCommenets"] as num).toInt();
@@ -105,6 +148,8 @@ class Products {
     communication = (json["communication"] as num).toInt();
     address = json["address"];
     createdAt = json["created_at"];
+    isUrgent = json["is_urgent"] == true || json["is_urgent"] == 1;
+    views = _toInt(json["views"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -115,13 +160,13 @@ class Products {
     _data["desc"] = desc;
     _data["price"] = price;
     _data["image"] = image;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images?.map((e) => e.toJson()).toList();
     }
     _data["rate"] = rate;
     _data["seller_rate"] = sellerRate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
     _data["isFavourite"] = isFavourite;
@@ -140,6 +185,8 @@ class Products {
     _data["communication"] = communication;
     _data["address"] = address;
     _data["created_at"] = createdAt;
+    _data["is_urgent"] = isUrgent;
+    _data["views"] = views;
     return _data;
   }
 }
@@ -179,7 +226,22 @@ class Seller {
   int? countCommenets;
   List<Commenets>? commenets;
 
-  Seller({this.id, this.name, this.email, this.phone, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt, this.sellerRate, this.countCommenets, this.commenets});
+  Seller({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.image,
+    this.token,
+    this.centerId,
+    this.cityId,
+    this.cityName,
+    this.centerName,
+    this.createdAt,
+    this.sellerRate,
+    this.countCommenets,
+    this.commenets,
+  });
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = (json["id"] as num).toInt();
@@ -195,7 +257,11 @@ class Seller {
     createdAt = json["created_at"];
     sellerRate = (json["seller_rate"] as num).toInt();
     countCommenets = (json["countCommenets"] as num).toInt();
-    commenets = json["commenets"] == null ? null : (json["commenets"] as List).map((e) => Commenets.fromJson(e)).toList();
+    commenets = json["commenets"] == null
+        ? null
+        : (json["commenets"] as List)
+              .map((e) => Commenets.fromJson(e))
+              .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -213,7 +279,7 @@ class Seller {
     _data["created_at"] = createdAt;
     _data["seller_rate"] = sellerRate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets?.map((e) => e.toJson()).toList();
     }
     return _data;
@@ -228,7 +294,14 @@ class Commenets {
   String? image;
   String? createdAt;
 
-  Commenets({this.id, this.rate, this.commenet, this.user, this.image, this.createdAt});
+  Commenets({
+    this.id,
+    this.rate,
+    this.commenet,
+    this.user,
+    this.image,
+    this.createdAt,
+  });
 
   Commenets.fromJson(Map<String, dynamic> json) {
     id = (json["id"] as num).toInt();

@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -39,7 +38,7 @@ class AllProductsSearchModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["status"] = status;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     return _data;
@@ -53,16 +52,20 @@ class Data {
   Data({this.products, this.pagination});
 
   Data.fromJson(Map<String, dynamic> json) {
-    products = json["products"] == null ? null : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
-    pagination = json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]);
+    products = json["products"] == null
+        ? null
+        : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
+    pagination = json["pagination"] == null
+        ? null
+        : Pagination.fromJson(json["pagination"]);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(products != null) {
+    if (products != null) {
       _data["products"] = products?.map((e) => e.toJson()).toList();
     }
-    if(pagination != null) {
+    if (pagination != null) {
       _data["pagination"] = pagination?.toJson();
     }
     return _data;
@@ -131,10 +134,51 @@ class Products {
   String? marka;
   String? type;
   String? createdAt;
+  int? views;
   String? shippingType;
   String? condition;
 
-  Products({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.centerId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt, this.shippingType, this.condition});
+  Products({
+    this.id,
+    this.name,
+    this.desc,
+    this.description,
+    this.discount,
+    this.finalPrice,
+    this.isNegotiable,
+    this.isUrgent,
+    this.price,
+    this.oldPrice,
+    this.currency,
+    this.listingType,
+    this.listingTypeLabel,
+    this.furnishing,
+    this.furnishingLabel,
+    this.seller,
+    this.image,
+    this.location,
+    this.cityId,
+    this.centerId,
+    this.categoryId,
+    this.categoryType,
+    this.subCategoryId,
+    this.subCategory,
+    this.date,
+    this.images,
+    this.rate,
+    this.countCommenets,
+    this.commenets,
+    this.reviews,
+    this.reviewsCount,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.createdAt,
+    this.shippingType,
+    this.condition,
+    this.views,
+  });
 
   Products.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -173,6 +217,7 @@ class Products {
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
     createdAt = _asString(json["created_at"]);
+    views = _asInt(json["views"]);
     shippingType = _asString(json["shipping_type"]);
     condition = _asString(json["condition"]);
   }
@@ -194,7 +239,7 @@ class Products {
     _data["listing_type_label"] = listingTypeLabel;
     _data["furnishing"] = furnishing;
     _data["furnishing_label"] = furnishingLabel;
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
     _data["image"] = image;
@@ -206,15 +251,15 @@ class Products {
     _data["sub_category_id"] = subCategoryId;
     _data["sub_category"] = subCategory;
     _data["date"] = date;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images;
     }
     _data["rate"] = rate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
-    if(reviews != null) {
+    if (reviews != null) {
       _data["reviews"] = reviews;
     }
     _data["reviews_count"] = reviewsCount;
@@ -223,6 +268,7 @@ class Products {
     _data["marka"] = marka;
     _data["type"] = type;
     _data["created_at"] = createdAt;
+    _data["views"] = views;
     _data["shipping_type"] = shippingType;
     _data["condition"] = condition;
     return _data;
@@ -237,7 +283,14 @@ class Seller {
   int? rating;
   int? reviewsCount;
 
-  Seller({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);

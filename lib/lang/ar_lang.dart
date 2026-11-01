@@ -268,6 +268,8 @@ class ArLang {
     "discount": "الخصم (اختياري)",
     "negotiable": "قابل للتفاوض",
     "urgent": "مستعجل",
+    "distinguished": "مميز",
+    "views": "مشاهدة",
     "shippingType": "نوع الشحن",
     "freeShipping": "شحن مجاني",
     "paidShipping": "شحن بتكلفة",

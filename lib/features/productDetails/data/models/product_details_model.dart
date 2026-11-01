@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -39,7 +38,7 @@ class ProductDetailsModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["status"] = status;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     return _data;
@@ -53,31 +52,59 @@ class Data {
   List<SponsoredProducts>? sponsoredProducts;
   List<Banners>? banners;
 
-  Data({this.product, this.relatedProducts, this.similarProducts, this.sponsoredProducts, this.banners});
+  Data({
+    this.product,
+    this.relatedProducts,
+    this.similarProducts,
+    this.sponsoredProducts,
+    this.banners,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
-    product = json["product"] == null ? null : Product.fromJson(json["product"]);
-    relatedProducts = json["relatedProducts"] == null ? null : (json["relatedProducts"] as List).map((e) => RelatedProducts.fromJson(e)).toList();
-    similarProducts = json["similarProducts"] == null ? null : (json["similarProducts"] as List).map((e) => SimilarProducts.fromJson(e)).toList();
-    sponsoredProducts = json["sponsoredProducts"] == null ? null : (json["sponsoredProducts"] as List).map((e) => SponsoredProducts.fromJson(e)).toList();
-    banners = json["banners"] == null ? null : (json["banners"] as List).map((e) => Banners.fromJson(e)).toList();
+    product = json["product"] == null
+        ? null
+        : Product.fromJson(json["product"]);
+    relatedProducts = json["relatedProducts"] == null
+        ? null
+        : (json["relatedProducts"] as List)
+              .map((e) => RelatedProducts.fromJson(e))
+              .toList();
+    similarProducts = json["similarProducts"] == null
+        ? null
+        : (json["similarProducts"] as List)
+              .map((e) => SimilarProducts.fromJson(e))
+              .toList();
+    sponsoredProducts = json["sponsoredProducts"] == null
+        ? null
+        : (json["sponsoredProducts"] as List)
+              .map((e) => SponsoredProducts.fromJson(e))
+              .toList();
+    banners = json["banners"] == null
+        ? null
+        : (json["banners"] as List).map((e) => Banners.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(product != null) {
+    if (product != null) {
       _data["product"] = product?.toJson();
     }
-    if(relatedProducts != null) {
-      _data["relatedProducts"] = relatedProducts?.map((e) => e.toJson()).toList();
+    if (relatedProducts != null) {
+      _data["relatedProducts"] = relatedProducts
+          ?.map((e) => e.toJson())
+          .toList();
     }
-    if(similarProducts != null) {
-      _data["similarProducts"] = similarProducts?.map((e) => e.toJson()).toList();
+    if (similarProducts != null) {
+      _data["similarProducts"] = similarProducts
+          ?.map((e) => e.toJson())
+          .toList();
     }
-    if(sponsoredProducts != null) {
-      _data["sponsoredProducts"] = sponsoredProducts?.map((e) => e.toJson()).toList();
+    if (sponsoredProducts != null) {
+      _data["sponsoredProducts"] = sponsoredProducts
+          ?.map((e) => e.toJson())
+          .toList();
     }
-    if(banners != null) {
+    if (banners != null) {
       _data["banners"] = banners?.map((e) => e.toJson()).toList();
     }
     return _data;
@@ -142,8 +169,46 @@ class SponsoredProducts {
   String? marka;
   String? type;
   String? createdAt;
+  int? views;
 
-  SponsoredProducts({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt});
+  SponsoredProducts({
+    this.id,
+    this.name,
+    this.desc,
+    this.description,
+    this.discount,
+    this.finalPrice,
+    this.isNegotiable,
+    this.isUrgent,
+    this.price,
+    this.oldPrice,
+    this.currency,
+    this.listingType,
+    this.listingTypeLabel,
+    this.furnishing,
+    this.furnishingLabel,
+    this.seller,
+    this.image,
+    this.location,
+    this.cityId,
+    this.categoryId,
+    this.categoryType,
+    this.subCategoryId,
+    this.subCategory,
+    this.date,
+    this.images,
+    this.rate,
+    this.countCommenets,
+    this.commenets,
+    this.reviews,
+    this.reviewsCount,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.createdAt,
+    this.views,
+  });
 
   SponsoredProducts.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -181,6 +246,7 @@ class SponsoredProducts {
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
     createdAt = _asString(json["created_at"]);
+    views = _asInt(json["views"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -200,7 +266,7 @@ class SponsoredProducts {
     _data["listing_type_label"] = listingTypeLabel;
     _data["furnishing"] = furnishing;
     _data["furnishing_label"] = furnishingLabel;
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
     _data["image"] = image;
@@ -211,15 +277,15 @@ class SponsoredProducts {
     _data["sub_category_id"] = subCategoryId;
     _data["sub_category"] = subCategory;
     _data["date"] = date;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images;
     }
     _data["rate"] = rate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
-    if(reviews != null) {
+    if (reviews != null) {
       _data["reviews"] = reviews;
     }
     _data["reviews_count"] = reviewsCount;
@@ -228,6 +294,7 @@ class SponsoredProducts {
     _data["marka"] = marka;
     _data["type"] = type;
     _data["created_at"] = createdAt;
+    _data["views"] = views;
     return _data;
   }
 }
@@ -240,7 +307,14 @@ class Seller3 {
   int? rating;
   int? reviewsCount;
 
-  Seller3({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller3({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller3.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -299,8 +373,46 @@ class SimilarProducts {
   String? marka;
   String? type;
   String? createdAt;
+  int? views;
 
-  SimilarProducts({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt});
+  SimilarProducts({
+    this.id,
+    this.name,
+    this.desc,
+    this.description,
+    this.discount,
+    this.finalPrice,
+    this.isNegotiable,
+    this.isUrgent,
+    this.price,
+    this.oldPrice,
+    this.currency,
+    this.listingType,
+    this.listingTypeLabel,
+    this.furnishing,
+    this.furnishingLabel,
+    this.seller,
+    this.image,
+    this.location,
+    this.cityId,
+    this.categoryId,
+    this.categoryType,
+    this.subCategoryId,
+    this.subCategory,
+    this.date,
+    this.images,
+    this.rate,
+    this.countCommenets,
+    this.commenets,
+    this.reviews,
+    this.reviewsCount,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.createdAt,
+    this.views,
+  });
 
   SimilarProducts.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -338,6 +450,7 @@ class SimilarProducts {
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
     createdAt = _asString(json["created_at"]);
+    views = _asInt(json["views"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -357,7 +470,7 @@ class SimilarProducts {
     _data["listing_type_label"] = listingTypeLabel;
     _data["furnishing"] = furnishing;
     _data["furnishing_label"] = furnishingLabel;
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
     _data["image"] = image;
@@ -368,15 +481,15 @@ class SimilarProducts {
     _data["sub_category_id"] = subCategoryId;
     _data["sub_category"] = subCategory;
     _data["date"] = date;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images;
     }
     _data["rate"] = rate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
-    if(reviews != null) {
+    if (reviews != null) {
       _data["reviews"] = reviews;
     }
     _data["reviews_count"] = reviewsCount;
@@ -385,6 +498,7 @@ class SimilarProducts {
     _data["marka"] = marka;
     _data["type"] = type;
     _data["created_at"] = createdAt;
+    _data["views"] = views;
     return _data;
   }
 }
@@ -397,7 +511,14 @@ class Seller2 {
   int? rating;
   int? reviewsCount;
 
-  Seller2({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller2({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller2.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -456,8 +577,46 @@ class RelatedProducts {
   String? marka;
   String? type;
   String? createdAt;
+  int? views;
 
-  RelatedProducts({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.model, this.marka, this.type, this.createdAt});
+  RelatedProducts({
+    this.id,
+    this.name,
+    this.desc,
+    this.description,
+    this.discount,
+    this.finalPrice,
+    this.isNegotiable,
+    this.isUrgent,
+    this.price,
+    this.oldPrice,
+    this.currency,
+    this.listingType,
+    this.listingTypeLabel,
+    this.furnishing,
+    this.furnishingLabel,
+    this.seller,
+    this.image,
+    this.location,
+    this.cityId,
+    this.categoryId,
+    this.categoryType,
+    this.subCategoryId,
+    this.subCategory,
+    this.date,
+    this.images,
+    this.rate,
+    this.countCommenets,
+    this.commenets,
+    this.reviews,
+    this.reviewsCount,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.createdAt,
+    this.views,
+  });
 
   RelatedProducts.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -484,7 +643,9 @@ class RelatedProducts {
     subCategoryId = _asInt(json["sub_category_id"]);
     subCategory = _asString(json["sub_category"]);
     date = _asString(json["date"]);
-    images = json["images"] == null ? null : (json["images"] as List).map((e) => Images1.fromJson(e)).toList();
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images1.fromJson(e)).toList();
     rate = _asString(json["rate"]);
     countCommenets = _asInt(json["countCommenets"]);
     commenets = json["commenets"] ?? [];
@@ -495,6 +656,7 @@ class RelatedProducts {
     marka = _asString(json["marka"]);
     type = _asString(json["type"]);
     createdAt = _asString(json["created_at"]);
+    views = _asInt(json["views"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -514,7 +676,7 @@ class RelatedProducts {
     _data["listing_type_label"] = listingTypeLabel;
     _data["furnishing"] = furnishing;
     _data["furnishing_label"] = furnishingLabel;
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
     _data["image"] = image;
@@ -525,15 +687,15 @@ class RelatedProducts {
     _data["sub_category_id"] = subCategoryId;
     _data["sub_category"] = subCategory;
     _data["date"] = date;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images?.map((e) => e.toJson()).toList();
     }
     _data["rate"] = rate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
-    if(reviews != null) {
+    if (reviews != null) {
       _data["reviews"] = reviews;
     }
     _data["reviews_count"] = reviewsCount;
@@ -542,6 +704,7 @@ class RelatedProducts {
     _data["marka"] = marka;
     _data["type"] = type;
     _data["created_at"] = createdAt;
+    _data["views"] = views;
     return _data;
   }
 }
@@ -573,7 +736,14 @@ class Seller1 {
   int? rating;
   int? reviewsCount;
 
-  Seller1({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller1({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller1.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -638,7 +808,48 @@ class Product {
   ProductMap? map;
   List<String>? safetyTips;
 
-  Product({this.id, this.name, this.desc, this.description, this.discount, this.finalPrice, this.isNegotiable, this.isUrgent, this.price, this.oldPrice, this.currency, this.listingType, this.listingTypeLabel, this.furnishing, this.furnishingLabel, this.seller, this.image, this.location, this.cityId, this.categoryId, this.categoryType, this.subCategoryId, this.subCategory, this.date, this.images, this.rate, this.countCommenets, this.commenets, this.reviews, this.reviewsCount, this.isFavourite, this.isPaused, this.model, this.marka, this.type, this.createdAt, this.views, this.specifications, this.map, this.safetyTips});
+  Product({
+    this.id,
+    this.name,
+    this.desc,
+    this.description,
+    this.discount,
+    this.finalPrice,
+    this.isNegotiable,
+    this.isUrgent,
+    this.price,
+    this.oldPrice,
+    this.currency,
+    this.listingType,
+    this.listingTypeLabel,
+    this.furnishing,
+    this.furnishingLabel,
+    this.seller,
+    this.image,
+    this.location,
+    this.cityId,
+    this.categoryId,
+    this.categoryType,
+    this.subCategoryId,
+    this.subCategory,
+    this.date,
+    this.images,
+    this.rate,
+    this.countCommenets,
+    this.commenets,
+    this.reviews,
+    this.reviewsCount,
+    this.isFavourite,
+    this.isPaused,
+    this.model,
+    this.marka,
+    this.type,
+    this.createdAt,
+    this.views,
+    this.specifications,
+    this.map,
+    this.safetyTips,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -665,11 +876,19 @@ class Product {
     subCategoryId = _asInt(json["sub_category_id"]);
     subCategory = _asString(json["sub_category"]);
     date = _asString(json["date"]);
-    images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     rate = _asInt(json["rate"]);
     countCommenets = _asInt(json["countCommenets"]);
-    commenets = json["commenets"] == null ? null : (json["commenets"] as List).map((e) => Commenets.fromJson(e)).toList();
-    reviews = json["reviews"] == null ? null : (json["reviews"] as List).map((e) => Reviews.fromJson(e)).toList();
+    commenets = json["commenets"] == null
+        ? null
+        : (json["commenets"] as List)
+              .map((e) => Commenets.fromJson(e))
+              .toList();
+    reviews = json["reviews"] == null
+        ? null
+        : (json["reviews"] as List).map((e) => Reviews.fromJson(e)).toList();
     reviewsCount = _asInt(json["reviews_count"]);
     isFavourite = _asBool(json["isFavourite"]);
     isPaused = _asBool(json["is_paused"]);
@@ -680,7 +899,9 @@ class Product {
     views = _asInt(json["views"]);
     specifications = json["specifications"] ?? [];
     map = json["map"] == null ? null : ProductMap.fromJson(json["map"]);
-    safetyTips = json["safety_tips"] == null ? null : List<String>.from(json["safety_tips"].map((e) => e.toString()));
+    safetyTips = json["safety_tips"] == null
+        ? null
+        : List<String>.from(json["safety_tips"].map((e) => e.toString()));
   }
 
   Map<String, dynamic> toJson() {
@@ -700,7 +921,7 @@ class Product {
     _data["listing_type_label"] = listingTypeLabel;
     _data["furnishing"] = furnishing;
     _data["furnishing_label"] = furnishingLabel;
-    if(seller != null) {
+    if (seller != null) {
       _data["seller"] = seller?.toJson();
     }
     _data["image"] = image;
@@ -711,15 +932,15 @@ class Product {
     _data["sub_category_id"] = subCategoryId;
     _data["sub_category"] = subCategory;
     _data["date"] = date;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images?.map((e) => e.toJson()).toList();
     }
     _data["rate"] = rate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets?.map((e) => e.toJson()).toList();
     }
-    if(reviews != null) {
+    if (reviews != null) {
       _data["reviews"] = reviews?.map((e) => e.toJson()).toList();
     }
     _data["reviews_count"] = reviewsCount;
@@ -730,13 +951,13 @@ class Product {
     _data["type"] = type;
     _data["created_at"] = createdAt;
     _data["views"] = views;
-    if(specifications != null) {
+    if (specifications != null) {
       _data["specifications"] = specifications;
     }
-    if(map != null) {
+    if (map != null) {
       _data["map"] = map?.toJson();
     }
-    if(safetyTips != null) {
+    if (safetyTips != null) {
       _data["safety_tips"] = safetyTips;
     }
     return _data;
@@ -775,7 +996,16 @@ class Reviews {
   String? createdAt;
   String? timeAgo;
 
-  Reviews({this.id, this.rate, this.commenet, this.user, this.userId, this.userImage, this.createdAt, this.timeAgo});
+  Reviews({
+    this.id,
+    this.rate,
+    this.commenet,
+    this.user,
+    this.userId,
+    this.userImage,
+    this.createdAt,
+    this.timeAgo,
+  });
 
   Reviews.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -812,7 +1042,16 @@ class Commenets {
   String? createdAt;
   String? timeAgo;
 
-  Commenets({this.id, this.rate, this.commenet, this.user, this.userId, this.userImage, this.createdAt, this.timeAgo});
+  Commenets({
+    this.id,
+    this.rate,
+    this.commenet,
+    this.user,
+    this.userId,
+    this.userImage,
+    this.createdAt,
+    this.timeAgo,
+  });
 
   Commenets.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -866,7 +1105,14 @@ class Seller {
   int? rating;
   int? reviewsCount;
 
-  Seller({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);

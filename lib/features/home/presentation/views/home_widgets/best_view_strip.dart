@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -74,6 +75,9 @@ class BestViewStrip extends StatelessWidget {
                     productId: item.id,
                     initialIsFavourite:
                         item.isFavourite == true,
+                    isUrgent: item.isUrgent == true,
+                    topRated: isTopRated(item.rate),
+                    views: item.views,
                     imageHeight: 105,
                     onTap: () {
                       context.pushNamed(

@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -32,7 +31,7 @@ class FavDataModel {
   FavDataModel.fromJson(Map<String, dynamic> json) {
     status = _asBool(json["status"]) ?? json["status"] == 1;
     message = _asString(json["message"]);
-    if(json["data"] is Map) {
+    if (json["data"] is Map) {
       data = json["data"] == null ? null : Data.fromJson(json["data"]);
     }
   }
@@ -45,21 +44,18 @@ class FavDataModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["status"] = status;
     _data["message"] = message;
-    if(data != null) {
+    if (data != null) {
       _data["data"] = data?.toJson();
     }
     return _data;
   }
 
-  FavDataModel copyWith({
-    bool? status,
-    String? message,
-    Data? data,
-  }) => FavDataModel(
-    status: status ?? this.status,
-    message: message ?? this.message,
-    data: data ?? this.data,
-  );
+  FavDataModel copyWith({bool? status, String? message, Data? data}) =>
+      FavDataModel(
+        status: status ?? this.status,
+        message: message ?? this.message,
+        data: data ?? this.data,
+      );
 }
 
 class Data {
@@ -68,8 +64,12 @@ class Data {
   Data({this.favourites});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["favourites"] is List) {
-      favourites = json["favourites"] == null ? null : (json["favourites"] as List).map((e) => Favourites.fromJson(e)).toList();
+    if (json["favourites"] is List) {
+      favourites = json["favourites"] == null
+          ? null
+          : (json["favourites"] as List)
+                .map((e) => Favourites.fromJson(e))
+                .toList();
     }
   }
 
@@ -79,17 +79,14 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    if(favourites != null) {
+    if (favourites != null) {
       _data["favourites"] = favourites?.map((e) => e.toJson()).toList();
     }
     return _data;
   }
 
-  Data copyWith({
-    List<Favourites>? favourites,
-  }) => Data(
-    favourites: favourites ?? this.favourites,
-  );
+  Data copyWith({List<Favourites>? favourites}) =>
+      Data(favourites: favourites ?? this.favourites);
 }
 
 class Favourites {
@@ -120,8 +117,40 @@ class Favourites {
   int? communication;
   String? address;
   String? createdAt;
+  bool? isUrgent;
+  int? views;
 
-  Favourites({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
+  Favourites({
+    this.id,
+    this.uniqueNumber,
+    this.name,
+    this.desc,
+    this.price,
+    this.image,
+    this.images,
+    this.rate,
+    this.sellerRate,
+    this.countCommenets,
+    this.commenets,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.view,
+    this.sellerId,
+    this.sellerName,
+    this.sellerImage,
+    this.sellerPhone,
+    this.lat,
+    this.long,
+    this.status,
+    this.negotiable,
+    this.communication,
+    this.address,
+    this.createdAt,
+    this.isUrgent,
+    this.views,
+  });
 
   Favourites.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -130,13 +159,15 @@ class Favourites {
     desc = _asString(json["desc"]);
     price = _asString(json["price"]);
     image = _asString(json["image"]);
-    if(json["images"] is List) {
-      images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    if (json["images"] is List) {
+      images = json["images"] == null
+          ? null
+          : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     }
     rate = _asInt(json["rate"]);
     sellerRate = _asInt(json["seller_rate"]);
     countCommenets = _asInt(json["countCommenets"]);
-    if(json["commenets"] is List) {
+    if (json["commenets"] is List) {
       commenets = json["commenets"] ?? [];
     }
     isFavourite = _asBool(json["isFavourite"]) ?? true;
@@ -155,6 +186,8 @@ class Favourites {
     communication = _asInt(json["communication"]);
     address = _asString(json["address"]);
     createdAt = _asString(json["created_at"]);
+    isUrgent = _asBool(json["is_urgent"]);
+    views = _asInt(json["views"]);
   }
 
   static List<Favourites> fromList(List<Map<String, dynamic>> list) {
@@ -169,13 +202,13 @@ class Favourites {
     _data["desc"] = desc;
     _data["price"] = price;
     _data["image"] = image;
-    if(images != null) {
+    if (images != null) {
       _data["images"] = images?.map((e) => e.toJson()).toList();
     }
     _data["rate"] = rate;
     _data["seller_rate"] = sellerRate;
     _data["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       _data["commenets"] = commenets;
     }
     _data["isFavourite"] = isFavourite;
@@ -194,6 +227,8 @@ class Favourites {
     _data["communication"] = communication;
     _data["address"] = address;
     _data["created_at"] = createdAt;
+    _data["is_urgent"] = isUrgent;
+    _data["views"] = views;
     return _data;
   }
 
@@ -225,6 +260,8 @@ class Favourites {
     int? communication,
     String? address,
     String? createdAt,
+    bool? isUrgent,
+    int? views,
   }) => Favourites(
     id: id ?? this.id,
     uniqueNumber: uniqueNumber ?? this.uniqueNumber,
@@ -253,6 +290,8 @@ class Favourites {
     communication: communication ?? this.communication,
     address: address ?? this.address,
     createdAt: createdAt ?? this.createdAt,
+    isUrgent: isUrgent ?? this.isUrgent,
+    views: views ?? this.views,
   );
 }
 
@@ -278,11 +317,6 @@ class Images {
     return _data;
   }
 
-  Images copyWith({
-    int? id,
-    String? image,
-  }) => Images(
-    id: id ?? this.id,
-    image: image ?? this.image,
-  );
+  Images copyWith({int? id, String? image}) =>
+      Images(id: id ?? this.id, image: image ?? this.image);
 }

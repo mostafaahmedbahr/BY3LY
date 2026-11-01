@@ -1,5 +1,5 @@
-
 import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,8 +16,7 @@ class MyAdsListItem extends StatelessWidget {
 
   bool get _isActive => adsProduct.isPaused != true;
 
-  Future<void> _showOptionsMenu(
-      BuildContext context, Ads ad) async {
+  Future<void> _showOptionsMenu(BuildContext context, Ads ad) async {
     await showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface,
@@ -52,8 +51,9 @@ class MyAdsListItem extends StatelessWidget {
                     ),
                   );
                   if (updated == true && context.mounted) {
-                    AdvertisementsCubit.get(context)
-                        .getAllMyAdsDataMethod(type: 0);
+                    AdvertisementsCubit.get(
+                      context,
+                    ).getAllMyAdsDataMethod(type: 0);
                   }
                 },
               ),
@@ -64,19 +64,15 @@ class MyAdsListItem extends StatelessWidget {
                 onTap: () async {
                   Navigator.pop(sheetContext);
                   if (ad.id == null) return;
-                  final confirmed =
-                      await AppConfirmDialog.show(
+                  final confirmed = await AppConfirmDialog.show(
                     context,
                     title: context.tr(LocaleKeys.deleteAd),
-                    message:
-                        context.tr(LocaleKeys.deleteAdConfirm),
-                    confirmText:
-                        context.tr(LocaleKeys.deleteAd),
+                    message: context.tr(LocaleKeys.deleteAdConfirm),
+                    confirmText: context.tr(LocaleKeys.deleteAd),
                     icon: Icons.delete_outline_rounded,
                   );
                   if (confirmed && context.mounted) {
-                    AdvertisementsCubit.get(context)
-                        .deleteAd(adId: ad.id!);
+                    AdvertisementsCubit.get(context).deleteAd(adId: ad.id!);
                   }
                 },
               ),
@@ -120,8 +116,7 @@ class MyAdsListItem extends StatelessWidget {
         );
         // Edit/delete inside details refreshes the list on return.
         if (changed == true && context.mounted) {
-          AdvertisementsCubit.get(context)
-              .getAllMyAdsDataMethod(type: 0);
+          AdvertisementsCubit.get(context).getAllMyAdsDataMethod(type: 0);
         }
       },
       borderRadius: BorderRadius.circular(18),
@@ -159,11 +154,9 @@ class MyAdsListItem extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
                         decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.vertical(
+                          borderRadius: const BorderRadius.vertical(
                             bottom: Radius.circular(14),
                           ),
                           gradient: LinearGradient(
@@ -176,8 +169,7 @@ class MyAdsListItem extends StatelessWidget {
                           ),
                         ),
                         child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
@@ -205,7 +197,7 @@ class MyAdsListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                const CustomSizedBox(width: 12,),
+                const CustomSizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +214,16 @@ class MyAdsListItem extends StatelessWidget {
                           color: AppColors.text,
                         ),
                       ),
-                      const CustomSizedBox(height: 4,),
+                      if (adsProduct.isUrgent == true ||
+                          isTopRated(adsProduct.rate)) ...[
+                        const CustomSizedBox(height: 6),
+                        ProductBadges(
+                          isUrgent: adsProduct.isUrgent == true,
+                          topRated: isTopRated(adsProduct.rate),
+                          elevated: false,
+                        ),
+                      ],
+                      const CustomSizedBox(height: 4),
                       Row(
                         children: [
                           SvgPicture.asset(
@@ -230,7 +231,7 @@ class MyAdsListItem extends StatelessWidget {
                             width: 13,
                             height: 13,
                           ),
-                          const CustomSizedBox(width: 4,),
+                          const CustomSizedBox(width: 4),
                           Expanded(
                             child: Text(
                               (adsProduct.location
@@ -243,24 +244,26 @@ class MyAdsListItem extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 11,
-                                  color: AppColors.textSecondary),
+                                fontSize: 11,
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      const CustomSizedBox(height: 4,),
+                      const CustomSizedBox(height: 4),
                       Text(
                         [adsProduct.type, adsProduct.model]
-                            .where((e) =>
-                                (e?.trim().isNotEmpty ?? false))
+                            .where((e) => (e?.trim().isNotEmpty ?? false))
                             .join('  •  '),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            fontSize: 11, color: AppColors.textSecondary),
+                          fontSize: 11,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
-                      const CustomSizedBox(height: 6,),
+                      const CustomSizedBox(height: 6),
                       Text(
                         adsProduct.price ?? '',
                         maxLines: 1,
@@ -271,12 +274,16 @@ class MyAdsListItem extends StatelessWidget {
                           color: AppColors.text,
                         ),
                       ),
+                      if ((adsProduct.views ?? 0) > 0) ...[
+                        const CustomSizedBox(height: 4),
+                        ProductViewsLabel(views: adsProduct.views),
+                      ],
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12,),
+            const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
@@ -288,16 +295,14 @@ class MyAdsListItem extends StatelessWidget {
                   for (int i = 0; i < stats.length; i++) ...[
                     Expanded(
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
                             height: 30,
                             width: 30,
                             decoration: BoxDecoration(
                               color: stats[i].tint,
-                              borderRadius:
-                                  BorderRadius.circular(9),
+                              borderRadius: BorderRadius.circular(9),
                             ),
                             child: Center(
                               child: SvgPicture.asset(
@@ -309,8 +314,7 @@ class MyAdsListItem extends StatelessWidget {
                           ),
                           const SizedBox(width: 7),
                           Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
@@ -334,16 +338,12 @@ class MyAdsListItem extends StatelessWidget {
                       ),
                     ),
                     if (i != stats.length - 1)
-                      Container(
-                        width: 1,
-                        height: 34,
-                        color: AppColors.border,
-                      ),
+                      Container(width: 1, height: 34, color: AppColors.border),
                   ],
                 ],
               ),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(height: 10),
             BlocConsumer<AdvertisementsCubit, AdvertisementsStates>(
               listener: (context, state) {
                 // Guard by adId: every card listens to the same cubit,
@@ -356,32 +356,30 @@ class MyAdsListItem extends StatelessWidget {
                       (state.message?.trim().isNotEmpty ?? false)
                           ? state.message!
                           : context.tr(LocaleKeys.deleteAd),
-                      style: const TextStyle(
-                          color: AppColors.mainColor),
+                      style: const TextStyle(color: AppColors.mainColor),
                     ),
                   ).show(context);
                 } else if (state is DeleteAdErrorState &&
-                    (state.adId == null ||
-                        state.adId == adsProduct.id)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.error)),
-                  );
+                    (state.adId == null || state.adId == adsProduct.id)) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.error)));
                 }
               },
               builder: (context, state) {
-                final deleting = state is DeleteAdLoadingState &&
+                final deleting =
+                    state is DeleteAdLoadingState &&
                     state.adId == adsProduct.id;
                 return Row(
                   children: [
                     Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () =>
-                          _showOptionsMenu(context, adsProduct),
-                      icon: const Icon(
-                        Icons.settings_outlined,
-                        size: 18,
-                        color: AppColors.mainColor,
-                      ),
+                      child: OutlinedButton.icon(
+                        onPressed: () => _showOptionsMenu(context, adsProduct),
+                        icon: const Icon(
+                          Icons.settings_outlined,
+                          size: 18,
+                          color: AppColors.mainColor,
+                        ),
                         label: const Text(
                           "خيارات",
                           style: TextStyle(
@@ -390,40 +388,34 @@ class MyAdsListItem extends StatelessWidget {
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                              color: AppColors.mainColor),
+                          side: const BorderSide(color: AppColors.mainColor),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 11),
+                          padding: const EdgeInsets.symmetric(vertical: 11),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12,),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: deleting
                             ? null
                             : () async {
                                 if (adsProduct.id == null) return;
-                                final confirmed =
-                                    await AppConfirmDialog.show(
+                                final confirmed = await AppConfirmDialog.show(
                                   context,
-                                  title: context
-                                      .tr(LocaleKeys.deleteAd),
+                                  title: context.tr(LocaleKeys.deleteAd),
                                   message: context.tr(
-                                      LocaleKeys.deleteAdConfirm),
-                                  confirmText: context
-                                      .tr(LocaleKeys.deleteAd),
-                                  icon:
-                                      Icons.delete_outline_rounded,
+                                    LocaleKeys.deleteAdConfirm,
+                                  ),
+                                  confirmText: context.tr(LocaleKeys.deleteAd),
+                                  icon: Icons.delete_outline_rounded,
                                 );
-                                if (confirmed &&
-                                    context.mounted) {
-                                  AdvertisementsCubit.get(context)
-                                      .deleteAd(
-                                          adId: adsProduct.id!);
+                                if (confirmed && context.mounted) {
+                                  AdvertisementsCubit.get(
+                                    context,
+                                  ).deleteAd(adId: adsProduct.id!);
                                 }
                               },
                         icon: deleting
@@ -454,8 +446,7 @@ class MyAdsListItem extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 11),
+                          padding: const EdgeInsets.symmetric(vertical: 11),
                           elevation: 0,
                         ),
                       ),
@@ -500,14 +491,12 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        danger ? AppColors.redColor : AppColors.mainColor;
+    final color = danger ? AppColors.redColor : AppColors.mainColor;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
         child: Row(
           children: [
             Container(

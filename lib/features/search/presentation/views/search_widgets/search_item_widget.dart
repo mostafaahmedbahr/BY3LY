@@ -1,5 +1,6 @@
 import 'package:by3ly/core/extensions/navigate.dart';
 import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/search/data/models/all_products_search_model.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ class SearchItemWidget extends StatelessWidget {
       rating: product.rate,
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
+      isUrgent: product.isUrgent == true,
+      topRated: isTopRated(product.rate),
+      views: product.views,
       onTap: () {
         context.pushNamed(Routes.productDetailsView, arguments: {
           "type": "home",

@@ -1,5 +1,6 @@
 import 'package:by3ly/core/extensions/navigate.dart';
 import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/shared_widgets/product_cards.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class RelatedProductsList extends StatelessWidget {
               rating: item.rate,
               productId: item.id,
               initialIsFavourite: item.isFavourite == true,
+              isUrgent: item.isUrgent == true,
+              topRated: isTopRated(item.rate),
+              views: item.views,
               imageHeight: 110,
               onTap: () {
                 context.pushNamed(Routes.productDetailsView, arguments: {

@@ -260,7 +260,8 @@ class EnLang {
     "deleteAdConfirm": "This ad will be permanently deleted. Continue?",
     "pauseAd": "Pause ad",
     "resumeAd": "Resume ad",
-    "pauseAdConfirm": "Your ad will be hidden from others until you resume it. Continue?",
+    "pauseAdConfirm":
+        "Your ad will be hidden from others until you resume it. Continue?",
     "resumeAdConfirm": "Your ad will be visible to others again. Continue?",
     "addNewAd": "Create new ad",
     "adName": "Ad title",
@@ -269,6 +270,8 @@ class EnLang {
     "discount": "Discount (optional)",
     "negotiable": "Negotiable",
     "urgent": "Urgent",
+    "distinguished": "Featured",
+    "views": "views",
     "shippingType": "Shipping type",
     "freeShipping": "Free shipping",
     "paidShipping": "Paid shipping",

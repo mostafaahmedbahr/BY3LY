@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
@@ -17,12 +18,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 // ---------------------------------------------------------------------------
 
 List<BoxShadow> get _cardShadow => [
-      BoxShadow(
-        color: Colors.black.withValues(alpha: 0.04),
-        blurRadius: 10,
-        offset: const Offset(0, 4),
-      ),
-    ];
+  BoxShadow(
+    color: Colors.black.withValues(alpha: 0.04),
+    blurRadius: 10,
+    offset: const Offset(0, 4),
+  ),
+];
 
 BorderSide get _cardBorder => BorderSide(color: AppColors.border, width: 1);
 
@@ -52,8 +53,7 @@ class _MinimalHeartState extends State<_MinimalHeart> {
   Widget build(BuildContext context) {
     return BlocConsumer<FavCubit, FavStates>(
       listener: (context, state) {
-        if (state is FavToggleSuccess &&
-            state.productId == widget.productId) {
+        if (state is FavToggleSuccess && state.productId == widget.productId) {
           setState(() => _localFav = state.isNowFavourite);
         } else if (state is FavToggleError) {
           setState(() => _localFav = null);
@@ -65,8 +65,8 @@ class _MinimalHeartState extends State<_MinimalHeart> {
         final isFav = GuestGuard.isGuest
             ? false
             : (_localFav ??
-                cubit.isFavourite(widget.productId) ||
-                    widget.initialIsFavourite);
+                  cubit.isFavourite(widget.productId) ||
+                      widget.initialIsFavourite);
         return Container(
           height: widget.size,
           width: widget.size,
@@ -99,11 +99,7 @@ Widget _locationRow(String? location) {
   }
   return Row(
     children: [
-      SvgPicture.asset(
-        AppImages.location,
-        width: 13,
-        height: 13,
-      ),
+      SvgPicture.asset(AppImages.location, width: 13, height: 13),
       const SizedBox(width: 4),
       Expanded(
         child: Text(
@@ -152,6 +148,9 @@ class ProductRowCard extends StatelessWidget {
     this.rating,
     this.productId,
     this.initialIsFavourite = false,
+    this.isUrgent = false,
+    this.topRated = false,
+    this.views,
     this.bottomWidget,
     required this.onTap,
   });
@@ -166,6 +165,15 @@ class ProductRowCard extends StatelessWidget {
   final String? rating;
   final int? productId;
   final bool initialIsFavourite;
+
+  /// Ads flagged `is_urgent` get the red urgent pill.
+  final bool isUrgent;
+
+  /// Ads rated 5/5 get the gold "featured" pill.
+  final bool topRated;
+
+  /// Total views, shown next to the date when the API provides it.
+  final int? views;
 
   /// Optional extra row at the bottom (e.g. remove-from-fav action).
   final Widget? bottomWidget;
@@ -212,6 +220,14 @@ class ProductRowCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
+                  if (isUrgent || topRated) ...[
+                    ProductBadges(
+                      isUrgent: isUrgent,
+                      topRated: topRated,
+                      elevated: false,
+                    ),
+                    const SizedBox(height: 4),
+                  ],
                   _locationRow(location),
                   const SizedBox(height: 4),
                   Text(
@@ -221,7 +237,9 @@ class ProductRowCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 11, color: AppColors.textSecondary),
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -251,16 +269,24 @@ class ProductRowCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (_hasValue(date)) ...[
+                  if (_hasValue(date) || (views ?? 0) > 0) ...[
                     const SizedBox(height: 2),
-                    Text(
-                      date!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textSecondary,
-                      ),
+                    Row(
+                      children: [
+                        if (_hasValue(date))
+                          Expanded(
+                            child: Text(
+                              date!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        if ((views ?? 0) > 0) ProductViewsLabel(views: views),
+                      ],
                     ),
                   ],
                   if (bottomWidget != null) ...[
@@ -293,6 +319,9 @@ class ProductGridCard extends StatelessWidget {
     this.rating,
     this.productId,
     this.initialIsFavourite = false,
+    this.isUrgent = false,
+    this.topRated = false,
+    this.views,
     this.imageHeight = 120,
     required this.onTap,
   });
@@ -307,6 +336,16 @@ class ProductGridCard extends StatelessWidget {
   final String? rating;
   final int? productId;
   final bool initialIsFavourite;
+
+  /// Ads flagged `is_urgent` get the red urgent pill.
+  final bool isUrgent;
+
+  /// Ads rated 5/5 get the gold "featured" pill.
+  final bool topRated;
+
+  /// Total views, shown next to the date when the API provides it.
+  final int? views;
+
   final double imageHeight;
   final VoidCallback onTap;
 
@@ -349,6 +388,18 @@ class ProductGridCard extends StatelessWidget {
                       initialIsFavourite: initialIsFavourite,
                     ),
                   ),
+                if (isUrgent || topRated)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    // Leave room for the heart so pills wrap instead of
+                    // sliding underneath it.
+                    right: productId != null ? 52 : 8,
+                    child: ProductBadges(
+                      isUrgent: isUrgent,
+                      topRated: topRated,
+                    ),
+                  ),
               ],
             ),
             Padding(
@@ -379,8 +430,7 @@ class ProductGridCard extends StatelessWidget {
                     _locationRow(location),
                   ],
                   const SizedBox(height: 4),
-                  if (_hasValue(price) ||
-                      (_hasValue(rating) && rating != '-'))
+                  if (_hasValue(price) || (_hasValue(rating) && rating != '-'))
                     Row(
                       children: [
                         Expanded(
@@ -399,16 +449,24 @@ class ProductGridCard extends StatelessWidget {
                           _ratingChip(rating!),
                       ],
                     ),
-                  if (_hasValue(date)) ...[
+                  if (_hasValue(date) || (views ?? 0) > 0) ...[
                     const SizedBox(height: 2),
-                    Text(
-                      date!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: AppColors.textSecondary,
-                      ),
+                    Row(
+                      children: [
+                        if (_hasValue(date))
+                          Expanded(
+                            child: Text(
+                              date!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        if ((views ?? 0) > 0) ProductViewsLabel(views: views),
+                      ],
                     ),
                   ],
                 ],

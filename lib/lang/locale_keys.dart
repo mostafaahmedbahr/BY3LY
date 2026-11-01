@@ -265,6 +265,8 @@ abstract class LocaleKeys {
   static const resumeAd = "resumeAd";
   static const pauseAdConfirm = "pauseAdConfirm";
   static const resumeAdConfirm = "resumeAdConfirm";
+  static const distinguished = "distinguished";
+  static const views = "views";
   static const addNewAd = "addNewAd";
   static const adName = "adName";
   static const adDescription = "adDescription";
