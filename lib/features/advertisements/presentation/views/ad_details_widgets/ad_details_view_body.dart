@@ -65,6 +65,35 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
     }
   }
 
+  Future<void> _onTogglePause() async {
+    final adId = widget.ad.id;
+    if (adId == null) return;
+    final pause = _isActive;
+    final title = pause
+        ? context.tr(LocaleKeys.pauseAd)
+        : context.tr(LocaleKeys.resumeAd);
+    final confirmed = await AppConfirmDialog.show(
+      context,
+      title: title,
+      message: pause
+          ? context.tr(LocaleKeys.pauseAdConfirm)
+          : context.tr(LocaleKeys.resumeAdConfirm),
+      confirmText: title,
+      icon: pause
+          ? Icons.pause_circle_outline_rounded
+          : Icons.play_circle_outline_rounded,
+      accentColor: pause ? AppColors.mainColor : const Color(0xff34C759),
+    );
+    if (confirmed && mounted) {
+      final cubit = AdvertisementsCubit.get(context);
+      if (pause) {
+        cubit.pauseAd(adId: adId);
+      } else {
+        cubit.resumeAd(adId: adId);
+      }
+    }
+  }
+
   Future<void> _onDelete() async {
     final adId = widget.ad.id;
     if (adId == null) return;
@@ -95,6 +124,27 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
           ).show(context);
           Navigator.pop(context, true);
         } else if (state is DeleteAdErrorState) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error)));
+        } else if (state is PauseResumeAdSuccessState &&
+            state.adId == widget.ad.id) {
+          final fallback = context.tr(
+            state.isPaused ? LocaleKeys.pauseAd : LocaleKeys.resumeAd,
+          );
+          CherryToast.success(
+            title: Text(
+              (state.message?.trim().isNotEmpty ?? false)
+                  ? state.message!
+                  : fallback,
+              style: TextStyle(color: AppColors.accent),
+            ),
+          ).show(context);
+          // The status badge is driven by widget.ad, which the cubit updates
+          // in place; rebuild so it flips between نشط / غير نشط immediately.
+          setState(() {});
+        } else if (state is PauseResumeAdErrorState &&
+            state.adId == widget.ad.id) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.error)));
@@ -332,6 +382,52 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
             ),
             const SizedBox(height: 14),
           ],
+          // Pause / resume action (kept separate and full-width because it
+          // changes the ad availability, unlike edit/delete).
+          BlocBuilder<AdvertisementsCubit, AdvertisementsStates>(
+            builder: (context, state) {
+              final pausing =
+                  state is PauseResumeAdLoadingState &&
+                  state.adId == widget.ad.id;
+              final active = widget.ad.isPaused != true;
+              final color = active
+                  ? const Color(0xffF59E0B)
+                  : const Color(0xff34C759);
+              return SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: pausing ? null : _onTogglePause,
+                  icon: pausing
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Icon(
+                          active
+                              ? Icons.pause_circle_outline_rounded
+                              : Icons.play_circle_outline_rounded,
+                          size: 18,
+                          color: color,
+                        ),
+                  label: Text(
+                    context.tr(
+                      active ? LocaleKeys.pauseAd : LocaleKeys.resumeAd,
+                    ),
+                    style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: color),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
           // Actions.
           Row(
             children: [

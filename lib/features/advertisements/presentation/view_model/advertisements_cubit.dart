@@ -1,4 +1,3 @@
-
 import 'package:by3ly/core/extensions/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,8 @@ import '../../data/repos/advertisements_repos.dart';
 import 'advertisements_states.dart';
 
 class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
-  AdvertisementsCubit(this.advertisementsRepo) : super(AdvertisementsInitState());
+  AdvertisementsCubit(this.advertisementsRepo)
+    : super(AdvertisementsInitState());
 
   static AdvertisementsCubit get(context) => BlocProvider.of(context);
 
@@ -17,20 +17,14 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
 
   List<Ads> allMyAdsList = [];
 
-  int advertisementsTypeIndex = 0 ;
-  void changeAdvertisementsTypeIndexWay(index)
-  {
+  int advertisementsTypeIndex = 0;
+  void changeAdvertisementsTypeIndexWay(index) {
     advertisementsTypeIndex = index;
     print(advertisementsTypeIndex);
     emit(ChangeAdvertisementsTypeIndexState());
   }
 
-
-  List<String> types = [
-    "الكل",
-    "النشط الان",
-    "الغير نشط",
-  ];
+  List<String> types = ["الكل", "النشط الان", "الغير نشط"];
 
   /// Backend rule: is_paused == true  -> paused (غير نشط),
   ///               anything else      -> active (نشط).
@@ -81,38 +75,121 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     deletingAdId = adId;
     emit(DeleteAdLoadingState(adId));
     var result = await advertisementsRepo!.deleteAd(adId: adId);
-    return result.fold((failure) {
-      debugPrint('AdvertisementsCubit deleteAd failed: ${failure.errMessage}');
-      deletingAdId = null;
-      emit(DeleteAdErrorState(failure.errMessage, adId: adId));
-    }, (data) {
-      deletingAdId = null;
-      if (data.status == true) {
-        allMyAdsList.removeWhere((ad) => ad.id == adId);
-        emit(DeleteAdSuccessState(adId, data.message));
-      } else {
-        emit(DeleteAdErrorState(
-            data.message ?? 'Something went wrong',
-            adId: adId));
-      }
-    });
+    return result.fold(
+      (failure) {
+        debugPrint(
+          'AdvertisementsCubit deleteAd failed: ${failure.errMessage}',
+        );
+        deletingAdId = null;
+        emit(DeleteAdErrorState(failure.errMessage, adId: adId));
+      },
+      (data) {
+        deletingAdId = null;
+        if (data.status == true) {
+          allMyAdsList.removeWhere((ad) => ad.id == adId);
+          emit(DeleteAdSuccessState(adId, data.message));
+        } else {
+          emit(
+            DeleteAdErrorState(
+              data.message ?? 'Something went wrong',
+              adId: adId,
+            ),
+          );
+        }
+      },
+    );
   }
 
-  Future<void> getAllMyAdsDataMethod({
-    required int type,
-}) async {
+  /// Ads with a pause/resume request in flight. Prevents double taps and
+  /// lets every card know when its own request is running.
+  final Set<int> _pauseResumeInFlight = {};
+
+  bool isPauseResumeLoading(int adId) => _pauseResumeInFlight.contains(adId);
+
+  /// Pauses the seller's own ad so it is no longer visible to others.
+  Future<void> pauseAd({required int adId}) {
+    return _changePauseState(adId: adId, pause: true);
+  }
+
+  /// Resumes a paused ad so it becomes visible to others again.
+  Future<void> resumeAd({required int adId}) {
+    return _changePauseState(adId: adId, pause: false);
+  }
+
+  Future<void> _changePauseState({
+    required int adId,
+    required bool pause,
+  }) async {
+    if (_pauseResumeInFlight.contains(adId)) return;
+    _pauseResumeInFlight.add(adId);
+    emit(PauseResumeAdLoadingState(adId, pause: pause));
+
+    var result = pause
+        ? await advertisementsRepo!.pauseAd(adId: adId)
+        : await advertisementsRepo!.resumeAd(adId: adId);
+
+    _pauseResumeInFlight.remove(adId);
+    if (isClosed) return;
+
+    return result.fold(
+      (failure) {
+        debugPrint(
+          'AdvertisementsCubit ${pause ? 'pauseAd' : 'resumeAd'} failed: '
+          '${failure.errMessage}',
+        );
+        emit(PauseResumeAdErrorState(failure.errMessage, adId: adId));
+      },
+      (data) {
+        if (data.status != true) {
+          emit(
+            PauseResumeAdErrorState(
+              data.message ?? 'Something went wrong',
+              adId: adId,
+            ),
+          );
+          return;
+        }
+        // Trust the backend value; fall back to the requested action when the
+        // payload omits `is_paused`.
+        final isPaused = data.data?.isPaused ?? pause;
+        _applyPauseState(adId: adId, isPaused: isPaused);
+        emit(PauseResumeAdSuccessState(adId, isPaused, data.message));
+      },
+    );
+  }
+
+  /// Mirrors the backend result into the cached list so status badges, tabs
+  /// and counters update without a full network reload.
+  void _applyPauseState({required int adId, required bool isPaused}) {
+    for (final ad in allMyAdsList) {
+      if (ad.id == adId) ad.isPaused = isPaused;
+    }
+    final modelAds = myAdsDataModel?.data?.ads;
+    if (modelAds != null) {
+      for (final ad in modelAds) {
+        if (ad.id == adId) ad.isPaused = isPaused;
+      }
+    }
+  }
+
+  Future<void> getAllMyAdsDataMethod({required int type}) async {
     allMyAdsList = [];
     emit(GetAllMyAdsDataLoadingState());
-    var result = await advertisementsRepo!.getMyAdsData( );
-    return result.fold((failure) {
-      debugPrint('AdvertisementsCubit getAllMyAdsDataMethod failed: ${failure.errMessage}');
-      emit(GetAllMyAdsDataErrorState(failure.errMessage));
-    }, (data) {
-      myAdsDataModel = data;
-      allMyAdsList = [...?myAdsDataModel?.data?.ads];
-      logSuccess(allMyAdsList.length.toString());
-      logSuccess("length");
-      emit(GetAllMyAdsDataSuccessState(data));
-    });
+    var result = await advertisementsRepo!.getMyAdsData();
+    return result.fold(
+      (failure) {
+        debugPrint(
+          'AdvertisementsCubit getAllMyAdsDataMethod failed: ${failure.errMessage}',
+        );
+        emit(GetAllMyAdsDataErrorState(failure.errMessage));
+      },
+      (data) {
+        myAdsDataModel = data;
+        allMyAdsList = [...?myAdsDataModel?.data?.ads];
+        logSuccess(allMyAdsList.length.toString());
+        logSuccess("length");
+        emit(GetAllMyAdsDataSuccessState(data));
+      },
+    );
   }
 }

@@ -9,7 +9,6 @@ import '../view_model/chat_states.dart';
 import 'chat_helpers.dart';
 import 'chat_widgets/chat_input_bar.dart';
 import 'chat_widgets/chat_messages_list.dart';
-import 'chat_widgets/chat_product_header.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key});

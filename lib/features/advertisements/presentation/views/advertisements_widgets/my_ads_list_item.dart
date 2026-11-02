@@ -58,6 +58,47 @@ class MyAdsListItem extends StatelessWidget {
                 },
               ),
               _OptionTile(
+                icon: _isActive
+                    ? Icons.pause_circle_outline_rounded
+                    : Icons.play_circle_outline_rounded,
+                title: _isActive
+                    ? context.tr(LocaleKeys.pauseAd)
+                    : context.tr(LocaleKeys.resumeAd),
+                color: _isActive
+                    ? const Color(0xffF59E0B)
+                    : const Color(0xff34C759),
+                onTap: () async {
+                  Navigator.pop(sheetContext);
+                  if (ad.id == null) return;
+                  final pause = _isActive;
+                  final title = pause
+                      ? context.tr(LocaleKeys.pauseAd)
+                      : context.tr(LocaleKeys.resumeAd);
+                  final confirmed = await AppConfirmDialog.show(
+                    context,
+                    title: title,
+                    message: pause
+                        ? context.tr(LocaleKeys.pauseAdConfirm)
+                        : context.tr(LocaleKeys.resumeAdConfirm),
+                    confirmText: title,
+                    icon: pause
+                        ? Icons.pause_circle_outline_rounded
+                        : Icons.play_circle_outline_rounded,
+                    accentColor: pause
+                        ? AppColors.mainColor
+                        : const Color(0xff34C759),
+                  );
+                  if (confirmed && context.mounted) {
+                    final cubit = AdvertisementsCubit.get(context);
+                    if (pause) {
+                      cubit.pauseAd(adId: ad.id!);
+                    } else {
+                      cubit.resumeAd(adId: ad.id!);
+                    }
+                  }
+                },
+              ),
+              _OptionTile(
                 icon: Icons.delete_outline_rounded,
                 title: "حذف الاعلان",
                 danger: true,
@@ -364,17 +405,43 @@ class MyAdsListItem extends StatelessWidget {
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(state.error)));
+                } else if (state is PauseResumeAdSuccessState &&
+                    state.adId == adsProduct.id) {
+                  // The success state already carries the new pause value, so
+                  // the right localized label is chosen without guessing.
+                  final fallback = context.tr(
+                    state.isPaused ? LocaleKeys.pauseAd : LocaleKeys.resumeAd,
+                  );
+                  CherryToast.success(
+                    title: Text(
+                      (state.message?.trim().isNotEmpty ?? false)
+                          ? state.message!
+                          : fallback,
+                      style: const TextStyle(color: AppColors.mainColor),
+                    ),
+                  ).show(context);
+                } else if (state is PauseResumeAdErrorState &&
+                    state.adId == adsProduct.id) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.error)));
                 }
               },
               builder: (context, state) {
                 final deleting =
                     state is DeleteAdLoadingState &&
                     state.adId == adsProduct.id;
+                final pausing =
+                    state is PauseResumeAdLoadingState &&
+                    state.adId == adsProduct.id;
+                final busy = deleting || pausing;
                 return Row(
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () => _showOptionsMenu(context, adsProduct),
+                        onPressed: busy
+                            ? null
+                            : () => _showOptionsMenu(context, adsProduct),
                         icon: const Icon(
                           Icons.settings_outlined,
                           size: 18,
@@ -399,7 +466,7 @@ class MyAdsListItem extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: deleting
+                        onPressed: busy
                             ? null
                             : () async {
                                 if (adsProduct.id == null) return;
@@ -482,6 +549,7 @@ class _OptionTile extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.danger = false,
+    this.color,
   });
 
   final IconData icon;
@@ -489,9 +557,13 @@ class _OptionTile extends StatelessWidget {
   final VoidCallback onTap;
   final bool danger;
 
+  /// Overrides the default accent colour (used by pause/resume).
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
-    final color = danger ? AppColors.redColor : AppColors.mainColor;
+    final color =
+        this.color ?? (danger ? AppColors.redColor : AppColors.mainColor);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
