@@ -346,4 +346,10 @@ abstract class LocaleKeys {
   static const contactSeller = "contactSeller";
   static const refresh = "refresh";
   static const cannotChatWithYourself = "cannotChatWithYourself";
+
+  // Privacy / account settings
+  static const storeName = "storeName";
+  static const storeAddress = "storeAddress";
+  static const notifyNewProducts = "notifyNewProducts";
+  static const settingsUpdated = "settingsUpdated";
 }

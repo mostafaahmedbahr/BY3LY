@@ -53,6 +53,9 @@ class EndPoints {
   static const resetPassword = "resetPassword";
   static const changePassword = "changePassword";
 
+  /// Account settings / privacy: GET = read, PATCH = update.
+  static const settings = "settings";
+
   static const getBanners = "getBanners";
   static const products = "products";
   static const subscriptionPackages = "subscriptionPackages";

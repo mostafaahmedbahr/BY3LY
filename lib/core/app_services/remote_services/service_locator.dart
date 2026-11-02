@@ -14,6 +14,7 @@ import '../../../../features/compare/data/repos/compare_repos_imple.dart';
 import '../../../../features/deleteAccount/data/repos/delete_account_repos_imple.dart';
 import '../../../../features/howToMakePurchase/data/repos/how_to_make_purchase_repos_imple.dart';
 import '../../../../features/notifications/data/repos/notifications_repos_imple.dart';
+import '../../../../features/privacy/data/repos/privacy_repo_imple.dart';
 import '../../../../features/productDetails/data/repos/product_details_repo_imple.dart';
 import '../../../../features/productSeller/data/repos/product_seller_repos_imple.dart';
 import '../../../../features/reportProduct/data/report_product_repos/report_product_repos_imple.dart';
@@ -120,6 +121,10 @@ void setup() {
   );
   getIt.registerSingleton<StatisticsRepoImpl>(
     StatisticsRepoImpl(getIt.get<ApiService>()),
+  );
+
+  getIt.registerSingleton<PrivacyRepoImpl>(
+    PrivacyRepoImpl(getIt.get<ApiService>()),
   );
 
   getIt.registerSingleton<ChatRepositoryImpl>(

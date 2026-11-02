@@ -10,17 +10,22 @@ class PrivacyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        shadowColor: AppColors.mainColor,
-        surfaceTintColor:  AppColors.mainColor,
-        title:  Text(LocaleKeys.privacySettings.tr(),style: TextStyle(
-            color: AppColors.text,
-            fontWeight: FontWeight.bold
-        ),),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.surface,
+          shadowColor: AppColors.mainColor,
+          surfaceTintColor: AppColors.mainColor,
+          title: Text(
+            LocaleKeys.privacySettings.tr(),
+            style: TextStyle(
+              color: AppColors.text,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        body: const PrivacyViewBody(),
       ),
-      body: const PrivacyViewBody(),
-    ));
+    );
   }
 }

@@ -364,5 +364,11 @@ class EnLang {
     "contactSeller": "Contact seller",
     "refresh": "Refresh",
     "cannotChatWithYourself": "You cannot start a conversation with yourself",
+
+    // Privacy / account settings
+    "storeName": "Store name",
+    "storeAddress": "Store address",
+    "notifyNewProducts": "New products notifications",
+    "settingsUpdated": "Settings updated successfully",
   };
 }

@@ -354,5 +354,11 @@ class ArLang {
     "contactSeller": "تواصل مع البائع",
     "refresh": "تحديث",
     "cannotChatWithYourself": "لا يمكنك بدء محادثة مع نفسك",
+
+    // Privacy / account settings
+    "storeName": "اسم المتجر",
+    "storeAddress": "عنوان المتجر",
+    "notifyNewProducts": "إشعارات المنتجات الجديدة",
+    "settingsUpdated": "تم تحديث الإعدادات بنجاح",
   };
 }

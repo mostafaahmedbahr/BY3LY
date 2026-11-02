@@ -17,6 +17,7 @@ import 'features/deleteAccount/presentation/view_model/delete_account_cubit.dart
 import 'features/fav/data/repos/fav_repos_imple.dart';
 import 'features/helpSupport/presentation/view-model/help_support_cubit.dart';
 import 'features/layout/presentation/view_model/layout_cubit.dart';
+import 'features/privacy/data/repos/privacy_repo_imple.dart';
 import 'features/privacy/presentation/view_model/privacy_cubit.dart';
 import 'features/reportProduct/presentation/view_model/report_product_cubit.dart';
 import 'features/search/data/repos/search_repos_imple.dart';
@@ -60,7 +61,14 @@ class MyApp extends StatelessWidget {
               ReportProductCubit(getIt.get<ReportProductsReposImpl>())
                 ..getAllComplaintsTypesData(),
         ),
-        BlocProvider(create: (context) => PrivacyCubit()),
+        BlocProvider(
+          create: (context) {
+            final cubit = PrivacyCubit(getIt.get<PrivacyRepoImpl>());
+            // Settings are account-scoped: guests would get a 401.
+            if (!GuestGuard.isGuest) cubit.getSettings();
+            return cubit;
+          },
+        ),
         BlocProvider(create: (context) => HelpSupportCubit()),
         BlocProvider(create: (context) => AddBalanceCubit()),
         BlocProvider(create: (context) => HelpSupportChatCubit()),
