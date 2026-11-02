@@ -108,6 +108,7 @@ class Products {
   String? shippingType;
   String? condition;
   bool? isUrgent;
+  int? status;
   int? views;
 
   Products({
@@ -145,6 +146,7 @@ class Products {
     this.shippingType,
     this.condition,
     this.isUrgent,
+    this.status,
     this.views,
   });
 
@@ -211,6 +213,8 @@ class Products {
 
     isUrgent = _asBool(json["is_urgent"]);
 
+    status = _asInt(json["status"]);
+
     views = _asInt(json["views"]);
   }
 
@@ -258,6 +262,7 @@ class Products {
     _data["shipping_type"] = shippingType;
     _data["condition"] = condition;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["views"] = views;
     return _data;
   }

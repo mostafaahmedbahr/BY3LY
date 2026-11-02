@@ -142,6 +142,7 @@ class SponsoredProducts {
   int? finalPrice;
   bool? isNegotiable;
   bool? isUrgent;
+  int? status;
   String? price;
   dynamic oldPrice;
   String? currency;
@@ -180,6 +181,7 @@ class SponsoredProducts {
     this.finalPrice,
     this.isNegotiable,
     this.isUrgent,
+    this.status,
     this.price,
     this.oldPrice,
     this.currency,
@@ -219,6 +221,7 @@ class SponsoredProducts {
     finalPrice = _asInt(json["final_price"]);
     isNegotiable = _asBool(json["is_negotiable"]);
     isUrgent = _asBool(json["is_urgent"]);
+    status = _asInt(json["status"]);
     price = _asString(json["price"]);
     oldPrice = json["old_price"];
     currency = _asString(json["currency"]);
@@ -259,6 +262,7 @@ class SponsoredProducts {
     _data["final_price"] = finalPrice;
     _data["is_negotiable"] = isNegotiable;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["price"] = price;
     _data["old_price"] = oldPrice;
     _data["currency"] = currency;
@@ -346,6 +350,7 @@ class SimilarProducts {
   int? finalPrice;
   bool? isNegotiable;
   bool? isUrgent;
+  int? status;
   String? price;
   dynamic oldPrice;
   String? currency;
@@ -384,6 +389,7 @@ class SimilarProducts {
     this.finalPrice,
     this.isNegotiable,
     this.isUrgent,
+    this.status,
     this.price,
     this.oldPrice,
     this.currency,
@@ -423,6 +429,7 @@ class SimilarProducts {
     finalPrice = _asInt(json["final_price"]);
     isNegotiable = _asBool(json["is_negotiable"]);
     isUrgent = _asBool(json["is_urgent"]);
+    status = _asInt(json["status"]);
     price = _asString(json["price"]);
     oldPrice = json["old_price"];
     currency = _asString(json["currency"]);
@@ -463,6 +470,7 @@ class SimilarProducts {
     _data["final_price"] = finalPrice;
     _data["is_negotiable"] = isNegotiable;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["price"] = price;
     _data["old_price"] = oldPrice;
     _data["currency"] = currency;
@@ -550,6 +558,7 @@ class RelatedProducts {
   int? finalPrice;
   bool? isNegotiable;
   bool? isUrgent;
+  int? status;
   String? price;
   dynamic oldPrice;
   String? currency;
@@ -588,6 +597,7 @@ class RelatedProducts {
     this.finalPrice,
     this.isNegotiable,
     this.isUrgent,
+    this.status,
     this.price,
     this.oldPrice,
     this.currency,
@@ -627,6 +637,7 @@ class RelatedProducts {
     finalPrice = _asInt(json["final_price"]);
     isNegotiable = _asBool(json["is_negotiable"]);
     isUrgent = _asBool(json["is_urgent"]);
+    status = _asInt(json["status"]);
     price = _asString(json["price"]);
     oldPrice = json["old_price"];
     currency = _asString(json["currency"]);
@@ -669,6 +680,7 @@ class RelatedProducts {
     _data["final_price"] = finalPrice;
     _data["is_negotiable"] = isNegotiable;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["price"] = price;
     _data["old_price"] = oldPrice;
     _data["currency"] = currency;
@@ -775,6 +787,7 @@ class Product {
   int? finalPrice;
   bool? isNegotiable;
   bool? isUrgent;
+  int? status;
   String? price;
   dynamic oldPrice;
   String? currency;
@@ -817,6 +830,7 @@ class Product {
     this.finalPrice,
     this.isNegotiable,
     this.isUrgent,
+    this.status,
     this.price,
     this.oldPrice,
     this.currency,
@@ -860,6 +874,7 @@ class Product {
     finalPrice = _asInt(json["final_price"]);
     isNegotiable = _asBool(json["is_negotiable"]);
     isUrgent = _asBool(json["is_urgent"]);
+    status = _asInt(json["status"]);
     price = _asString(json["price"]);
     oldPrice = json["old_price"];
     currency = _asString(json["currency"]);
@@ -914,6 +929,7 @@ class Product {
     _data["final_price"] = finalPrice;
     _data["is_negotiable"] = isNegotiable;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["price"] = price;
     _data["old_price"] = oldPrice;
     _data["currency"] = currency;

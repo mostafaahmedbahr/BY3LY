@@ -149,7 +149,7 @@ class ProductRowCard extends StatelessWidget {
     this.productId,
     this.initialIsFavourite = false,
     this.isUrgent = false,
-    this.topRated = false,
+    this.featured = false,
     this.views,
     this.bottomWidget,
     required this.onTap,
@@ -169,8 +169,8 @@ class ProductRowCard extends StatelessWidget {
   /// Ads flagged `is_urgent` get the red urgent pill.
   final bool isUrgent;
 
-  /// Ads rated 5/5 get the gold "featured" pill.
-  final bool topRated;
+  /// Ads with `status == 3` get the yellow "featured" pill.
+  final bool featured;
 
   /// Total views, shown next to the date when the API provides it.
   final int? views;
@@ -220,10 +220,10 @@ class ProductRowCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  if (isUrgent || topRated) ...[
+                  if (isUrgent || featured) ...[
                     ProductBadges(
                       isUrgent: isUrgent,
-                      topRated: topRated,
+                      featured: featured,
                       elevated: false,
                     ),
                     const SizedBox(height: 4),
@@ -320,7 +320,7 @@ class ProductGridCard extends StatelessWidget {
     this.productId,
     this.initialIsFavourite = false,
     this.isUrgent = false,
-    this.topRated = false,
+    this.featured = false,
     this.views,
     this.imageHeight = 120,
     required this.onTap,
@@ -340,8 +340,8 @@ class ProductGridCard extends StatelessWidget {
   /// Ads flagged `is_urgent` get the red urgent pill.
   final bool isUrgent;
 
-  /// Ads rated 5/5 get the gold "featured" pill.
-  final bool topRated;
+  /// Ads with `status == 3` get the yellow "featured" pill.
+  final bool featured;
 
   /// Total views, shown next to the date when the API provides it.
   final int? views;
@@ -388,7 +388,7 @@ class ProductGridCard extends StatelessWidget {
                       initialIsFavourite: initialIsFavourite,
                     ),
                   ),
-                if (isUrgent || topRated)
+                if (isUrgent || featured)
                   Positioned(
                     top: 8,
                     left: 8,
@@ -397,7 +397,7 @@ class ProductGridCard extends StatelessWidget {
                     right: productId != null ? 52 : 8,
                     child: ProductBadges(
                       isUrgent: isUrgent,
-                      topRated: topRated,
+                      featured: featured,
                     ),
                   ),
               ],

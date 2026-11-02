@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class SeeAllBestViewBodyListItem extends StatelessWidget {
   const SeeAllBestViewBodyListItem({super.key, required this.product});
- final  Products  product;
+  final Products product;
   @override
   Widget build(BuildContext context) {
     return ProductGridCard(
@@ -22,13 +22,13 @@ class SeeAllBestViewBodyListItem extends StatelessWidget {
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
       isUrgent: product.isUrgent == true,
-      topRated: isTopRated(product.rate),
+      featured: isFeatured(product.status),
       views: product.views,
       onTap: () {
-        context.pushNamed(Routes.productDetailsView, arguments: {
-          "type": "home",
-          "productId": product.id ?? 0,
-        });
+        context.pushNamed(
+          Routes.productDetailsView,
+          arguments: {"type": "home", "productId": product.id ?? 0},
+        );
       },
     );
   }

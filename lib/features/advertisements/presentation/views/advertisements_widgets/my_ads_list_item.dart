@@ -215,11 +215,11 @@ class MyAdsListItem extends StatelessWidget {
                         ),
                       ),
                       if (adsProduct.isUrgent == true ||
-                          isTopRated(adsProduct.rate)) ...[
+                          isFeatured(adsProduct.status)) ...[
                         const CustomSizedBox(height: 6),
                         ProductBadges(
                           isUrgent: adsProduct.isUrgent == true,
-                          topRated: isTopRated(adsProduct.rate),
+                          featured: isFeatured(adsProduct.status),
                           elevated: false,
                         ),
                       ],

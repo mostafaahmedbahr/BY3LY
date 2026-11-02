@@ -7,23 +7,23 @@ import 'package:flutter/material.dart';
 // Product identity badges, reused everywhere a product is displayed.
 //
 // * Urgent      -> red pill with a bolt icon, only when `is_urgent` is true.
-// * Featured    -> gold pill with a premium icon, only when rate reached 5/5.
+// * Featured    -> yellow pill with a premium icon, only when `status == 3`.
 // * Views count -> eye icon + "604 views", only when the API sends `views`.
 // ---------------------------------------------------------------------------
 
-/// A product rating of this value (or more) earns the "featured" badge.
-const double kTopRatedValue = 5;
+/// Products with this `status` value are featured by the backend.
+const int kFeaturedStatus = 3;
 
-/// True when [rate] represents a full 5/5 rating.
+/// True when [status] is the "featured" status (3).
 ///
-/// The API sends the rate sometimes as `int`, sometimes as `String`, so both
+/// The API sends the status sometimes as `int`, sometimes as `String`, so both
 /// are accepted here.
-bool isTopRated(dynamic rate) {
-  if (rate == null) return false;
-  final value = rate is num
-      ? rate.toDouble()
-      : double.tryParse(rate.toString().trim());
-  return value != null && value >= kTopRatedValue;
+bool isFeatured(dynamic status) {
+  if (status == null) return false;
+  final value = status is num
+      ? status.toInt()
+      : int.tryParse(status.toString().trim());
+  return value == kFeaturedStatus;
 }
 
 /// Small rounded label used over product images and next to titles.
@@ -103,13 +103,13 @@ class UrgentBadge extends StatelessWidget {
   }
 }
 
-/// Gold "featured" pill, shown only when the rating reached 5/5.
-class TopRatedBadge extends StatelessWidget {
-  const TopRatedBadge({super.key, this.elevated = true});
+/// Yellow "featured" pill, shown only for products with `status == 3`.
+class FeaturedBadge extends StatelessWidget {
+  const FeaturedBadge({super.key, this.elevated = true});
 
   final bool elevated;
 
-  /// Dark brown keeps the text readable on the gold background.
+  /// Dark brown keeps the text readable on the yellow background.
   static const Color _foreground = Color(0xff3D2B00);
   static const Color _background = Color(0xffF5B301);
 
@@ -131,26 +131,26 @@ class ProductBadges extends StatelessWidget {
   const ProductBadges({
     super.key,
     this.isUrgent = false,
-    this.topRated = false,
+    this.featured = false,
     this.elevated = true,
     this.spacing = 6,
   });
 
   final bool isUrgent;
-  final bool topRated;
+  final bool featured;
   final bool elevated;
   final double spacing;
 
   @override
   Widget build(BuildContext context) {
-    if (!isUrgent && !topRated) return const SizedBox.shrink();
+    if (!isUrgent && !featured) return const SizedBox.shrink();
     return Wrap(
       spacing: spacing,
       runSpacing: 4,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (isUrgent) UrgentBadge(elevated: elevated),
-        if (topRated) TopRatedBadge(elevated: elevated),
+        if (featured) FeaturedBadge(elevated: elevated),
       ],
     );
   }

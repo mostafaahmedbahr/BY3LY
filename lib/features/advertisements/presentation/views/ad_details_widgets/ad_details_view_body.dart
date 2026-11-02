@@ -207,7 +207,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
             ),
           ),
           if (widget.ad.isUrgent == true ||
-              isTopRated(widget.ad.rate) ||
+              isFeatured(widget.ad.status) ||
               (widget.ad.views ?? 0) > 0) ...[
             const SizedBox(height: 8),
             Wrap(
@@ -217,7 +217,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
               children: [
                 ProductBadges(
                   isUrgent: widget.ad.isUrgent == true,
-                  topRated: isTopRated(widget.ad.rate),
+                  featured: isFeatured(widget.ad.status),
                   elevated: false,
                 ),
                 ProductViewsLabel(views: widget.ad.views, fontSize: 12),

@@ -43,8 +43,7 @@ class BestViewStrip extends StatelessWidget {
                   },
                   child: Text(
                     context.tr(LocaleKeys.seeAll),
-                    style: const TextStyle(
-                        color: AppColors.mainColor),
+                    style: const TextStyle(color: AppColors.mainColor),
                   ),
                 ),
               ],
@@ -73,19 +72,16 @@ class BestViewStrip extends StatelessWidget {
                     date: item.createdAt,
                     rating: item.rate?.toString(),
                     productId: item.id,
-                    initialIsFavourite:
-                        item.isFavourite == true,
+                    initialIsFavourite: item.isFavourite == true,
                     isUrgent: item.isUrgent == true,
-                    topRated: isTopRated(item.rate),
+                    featured: isFeatured(item.status),
                     views: item.views,
                     imageHeight: 105,
                     onTap: () {
                       context.pushNamed(
-                          Routes.productDetailsView,
-                          arguments: {
-                            "type": "home",
-                            "productId": item.id ?? 0,
-                          });
+                        Routes.productDetailsView,
+                        arguments: {"type": "home", "productId": item.id ?? 0},
+                      );
                     },
                   ),
                 );

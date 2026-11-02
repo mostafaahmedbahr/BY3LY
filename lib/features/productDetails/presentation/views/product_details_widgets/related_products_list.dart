@@ -6,7 +6,7 @@ import 'package:by3ly/features/productDetails/data/models/product_details_model.
 import 'package:flutter/material.dart';
 
 class RelatedProductsList extends StatelessWidget {
-  const RelatedProductsList({super.key,required this.relatedProductsList});
+  const RelatedProductsList({super.key, required this.relatedProductsList});
   final List<RelatedProducts>? relatedProductsList;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class RelatedProductsList extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
-        itemBuilder:  (context , index ){
+        itemBuilder: (context, index) {
           final item = items[index];
           return SizedBox(
             width: 165,
@@ -37,20 +37,20 @@ class RelatedProductsList extends StatelessWidget {
               productId: item.id,
               initialIsFavourite: item.isFavourite == true,
               isUrgent: item.isUrgent == true,
-              topRated: isTopRated(item.rate),
+              featured: isFeatured(item.status),
               views: item.views,
               imageHeight: 110,
               onTap: () {
-                context.pushNamed(Routes.productDetailsView, arguments: {
-                  "type": "home",
-                  "productId": item.id ?? 0,
-                });
+                context.pushNamed(
+                  Routes.productDetailsView,
+                  arguments: {"type": "home", "productId": item.id ?? 0},
+                );
               },
             ),
           );
         },
-        separatorBuilder: (context , index ){
-          return const SizedBox(width: 10,);
+        separatorBuilder: (context, index) {
+          return const SizedBox(width: 10);
         },
         itemCount: items.length,
       ),

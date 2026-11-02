@@ -22,13 +22,13 @@ class FavItemWidget extends StatelessWidget {
       productId: favourite.id,
       initialIsFavourite: true,
       isUrgent: favourite.isUrgent == true,
-      topRated: isTopRated(favourite.rate),
+      featured: isFeatured(favourite.status),
       views: favourite.views,
       onTap: () {
-        context.pushNamed(Routes.productDetailsView, arguments: {
-          "type": "home",
-          "productId": favourite.id ?? 0,
-        });
+        context.pushNamed(
+          Routes.productDetailsView,
+          arguments: {"type": "home", "productId": favourite.id ?? 0},
+        );
       },
     );
   }

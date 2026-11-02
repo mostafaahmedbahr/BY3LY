@@ -15,7 +15,7 @@ class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
         Text("${product!.name}", style: AppStyles.textStyle16W600Black),
         // Urgent / featured badges + total views (only when available).
         if (product!.isUrgent == true ||
-            isTopRated(product!.rate) ||
+            isFeatured(product!.status) ||
             (product!.views ?? 0) > 0) ...[
           const CustomSizedBox(height: 8),
           Wrap(
@@ -25,7 +25,7 @@ class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
             children: [
               ProductBadges(
                 isUrgent: product!.isUrgent == true,
-                topRated: isTopRated(product!.rate),
+                featured: isFeatured(product!.status),
                 elevated: false,
               ),
               ProductViewsLabel(views: product!.views, fontSize: 12),

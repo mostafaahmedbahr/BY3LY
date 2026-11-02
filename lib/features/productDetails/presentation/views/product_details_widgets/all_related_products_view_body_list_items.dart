@@ -10,8 +10,7 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
   final List<RelatedProducts>? relatedProducts;
   @override
   Widget build(BuildContext context) {
-    return
-    GridView.builder(
+    return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 12,
@@ -34,13 +33,13 @@ class AllRelatedProductsViewBodyListItems extends StatelessWidget {
           productId: item.id,
           initialIsFavourite: item.isFavourite == true,
           isUrgent: item.isUrgent == true,
-          topRated: isTopRated(item.rate),
+          featured: isFeatured(item.status),
           views: item.views,
           onTap: () {
-            context.pushNamed(Routes.productDetailsView, arguments: {
-              "type": "home",
-              "productId": item.id ?? 0,
-            });
+            context.pushNamed(
+              Routes.productDetailsView,
+              arguments: {"type": "home", "productId": item.id ?? 0},
+            );
           },
         );
       },

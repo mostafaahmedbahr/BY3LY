@@ -143,7 +143,7 @@ class Products {
     sellerPhone = json["seller_phone"];
     lat = json["lat"];
     long = json["long"];
-    status = (json["status"] as num).toInt();
+    status = _toInt(json["status"]);
     negotiable = (json["negotiable"] as num).toInt();
     communication = (json["communication"] as num).toInt();
     address = json["address"];

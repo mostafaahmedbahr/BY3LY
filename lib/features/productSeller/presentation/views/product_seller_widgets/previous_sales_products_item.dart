@@ -21,13 +21,13 @@ class PreviousSalesProductsItem extends StatelessWidget {
       productId: product.id,
       initialIsFavourite: product.isFavourite == true,
       isUrgent: product.isUrgent == true,
-      topRated: isTopRated(product.rate),
+      featured: isFeatured(product.status),
       views: product.views,
       onTap: () {
-        context.pushNamed(Routes.productDetailsView, arguments: {
-          "type": "home",
-          "productId": product.id ?? 0,
-        });
+        context.pushNamed(
+          Routes.productDetailsView,
+          arguments: {"type": "home", "productId": product.id ?? 0},
+        );
       },
     );
   }

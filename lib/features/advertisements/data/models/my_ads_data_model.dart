@@ -74,6 +74,7 @@ class Ads {
   int? finalPrice;
   bool? isNegotiable;
   bool? isUrgent;
+  int? status;
   bool? isPaused;
   String? price;
   dynamic oldPrice;
@@ -118,6 +119,7 @@ class Ads {
     this.finalPrice,
     this.isNegotiable,
     this.isUrgent,
+    this.status,
     this.isPaused,
     this.price,
     this.oldPrice,
@@ -163,6 +165,7 @@ class Ads {
     finalPrice = _asInt(json["final_price"]);
     isNegotiable = _asBool(json["is_negotiable"]);
     isUrgent = _asBool(json["is_urgent"]);
+    status = _asInt(json["status"]);
     isPaused = _asBool(json["is_paused"]);
     price = _asString(json["price"]);
     oldPrice = json["old_price"];
@@ -217,6 +220,7 @@ class Ads {
     _data["final_price"] = finalPrice;
     _data["is_negotiable"] = isNegotiable;
     _data["is_urgent"] = isUrgent;
+    _data["status"] = status;
     _data["is_paused"] = isPaused;
     _data["price"] = price;
     _data["old_price"] = oldPrice;
