@@ -20,106 +20,112 @@ import '../../../../features/reportProduct/data/report_product_repos/report_prod
 import '../../../../features/search/data/repos/search_repos_imple.dart';
 import '../../../../features/seeAllBestView/data/repos/sell_all_best_view_repo_imple.dart';
 import '../../../../features/updateProfile/data/repos/update_profile_data_repo_imple.dart';
-import '../../../features/changePassword/data/repos/change_password_repo_imple.dart';
+import '../../../../features/changePassword/data/repos/change_password_repo_imple.dart';
+import '../../../../features/chat/data/repos/chat_repository_impl.dart';
+import '../../../../features/chat/presentation/view_model/chat_unread_cubit.dart';
 import '../../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../../features/packages/data/repos/packages_repos_imple.dart';
 import '../../../features/PaymentBalance/data/repos/wallet_repos_imple.dart';
 import '../../../features/register/data/repos/register_repo_imple.dart';
 import '../../../features/statistics/data/repos/statistics_repos_imple.dart';
 import 'api_service.dart';
+
 //dependency Injection
 
 final getIt = GetIt.instance;
 
 void setup() {
   getIt.registerSingleton<ApiService>(ApiService(Dio()));
-  getIt.registerSingleton<AllCategoriesRepoImpl>(AllCategoriesRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<RegisterRepoImpl>(RegisterRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<HomeRepoImpl>(HomeRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<AllCategoriesRepoImpl>(
+    AllCategoriesRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<RegisterRepoImpl>(
+    RegisterRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<HomeRepoImpl>(HomeRepoImpl(getIt.get<ApiService>()));
 
-  getIt.registerSingleton<SellAllBestViewRepoImpl>(SellAllBestViewRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<SellAllBestViewRepoImpl>(
+    SellAllBestViewRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<LoginRepoImpl>(LoginRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<LoginRepoImpl>(
+    LoginRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<ProfileRepoImpl>(ProfileRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<ProfileRepoImpl>(
+    ProfileRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<OtpReposImpl>(OtpReposImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<OtpReposImpl>(OtpReposImpl(getIt.get<ApiService>()));
 
-  getIt.registerSingleton<ChooseLocationReposImpl>(ChooseLocationReposImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<FavDataRepoImpl>(FavDataRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<SearchReposImpl>(SearchReposImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<DeleteAccountReposImple>(DeleteAccountReposImple(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<ChooseLocationReposImpl>(
+    ChooseLocationReposImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<FavDataRepoImpl>(
+    FavDataRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<SearchReposImpl>(
+    SearchReposImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<DeleteAccountReposImple>(
+    DeleteAccountReposImple(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<ProductDetailsRepoImpl>(ProductDetailsRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<ProductDetailsRepoImpl>(
+    ProductDetailsRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<AddAdvertisementsRepoImpl>(AddAdvertisementsRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<AdvertisementsRepoImpl>(AdvertisementsRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<AllSubCategoriesRepoImpl>(AllSubCategoriesRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<AllSubCategoriesProductsReposImpl>(AllSubCategoriesProductsReposImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<AddAdvertisementsRepoImpl>(
+    AddAdvertisementsRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<AdvertisementsRepoImpl>(
+    AdvertisementsRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<AllSubCategoriesRepoImpl>(
+    AllSubCategoriesRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<AllSubCategoriesProductsReposImpl>(
+    AllSubCategoriesProductsReposImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<ProductSellerRepoImpl>(ProductSellerRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<ProductSellerRepoImpl>(
+    ProductSellerRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<HowToMakePurchaseRepoImpl>(HowToMakePurchaseRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<HowToMakePurchaseRepoImpl>(
+    HowToMakePurchaseRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<NotificationsDataRepoImpl>(NotificationsDataRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<NotificationsDataRepoImpl>(
+    NotificationsDataRepoImpl(getIt.get<ApiService>()),
+  );
 
-  getIt.registerSingleton<ReportProductsReposImpl>(ReportProductsReposImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<UpdateProfileDataRepoImpl>(UpdateProfileDataRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<ChangePasswordRepoImpl>(ChangePasswordRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<CompareReposImpl>(CompareReposImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<PackagesRepoImpl>(PackagesRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<WalletRepoImpl>(WalletRepoImpl(
-    getIt.get<ApiService>(),
-  ));
-  getIt.registerSingleton<StatisticsRepoImpl>(StatisticsRepoImpl(
-    getIt.get<ApiService>(),
-  ));
+  getIt.registerSingleton<ReportProductsReposImpl>(
+    ReportProductsReposImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<UpdateProfileDataRepoImpl>(
+    UpdateProfileDataRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<ChangePasswordRepoImpl>(
+    ChangePasswordRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<CompareReposImpl>(
+    CompareReposImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<PackagesRepoImpl>(
+    PackagesRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<WalletRepoImpl>(
+    WalletRepoImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<StatisticsRepoImpl>(
+    StatisticsRepoImpl(getIt.get<ApiService>()),
+  );
+
+  getIt.registerSingleton<ChatRepositoryImpl>(
+    ChatRepositoryImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<ChatUnreadCubit>(
+    ChatUnreadCubit(getIt.get<ChatRepositoryImpl>()),
+  );
 }

@@ -326,5 +326,33 @@ class ArLang {
     "payBankTransfer": "تحويل بنكي",
     "payWallet": "محفظة",
     "payFawry": "فوري",
+
+    // Marketplace chat
+    "conversations": "المحادثات",
+    "noConversations": "لا توجد محادثات بعد",
+    "noConversationsMessage":
+        "ابدأ محادثة مع بائع من صفحة الإعلان أو من صفحة البائع",
+    "deletedMessage": "تم حذف هذه الرسالة",
+    "photo": "صورة",
+    "you": "أنت",
+    "yesterday": "أمس",
+    "currencyEgp": "ج.م",
+    "deleteConversation": "حذف المحادثة",
+    "deleteConversationConfirm":
+        "سيتم حذف المحادثة من قائمتك أنت فقط، هل أنت متأكد؟",
+    "conversationDeleted": "تم حذف المحادثة",
+    "noMessagesYet": "لا توجد رسائل بعد",
+    "startTheConversation": "ابدأ المحادثة بإرسال أول رسالة",
+    "writeMessageHint": "اكتب رسالتك هنا",
+    "attachImage": "إرفاق صورة",
+    "camera": "الكاميرا",
+    "gallery": "معرض الصور",
+    "deleteMessage": "حذف الرسالة",
+    "deleteMessageConfirm": "سيتم حذف هذه الرسالة للطرفين، هل أنت متأكد؟",
+    "imageTooLarge": "حجم الصورة كبير جدًا، الحد الأقصى 5 ميجابايت",
+    "unsupportedImageType": "نوع الصورة غير مدعوم، استخدم JPG أو PNG أو WEBP",
+    "contactSeller": "تواصل مع البائع",
+    "refresh": "تحديث",
+    "cannotChatWithYourself": "لا يمكنك بدء محادثة مع نفسك",
   };
 }

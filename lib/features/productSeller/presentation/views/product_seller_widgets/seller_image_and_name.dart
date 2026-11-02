@@ -8,47 +8,43 @@ class SellerImageAndName extends StatelessWidget {
   final Seller seller;
   @override
   Widget build(BuildContext context) {
-    return    Row(
+    return Row(
       children: [
         Container(
           height: 44,
           width: 44,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: AppColors.surfaceVariant,
-              border: Border.all(
-                color: AppColors.surfaceVariant,
-              )),
+            borderRadius: BorderRadius.circular(100),
+            color: AppColors.surfaceVariant,
+            border: Border.all(color: AppColors.surfaceVariant),
+          ),
           child: CustomNetWorkImage(
-            imageUrl:
-            "${seller.image}",
+            imageUrl: "${seller.image}",
             raduis: 50,
             fit: BoxFit.cover,
           ),
         ),
-        const SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(seller.name.toString(),style: AppStyles.textStyle16W600Black,),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset(AppImages.star1),
-                    const SizedBox(width: 2,),
-                    Text("${seller.sellerRate}"),
-                  ],
-                ),
-                const SizedBox(width: 4,),
-                Text("( ${seller.countCommenets} )",
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                  ),),
-              ],
-            ) ,
+            Text(seller.name.toString(), style: AppStyles.textStyle16W600Black),
+            // Row(
+            //   children: [
+            //     Row(
+            //       children: [
+            //         SvgPicture.asset(AppImages.star1),
+            //         const SizedBox(width: 2,),
+            //         Text("${seller.sellerRate}"),
+            //       ],
+            //     ),
+            //     const SizedBox(width: 4,),
+            //     Text("( ${seller.countCommenets} )",
+            //       style: TextStyle(
+            //         color: AppColors.textSecondary,
+            //       ),),
+            //   ],
+            // ) ,
           ],
         ),
       ],

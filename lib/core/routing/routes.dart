@@ -8,12 +8,12 @@ class Routes {
   static const String chooseLocationView = '/chooseLocationView';
   static const String changePasswordView = '/changePasswordView';
   static const String allSubCategoriesView = '/allSubCategoriesView';
-  static const String allSubCategoriesProductsView = '/allSubCategoriesProductsView';
+  static const String allSubCategoriesProductsView =
+      '/allSubCategoriesProductsView';
   static const String productDetailsView = '/productDetailsView';
   static const String allCategoriesView = '/allCategoriesView';
   static const String compareView = '/compareView';
   static const String packagesView = '/packagesView';
-
-
-
+  static const String conversationsView = '/conversationsView';
+  static const String chatView = '/chatView';
 }

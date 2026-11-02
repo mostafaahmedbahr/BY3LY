@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_states.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
@@ -7,7 +8,7 @@ import 'package:by3ly/features/notifications/presentation/view_model/notificatio
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
- import '../../../../main_importants.dart';
+import '../../../../main_importants.dart';
 
 class LayoutView extends StatefulWidget {
   const LayoutView({super.key});
@@ -21,12 +22,26 @@ class LayoutViewState extends State<LayoutView> {
   DateTime? _lastPressed;
 
   @override
+  void initState() {
+    super.initState();
+    // LayoutView is recreated after login, so refresh the chat badge once the
+    // new account is available. Guests have no token, skip the request.
+    if (!GuestGuard.isGuest) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ChatUnreadCubit.get(context).refresh();
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     debugPrint(CacheTokenManger.userToken);
     debugPrint("LayoutView");
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final inactiveNavColor =
-        isDarkMode ? AppColors.textSecondary : AppColors.mainColor;
+    final inactiveNavColor = isDarkMode
+        ? AppColors.textSecondary
+        : AppColors.mainColor;
     return BlocBuilder<LayoutCubit, LayoutStates>(
       builder: (context, state) {
         var layoutCubit = LayoutCubit.get(context);
@@ -48,11 +63,11 @@ class LayoutViewState extends State<LayoutView> {
                 FlashyTabBarItem(
                   activeColor: AppColors.accent,
                   inactiveColor: inactiveNavColor,
-                  icon: BlocBuilder<NotificationsCubit,
-                      NotificationsStates>(
+                  icon: BlocBuilder<NotificationsCubit, NotificationsStates>(
                     builder: (context, state) {
-                      final unread = NotificationsCubit.get(context)
-                          .unreadCount;
+                      final unread = NotificationsCubit.get(
+                        context,
+                      ).unreadCount;
                       return Badge(
                         isLabelVisible: unread > 0,
                         label: Text(
@@ -60,8 +75,7 @@ class LayoutViewState extends State<LayoutView> {
                           style: const TextStyle(fontSize: 10),
                         ),
                         backgroundColor: AppColors.redColor,
-                        child: const Icon(
-                            CupertinoIcons.chat_bubble),
+                        child: const Icon(CupertinoIcons.chat_bubble),
                       );
                     },
                   ),
@@ -90,11 +104,12 @@ class LayoutViewState extends State<LayoutView> {
               onItemSelected: (index) {
                 // Guests may only browse: home(0) and search(2) are open,
                 // notifications(1), ads(3) and account(4) need login.
-                if (GuestGuard.isGuest && (index == 1 || index == 3 || index == 4)) {
+                if (GuestGuard.isGuest &&
+                    (index == 1 || index == 3 || index == 4)) {
                   GuestGuard.requireLogin(context);
                   return;
                 }
-                layoutCubit.changeBottomNav(index,context);
+                layoutCubit.changeBottomNav(index, context);
               },
             ),
           ),
@@ -110,7 +125,8 @@ class LayoutViewState extends State<LayoutView> {
     }
 
     DateTime now = DateTime.now();
-    if (_lastPressed == null || now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+    if (_lastPressed == null ||
+        now.difference(_lastPressed!) > const Duration(seconds: 2)) {
       // First press: show a message and update the time
       _lastPressed = now;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -335,5 +335,34 @@ class EnLang {
     "payBankTransfer": "Bank transfer",
     "payWallet": "Wallet",
     "payFawry": "Fawry",
+
+    // Marketplace chat
+    "conversations": "Conversations",
+    "noConversations": "No conversations yet",
+    "noConversationsMessage":
+        "Start a conversation with a seller from an ad or the seller page",
+    "deletedMessage": "This message was deleted",
+    "photo": "Photo",
+    "you": "You",
+    "yesterday": "Yesterday",
+    "currencyEgp": "EGP",
+    "deleteConversation": "Delete conversation",
+    "deleteConversationConfirm":
+        "The conversation will be removed from your list only. Continue?",
+    "conversationDeleted": "Conversation deleted",
+    "noMessagesYet": "No messages yet",
+    "startTheConversation": "Send the first message to start the conversation",
+    "writeMessageHint": "Write your message here",
+    "attachImage": "Attach image",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "deleteMessage": "Delete message",
+    "deleteMessageConfirm":
+        "This message will be deleted for both sides. Continue?",
+    "imageTooLarge": "Image is too large. Maximum size is 5 MB",
+    "unsupportedImageType": "Unsupported image type. Use JPG, PNG or WEBP",
+    "contactSeller": "Contact seller",
+    "refresh": "Refresh",
+    "cannotChatWithYourself": "You cannot start a conversation with yourself",
   };
 }

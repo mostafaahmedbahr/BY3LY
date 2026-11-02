@@ -163,6 +163,7 @@ class ProductDetailsView extends StatelessWidget {
             product: product,
             relatedProducts: relatedProducts,
             type: type,
+            isOwner: isOwner,
           ),
         );
       },

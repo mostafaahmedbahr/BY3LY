@@ -11,6 +11,7 @@ import 'core/shared_cubits/auth_cubit/auth_cubit.dart';
 import 'features/chooseLocation/data/repos/choose_location_repos_imple.dart';
 import 'main_importants.dart';
 import 'features/changeLang/presentation/view_model/change_lang_cubit.dart';
+import 'features/chat/presentation/view_model/chat_unread_cubit.dart';
 import 'features/deleteAccount/data/repos/delete_account_repos_imple.dart';
 import 'features/deleteAccount/presentation/view_model/delete_account_cubit.dart';
 import 'features/fav/data/repos/fav_repos_imple.dart';
@@ -116,6 +117,14 @@ class MyApp extends StatelessWidget {
             }
             return cubit;
           },
+        ),
+        BlocProvider<ChatUnreadCubit>.value(
+          value: () {
+            // Shared singleton: the badge stays in sync with the chat screens.
+            final cubit = getIt.get<ChatUnreadCubit>();
+            if (!GuestGuard.isGuest) cubit.refresh();
+            return cubit;
+          }(),
         ),
       ],
       child: ThemeProvider(

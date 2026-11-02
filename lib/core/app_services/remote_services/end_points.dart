@@ -37,7 +37,7 @@ class EndPoints {
   static const editAd = "editAds";
   static const getSubCategories = "getSubCategories";
   static const productBySubCategory = "productBySubCategory";
-  static const sellerProduct = "sellerProduct";
+  static const sellerProduct = "sellerDetails";
 
   /// Notifications: GET list, PATCH read, DELETE remove.
   static const notifications = "notifications";
@@ -64,4 +64,14 @@ class EndPoints {
 
   /// Seller statistics: `?month=YYYY-MM`, `?date=YYYY-MM-DD`, `?page=`.
   static const statistics = "statistics";
+
+  /// Marketplace chat: buyer <-> seller conversations.
+  /// GET = list, POST = create, DELETE = hide from the current user only.
+  static const conversations = "conversations";
+  static const conversationsUnreadCount = "conversations/unread-count";
+  static String conversationById(int id) => "conversations/$id";
+  static String conversationMessages(int id) => "conversations/$id/messages";
+  static String conversationRead(int id) => "conversations/$id/read";
+  static String conversationMessage(int conversationId, int messageId) =>
+      "conversations/$conversationId/messages/$messageId";
 }

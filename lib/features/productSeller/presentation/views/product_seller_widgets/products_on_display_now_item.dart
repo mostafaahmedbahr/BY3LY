@@ -13,7 +13,7 @@ class ProductsOnDisplayNowItem extends StatelessWidget {
     return ProductRowCard(
       imageUrl: product.image ?? '',
       title: product.name ?? '',
-      location: product.address,
+      location: product.location,
       type: product.type,
       model: product.model,
       price: product.price,

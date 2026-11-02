@@ -1,4 +1,6 @@
 import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/chat/presentation/view_model/chat_states.dart';
+import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
 import 'package:by3ly/main_importants.dart';
@@ -32,6 +34,53 @@ class HomeView extends StatelessWidget {
           ],
         ),
         actions: [
+          BlocBuilder<ChatUnreadCubit, ChatUnreadStates>(
+            builder: (context, state) {
+              final unread = ChatUnreadCubit.get(context).count;
+              return IconButton(
+                tooltip: context.tr(LocaleKeys.conversations),
+                onPressed: () async {
+                  if (!await GuestGuard.requireLogin(context)) return;
+                  if (!context.mounted) return;
+                  context.pushNamed(Routes.conversationsView);
+                },
+                icon: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      color: AppColors.yellowColor,
+                    ),
+                    if (unread > 0)
+                      PositionedDirectional(
+                        top: -5,
+                        end: -5,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 1,
+                          ),
+                          constraints: const BoxConstraints(minWidth: 16),
+                          decoration: BoxDecoration(
+                            color: AppColors.redColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            unread > 99 ? '99+' : '$unread',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
           BlocBuilder<ProfileCubit, ProfileStates>(
             builder: (context, state) {
               final profileCubit = context.read<ProfileCubit>();
@@ -111,4 +160,3 @@ class HomeView extends StatelessWidget {
     );
   }
 }
-

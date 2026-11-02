@@ -1,4 +1,4 @@
-
+import 'package:by3ly/features/chat/presentation/views/chat_widgets/start_chat_button.dart';
 import 'package:by3ly/features/howToMakePurchase/presentation/views/how_to_make_purchase_view.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
@@ -8,22 +8,28 @@ import 'package:by3ly/features/productDetails/presentation/views/product_details
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/rate_product_widget.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_images_list.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_seller_info.dart';
- import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/related_products_widget.dart';
+import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/related_products_widget.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/tips_for_your_safety.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/reportProduct/presentation/views/report_the_product_view.dart';
 import 'package:easy_localization/easy_localization.dart';
-  import '../../../../../main_importants.dart';
+import '../../../../../main_importants.dart';
 
 class ProductDetailsViewBody extends StatelessWidget {
-  const ProductDetailsViewBody(
-      {super.key,
-      required this.product,
-      required this.relatedProducts,
-      this.type = 'home'});
+  const ProductDetailsViewBody({
+    super.key,
+    required this.product,
+    required this.relatedProducts,
+    this.type = 'home',
+    this.isOwner = false,
+  });
   final Product? product;
   final List<RelatedProducts>? relatedProducts;
   final String type;
+
+  /// True when the signed-in user owns this ad; in that case contacting the
+  /// seller (yourself) is disabled.
+  final bool isOwner;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductDetailsCubit, ProductDetailsStates>(
@@ -34,43 +40,61 @@ class ProductDetailsViewBody extends StatelessWidget {
         final safeIndex = images.isEmpty
             ? 0
             : productDetailsCubit.imageIndex.clamp(0, images.length - 1);
-        final mainImage =
-            images.isNotEmpty ? images[safeIndex].image.toString() : '';
+        final mainImage = images.isNotEmpty
+            ? images[safeIndex].image.toString()
+            : '';
         final seller = product?.seller;
         return ListView(
           children: [
-              ProductImage(
-                  imageUrl: mainImage,
+            ProductImage(
+              imageUrl: mainImage,
               productId: product?.id ?? 0,
-              images: [
-                for (final img in images) img.image.toString(),
-              ],
-              initialIndex: safeIndex,),
-              Padding(
+              images: [for (final img in images) img.image.toString()],
+              initialIndex: safeIndex,
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    ProductImagesList(
-                      imagesList: images,
-                    ),
-                  const CustomSizedBox(
-                    height: 10,
-                  ),
-                    NameAndLocationAndPriceAndDesOfProduct(
-                    product: product,
-                  ),
-                  const CustomSizedBox(
-                    height: 10,
-                  ),
+                  ProductImagesList(imagesList: images),
+                  const CustomSizedBox(height: 10),
+                  NameAndLocationAndPriceAndDesOfProduct(product: product),
+                  const CustomSizedBox(height: 10),
                   ProductSellerInfo(
-                      sellerName: seller?.name ?? '',
-                      sellerId: seller?.id ?? 0,
-                      sellerImage: seller?.image ?? '',
+                    sellerName: seller?.name ?? '',
+                    sellerId: seller?.id ?? 0,
+                    sellerImage: seller?.image ?? '',
                   ),
-                  const CustomSizedBox(
-                    height: 10,
-                  ),
+                  if (product?.id != null && !isOwner)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: StartChatButton(
+                        productId: product!.id,
+                        sellerId: seller?.id,
+                        builder: (context, isLoading, onPressed) =>
+                            CustomButton(
+                              btnColor: AppColors.mainColor,
+                              btnText: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.whiteColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      context.tr(LocaleKeys.contactSeller),
+                                      style: const TextStyle(
+                                        color: AppColors.whiteColor,
+                                      ),
+                                    ),
+                              onPressed: onPressed,
+                            ),
+                      ),
+                    ),
+                  const CustomSizedBox(height: 10),
                   if (product?.id != null)
                     RateProductWidget(
                       productId: product!.id!,
@@ -78,68 +102,56 @@ class ProductDetailsViewBody extends StatelessWidget {
                       currentRate: product?.rate,
                       reviewsCount: product?.reviewsCount,
                     ),
-                  if (product?.id != null)
-                    const CustomSizedBox(
-                      height: 10,
+                  if (product?.id != null) const CustomSizedBox(height: 10),
+                  const CustomSizedBox(height: 10),
+                  Text(
+                    LocaleKeys.aboutProduct.tr(),
+                    style: AppStyles.textStyle16W600Black,
+                  ),
+                  const CustomSizedBox(height: 10),
+                  const TipsForYourSafety(),
+                  const CustomSizedBox(height: 20),
+                  CustomButton(
+                    btnColor: AppColors.surface,
+                    btnText: const Text(
+                      "كيم تتم عملية الشراء !",
+                      style: TextStyle(color: AppColors.mainColor),
                     ),
-                  const CustomSizedBox(
-                    height: 10,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: const HowToMakePurchaseView(),
+                        ),
+                      );
+                    },
                   ),
-                    Text(LocaleKeys.aboutProduct.tr(),
-                  style: AppStyles.textStyle16W600Black,),
-                  const CustomSizedBox(
-                    height: 10,
-                  ),
-                   const TipsForYourSafety(),
-                  const CustomSizedBox(
-                    height: 20,
-                  ),
+                  const CustomSizedBox(height: 20),
                   CustomButton(
                     btnColor: AppColors.surface,
-                      btnText: const Text("كيم تتم عملية الشراء !",style: TextStyle(
-                        color: AppColors.mainColor,
-                      ),),
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child:  const HowToMakePurchaseView(),
+                    btnText: Text(
+                      LocaleKeys.reportingAndSupport.tr(),
+                      style: const TextStyle(color: AppColors.mainColor),
+                    ),
+                    onPressed: () async {
+                      // Reporting needs an account: don't open it for guests.
+                      if (!await GuestGuard.requireLogin(context)) return;
+                      if (!context.mounted) return;
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: ReportTheProductView(
+                            productId: product?.id,
+                            sellerId: seller?.id,
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
                   ),
-                  const CustomSizedBox(
-                    height: 20,
-                  ),
-                  CustomButton(
-                    btnColor: AppColors.surface,
-                    btnText:   Text( LocaleKeys.reportingAndSupport.tr(),style: const TextStyle(
-                      color: AppColors.mainColor,
-                    ),),
-                      onPressed: () async {
-                        // Reporting needs an account: don't open it for guests.
-                        if (!await GuestGuard.requireLogin(context)) return;
-                        if (!context.mounted) return;
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.fade,
-                            child:    ReportTheProductView(
-                              productId:product?.id,
-                              sellerId: seller?.id,
-                            ),
-                          ),
-                        );
-                      },
-                  ),
-                  const CustomSizedBox(
-                    height: 20,
-                  ),
-                  RelatedProductsWidget(
-                      relatedProducts : relatedProducts,
-                  ),
-
+                  const CustomSizedBox(height: 20),
+                  RelatedProductsWidget(relatedProducts: relatedProducts),
                 ],
               ),
             ),

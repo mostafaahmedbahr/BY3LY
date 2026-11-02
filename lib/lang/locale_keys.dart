@@ -320,4 +320,30 @@ abstract class LocaleKeys {
   static const payBankTransfer = "payBankTransfer";
   static const payWallet = "payWallet";
   static const payFawry = "payFawry";
+
+  // Marketplace chat
+  static const conversations = "conversations";
+  static const noConversations = "noConversations";
+  static const noConversationsMessage = "noConversationsMessage";
+  static const deletedMessage = "deletedMessage";
+  static const photo = "photo";
+  static const you = "you";
+  static const yesterday = "yesterday";
+  static const currencyEgp = "currencyEgp";
+  static const deleteConversation = "deleteConversation";
+  static const deleteConversationConfirm = "deleteConversationConfirm";
+  static const conversationDeleted = "conversationDeleted";
+  static const noMessagesYet = "noMessagesYet";
+  static const startTheConversation = "startTheConversation";
+  static const writeMessageHint = "writeMessageHint";
+  static const attachImage = "attachImage";
+  static const camera = "camera";
+  static const gallery = "gallery";
+  static const deleteMessage = "deleteMessage";
+  static const deleteMessageConfirm = "deleteMessageConfirm";
+  static const imageTooLarge = "imageTooLarge";
+  static const unsupportedImageType = "unsupportedImageType";
+  static const contactSeller = "contactSeller";
+  static const refresh = "refresh";
+  static const cannotChatWithYourself = "cannotChatWithYourself";
 }

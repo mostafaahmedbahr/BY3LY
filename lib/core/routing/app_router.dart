@@ -16,6 +16,13 @@ import '../../features/allSubCategoriesProducts/presentation/views/all_sub_categ
 import '../../features/changePassword/data/repos/change_password_repo_imple.dart';
 import '../../features/changePassword/presentation/view_model/change_password_cubit.dart';
 import '../../features/changePassword/presentation/views/change_password_view.dart';
+import '../../features/chat/data/models/chat_models.dart';
+import '../../features/chat/data/repos/chat_repository_impl.dart';
+import '../../features/chat/presentation/view_model/chat_cubit.dart';
+import '../../features/chat/presentation/view_model/chat_unread_cubit.dart';
+import '../../features/chat/presentation/view_model/conversations_cubit.dart';
+import '../../features/chat/presentation/views/chat_view.dart';
+import '../../features/chat/presentation/views/conversations_view.dart';
 import '../../features/chooseLocation/data/repos/choose_location_repos_imple.dart';
 import '../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../features/otp/presentation/view_model/otp_cubit.dart';
@@ -41,9 +48,7 @@ class AppRouter {
       case Routes.splashView:
         return MaterialPageRoute(builder: (context) => const SplashView());
       case Routes.loginView:
-        return MaterialPageRoute(
-          builder: (context) => const LoginView(),
-        );
+        return MaterialPageRoute(builder: (context) => const LoginView());
       case Routes.layoutView:
         return MaterialPageRoute(builder: (context) => const LayoutView());
       case Routes.otpView:
@@ -57,7 +62,9 @@ class AppRouter {
       case Routes.chooseLocationView:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => ChooseLocationCubit(getIt.get<ChooseLocationReposImpl>())..getAllCitiesAndCenters(),
+            create: (context) =>
+                ChooseLocationCubit(getIt.get<ChooseLocationReposImpl>())
+                  ..getAllCitiesAndCenters(),
             child: const ChooseLocationView(),
           ),
         );
@@ -71,19 +78,21 @@ class AppRouter {
       case Routes.changePasswordView:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => ChangePasswordCubit(getIt.get<ChangePasswordRepoImpl>()),
-            child:   const ChangePasswordView(screenName: "",),
+            create: (context) =>
+                ChangePasswordCubit(getIt.get<ChangePasswordRepoImpl>()),
+            child: const ChangePasswordView(screenName: ""),
           ),
         );
       case Routes.allSubCategoriesView:
         final args = arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>()),
-            child:     AllSubCategoriesView(
-                mainCategoryName: args["mainCategoryName"],
-                mainCategoryId: args["mainCategoryId"],
-                mainCategoryImage: args["mainCategoryImage"],
+            create: (context) =>
+                AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>()),
+            child: AllSubCategoriesView(
+              mainCategoryName: args["mainCategoryName"],
+              mainCategoryId: args["mainCategoryId"],
+              mainCategoryImage: args["mainCategoryImage"],
             ),
           ),
         );
@@ -91,8 +100,10 @@ class AppRouter {
         final args = arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => AllSubCategoriesProductsCubit(getIt.get<AllSubCategoriesProductsReposImpl>()),
-            child:     AllSubCategoriesProductsView(
+            create: (context) => AllSubCategoriesProductsCubit(
+              getIt.get<AllSubCategoriesProductsReposImpl>(),
+            ),
+            child: AllSubCategoriesProductsView(
               subCategoryId: args["subCategoryId"],
               subCategoryName: args["subCategoryName"],
             ),
@@ -102,11 +113,13 @@ class AppRouter {
         final args = arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => ProductDetailsCubit(getIt.get<ProductDetailsRepoImpl>())..getProductDetailsData(
-                productId: args["productId"],
-                type: args["type"],
-            ),
-            child:     ProductDetailsView(
+            create: (context) =>
+                ProductDetailsCubit(getIt.get<ProductDetailsRepoImpl>())
+                  ..getProductDetailsData(
+                    productId: args["productId"],
+                    type: args["type"],
+                  ),
+            child: ProductDetailsView(
               productId: args["productId"],
               type: args["type"],
             ),
@@ -115,15 +128,14 @@ class AppRouter {
       case Routes.allCategoriesView:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => AllCategoriesCubit(getIt.get<AllCategoriesRepoImpl>())..getAllCategories(
-            ),
-            child:     const AllCategoriesView(),
+            create: (context) =>
+                AllCategoriesCubit(getIt.get<AllCategoriesRepoImpl>())
+                  ..getAllCategories(),
+            child: const AllCategoriesView(),
           ),
         );
       case Routes.compareView:
-        return MaterialPageRoute(
-          builder: (context) => const CompareView(),
-        );
+        return MaterialPageRoute(builder: (context) => const CompareView());
       case Routes.packagesView:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
@@ -132,8 +144,31 @@ class AppRouter {
             child: const PackagesView(),
           ),
         );
+      case Routes.conversationsView:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ConversationsCubit(
+              getIt.get<ChatRepositoryImpl>(),
+              getIt.get<ChatUnreadCubit>(),
+            ),
+            child: const ConversationsView(),
+          ),
+        );
+      case Routes.chatView:
+        final chatArgs = arguments as Map<String, dynamic>;
+        final conversation = chatArgs["conversation"] as ConversationModel;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ChatCubit(
+              getIt.get<ChatRepositoryImpl>(),
+              getIt.get<ChatUnreadCubit>(),
+              conversation: conversation,
+            ),
+            child: const ChatView(),
+          ),
+        );
 
-        default:
+      default:
         return null;
     }
   }
