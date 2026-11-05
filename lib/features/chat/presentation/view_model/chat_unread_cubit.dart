@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/repos/chat_repository.dart';
 import 'chat_states.dart';
+import '../../../../core/app_services/local_services/cache_token.dart';
 import '../../../../core/utils/guest_guard.dart';
 
 /// Global, app-wide unread counter used by the chat badge.
@@ -31,6 +32,7 @@ class ChatUnreadCubit extends Cubit<ChatUnreadStates>
   }
 
   Future<void> refresh() async {
+    if (isClosed) return;
     // Guests have no token; the endpoint would 401 and could trigger the
     // global logout flow, so keep the badge at zero instead.
     if (GuestGuard.isGuest) {
@@ -40,7 +42,19 @@ class ChatUnreadCubit extends Cubit<ChatUnreadStates>
     if (_isFetching) return;
     _isFetching = true;
     try {
+      // The token is checked outside the request too: after a logout the
+      // app-wide cubit stays alive, so a lifecycle resume could otherwise
+      // call this endpoint without a token and get a 401 (which triggers the
+      // logout flow again).
+      final token = await CacheTokenManger.getUserToken();
+      if (isClosed) return;
+      if (token == null || token.trim().isEmpty) {
+        setCount(0);
+        return;
+      }
+
       final result = await _repository.getUnreadCount();
+      if (isClosed) return;
       result.fold(
         (failure) {
           debugPrint('ChatUnreadCubit refresh failed: ${failure.errMessage}');
