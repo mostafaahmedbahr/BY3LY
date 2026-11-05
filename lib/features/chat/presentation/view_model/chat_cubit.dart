@@ -104,6 +104,9 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
           return;
         }
         final loaded = _sortedDesc(data.data!.messages ?? const []);
+        for (var m in loaded) {
+          debugPrint('📥 LOADED MESSAGE: id=${m.id} type=${m.type} body=${m.body} image=${m.image} isMine=${m.isMine}');
+        }
         final changed = !_sameIds(messages, loaded);
         messages
           ..clear()
@@ -265,6 +268,8 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       },
       (data) {
         final message = data.chatMessage;
+        debugPrint('💬 SEND RESPONSE: status=${data.status} message=${data.message}');
+        debugPrint('💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}');
         if (data.status != true || message == null) {
           emit(ChatMessageSendError(data.message ?? 'Something went wrong'));
           return false;
@@ -313,6 +318,8 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       },
       (data) {
         final message = data.chatMessage;
+        debugPrint('💬 SEND RESPONSE: status=${data.status} message=${data.message}');
+        debugPrint('💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}');
         if (data.status != true || message == null) {
           emit(ChatMessageSendError(data.message ?? 'Something went wrong'));
           return false;

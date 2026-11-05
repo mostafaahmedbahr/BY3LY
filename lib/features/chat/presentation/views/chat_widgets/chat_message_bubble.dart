@@ -101,7 +101,7 @@ class ChatMessageBubble extends StatelessWidget {
                         width: 220,
                         height: 180,
                         child: CachedNetworkImage(
-                          imageUrl: message.image ?? '',
+                          imageUrl: _resolveImageUrl(message.image),
                           fit: BoxFit.cover,
                           placeholder: (_, _) =>
                               const Center(child: CustomLoading()),
@@ -189,4 +189,23 @@ void showChatImage(BuildContext context, String imageUrl) {
       ),
     ),
   );
+}
+
+/// Resolves a possibly-relative image URL returned by the API.
+/// If the API already returns an absolute URL it is used as-is.
+String _resolveImageUrl(String? raw) {
+  if (raw == null || raw.isEmpty) {
+    debugPrint('🖼️ RESOLVE IMAGE: raw is null/empty -> returning ""');
+    return '';
+  }
+  if (raw.startsWith('http://') || raw.startsWith('https://')) {
+    debugPrint('🖼️ RESOLVE IMAGE: already absolute -> $raw');
+    return raw;
+  }
+  final base = EndPoints.baseUrl;
+  final cleanBase = base.endsWith('/') ? base : '$base/';
+  final cleanRaw = raw.startsWith('/') ? raw.substring(1) : raw;
+  final resolved = '$cleanBase$cleanRaw';
+  debugPrint('🖼️ RESOLVE IMAGE: relative "$raw" -> resolved "$resolved"');
+  return resolved;
 }

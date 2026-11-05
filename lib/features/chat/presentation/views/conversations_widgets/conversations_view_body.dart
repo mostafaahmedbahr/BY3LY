@@ -1,4 +1,3 @@
-import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/main_importants.dart';
 
 import '../../view_model/chat_states.dart';
@@ -42,9 +41,9 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
         }
 
         if (state is ConversationsError && cubit.conversations.isEmpty) {
-          return CustomErrorWidget(
+          return _ErrorState(
             error: chatErrorText(state.message),
-            onTap: () => cubit.getConversations(),
+            onRetry: () => cubit.getConversations(),
           );
         }
 
@@ -54,7 +53,10 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
             color: AppColors.accent,
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              children: const [SizedBox(height: 80), ConversationsEmpty()],
+              children: const [
+                SizedBox(height: 60),
+                ConversationsEmpty(),
+              ],
             ),
           );
         }
@@ -77,9 +79,18 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
                   cubit.conversations.length + (cubit.isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index >= cubit.conversations.length) {
-                  return const Padding(
+                  return Padding(
                     padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Center(child: CustomLoading()),
+                    child: Center(
+                      child: SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
                   );
                 }
                 final conversation = cubit.conversations[index];
@@ -100,13 +111,12 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
   }
 
   Future<void> _openChat(int? conversationId) async {
+    if (conversationId == null) return;
     final cubit = ConversationsCubit.get(context);
     final conversation = cubit.conversations.firstWhere(
       (item) => item.id == conversationId,
     );
     cubit.markConversationReadLocally(conversationId);
-    // The chat screen has its own polling; stop the list's background polling
-    // so it doesn't reload conversations (and the badge) while the user types.
     cubit.stopPolling();
     await context.pushNamed(
       Routes.chatView,
@@ -115,5 +125,78 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
     if (!mounted) return;
     cubit.startPolling();
     cubit.refresh(silent: true);
+  }
+}
+
+/// Error state widget shown when loading conversations fails.
+class _ErrorState extends StatelessWidget {
+  final String error;
+  final VoidCallback onRetry;
+
+  const _ErrorState({required this.error, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 96,
+              width: 96,
+              decoration: BoxDecoration(
+                color: AppColors.redColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.error_outline_rounded,
+                size: 46,
+                color: AppColors.redColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'حدث خطأ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: AppColors.text,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.6,
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: const Text('محاولة مرة أخرى'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.accent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  elevation: 0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
