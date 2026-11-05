@@ -11,7 +11,7 @@ import 'add_new_ad_states.dart';
 ///
 /// Spec: name, description, price, discount, is_negotiable (1/0,
 /// default 0), is_urgent (0/1), listing_type always "sale",
-/// category + dependent sub-category, images[] (1..3), shipping_type
+/// category + dependent sub-category, images[] (1..5), shipping_type
 /// (free/paid), condition (new/used), city_id + center_id defaulting
 /// to the user's own data but changeable in the form.
 class AddNewAdCubit extends Cubit<AddNewAdStates> {
@@ -28,7 +28,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
 
   final ImagePicker picker = ImagePicker();
   List<File> images = [];
-  static const int maxImages = 3;
+  static const int maxImages = 5;
 
   int? categoryId;
   int? subCategoryId;
@@ -75,7 +75,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     final messenger = ScaffoldMessenger.of(context);
     if (totalImagesCount >= maxImages) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Max 3 images')),
+        const SnackBar(content: Text('Max 5 images')),
       );
       return;
     }
@@ -89,7 +89,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   Future<void> pickImages(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     const warning =
-        SnackBar(content: Text('Max 3 images'));
+        SnackBar(content: Text('Max 5 images'));
     final selected = await picker.pickMultiImage();
     if (selected.isEmpty) return;
     final room = maxImages - totalImagesCount;

@@ -279,7 +279,7 @@ class ArLang {
     "city": "المحافظة",
     "category": "القسم",
     "subCategory": "القسم الفرعي",
-    "selectImages": "أضف صور (1-3)",
+    "selectImages": "أضف صور (1-5)",
     "publishAd": "نشر الإعلان",
     "editAd": "تعديل الإعلان",
     "imagesRequired": "من فضلك أضف صورة واحدة على الأقل",

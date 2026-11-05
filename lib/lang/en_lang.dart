@@ -281,7 +281,7 @@ class EnLang {
     "city": "City",
     "category": "Category",
     "subCategory": "Sub-category",
-    "selectImages": "Add photos (1-3)",
+    "selectImages": "Add photos (1-5)",
     "publishAd": "Publish ad",
     "editAd": "Edit ad",
     "imagesRequired": "Please add at least one photo",
