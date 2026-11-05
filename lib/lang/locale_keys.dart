@@ -341,6 +341,8 @@ abstract class LocaleKeys {
   static const gallery = "gallery";
   static const deleteMessage = "deleteMessage";
   static const deleteMessageConfirm = "deleteMessageConfirm";
+  static const copy = "copy";
+  static const messageDeleted = "messageDeleted";
   static const imageTooLarge = "imageTooLarge";
   static const unsupportedImageType = "unsupportedImageType";
   static const contactSeller = "contactSeller";

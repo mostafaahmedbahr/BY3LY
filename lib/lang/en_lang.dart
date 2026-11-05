@@ -359,6 +359,8 @@ class EnLang {
     "deleteMessage": "Delete message",
     "deleteMessageConfirm":
         "This message will be deleted for both sides. Continue?",
+    "copy": "Copy",
+    "messageDeleted": "Message deleted",
     "imageTooLarge": "Image is too large. Maximum size is 5 MB",
     "unsupportedImageType": "Unsupported image type. Use JPG, PNG or WEBP",
     "contactSeller": "Contact seller",

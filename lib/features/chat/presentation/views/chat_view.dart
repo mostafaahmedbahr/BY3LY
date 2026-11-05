@@ -1,6 +1,7 @@
 import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/chat_models.dart';
@@ -149,6 +150,77 @@ class _ChatViewState extends State<ChatView> {
     ChatCubit.get(context).deleteMessage(message);
   }
 
+  /// Shows a chic bottom-sheet with actions for the long-pressed message.
+  Future<void> _showMessageActions(ChatMessageModel message) async {
+    final isMine = message.isMine == true;
+    final isDeleted = message.isDeleted == true;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.border.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Copy (always available for text messages)
+            if (!isDeleted && (message.body?.trim().isNotEmpty ?? false))
+              _ActionSheetItem(
+                icon: Icons.content_copy_rounded,
+                label: context.tr(LocaleKeys.copy),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  final data = ClipboardData(text: message.body ?? '');
+                  Clipboard.setData(data).then((_) {
+                    Toast.showSuccessToast(
+                      msg: context.tr(LocaleKeys.copy),
+                      context: context,
+                    );
+                  });
+                },
+              ),
+            // Delete (only for my messages, not already deleted)
+            if (isMine && !isDeleted)
+              _ActionSheetItem(
+                icon: Icons.delete_outline_rounded,
+                label: context.tr(LocaleKeys.deleteMessage),
+                iconColor: AppColors.redColor,
+                isDestructive: true,
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  _deleteMessage(message);
+                },
+              ),
+            const SizedBox(height: 20),
+            // Cancel
+            _ActionSheetItem(
+              icon: Icons.close_rounded,
+              label: context.tr(LocaleKeys.cancel),
+              onTap: () => Navigator.pop(sheetContext),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _deleteConversation() async {
     final confirmed = await AppConfirmDialog.show(
       context,
@@ -177,6 +249,11 @@ class _ChatViewState extends State<ChatView> {
         } else if (state is ChatMessageDeleteError) {
           Toast.showErrorToast(
             msg: chatErrorText(state.message),
+            context: context,
+          );
+        } else if (state is ChatMessageDeleted) {
+          Toast.showSuccessToast(
+            msg: context.tr(LocaleKeys.messageDeleted),
             context: context,
           );
         } else if (state is ChatConversationDeleteError) {
@@ -300,7 +377,7 @@ class _ChatViewState extends State<ChatView> {
               Expanded(
                 child: ChatMessagesList(
                   scrollController: _scrollController,
-                  onDeleteMessage: _deleteMessage,
+                  onMessageLongPress: _showMessageActions,
                 ),
               ),
               ChatInputBar(
@@ -314,6 +391,61 @@ class _ChatViewState extends State<ChatView> {
           ),
         );
       },
+    );
+  }
+}
+
+/// Single item in the message action bottom-sheet.
+class _ActionSheetItem extends StatelessWidget {
+  const _ActionSheetItem({
+    required this.icon,
+    required this.label,
+    this.iconColor,
+    this.isDestructive = false,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color? iconColor;
+  final bool isDestructive;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveIconColor = iconColor ??
+        (isDestructive ? AppColors.redColor : AppColors.accent);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: effectiveIconColor,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: isDestructive
+                        ? AppColors.redColor
+                        : AppColors.text,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

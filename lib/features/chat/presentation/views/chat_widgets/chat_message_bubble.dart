@@ -56,27 +56,35 @@ class ChatMessageBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (_isDeleted)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 2,
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.redColor.withValues(alpha: 0.08),
+                    border: Border.all(
+                      color: AppColors.redColor.withValues(alpha: 0.25),
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.block_rounded,
-                        size: 14,
-                        color: textColor.withValues(alpha: 0.7),
+                        size: 16,
+                        color: AppColors.redColor,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       Flexible(
                         child: Text(
                           context.tr(LocaleKeys.deletedMessage),
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12.5,
                             fontStyle: FontStyle.italic,
-                            color: textColor.withValues(alpha: 0.75),
+                            color: AppColors.redColor.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

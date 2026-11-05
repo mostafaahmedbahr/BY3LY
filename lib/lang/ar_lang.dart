@@ -349,6 +349,8 @@ class ArLang {
     "gallery": "معرض الصور",
     "deleteMessage": "حذف الرسالة",
     "deleteMessageConfirm": "سيتم حذف هذه الرسالة للطرفين، هل أنت متأكد؟",
+    "copy": "نسخ",
+    "messageDeleted": "تم حذف الرسالة",
     "imageTooLarge": "حجم الصورة كبير جدًا، الحد الأقصى 5 ميجابايت",
     "unsupportedImageType": "نوع الصورة غير مدعوم، استخدم JPG أو PNG أو WEBP",
     "contactSeller": "تواصل مع البائع",
