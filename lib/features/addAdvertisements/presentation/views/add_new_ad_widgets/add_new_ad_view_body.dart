@@ -265,6 +265,21 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                                 color: AppColors.mainColor,
                                 size: 20),
                           ),
+                          suffixIcon: cubit.discountPercentage != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Text(
+                                    '-${cubit.discountPercentage!.toStringAsFixed(0)}%',
+                                    style: const TextStyle(
+                                      color: AppColors.redColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                          onChanged: (_) =>
+                              cubit.onPriceOrDiscountChanged(),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -276,10 +291,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                               context.tr(LocaleKeys.discount),
                           prefixIcon: const Padding(
                             padding: EdgeInsets.all(12),
-                            child: Icon(Icons.percent_rounded,
-                                color: AppColors.mainColor,
-                                size: 20),
+                            child: Icon(Icons.attach_money,
+                                color: AppColors.mainColor, size: 20),
                           ),
+                          onChanged: (_) =>
+                              cubit.onPriceOrDiscountChanged(),
                         ),
                       ),
                     ],

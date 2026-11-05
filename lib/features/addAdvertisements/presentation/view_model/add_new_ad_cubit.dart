@@ -56,6 +56,23 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
 
   int get totalImagesCount => images.length + existingImages.length;
 
+  /// Discount percentage calculated from the price and the discount amount.
+  /// Returns null when price or discount is missing / invalid.
+  double? get discountPercentage {
+    final price = double.tryParse(priceCon.text.trim());
+    final discount = double.tryParse(discountCon.text.trim());
+    if (price == null || price <= 0 || discount == null || discount < 0) {
+      return null;
+    }
+    return (discount / price) * 100;
+  }
+
+  /// Triggered when price or discount changes so the UI can rebuild
+  /// and show the calculated discount percentage.
+  void onPriceOrDiscountChanged() {
+    emit(AddNewAdSelectionChanged());
+  }
+
   @override
   Future<void> close() {
     nameCon.dispose();
