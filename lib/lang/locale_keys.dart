@@ -190,6 +190,8 @@ abstract class LocaleKeys {
   static const deleteNow = 'deleteNow';
   static const categories = 'categories';
   static const joinNow = 'joinNow';
+  static const bannerTitle = 'bannerTitle';
+  static const bannerDescription = 'bannerDescription';
   static const bestView = 'bestView';
   static const memberFrom = 'memberFrom';
   static const messageValidate = "messageValidate";

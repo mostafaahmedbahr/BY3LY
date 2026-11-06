@@ -71,21 +71,15 @@ class BannerToLogin extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _text(
-                            "انضم الينا واحصل علي افضل العروض",
+                            LocaleKeys.bannerTitle.tr(),
                             titleFont,
                             maxLines: 2,
                           ),
                           SizedBox(height: 2.h),
                           _text(
-                            "بيعلي هو تطبيق يمكنك من خلاله بيع وشراء المنتجات",
+                            LocaleKeys.bannerDescription.tr(),
                             titleFont * 0.92,
-                            maxLines: 2,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          _text(
-                            "بطريقه سهله وسريعه",
-                            titleFont * 0.92,
-                            maxLines: 1,
+                            maxLines: 3,
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 8.h),
@@ -175,7 +169,6 @@ class BannerToLogin extends StatelessWidget {
     double height,
     double fontSize,
   ) {
-    final bool isArabic = context.isArabic;
     return CustomButton(
       borderColor: AppColors.whiteColor,
       btnColor: AppColors.whiteColor,
@@ -185,7 +178,7 @@ class BannerToLogin extends StatelessWidget {
       btnText: FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(
-          isArabic ? "انضم الان" : context.tr(LocaleKeys.joinNow),
+          LocaleKeys.joinNow.tr(),
           maxLines: 1,
           style: TextStyle(
             fontWeight: FontWeight.w600,

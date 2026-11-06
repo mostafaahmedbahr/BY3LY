@@ -189,6 +189,8 @@ class ArLang {
     "deleteNow": "حذف الان",
     "categories": "الفئات",
     "joinNow": "انضم الان",
+    "bannerTitle": "انضم الينا واحصل علي افضل العروض",
+    "bannerDescription": "بيعلي هو تطبيق يمكنك من خلاله بيع وشراء المنتجات بطريقه سهله وسريعه",
     'bestView': "الاكثر مشاهدة",
     "memberFrom": "عضو منذ",
     "phoneValidate": "يرجى إدخال رقم الهاتف",

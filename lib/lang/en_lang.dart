@@ -187,6 +187,8 @@ class EnLang {
     "deleteNow": "Delete Now",
     "categories": "Categories",
     "joinNow": "Join Now",
+    "bannerTitle": "Join us and get the best offers",
+    "bannerDescription": "By3ly is an app where you can buy and sell products easily and quickly",
     "bestView": "Best View",
     "memberFrom": "Member From",
     "phoneValidate": "Please enter a phone number",
