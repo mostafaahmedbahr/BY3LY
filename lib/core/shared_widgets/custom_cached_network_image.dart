@@ -1,12 +1,12 @@
-import 'package:by3ly/core/shared_widgets/custom_loading.dart';
+import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomNetWorkImage extends StatelessWidget {
-  const CustomNetWorkImage({Key? key, required this.imageUrl, required this.raduis,
+  const CustomNetWorkImage({super.key, required this.imageUrl, required this.raduis,
   this.width,
   this.height, this.fit,
-  }) : super(key: key);
+  }) ;
 final String imageUrl;
 final double raduis;
 final double? height;
@@ -21,7 +21,11 @@ final  BoxFit? fit;
         height: height ?? double.infinity,
         width: width ?? double.infinity,
         fit:fit ?? BoxFit.contain,
-        placeholder: (context, url) => const Center(child:   CustomLoading()),
+        placeholder: (context, url) => SimmerLoading(
+          height: height,
+          width: width,
+          raduis: raduis,
+        ),
         errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
