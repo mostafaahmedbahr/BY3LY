@@ -37,46 +37,83 @@ class HomeView extends StatelessWidget {
           BlocBuilder<ChatUnreadCubit, ChatUnreadStates>(
             builder: (context, state) {
               final unread = ChatUnreadCubit.get(context).count;
-              return IconButton(
-                tooltip: context.tr(LocaleKeys.conversations),
-                onPressed: () async {
-                  if (!await GuestGuard.requireLogin(context)) return;
-                  if (!context.mounted) return;
-                  context.pushNamed(Routes.conversationsView);
-                },
-                icon: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    const Icon(
-                      Icons.chat_bubble_outline_rounded,
-                      color: AppColors.yellowColor,
+
+              return Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () async {
+                    if (!await GuestGuard.requireLogin(context)) return;
+                    if (!context.mounted) return;
+
+                    context.pushNamed(Routes.conversationsView);
+                  },
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.grey.withOpacity(0.12),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    if (unread > 0)
-                      PositionedDirectional(
-                        top: -5,
-                        end: -5,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 1,
-                          ),
-                          constraints: const BoxConstraints(minWidth: 16),
-                          decoration: BoxDecoration(
-                            color: AppColors.redColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            unread > 99 ? '99+' : '$unread',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(
+                          Icons.chat_rounded,
+                          size: 21,
+                          color: AppColors.yellowColor,
+                        ),
+
+                        if (unread > 0)
+                          PositionedDirectional(
+                            top: 0,
+                            end: 0,
+                            child: Container(
+                              width: unread > 9 ? 20 : 11,
+                              height: unread > 9 ? 20 : 11,
+                              padding: unread > 9
+                                  ? const EdgeInsets.all(2)
+                                  : EdgeInsets.zero,
+                              decoration: BoxDecoration(
+                                color: AppColors.redColor,
+                                shape: unread > 9
+                                    ? BoxShape.rectangle
+                                    : BoxShape.circle,
+                                borderRadius: unread > 9
+                                    ? BorderRadius.circular(10)
+                                    : null,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.5,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: unread > 9
+                                  ? Text(
+                                unread > 99 ? '99+' : '$unread',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                                  : null,
                             ),
                           ),
-                        ),
-                      ),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
               );
             },
