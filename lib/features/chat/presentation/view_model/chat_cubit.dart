@@ -61,7 +61,7 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
 
   void _startPolling() {
     _stopPolling();
-    _pollTimer = Timer.periodic(const Duration(seconds: 4), (_) => poll());
+    _pollTimer = Timer.periodic(const Duration(minutes: 1), (_) => poll());
   }
 
   void _stopPolling() {

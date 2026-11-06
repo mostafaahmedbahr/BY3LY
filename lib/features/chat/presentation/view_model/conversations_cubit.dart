@@ -49,7 +49,7 @@ class ConversationsCubit extends Cubit<ConversationsStates>
     _stopTimer();
     // The list is only a preview: poll it so a new message from the other side
     // appears without a manual refresh.
-    _pollTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _pollTimer = Timer.periodic(const Duration(minutes: 2), (_) {
       refresh(silent: true);
     });
   }
