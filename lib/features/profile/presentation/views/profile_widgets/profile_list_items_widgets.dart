@@ -5,10 +5,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../../../../../core/utils/app_images/app_images.dart';
 import '../../../../../lang/locale_keys.dart';
 import '../../../../fav/presentation/views/fav_view.dart';
- import '../../../../helpSupport/presentation/views/help_support_view.dart';
+import '../../../../helpSupport/presentation/views/help_support_view.dart';
 import '../../../../statistics/presentation/views/statistics_view.dart';
 
 class ProfileListItemsWidgets extends StatelessWidget {
@@ -18,9 +17,11 @@ class ProfileListItemsWidgets extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Payment & Balance
         ProfileViewBodyListItemWidget(
-          svg: true,
-          onTap: (){
+          style: ProfileItemStyle.classic,
+          icon: CupertinoIcons.money_pound_circle,
+          onTap: () {
             Navigator.push(
               context,
               PageTransition(
@@ -30,11 +31,13 @@ class ProfileListItemsWidgets extends StatelessWidget {
             );
           },
           title: context.tr(LocaleKeys.paymentAndBalance),
-          image: AppImages.wallet,
         ),
+
+        // Favorites
         ProfileViewBodyListItemWidget(
-          svg: true,
-          onTap: (){
+          style: ProfileItemStyle.classic,
+          icon: CupertinoIcons.heart_fill,
+          onTap: () {
             Navigator.push(
               context,
               PageTransition(
@@ -43,12 +46,14 @@ class ProfileListItemsWidgets extends StatelessWidget {
               ),
             );
           },
-          title:  LocaleKeys.favorite.tr(),
-          image: AppImages.heart,
+          title: LocaleKeys.favorite.tr(),
         ),
+
+        // Statistics
         ProfileViewBodyListItemWidget(
-          svg: true,
-          onTap: (){
+          style: ProfileItemStyle.classic,
+          icon: CupertinoIcons.chart_bar_fill,
+          onTap: () {
             Navigator.push(
               context,
               PageTransition(
@@ -58,11 +63,13 @@ class ProfileListItemsWidgets extends StatelessWidget {
             );
           },
           title: LocaleKeys.statistics.tr(),
-          image: AppImages.chart,
         ),
+
+        // Comparison
         ProfileViewBodyListItemWidget(
-          svg: true,
-          onTap: (){
+          style: ProfileItemStyle.classic,
+          icon: CupertinoIcons.square_split_2x2_fill,
+          onTap: () {
             Navigator.push(
               context,
               PageTransition(
@@ -72,11 +79,13 @@ class ProfileListItemsWidgets extends StatelessWidget {
             );
           },
           title: LocaleKeys.comparison.tr(),
-          image: AppImages.cpmpration,
         ),
+
+        // Help & Support
         ProfileViewBodyListItemWidget(
-          svg: true,
-          onTap: (){
+          style: ProfileItemStyle.classic,
+          icon: CupertinoIcons.headphones,
+          onTap: () {
             Navigator.push(
               context,
               PageTransition(
@@ -86,7 +95,6 @@ class ProfileListItemsWidgets extends StatelessWidget {
             );
           },
           title: LocaleKeys.reportingAndSupport.tr(),
-          image: AppImages.bullhorn,
         ),
       ],
     );

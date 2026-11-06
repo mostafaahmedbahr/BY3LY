@@ -16,7 +16,7 @@ class ThemeModeSwitch extends StatelessWidget {
         final isDark = theme.brightness == Brightness.dark;
 
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 4),
           child: Card(
             margin: EdgeInsets.zero,
             shadowColor: AppColors.mainColor,
@@ -32,7 +32,7 @@ class ThemeModeSwitch extends StatelessWidget {
                 children: [
                   Icon(
                     isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-                    color: AppColors.accent,
+                    color:  isDark ? AppColors.whiteColor : AppColors.blackColor,
                   ),
                   Gap(18.w),
                   Column(

@@ -15,6 +15,7 @@ class SettingsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,6 +83,7 @@ class SettingsListWidget extends StatelessWidget {
           listener: (context, state) {},
           builder: (context, state) {
             final theme = Theme.of(context);
+            final isDark = theme.brightness == Brightness.dark;
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Card(
@@ -103,7 +105,7 @@ class SettingsListWidget extends StatelessWidget {
                       SvgPicture.asset(
                         AppImages.notification,
                         colorFilter: ColorFilter.mode(
-                          AppColors.text,
+                          isDark ? AppColors.whiteColor : AppColors.blackColor,
                           BlendMode.srcIn,
                         ),
                       ),

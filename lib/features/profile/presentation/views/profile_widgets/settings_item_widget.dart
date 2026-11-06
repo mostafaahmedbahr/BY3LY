@@ -23,6 +23,7 @@ class SettingsItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
@@ -44,8 +45,20 @@ class SettingsItemWidget extends StatelessWidget {
             child: Row(
               children: [
                 image.contains("png")
-                    ? Image.asset(image, height: 20)
-                    : SvgPicture.asset(image),
+                    ? Image.asset(
+                        image,
+                        height: 20,
+                        color:
+                            isDark ? AppColors.whiteColor : AppColors.blackColor,
+                        colorBlendMode: BlendMode.srcIn,
+                      )
+                    : SvgPicture.asset(
+                        image,
+                        colorFilter: ColorFilter.mode(
+                          isDark ? AppColors.whiteColor : AppColors.blackColor,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                 Gap(18.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
