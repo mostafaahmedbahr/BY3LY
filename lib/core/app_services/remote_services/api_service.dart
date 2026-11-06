@@ -10,6 +10,7 @@ import '../../../features/layout/presentation/view_model/layout_cubit.dart';
 import '../../errors/failure.dart';
 import '../../routing/app_router.dart';
 import '../../routing/routes.dart';
+import '../../utils/app_consts/storage_keys.dart';
 import '../local_services/cache_helper.dart';
 import '../local_services/cache_token.dart';
 import 'end_points.dart';
@@ -29,6 +30,14 @@ class ApiService {
           // Add default headers
           options.headers["Accept"] = "application/json";
           options.headers["Content-Type"] = "application/json";
+
+          // Send current language so server returns data in the selected language.
+          final savedLang = CacheHelper.getData(key: StorageKeys.language);
+          final langCode = (savedLang is String && savedLang.isNotEmpty)
+              ? savedLang
+              : 'ar';
+          options.headers["Accept-Language"] = langCode;
+          options.headers["lang"] = langCode;
 
           // Add user token if available
           if (CacheTokenManger.userToken != null &&

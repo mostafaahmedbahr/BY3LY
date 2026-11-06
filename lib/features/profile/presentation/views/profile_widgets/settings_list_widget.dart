@@ -45,13 +45,7 @@ class SettingsListWidget extends StatelessWidget {
           subTitle: LocaleKeys.changeLangYouWant.tr(),
           image: AppImages.lang,
           onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: const ChangeLangView(),
-              ),
-            );
+            showChangeLangSheet(context);
           },
         ),
         const ThemeModeSwitch(),
