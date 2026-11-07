@@ -92,6 +92,14 @@ abstract class LocaleKeys {
   static const lightMode = "lightMode";
   static const privacy = "privacy";
   static const blockPhoneNumber = "blockPhoneNumber";
+
+  /// Static pages: about the app / terms & conditions / privacy policy
+  static const aboutApp = "aboutApp";
+  static const aboutAppMsg = "aboutAppMsg";
+  static const termsAndConditions = "termsAndConditions";
+  static const termsAndConditionsMsg = "termsAndConditionsMsg";
+  static const privacyPolicy = "privacyPolicy";
+  static const privacyPolicyMsg = "privacyPolicyMsg";
   static const deleteAccount = "deleteAccount";
   static const deleteAccountAndStopAds = "deleteAccountAndStopAds";
   static const notifications = "notifications";

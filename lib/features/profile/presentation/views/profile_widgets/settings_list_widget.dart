@@ -148,6 +148,32 @@ class SettingsListWidget extends StatelessWidget {
         //   image: AppImages.notification,
         //   onTap: (){},
         // ),
+
+        /// Static pages from the API (about / terms / privacy policy)
+        SettingsItemWidget(
+          title: LocaleKeys.aboutApp.tr(),
+          subTitle: LocaleKeys.aboutAppMsg.tr(),
+          image: AppImages.globe,
+          onTap: () {
+            context.pushNamed(Routes.aboutView);
+          },
+        ),
+        SettingsItemWidget(
+          title: LocaleKeys.termsAndConditions.tr(),
+          subTitle: LocaleKeys.termsAndConditionsMsg.tr(),
+          image: AppImages.bookOpen,
+          onTap: () {
+            context.pushNamed(Routes.termsView);
+          },
+        ),
+        SettingsItemWidget(
+          title: LocaleKeys.privacyPolicy.tr(),
+          subTitle: LocaleKeys.privacyPolicyMsg.tr(),
+          image: AppImages.shield,
+          onTap: () {
+            context.pushNamed(Routes.privacyPolicyView);
+          },
+        ),
         const Gap(10),
         Logout(),
       ],

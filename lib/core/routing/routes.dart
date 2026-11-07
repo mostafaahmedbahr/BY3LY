@@ -17,4 +17,9 @@ class Routes {
   static const String conversationsView = '/conversationsView';
   static const String chatView = '/chatView';
   static const String notificationsView = '/notificationsView';
+
+  /// Static pages: about the app, terms & conditions, privacy policy.
+  static const String aboutView = '/aboutView';
+  static const String termsView = '/termsView';
+  static const String privacyPolicyView = '/privacyPolicyView';
 }

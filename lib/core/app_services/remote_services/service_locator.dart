@@ -13,6 +13,7 @@ import '../../../../features/chooseLocation/data/repos/choose_location_repos_imp
 import '../../../../features/compare/data/repos/compare_repos_imple.dart';
 import '../../../../features/deleteAccount/data/repos/delete_account_repos_imple.dart';
 import '../../../../features/howToMakePurchase/data/repos/how_to_make_purchase_repos_imple.dart';
+import '../../../../features/legalContent/data/repos/legal_content_repos_imple.dart';
 import '../../../../features/notifications/data/repos/notifications_repos_imple.dart';
 import '../../../../features/privacy/data/repos/privacy_repo_imple.dart';
 import '../../../../features/productDetails/data/repos/product_details_repo_imple.dart';
@@ -95,6 +96,10 @@ void setup() {
 
   getIt.registerSingleton<HowToMakePurchaseRepoImpl>(
     HowToMakePurchaseRepoImpl(getIt.get<ApiService>()),
+  );
+
+  getIt.registerSingleton<LegalContentRepoImpl>(
+    LegalContentRepoImpl(getIt.get<ApiService>()),
   );
 
   getIt.registerSingleton<NotificationsDataRepoImpl>(

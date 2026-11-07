@@ -32,6 +32,7 @@ class AppImages
    static const String  englishImage = "assets/images/English.png";
    static const String  mapLocation = "assets/images/Map-location.svg";
    static const String  globe = "assets/images/Globe.svg";
+  static const String  bookOpen = "assets/images/Book-open.svg";
    static const String  healthiconsMarket = "assets/images/healthicons_market-stall-outline.svg";
    static const String  gallery = "assets/images/gallery.png";
    static const String  camera2 = "assets/images/camera.png";

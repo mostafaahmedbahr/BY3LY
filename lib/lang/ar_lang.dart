@@ -83,6 +83,12 @@ class ArLang {
     "lightMode": "الوضع النهاري",
     "privacy": "الخصوصية",
     "blockPhoneNumber": "حجب رقم الهاتف",
+    "aboutApp": "عن التطبيق",
+    "aboutAppMsg": "اعرف المزيد عن التطبيق",
+    "termsAndConditions": "الشروط والأحكام",
+    "termsAndConditionsMsg": "قواعد وشروط استخدام التطبيق",
+    "privacyPolicy": "سياسة الخصوصية",
+    "privacyPolicyMsg": "كيف نحمي بياناتك ومعلوماتك",
     "deleteAccount": "حذف الحساب",
     "deleteAccountAndStopAds": "حذف الحساب ووقف الاعلانات",
     "notifications":

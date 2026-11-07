@@ -24,6 +24,8 @@ import '../../features/chat/presentation/view_model/conversations_cubit.dart';
 import '../../features/chat/presentation/views/chat_view.dart';
 import '../../features/chat/presentation/views/conversations_view.dart';
 import '../../features/notifications/presentation/views/notifications_view.dart';
+import '../../features/legalContent/data/models/legal_content_model.dart';
+import '../../features/legalContent/presentation/views/legal_content_view.dart';
 import '../../features/chooseLocation/data/repos/choose_location_repos_imple.dart';
 import '../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../features/otp/presentation/view_model/otp_cubit.dart';
@@ -172,6 +174,21 @@ class AppRouter {
         // NotificationsCubit is provided at the app root, nothing extra needed.
         return MaterialPageRoute(
           builder: (context) => const NotificationsView(),
+        );
+      case Routes.aboutView:
+        return MaterialPageRoute(
+          builder: (context) =>
+              const LegalContentView(type: LegalContentType.about),
+        );
+      case Routes.termsView:
+        return MaterialPageRoute(
+          builder: (context) =>
+              const LegalContentView(type: LegalContentType.terms),
+        );
+      case Routes.privacyPolicyView:
+        return MaterialPageRoute(
+          builder: (context) =>
+              const LegalContentView(type: LegalContentType.privacy),
         );
 
       default:

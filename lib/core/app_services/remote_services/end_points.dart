@@ -56,6 +56,11 @@ class EndPoints {
   /// Account settings / privacy: GET = read, PATCH = update.
   static const settings = "settings";
 
+  /// Static legal pages: GET = HTML content (about / terms / privacy).
+  static const about = "about";
+  static const terms = "terms";
+  static const privacy = "privacy";
+
   static const getBanners = "getBanners";
   static const products = "products";
   static const subscriptionPackages = "subscriptionPackages";
