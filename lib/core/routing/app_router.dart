@@ -23,6 +23,7 @@ import '../../features/chat/presentation/view_model/chat_unread_cubit.dart';
 import '../../features/chat/presentation/view_model/conversations_cubit.dart';
 import '../../features/chat/presentation/views/chat_view.dart';
 import '../../features/chat/presentation/views/conversations_view.dart';
+import '../../features/notifications/presentation/views/notifications_view.dart';
 import '../../features/chooseLocation/data/repos/choose_location_repos_imple.dart';
 import '../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../features/otp/presentation/view_model/otp_cubit.dart';
@@ -166,6 +167,11 @@ class AppRouter {
             ),
             child: const ChatView(),
           ),
+        );
+      case Routes.notificationsView:
+        // NotificationsCubit is provided at the app root, nothing extra needed.
+        return MaterialPageRoute(
+          builder: (context) => const NotificationsView(),
         );
 
       default:

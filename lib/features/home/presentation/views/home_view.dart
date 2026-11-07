@@ -1,6 +1,6 @@
 import 'package:by3ly/core/utils/guest_guard.dart';
-import 'package:by3ly/features/chat/presentation/view_model/chat_states.dart';
-import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
 import 'package:by3ly/main_importants.dart';
@@ -206,11 +206,11 @@ class HomeView extends StatelessWidget {
             },
           ),
 
-          // Chat button — chic circle
+          // Notifications button — chic circle
 
-          BlocBuilder<ChatUnreadCubit, ChatUnreadStates>(
+          BlocBuilder<NotificationsCubit, NotificationsStates>(
             builder: (context, state) {
-              final unread = ChatUnreadCubit.get(context).count;
+              final unread = NotificationsCubit.get(context).unreadCount;
 
               return Padding(
                 padding: EdgeInsetsDirectional.only(end: 12.w),
@@ -228,7 +228,7 @@ class HomeView extends StatelessWidget {
                         if (!await GuestGuard.requireLogin(context)) return;
                         if (!context.mounted) return;
 
-                        context.pushNamed(Routes.conversationsView);
+                        context.pushNamed(Routes.notificationsView);
                       },
                       child: SizedBox(
                         width: 46.w,
@@ -238,7 +238,7 @@ class HomeView extends StatelessWidget {
                           clipBehavior: Clip.none,
                           children: [
                             Icon(
-                              Icons.forum_rounded,
+                              Icons.notifications_outlined,
                               size: 24.sp,
                               color: AppColors.accent,
                             ),

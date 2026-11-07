@@ -1,10 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
+import 'package:by3ly/features/chat/presentation/view_model/chat_states.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_states.dart';
-import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
-import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,11 +62,9 @@ class LayoutViewState extends State<LayoutView> {
                 FlashyTabBarItem(
                   activeColor: AppColors.accent,
                   inactiveColor: inactiveNavColor,
-                  icon: BlocBuilder<NotificationsCubit, NotificationsStates>(
+                  icon: BlocBuilder<ChatUnreadCubit, ChatUnreadStates>(
                     builder: (context, state) {
-                      final unread = NotificationsCubit.get(
-                        context,
-                      ).unreadCount;
+                      final unread = ChatUnreadCubit.get(context).count;
                       return Badge(
                         isLabelVisible: unread > 0,
                         label: Text(
@@ -79,7 +76,7 @@ class LayoutViewState extends State<LayoutView> {
                       );
                     },
                   ),
-                  title: Text(context.tr(LocaleKeys.notifications)),
+                  title: Text(context.tr(LocaleKeys.chat)),
                 ),
                 FlashyTabBarItem(
                   activeColor: AppColors.accent,
@@ -103,7 +100,7 @@ class LayoutViewState extends State<LayoutView> {
               showElevation: true,
               onItemSelected: (index) {
                 // Guests may only browse: home(0) and search(2) are open,
-                // notifications(1), ads(3) and account(4) need login.
+                // chat(1), ads(3) and account(4) need login.
                 if (GuestGuard.isGuest &&
                     (index == 1 || index == 3 || index == 4)) {
                   GuestGuard.requireLogin(context);

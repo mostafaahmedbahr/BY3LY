@@ -16,4 +16,5 @@ class Routes {
   static const String packagesView = '/packagesView';
   static const String conversationsView = '/conversationsView';
   static const String chatView = '/chatView';
+  static const String notificationsView = '/notificationsView';
 }
