@@ -34,27 +34,39 @@ class HomeViewBody extends StatelessWidget {
         return const HomeLoadingWidget();
       }
       final bestView = homeCubit.homeModel?.data?.bestView ?? [];
-      return ListView(
-        children: [
-          /// Banners slider (above the search).
-          const HomeBannerSlider(),
+      return RefreshIndicator(
+        color: AppColors.accent,
+        backgroundColor: AppColors.surface,
+        // Refresh both requests in parallel; the shimmer stays away because
+        // homeModel/bannersModel keep their old data while reloading.
+        onRefresh: () async {
+          final cubit = context.read<HomeCubit>();
+          await Future.wait([cubit.getHome(), cubit.getBanners()]);
+        },
+        child: ListView(
+          // Always allow the drag, even when the content fits on screen.
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
+            /// Banners slider (above the search).
+            const HomeBannerSlider(),
 
-          /// search
-          Padding(
-            padding: EdgeInsets.only(top: 10.h,bottom: 10.h,right: 20.w,left: 20.w),
-            child: const ContainerSearchWidget(),
-          ),
+            /// search
+            Padding(
+              padding: EdgeInsets.only(top: 10.h,bottom: 10.h,right: 20.w,left: 20.w),
+              child: const ContainerSearchWidget(),
+            ),
 
-          /// CategoriesList (title + horizontal, first 5).
-          const CategoriesList(),
+            /// CategoriesList (title + horizontal, first 5).
+            const CategoriesList(),
 
-          ///BannerToLogin
-          const BannerToLogin(),
+            ///BannerToLogin
+            const BannerToLogin(),
 
-          /// BestView grid (vertical scroll, all items).
-          if (bestView.isNotEmpty)
-            BestViewProducts(bestView: bestView),
-        ],
+            /// BestView grid (vertical scroll, all items).
+            if (bestView.isNotEmpty)
+              BestViewProducts(bestView: bestView),
+          ],
+        ),
       );
     });
   }
