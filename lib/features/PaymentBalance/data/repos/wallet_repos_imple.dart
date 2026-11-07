@@ -41,11 +41,15 @@ class WalletRepoImpl implements WalletRepos {
     required String amount,
     required String paymentMethod,
     required String receiptPath,
+    String? transferReference,
   }) async {
     try {
       final formData = FormData.fromMap({
         'amount': amount,
         'payment_method': paymentMethod,
+        if (transferReference != null &&
+            transferReference.trim().isNotEmpty)
+          'transfer_reference': transferReference.trim(),
       });
       formData.files.add(MapEntry(
         'receipt',

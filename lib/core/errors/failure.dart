@@ -6,7 +6,11 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure(super.errMessage);
+  ServerFailure(super.errMessage, {this.fieldErrors});
+
+  /// Validation errors of a 422 response, keyed by field name
+  /// (e.g. payment_method / receipt / transfer_reference).
+  final Map<String, dynamic>? fieldErrors;
 
   factory ServerFailure.fromDioError(DioException dioException) {
     switch (dioException.type) {
@@ -58,7 +62,7 @@ class ServerFailure extends Failure {
           }
         }
 
-        return ServerFailure(errorMessage);
+        return ServerFailure(errorMessage, fieldErrors: errors);
       }
 
       // ✅ Validation Errors (422)

@@ -38,6 +38,10 @@ class TransferView extends StatefulWidget {
 class _TransferViewState extends State<TransferView> {
   final TextEditingController _amountController = TextEditingController();
 
+  /// Optional transfer reference number (رقم مرجع التحويل) — wallet
+  /// top-up only, same key the website posts.
+  final TextEditingController _referenceCon = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +53,7 @@ class _TransferViewState extends State<TransferView> {
   @override
   void dispose() {
     _amountController.dispose();
+    _referenceCon.dispose();
     super.dispose();
   }
 
@@ -251,6 +256,31 @@ class _TransferViewState extends State<TransferView> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                if (topUpMode) ...[
+                  Text(
+                    "رقم مرجع التحويل (اختياري)",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.text,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  CustomTextFormField(
+                    controller: _referenceCon,
+                    keyboardType: TextInputType.number,
+                    hintText: "رقم مرجع التحويل",
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(
+                        Icons.tag_rounded,
+                        color: AppColors.mainColor,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 if (topUpMode)
                   BlocBuilder<WalletCubit, WalletStates>(
                     builder: (context, walletState) {
@@ -289,6 +319,11 @@ class _TransferViewState extends State<TransferView> {
                                       paymentMethod:
                                           method!.code!,
                                       receiptPath: receipt.path,
+                                      transferReference:
+                                          _referenceCon.text.trim().isEmpty
+                                              ? null
+                                              : _referenceCon.text
+                                                  .trim(),
                                     );
                               },
                       );

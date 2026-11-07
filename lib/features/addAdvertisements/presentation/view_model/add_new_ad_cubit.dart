@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:by3ly/core/errors/failure.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/ad_publishing_settings_model.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -238,6 +241,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   Future<void> submit({
     String? paymentMethod,
     String? receiptPath,
+    String? transferReference,
   }) async {
     emit(AddNewAdLoading());
     final result = await addAdvertisementsRepos!.addNewAd(      name: nameCon.text.trim(),
@@ -256,9 +260,21 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       images: images,
       paymentMethod: paymentMethod,
       receiptPath: receiptPath,
+      transferReference: transferReference,
     );
     return result.fold((failure) {
       debugPrint('AddNewAdCubit submit failed: ${failure.errMessage}');
+      // The package/free ads ran out mid-flow → reopen the payment step.
+      if (failure is ServerFailure &&
+          failure.fieldErrors != null &&
+          const [
+            'payment_method',
+            'receipt',
+            'transfer_reference',
+          ].any(failure.fieldErrors!.containsKey)) {
+        emit(AddNewAdPaymentRequired(failure.errMessage));
+        return;
+      }
       emit(AddNewAdError(failure.errMessage));
     }, (data) {
       if (data.status == true) {
@@ -267,6 +283,22 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
         emit(AddNewAdError(data.message ?? 'Something went wrong'));
       }
     });
+  }
+
+  /// Whether publishing is still covered by the subscription package
+  /// (same rule as the website: active, not expired, ads remaining).
+  ///
+  /// Returns null when the check itself failed so the caller can fall
+  /// back to the profile package instead of forcing a payment.
+  Future<bool?> isPublishingCovered() async {
+    final result = await addAdvertisementsRepos!.getCurrentSubscription();
+    return result.fold((_) => null, (subscription) => subscription.isCovered);
+  }
+
+  /// Fixed publishing fee shown in the payment step.
+  Future<Either<Failure, AdPublishingSettingsModel>>
+      loadPublishingSettings() {
+    return addAdvertisementsRepos!.getAdPublishingSettings();
   }
 
   Future<void> submitEdit() async {

@@ -31,9 +31,20 @@ class AddNewAdViewBody extends StatefulWidget {
 }
 
 class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
-  /// True while refreshing the profile to check the subscription
-  /// package before deciding (direct publish vs payment sheet).
+  /// True while checking whether the subscription still covers a free
+  /// publish (direct publish vs payment step).
   bool _checkingPackage = false;
+
+  /// True while the payment sheet is on screen — avoids opening it
+  /// twice and routes errors to the right place.
+  bool _paymentSheetOpen = false;
+
+  Future<void> _openPaymentSheet() async {
+    if (_paymentSheetOpen) return;
+    _paymentSheetOpen = true;
+    await showAdPaymentSheet(context);
+    _paymentSheetOpen = false;
+  }
 
   @override
   void initState() {
@@ -206,10 +217,22 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
             ),
           ).show(context);
           Navigator.pop(context, true);
+        } else if (state is AddNewAdPaymentRequired) {
+          // Package/free ads exhausted → the server demands payment:
+          // force the payment step instead of publishing directly.
+          if (!_paymentSheetOpen) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+            _openPaymentSheet();
+          }
         } else if (state is AddNewAdError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          // When the sheet is open it toasts the error itself.
+          if (!_paymentSheetOpen) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -435,29 +458,36 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                         cubit.submitEdit();
                         return;
                       }
-                      // Has an active subscription package? Publish directly.
-                      // Otherwise take a payment method (wallet / transfer).
-                      final profileCubit = context.read<ProfileCubit>();
-                      var hasPackage = profileCubit.profileModel?.data?.user
-                              ?.subscriptionPackage !=
-                          null;
-                      if (!hasPackage) {
-                        // Refresh once in case a package was bought elsewhere.
-                        setState(() => _checkingPackage = true);
+                      // Same rule as the website: publish free only
+                      // while the package still has ads left; when the
+                      // package or the free ads are exhausted, force
+                      // the payment step (wallet / transfer).
+                      setState(() => _checkingPackage = true);
+                      final coverage =
+                          await cubit.isPublishingCovered();
+                      if (!mounted) return;
+                      bool covered;
+                      if (coverage != null) {
+                        covered = coverage;
+                      } else {
+                        // Check failed (offline, etc.) → fall back to
+                        // the profile package instead of demanding a
+                        // payment the server may still not need.
+                        final profileCubit =
+                            context.read<ProfileCubit>();
                         try {
                           await profileCubit.getProfile();
                         } catch (_) {}
-                        if (!mounted) return;
-                        setState(() => _checkingPackage = false);
-                        hasPackage = profileCubit.profileModel?.data?.user
+                        covered = profileCubit.profileModel?.data?.user
                                 ?.subscriptionPackage !=
                             null;
                       }
                       if (!mounted) return;
-                      if (hasPackage) {
+                      setState(() => _checkingPackage = false);
+                      if (covered) {
                         cubit.submit();
                       } else {
-                        showAdPaymentSheet(context);
+                        _openPaymentSheet();
                       }
                     },
             ),

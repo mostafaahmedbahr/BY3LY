@@ -11,5 +11,6 @@ abstract class WalletRepos {
     required String amount,
     required String paymentMethod,
     required String receiptPath,
+    String? transferReference,
   });
 }

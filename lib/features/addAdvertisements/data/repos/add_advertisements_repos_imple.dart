@@ -1,5 +1,7 @@
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:by3ly/core/general_models/general_model.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/ad_publishing_settings_model.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/current_subscription_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_marka_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_models_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_types_model.dart';
@@ -89,6 +91,7 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
     required List<dynamic> images,
     String? paymentMethod,
     String? receiptPath,
+    String? transferReference,
   }) async {
     try {
       FormData formData = FormData.fromMap({
@@ -109,6 +112,10 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         // Omitted when publishing under an active subscription package.
         if (paymentMethod != null && paymentMethod.trim().isNotEmpty)
           'payment_method': paymentMethod,
+        // Transfer reference number (optional, transfer methods only).
+        if (transferReference != null &&
+            transferReference.trim().isNotEmpty)
+          'transfer_reference': transferReference.trim(),
       });
       for (var image in images) {
         formData.files.add(MapEntry(
@@ -134,6 +141,49 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
       return right(result);
     } catch (e, s) {
       debugPrint('AddAdvertisementsRepoImpl addNewAd error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, AdPublishingSettingsModel>>
+      getAdPublishingSettings() async {
+    try {
+      final response = await apiService!.getData(
+        endPoint: EndPoints.adPublishingSettings,
+      );
+      return right(AdPublishingSettingsModel.fromJson(response.data));
+    } catch (e, s) {
+      debugPrint('AddAdvertisementsRepoImpl getAdPublishingSettings error: $e');
+      debugPrint(s.toString());
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      } else {
+        return left(ServerFailure(e.toString()));
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, CurrentSubscriptionModel>>
+      getCurrentSubscription() async {
+    try {
+      final response = await apiService!.getData(
+        endPoint: EndPoints.subscriptionsCurrent,
+      );
+      final data = response.data;
+      if (data is! Map<String, dynamic>) {
+        // No subscription payload → not covered by a package.
+        return right(CurrentSubscriptionModel());
+      }
+      return right(CurrentSubscriptionModel.fromJson(data));
+    } catch (e, s) {
+      debugPrint('AddAdvertisementsRepoImpl getCurrentSubscription error: $e');
       debugPrint(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));

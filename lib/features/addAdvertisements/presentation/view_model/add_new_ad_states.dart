@@ -35,3 +35,13 @@ class AddNewAdError extends AddNewAdStates {
   @override
   String toString() => 'AddNewAdError(message: $message)';
 }
+
+/// The server rejected the publish because payment fields were missing
+/// (package/free ads exhausted) → the payment step must be reopened.
+class AddNewAdPaymentRequired extends AddNewAdStates {
+  final String message;
+  AddNewAdPaymentRequired(this.message);
+
+  @override
+  String toString() => 'AddNewAdPaymentRequired(message: $message)';
+}

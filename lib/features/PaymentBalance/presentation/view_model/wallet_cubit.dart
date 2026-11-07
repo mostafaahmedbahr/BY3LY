@@ -31,12 +31,14 @@ class WalletCubit extends Cubit<WalletStates> {
     required String amount,
     required String paymentMethod,
     required String receiptPath,
+    String? transferReference,
   }) async {
     emit(TopUpLoadingState());
     var result = await walletRepos!.topUp(
       amount: amount,
       paymentMethod: paymentMethod,
       receiptPath: receiptPath,
+      transferReference: transferReference,
     );
     return result.fold((failure) {
       emit(TopUpErrorState(failure.errMessage));

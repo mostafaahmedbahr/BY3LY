@@ -67,6 +67,8 @@ class EndPoints {
   static const subscriptions = "subscriptions";
   static const subscriptionsCheckout = "subscriptions/checkout";
   static const paymentMethods = "payment-methods";
+  static const subscriptionsCurrent = "subscriptions/current";
+  static const adPublishingSettings = "ad-publishing-settings";
   static const walletTopUp = "wallet/top-up";
   static const walletHistory = "wallet/history";
 

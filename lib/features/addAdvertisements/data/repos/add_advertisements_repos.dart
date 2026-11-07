@@ -1,4 +1,6 @@
 import 'package:by3ly/core/general_models/general_model.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/ad_publishing_settings_model.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/current_subscription_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_marka_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_models_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/get_car_types_model.dart';
@@ -33,7 +35,7 @@ abstract class AddAdvertisementsRepos{
   ///
   /// [paymentMethod] is omitted when the user publishes under an active
   /// subscription package; otherwise 'wallet' or a transfer method code
-  /// (+ [receiptPath] for transfers).
+  /// (+ [receiptPath] and [transferReference] for transfers).
   Future<Either<Failure,GeneralModel>> addNewAd({    required String name,
     required String description,
     required String price,
@@ -49,7 +51,16 @@ abstract class AddAdvertisementsRepos{
     required List<dynamic> images,
     String? paymentMethod,
     String? receiptPath,
+    String? transferReference,
   });
+
+  /// Fixed publishing fee + transfer accounts
+  /// (GET /api/ad-publishing-settings).
+  Future<Either<Failure,AdPublishingSettingsModel>> getAdPublishingSettings();
+
+  /// Active subscription (GET /api/subscriptions/current) — decides
+  /// whether publishing is covered by the package or needs payment.
+  Future<Either<Failure,CurrentSubscriptionModel>> getCurrentSubscription();
 
   /// Edit an existing ad (same fields + ad_id, new image files only).
   Future<Either<Failure,GeneralModel>> editAd({
