@@ -4,15 +4,21 @@ import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/routing/routes.dart';
+import '../../view_model/advertisements_cubit.dart';
 
 class AddBundleButton extends StatelessWidget {
   const AddBundleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
-      onTap: (){
-        context.pushNamed(Routes.packagesView);
+    return GestureDetector(
+      onTap: () async {
+        await context.pushNamed(Routes.packagesView);
+        // A bundle/purchase can change ad statuses (e.g. featured), so
+        // refresh the page when coming back.
+        if (context.mounted) {
+          AdvertisementsCubit.get(context).getAllMyAdsDataMethod(type: 0);
+        }
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -38,13 +44,16 @@ class AddBundleButton extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.add,color: AppColors.whiteColor,),
+              child: const Icon(Icons.add, color: AppColors.whiteColor),
             ),
-            const SizedBox(width: 10,),
-            Text("الباقات",style: AppStyles.textStyle14W500White.copyWith(
+            const SizedBox(width: 10),
+            Text(
+              "الباقات",
+              style: AppStyles.textStyle14W500White.copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-            ),),
+              ),
+            ),
             const Spacer(),
             const Icon(
               Icons.arrow_forward_ios_rounded,

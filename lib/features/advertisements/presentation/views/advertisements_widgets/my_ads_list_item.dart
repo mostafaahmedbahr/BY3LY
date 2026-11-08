@@ -91,9 +91,18 @@ class MyAdsListItem extends StatelessWidget {
                   if (confirmed && context.mounted) {
                     final cubit = AdvertisementsCubit.get(context);
                     if (pause) {
-                      cubit.pauseAd(adId: ad.id!);
+                      await cubit.pauseAd(adId: ad.id!);
                     } else {
-                      cubit.resumeAd(adId: ad.id!);
+                      await cubit.resumeAd(adId: ad.id!);
+                    }
+                    // Status changed (e.g. paused → غير نشط): reload the
+                    // list so the badge/status comes straight from the
+                    // server instead of the cached value.
+                    final state = cubit.state;
+                    if (!cubit.isClosed &&
+                        state is PauseResumeAdSuccessState &&
+                        state.adId == ad.id) {
+                      cubit.getAllMyAdsDataMethod(type: 0);
                     }
                   }
                 },
@@ -400,6 +409,11 @@ class MyAdsListItem extends StatelessWidget {
                       style: const TextStyle(color: AppColors.mainColor),
                     ),
                   ).show(context);
+                  // Reload so the page reflects the server state after the
+                  // deletion (counts, statuses and remaining ads).
+                  AdvertisementsCubit.get(
+                    context,
+                  ).getAllMyAdsDataMethod(type: 0);
                 } else if (state is DeleteAdErrorState &&
                     (state.adId == null || state.adId == adsProduct.id)) {
                   ScaffoldMessenger.of(

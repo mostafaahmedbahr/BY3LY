@@ -140,9 +140,10 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
               style: TextStyle(color: AppColors.accent),
             ),
           ).show(context);
-          // The status badge is driven by widget.ad, which the cubit updates
-          // in place; rebuild so it flips between نشط / غير نشط immediately.
-          setState(() {});
+          // The status changed (نشط ↔ غير نشط). Close with `true` so the
+          // my-ads list refreshes and shows the new status from the server.
+          widget.ad.isPaused = state.isPaused;
+          Navigator.pop(context, true);
         } else if (state is PauseResumeAdErrorState &&
             state.adId == widget.ad.id) {
           ScaffoldMessenger.of(
