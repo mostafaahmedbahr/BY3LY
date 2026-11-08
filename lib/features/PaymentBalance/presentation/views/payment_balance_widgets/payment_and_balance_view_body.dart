@@ -6,8 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:by3ly/core/shared_widgets/custom_loading.dart';
 import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
+import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/features/PaymentBalance/data/models/wallet_history_model.dart';
@@ -28,211 +28,279 @@ import 'package:page_transition/page_transition.dart';
 import '../../../../../lang/locale_keys.dart';
 import '../../../../packages/presentation/views/transfer_view.dart';
 
-class PaymentAndBalanceViewBody extends StatelessWidget {
+class PaymentAndBalanceViewBody extends StatefulWidget {
   const PaymentAndBalanceViewBody({super.key});
 
   @override
+  State<PaymentAndBalanceViewBody> createState() =>
+      _PaymentAndBalanceViewBodyState();
+}
+
+class _PaymentAndBalanceViewBodyState extends State<PaymentAndBalanceViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    // The history is loaded by the WalletCubit provider. Refresh the
+    // balance too on every entry so an approved top-up shows up.
+    // Deferred to after the first frame so emitting a state does not
+    // rebuild listeners while the tree is still building.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<ProfileCubit>().getProfile();
+    });
+  }
+
+  /// Refreshes both the balance card (profile) and the history list.
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<ProfileCubit>().getProfile(),
+      context.read<WalletCubit>().getHistory(),
+    ]);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColors.mainColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(context.tr(LocaleKeys.balance),style: AppStyles.textStyle14W500White,),
-                    IconButton(onPressed: (){},
-                        icon: const Icon(Icons.refresh,
-                        color: AppColors.yellowColor,)
-                    ),
-                  ],
-                ),
-                BlocBuilder<ProfileCubit, ProfileStates>(
-                  builder: (context, state) {
-                    final balance = context
-                        .read<ProfileCubit>()
-                        .profileModel
-                        ?.data
-                        ?.user
-                        ?.walletBalance;
-                    final text = balance == null
-                        ? '...'
-                        : '${balance == balance.roundToDouble() ? balance.toInt() : balance} ج.م';
-                    return Text(
-                      text,
-                      style:
-                          AppStyles.textStyle14W500White.copyWith(
-                        fontSize: 24,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          BlocBuilder<PackagesCubit, PackagesStates>(
-            builder: (context, state) {
-              final packages =
-                  PackagesCubit.get(context).allPackages;
-              Packages? current;
-              for (final p in packages) {
-                if (p.isSubscriped == true) {
-                  current = p;
-                  break;
-                }
-              }
-              if (current == null) {
-                return const SizedBox.shrink();
-              }
-              final pkg = current;
-              var endsAt = (pkg.endsAt ?? '').trim();
-              if (endsAt.length > 10) {
-                endsAt = endsAt.substring(0, 10);
-              }
-              return Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: AppColors.mainColor
-                          .withValues(alpha: 0.3)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.card_membership_rounded,
-                          size: 18,
-                          color: AppColors.mainColor,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'الباقة الحالية: ${pkg.name ?? ''}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.text,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'ينتهي في: ${endsAt.isNotEmpty ? endsAt : '...'}',
-                            style: TextStyle(
-                              fontSize: 12.5,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          pkg.remainingAds != null
-                              ? 'المتبقي: ${pkg.remainingAds} إعلان'
-                              : '',
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.mainColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-            Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Text(context.tr(LocaleKeys.previousActivities),style: AppStyles.textStyle16W500Black,),
-          ),
-          Expanded(
+    return Column(
+      children: [
+        Expanded(
+          child: RefreshIndicator(
+            color: AppColors.mainColor,
+            onRefresh: _refresh,
             child: BlocBuilder<WalletCubit, WalletStates>(
               builder: (context, state) {
                 final cubit = WalletCubit.get(context);
-                if (state is GetWalletHistoryLoadingState) {
-                  return const CustomLoading();
-                }
-                if (state is GetWalletHistoryErrorState) {
-                  return CustomErrorWidget(
-                    error: state.error,
-                    onTap: () => cubit.getHistory(),
-                  );
-                }
-                final history = cubit.history;
-                if (history.isEmpty) {
-                  return Center(
-                    child: Text(
-                      "لا يوجد عمليات سابقة",
-                      style: TextStyle(color: AppColors.textSecondary),
-                    ),
-                  );
-                }
-                return ListView.separated(
-                  itemBuilder: (context, index) {
-                    return _HistoryItem(item: history[index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return const CustomSizedBox(height: 16);
-                  },
-                  itemCount: history.length,
+                final loading =
+                    state is GetWalletHistoryLoadingState ||
+                    state is WalletInitState;
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    if (loading)
+                      const _WalletPageShimmer()
+                    else ...[
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppColors.mainColor,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  context.tr(LocaleKeys.balance),
+                                  style: AppStyles.textStyle14W500White,
+                                ),
+                                IconButton(
+                                  onPressed: _refresh,
+                                  icon: const Icon(
+                                    Icons.refresh,
+                                    color: AppColors.yellowColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            BlocBuilder<ProfileCubit, ProfileStates>(
+                              builder: (context, state) {
+                                final balance = context
+                                    .read<ProfileCubit>()
+                                    .profileModel
+                                    ?.data
+                                    ?.user
+                                    ?.walletBalance;
+                                if (balance == null) {
+                                  return const Padding(
+                                    padding: EdgeInsets.only(top: 4),
+                                    child: SimmerLoading(
+                                      height: 24,
+                                      width: 100,
+                                      raduis: 8,
+                                    ),
+                                  );
+                                }
+                                final text =
+                                    '${balance == balance.roundToDouble() ? balance.toInt() : balance} ج.م';
+                                return Text(
+                                  text,
+                                  style: AppStyles.textStyle14W500White
+                                      .copyWith(fontSize: 24),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      BlocBuilder<PackagesCubit, PackagesStates>(
+                        builder: (context, state) {
+                          final packages = PackagesCubit.get(
+                            context,
+                          ).allPackages;
+                          Packages? current;
+                          for (final p in packages) {
+                            if (p.isSubscriped == true) {
+                              current = p;
+                              break;
+                            }
+                          }
+                          if (current == null) {
+                            return const SizedBox.shrink();
+                          }
+                          final pkg = current;
+                          var endsAt = (pkg.endsAt ?? '').trim();
+                          if (endsAt.length > 10) {
+                            endsAt = endsAt.substring(0, 10);
+                          }
+                          return Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.surface,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: AppColors.mainColor.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.card_membership_rounded,
+                                      size: 18,
+                                      color: AppColors.mainColor,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        'الباقة الحالية: ${pkg.name ?? ''}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.text,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'ينتهي في: ${endsAt.isNotEmpty ? endsAt : '...'}',
+                                        style: TextStyle(
+                                          fontSize: 12.5,
+                                          color: AppColors.textSecondary,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      pkg.remainingAds != null
+                                          ? 'المتبقي: ${pkg.remainingAds} إعلان'
+                                          : '',
+                                      style: const TextStyle(
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.mainColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          context.tr(LocaleKeys.previousActivities),
+                          style: AppStyles.textStyle16W500Black,
+                        ),
+                      ),
+                      if (state is GetWalletHistoryErrorState)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: CustomErrorWidget(
+                            error: state.error,
+                            onTap: () => cubit.getHistory(),
+                          ),
+                        )
+                      else if (cubit.history.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 60),
+                          child: Center(
+                            child: Text(
+                              "لا يوجد عمليات سابقة",
+                              style: TextStyle(color: AppColors.textSecondary),
+                            ),
+                          ),
+                        )
+                      else
+                        Column(
+                          children: [
+                            for (int i = 0; i < cubit.history.length; i++) ...[
+                              if (i > 0) const CustomSizedBox(height: 16),
+                              _HistoryItem(item: cubit.history[i]),
+                            ],
+                          ],
+                        ),
+                    ],
+                  ],
                 );
               },
             ),
           ),
-          const CustomSizedBox(height: 20,),
-          CustomButton(
-            btnText: Text(context.tr(LocaleKeys.addCredit),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: CustomButton(
+            btnText: Text(
+              context.tr(LocaleKeys.addCredit),
               style: AppStyles.textStyle16W600Black.copyWith(
                 color: AppColors.whiteColor,
-              ),),
-            onPressed: (){
+              ),
+            ),
+            onPressed: () async {
               // Pushed routes can't see this page's local providers,
               // so both cubits are passed explicitly with the new route.
-              Navigator.push(
+              final added = await Navigator.push(
                 context,
                 PageTransition(
                   type: PageTransitionType.rightToLeft,
                   child: MultiBlocProvider(
                     providers: [
-                      BlocProvider.value(
-                        value: WalletCubit.get(context),
-                      ),
+                      BlocProvider.value(value: WalletCubit.get(context)),
                       BlocProvider(
-                        create: (_) => PackagesCubit(
-                            getIt.get<PackagesRepoImpl>()),
+                        create: (_) =>
+                            PackagesCubit(getIt.get<PackagesRepoImpl>()),
                       ),
                     ],
                     child: const TransferView(topUpMode: true),
                   ),
                 ),
               );
+              // Top-up submitted → refresh the balance card and the
+              // previous activities so the new operation shows up.
+              if (added == true && mounted) {
+                _refresh();
+              }
             },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -303,16 +371,10 @@ class _ReceiptSheetState extends State<_ReceiptSheet> {
       if (!mounted || path == null) return;
       await Gal.putImage(path);
       if (!mounted) return;
-      Toast.showSuccessToast(
-        msg: "تم حفظ الصورة في المعرض",
-        context: context,
-      );
+      Toast.showSuccessToast(msg: "تم حفظ الصورة في المعرض", context: context);
     } catch (_) {
       if (!mounted) return;
-      Toast.showErrorToast(
-        msg: "تعذر حفظ الصورة",
-        context: context,
-      );
+      Toast.showErrorToast(msg: "تعذر حفظ الصورة", context: context);
     } finally {
       if (mounted) setState(() => _downloading = false);
     }
@@ -325,17 +387,11 @@ class _ReceiptSheetState extends State<_ReceiptSheet> {
       final path = await _downloadTemp();
       if (!mounted || path == null) return;
       await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(path)],
-          text: 'إيصال التحويل',
-        ),
+        ShareParams(files: [XFile(path)], text: 'إيصال التحويل'),
       );
     } catch (_) {
       if (!mounted) return;
-      Toast.showErrorToast(
-        msg: "تعذر مشاركة الصورة",
-        context: context,
-      );
+      Toast.showErrorToast(msg: "تعذر مشاركة الصورة", context: context);
     } finally {
       if (mounted) setState(() => _sharing = false);
     }
@@ -437,9 +493,7 @@ class _SheetAction extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           color: filled ? AppColors.mainColor : AppColors.surface,
           border: Border.all(
-            color: filled
-                ? AppColors.mainColor
-                : AppColors.border,
+            color: filled ? AppColors.mainColor : AppColors.border,
           ),
         ),
         child: busy
@@ -448,9 +502,7 @@ class _SheetAction extends StatelessWidget {
                 height: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
-                  color: filled
-                      ? Colors.white
-                      : AppColors.mainColor,
+                  color: filled ? Colors.white : AppColors.mainColor,
                 ),
               )
             : Row(
@@ -459,9 +511,7 @@ class _SheetAction extends StatelessWidget {
                   Icon(
                     icon,
                     size: 20,
-                    color: filled
-                        ? Colors.white
-                        : AppColors.mainColor,
+                    color: filled ? Colors.white : AppColors.mainColor,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -469,14 +519,91 @@ class _SheetAction extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: filled
-                          ? Colors.white
-                          : AppColors.mainColor,
+                      color: filled ? Colors.white : AppColors.mainColor,
                     ),
                   ),
                 ],
               ),
       ),
+    );
+  }
+}
+
+/// Full-page shimmer: balance card + package card + section header + rows.
+class _WalletPageShimmer extends StatelessWidget {
+  const _WalletPageShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Balance card.
+        SimmerLoading(height: 118, raduis: 10),
+        SizedBox(height: 12),
+        // Current package card.
+        SimmerLoading(height: 74, raduis: 10),
+        SizedBox(height: 16),
+        // "Previous activities" header.
+        SimmerLoading(height: 16, width: 140, raduis: 6),
+        SizedBox(height: 12),
+        _WalletHistoryShimmer(),
+      ],
+    );
+  }
+}
+
+/// Shimmer skeleton mirroring [_HistoryItem]: icon block + text lines.
+class _WalletHistoryShimmer extends StatelessWidget {
+  const _WalletHistoryShimmer();
+
+  static const int _itemCount = 4;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (int i = 0; i < _itemCount; i++) ...[
+          if (i > 0) const CustomSizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: const Row(
+              children: [
+                SimmerLoading(height: 46, width: 46, raduis: 14),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: SimmerLoading(height: 12, raduis: 6)),
+                          SizedBox(width: 12),
+                          SimmerLoading(height: 12, width: 56, raduis: 6),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          SimmerLoading(height: 10, width: 70, raduis: 5),
+                          Spacer(),
+                          SimmerLoading(height: 10, width: 50, raduis: 5),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
@@ -493,8 +620,7 @@ class _HistoryItem extends StatelessWidget {
     final amountText = amount == null
         ? '...'
         : '${amount == amount.roundToDouble() ? amount.toInt() : amount} ج.م';
-    final accent =
-        credit ? AppColors.mainColor : AppColors.redColor;
+    final accent = credit ? AppColors.mainColor : AppColors.redColor;
     final methodName = _methodName(context, item.paymentMethod);
     return Container(
       width: double.infinity,
@@ -520,10 +646,7 @@ class _HistoryItem extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  accent,
-                  accent.withValues(alpha: 0.6),
-                ],
+                colors: [accent, accent.withValues(alpha: 0.6)],
               ),
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
@@ -593,9 +716,7 @@ class _HistoryItem extends StatelessWidget {
                       ),
                     ],
                     const Spacer(),
-                    _StatusPill(
-                        status: item.status,
-                        label: item.statusLabel),
+                    _StatusPill(status: item.status, label: item.statusLabel),
                   ],
                 ),
                 if (methodName.isNotEmpty) ...[
@@ -614,15 +735,15 @@ class _HistoryItem extends StatelessWidget {
                   Divider(height: 1, color: AppColors.border),
                   const SizedBox(height: 8),
                   InkWell(
-                    onTap: () =>
-                        _showReceipt(context, item.receiptUrl!),
+                    onTap: () => _showReceipt(context, item.receiptUrl!),
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.08),
+                        color: AppColors.mainColor.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Row(

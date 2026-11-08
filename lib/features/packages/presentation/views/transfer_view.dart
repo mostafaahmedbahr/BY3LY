@@ -20,8 +20,8 @@ import 'packages_widgets/transfer_method_card.dart';
 /// - Subscription mode ([package] set): transfer checkout for a package.
 ///   On success it pops back and the packages page refreshes.
 /// - Wallet top-up mode ([topUpMode] true): amount + method + receipt,
-///   posted to wallet/top-up. On success it pops back and the history
-///   refreshes.
+///   posted to wallet/top-up. On success it pops back with `true` and the
+///   wallet page refreshes the balance and the history.
 class TransferView extends StatefulWidget {
   const TransferView({super.key, this.package, this.topUpMode = false})
       : assert(
@@ -345,7 +345,8 @@ class _TransferViewState extends State<TransferView> {
         },
       ),
     );
-    // Wallet mode: top-up result pops back + refreshes the history.
+    // Wallet mode: on success pop back with `true` so the wallet page
+    // refreshes the balance and the history.
     if (topUpMode) {
       return BlocListener<WalletCubit, WalletStates>(
         listener: (context, state) {
@@ -356,8 +357,7 @@ class _TransferViewState extends State<TransferView> {
                   : "تم إرسال طلب الشحن بنجاح",
               context: context,
             );
-            context.read<WalletCubit>().getHistory();
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           } else if (state is TopUpErrorState) {
             Toast.showErrorToast(
                 msg: state.error, context: context);
