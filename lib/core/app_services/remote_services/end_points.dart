@@ -53,6 +53,12 @@ class EndPoints {
   static const resetPassword = "resetPassword";
   static const changePassword = "changePassword";
 
+  /// Endpoint that accepts `{ "device_token": "..." }` for the logged-in user.
+  /// The current backend only accepts the token on login, so this is null
+  /// until a dedicated endpoint is added. Set it to the real path (and
+  /// [DeviceTokenSync] starts syncing automatically).
+  static const String? updateDeviceToken = null;
+
   /// Account settings / privacy: GET = read, PATCH = update.
   static const settings = "settings";
 

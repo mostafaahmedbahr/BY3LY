@@ -18,12 +18,13 @@ class OtpReposImpl implements OtpRepos {
 
   @override
   Future<Either<Failure, OtpModel>> verifyOtp({
-    required String otp, required String email,
+    required String otp, required String email, required String deviceToken,
 }) async{
     try {
       var data = json.encode({
         "email": email,
-        "otp": otp
+        "otp": otp,
+        "device_token": deviceToken,
       });
       var response = await apiService!.postData(
         endPoint: EndPoints.verifyCode,

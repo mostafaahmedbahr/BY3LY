@@ -10,6 +10,9 @@ class AppInitializer {
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     // 🔹 Init Cache
     await CacheHelper.init();
 
@@ -36,16 +39,12 @@ class AppInitializer {
     // 🔹 Localization
     await EasyLocalization.ensureInitialized();
 
-    // 🔹 Firebase
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    // 🔹 Device Token
-    await getDeviceToken();
-
     // 🔹 Dependency Injection
     setup();
+
+    // 🔹 Device Token (needs Firebase + DI for token syncing)
+    // ignore: unawaited_futures
+  getDeviceToken();
 
     // 🔹 Bloc Observer
     Bloc.observer = SimpleBlocObserver();

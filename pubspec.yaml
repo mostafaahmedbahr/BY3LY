@@ -75,6 +75,7 @@ dependencies:
   gap: ^3.0.1
   firebase_core: ^4.15.0
   firebase_messaging:
+  flutter_local_notifications: ^20.1.0
   flutter_html:
   share_plus: ^13.3.1
   path_provider: ^2.1.6

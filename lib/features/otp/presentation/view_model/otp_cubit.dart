@@ -14,12 +14,13 @@ class OtpCubit extends Cubit<OtpStates> {
   OtpModel? otpModel;
 
   Future<void> verifyOtp({
-    required String otp, required String email
+    required String otp, required String email, required String deviceToken
 }) async {
     emit(VerifyOtpLoadingState());
     var result = await otpRepos!.verifyOtp(
         otp: otp,
       email: email,
+      deviceToken: deviceToken,
     );
     return result.fold((failure) {
       emit(VerifyOtpErrorState(failure.errMessage));

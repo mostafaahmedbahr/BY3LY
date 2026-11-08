@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:by3ly/core/notifications/app_notifications.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
 import 'package:by3ly/features/chat/presentation/view_model/chat_states.dart';
@@ -31,6 +32,14 @@ class LayoutViewState extends State<LayoutView> {
         ChatUnreadCubit.get(context).refresh();
       });
     }
+    // If the app was launched by tapping a notification, open the
+    // notifications screen once the layout (post-splash) is on screen.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (AppNotifications.consumePendingNavigation()) {
+        Navigator.of(context).pushNamed(Routes.notificationsView);
+      }
+    });
   }
 
   @override

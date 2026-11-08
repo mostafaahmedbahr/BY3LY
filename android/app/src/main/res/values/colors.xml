@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Accent color applied to the small notification icon (matches AppColors.mainColor). -->
+    <color name="notification_color">#0E8565</color>
+</resources>
