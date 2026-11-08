@@ -24,9 +24,11 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
   @override
   void initState() {
     super.initState();
-    // The startup call may have run before login, refetch if empty.
+    // Fetch fresh data every time the screen opens, not just when the list
+    // is empty — otherwise a notification received while the app was
+    // backgrounded never appears in the list.
     final cubit = NotificationsCubit.get(context);
-    if (cubit.notificationsList.isEmpty) {
+    if (cubit.shouldRefreshOnOpen) {
       cubit.getNotificationsData();
     }
   }

@@ -74,3 +74,10 @@ class AllNotificationsDeleted extends NotificationsStates {
   @override
   String toString() => 'AllNotificationsDeleted';
 }
+
+/// Fired when a new FCM arrived and the badge was bumped optimistically
+/// before the silent server sync completes (Home badge listens to this).
+class NewNotificationArrived extends NotificationsStates {
+  @override
+  String toString() => 'NewNotificationArrived';
+}

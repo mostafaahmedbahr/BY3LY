@@ -11,6 +11,7 @@ import '../app_services/local_services/cache_token.dart';
 import '../routing/routes.dart';
 import '../utils/app_consts/storage_keys.dart';
 import '../utils/guest_guard.dart';
+import '../../features/notifications/presentation/view_model/notifications_cubit.dart';
 import 'device_token_sync.dart';
 import 'notification_service.dart';
 
@@ -117,17 +118,25 @@ class AppNotifications {
   static Future<void> _handleForegroundMessage(RemoteMessage message) async {
     debugPrint('FCM foreground message: ${message.messageId}');
     // iOS displays `notification` payloads itself (presentation options above).
-    if (Platform.isIOS && message.notification != null) return;
+    if (Platform.isIOS && message.notification != null) {
+      NotificationsCubit.activeInstance?.onNewNotificationArrived();
+      return;
+    }
 
     try {
       await NotificationService.instance.showRemoteMessage(message);
     } catch (e) {
       debugPrint('Foreground notification failed: $e');
     }
+    // Show the local notification AND sync the in-app badge + list.
+    NotificationsCubit.activeInstance?.onNewNotificationArrived();
   }
 
   static void _navigateToNotifications() {
     if (GuestGuard.isGuest) return;
+    // Force the screen to refetch so the tapped notification appears
+    // in the list and the badge (Home icon) matches the server count.
+    NotificationsCubit.activeInstance?.markPendingUpdate();
 
     final navigator = MyApp.navigatorKey.currentState;
     if (navigator == null) {
