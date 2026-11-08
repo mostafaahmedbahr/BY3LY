@@ -39,11 +39,24 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
   /// twice and routes errors to the right place.
   bool _paymentSheetOpen = false;
 
+  /// True when the ad was published from inside the payment sheet. The
+  /// page is popped with `true` only after the sheet closes so the caller
+  /// (e.g. the my-ads list) knows it has to refresh.
+  bool _publishedFromSheet = false;
+
   Future<void> _openPaymentSheet() async {
     if (_paymentSheetOpen) return;
     _paymentSheetOpen = true;
+    _publishedFromSheet = false;
     await showAdPaymentSheet(context);
     _paymentSheetOpen = false;
+    if (!mounted) return;
+    if (_publishedFromSheet) {
+      _publishedFromSheet = false;
+      // The sheet has already closed, so this pops the form page and
+      // returns `true` to the caller to trigger a refresh.
+      Navigator.pop(context, true);
+    }
   }
 
   @override
@@ -216,7 +229,13 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                   const TextStyle(color: AppColors.mainColor),
             ),
           ).show(context);
-          Navigator.pop(context, true);
+          if (_paymentSheetOpen) {
+            // The payment sheet closes itself on success; wait until it is
+            // gone before popping this page (see _openPaymentSheet).
+            _publishedFromSheet = true;
+          } else {
+            Navigator.pop(context, true);
+          }
         } else if (state is AddNewAdPaymentRequired) {
           // Package/free ads exhausted → the server demands payment:
           // force the payment step instead of publishing directly.
