@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:by3ly/features/profile/data/models/profile_data_model.dart';
 import 'package:by3ly/features/profile/data/repos/profile_repos.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/app_services/local_services/cache_helper.dart';
@@ -14,7 +13,7 @@ import '../../data/models/logout_model.dart';
 class ProfileCubit extends Cubit<ProfileStates> {
   ProfileCubit(this.profileRepos) : super(ProfileInitState());
 
-  static ProfileCubit get(context) => BlocProvider.of(context);
+  static ProfileCubit get(BuildContext context) => BlocProvider.of(context);
 
 
 
@@ -35,7 +34,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
 
   bool switchValue = true;
 
-  void changeNotificationValue(newValue)
+  void changeNotificationValue(bool newValue)
   {
     switchValue = newValue;
     emit(ChangeNotificationValueState());

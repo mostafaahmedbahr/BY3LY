@@ -63,6 +63,7 @@ class AllCategoriesViewBody extends StatelessWidget {
                         '${category.subCategories?.length ?? 0} قسم فرعي',
                         image: category.image.toString(),
                         svg: false,
+                        style: ProfileItemStyle.premium,
                         onTap: () {
                           context.pushNamed(
                             Routes.allSubCategoriesView,

@@ -89,6 +89,8 @@ class ArLang {
     "termsAndConditionsMsg": "قواعد وشروط استخدام التطبيق",
     "privacyPolicy": "سياسة الخصوصية",
     "privacyPolicyMsg": "كيف نحمي بياناتك ومعلوماتك",
+    "legalInfo": "معلومات قانونية",
+    "legalInfoMsg": "عن التطبيق والشروط والخصوصية",
     "deleteAccount": "حذف الحساب",
     "deleteAccountAndStopAds": "حذف الحساب ووقف الاعلانات",
     "notifications":

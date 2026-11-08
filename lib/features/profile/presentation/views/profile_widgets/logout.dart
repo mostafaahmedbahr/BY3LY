@@ -8,38 +8,44 @@ class Logout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.h),
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
-        onTap: () {
-          showLogoutDialog(context);
-        },
-        child: Card(
-          shadowColor: AppColors.redColor,
-          elevation: 2.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+        onTap: () => showLogoutDialog(context),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          height: 44,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.redColor.withValues(alpha: 0.35),
+            ),
+            color: AppColors.redColor.withValues(alpha: 0.06),
           ),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            width: double.infinity,
-            height: 56.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r),
-              color: Theme.of(context).cardColor,
-            ),
-            child: Row(
-              children: [
-                SvgPicture.asset(AppImages.logout),
-                Gap(20.w),
-                Text(
-                  LocaleKeys.signOut.tr(),
-                  style: AppStyles.textStyle14W500White.copyWith(
-                    color: AppColors.redColor,
-                  ),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                AppImages.logout,
+                width: 18,
+                height: 18,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.redColor,
+                  BlendMode.srcIn,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                LocaleKeys.signOut.tr(),
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.redColor,
+                ),
+              ),
+            ],
           ),
         ),
       ),

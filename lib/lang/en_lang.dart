@@ -90,6 +90,8 @@ class EnLang {
     "termsAndConditionsMsg": "Rules for using the app",
     "privacyPolicy": "Privacy Policy",
     "privacyPolicyMsg": "How we protect your data",
+    "legalInfo": "Legal info",
+    "legalInfoMsg": "About, terms and privacy",
     "deleteAccount": "Delete Account",
     "deleteAccountAndStopAds": "Delete Account and Stop Ads",
     "notifications": "Notify",

@@ -2,7 +2,6 @@ import 'package:by3ly/core/shared_cubits/auth_cubit/auth_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../../main_importants.dart';
-import 'package:by3ly/core/utils/get_device_token.dart';
 import 'package:by3ly/core/utils/app_consts/storage_keys.dart';
 import '../../view_model/otp_cubit.dart';
 import '../../view_model/otp_states.dart';

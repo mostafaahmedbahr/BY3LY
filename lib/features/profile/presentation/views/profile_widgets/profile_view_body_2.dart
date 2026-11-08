@@ -8,17 +8,15 @@ class ProfileViewBody2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: ListView(
-        children:   [
-          const ProfileDataWidget(),
-          Gap(10.h),
-          const ProfileListItemsWidgets(),
-         Gap(10.h),
-          const SettingsListWidget(),
-        ],
-      ),
+    return ListView(
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+      children: const [
+        ProfileDataWidget(),
+        SizedBox(height: 12),
+        ProfileListItemsWidgets(),
+        SizedBox(height: 16),
+        SettingsListWidget(),
+      ],
     );
   }
 }

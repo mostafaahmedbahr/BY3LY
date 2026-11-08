@@ -100,6 +100,8 @@ abstract class LocaleKeys {
   static const termsAndConditionsMsg = "termsAndConditionsMsg";
   static const privacyPolicy = "privacyPolicy";
   static const privacyPolicyMsg = "privacyPolicyMsg";
+  static const legalInfo = "legalInfo";
+  static const legalInfoMsg = "legalInfoMsg";
   static const deleteAccount = "deleteAccount";
   static const deleteAccountAndStopAds = "deleteAccountAndStopAds";
   static const notifications = "notifications";

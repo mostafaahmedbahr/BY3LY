@@ -1,12 +1,13 @@
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
-import 'package:by3ly/features/profile/presentation/views/profile_widgets/settings_item_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../../main_importants.dart';
 import '../../../../changeLang/presentation/views/change_lang_view.dart';
 import '../../../../deleteAccount/presentation/views/delete_account_view.dart';
+import '../../../../helpSupport/presentation/views/help_support_view.dart';
 import '../../../../privacy/presentation/views/privacy_view.dart';
+import 'compact_settings_tile.dart';
 import 'logout.dart';
 import 'theme_mode_switch.dart';
 
@@ -15,168 +16,178 @@ class SettingsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.tr(LocaleKeys.settings),
-          style: AppStyles.textStyle16W500Black.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: Text(
+            context.tr(LocaleKeys.settings),
+            style: AppStyles.textStyle16W500Black.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-        Gap(10.h),
-        SettingsItemWidget(
-          title: LocaleKeys.privacy.tr(),
-          subTitle: LocaleKeys.blockPhoneNumber.tr(),
-          image: AppImages.shield,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: const PrivacyView(),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.mainColor.withValues(alpha: 0.08),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
-            );
-          },
-        ),
-        SettingsItemWidget(
-          title: LocaleKeys.changeLang.tr(),
-          subTitle: LocaleKeys.changeLangYouWant.tr(),
-          image: AppImages.lang,
-          onTap: () {
-            showChangeLangSheet(context);
-          },
-        ),
-        const ThemeModeSwitch(),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Column(
+            children: [
+              // الدعم والمساعدة
+              CompactSettingsTile(
+                title: LocaleKeys.reportingAndSupport.tr(),
+                iconData: CupertinoIcons.headphones,
+                onTap: () => _push(context, const HelpSupportView()),
+              ),
+              const SettingsDivider(),
 
-        /// change password
-        SettingsItemWidget(
-          title: LocaleKeys.changePassword.tr(),
-          subTitle: LocaleKeys.changePasswordMsg.tr(),
-          image: AppImages.lock,
-          onTap: () {
-            context.pushNamed(Routes.changePasswordView);
-          },
-        ),
-        SettingsItemWidget(
-          title: LocaleKeys.deleteAccount.tr(),
-          subTitle: LocaleKeys.deleteAccountAndStopAds.tr(),
-          image: AppImages.trash,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: const DeleteAccountView(),
+              // الخصوصية / حجب الرقم
+              CompactSettingsTile(
+                title: LocaleKeys.privacy.tr(),
+                imagePath: AppImages.shield,
+                onTap: () => _push(context, const PrivacyView()),
               ),
-            );
-          },
-        ),
-        BlocConsumer<ProfileCubit, ProfileStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            final theme = Theme.of(context);
-            final isDark = theme.brightness == Brightness.dark;
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Card(
-                shadowColor: AppColors.mainColor,
-                elevation: 2.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  width: double.infinity,
-                  height: 56,
+              const SettingsDivider(),
+
+              // تغيير كلمة المرور
+              CompactSettingsTile(
+                title: LocaleKeys.changePassword.tr(),
+                imagePath: AppImages.lock,
+                onTap: () => context.pushNamed(Routes.changePasswordView),
+              ),
+              const SettingsDivider(),
+
+              // تغيير اللغة
+              CompactSettingsTile(
+                title: LocaleKeys.changeLang.tr(),
+                imagePath: AppImages.lang,
+                onTap: () => showChangeLangSheet(context),
+              ),
+              const SettingsDivider(),
+
+              // المظهر
+              const ThemeModeSwitch(),
+              const SettingsDivider(),
+
+              // الإشعارات
+              BlocConsumer<ProfileCubit, ProfileStates>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  return CompactSettingsTile(
+                    title: LocaleKeys.notifications.tr(),
+                    imagePath: AppImages.notification,
+                    trailing: CupertinoSwitch(
+                      activeTrackColor: AppColors.mainColor,
+                      value: ProfileCubit.get(context).switchValue,
+                      onChanged: (value) {
+                        ProfileCubit.get(context)
+                            .changeNotificationValue(value);
+                      },
+                    ),
+                  );
+                },
+              ),
+              const SettingsDivider(),
+
+              // معلومات قانونية (قابلة للطي: عن التطبيق / الشروط / الخصوصية)
+              ExpansionTile(
+                visualDensity: VisualDensity.compact,
+                tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+                childrenPadding: const EdgeInsets.only(bottom: 4),
+                dense: true,
+                leading: Container(
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
+                    color: AppColors.mainColor.withValues(alpha: 0.09),
                     borderRadius: BorderRadius.circular(10),
-                    color: theme.cardColor,
                   ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppImages.notification,
-                        colorFilter: ColorFilter.mode(
-                          isDark ? AppColors.whiteColor : AppColors.blackColor,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      const CustomSizedBox(width: 8),
-                      const CustomSizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            LocaleKeys.notifications.tr(),
-                            style: AppStyles.textStyle14W500White.copyWith(
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          Text(
-                            ProfileCubit.get(context).switchValue == false
-                                ? LocaleKeys.enableNotifications.tr()
-                                : LocaleKeys.disableNotifications.tr(),
-                            style: AppStyles.textStyle10W400Gray,
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      CupertinoSwitch(
-                        activeColor: AppColors.mainColor,
-                        value: ProfileCubit.get(context).switchValue,
-                        onChanged: (value) {
-                          ProfileCubit.get(
-                            context,
-                          ).changeNotificationValue(value);
-                        },
-                      ),
-                      const CustomSizedBox(width: 8),
-                    ],
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    AppImages.bookOpen,
+                    width: 19,
+                    height: 19,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.mainColor,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
+                title: Text(
+                  LocaleKeys.legalInfo.tr(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyles.textStyle14W500Black.copyWith(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                subtitle: Text(
+                  LocaleKeys.legalInfoMsg.tr(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyles.textStyle10W400Gray.copyWith(fontSize: 9.5),
+                ),
+                trailing: Icon(
+                  Icons.expand_more_rounded,
+                  size: 20,
+                  color: AppColors.textSecondary,
+                ),
+                children: [
+                  CompactSettingsTile(
+                    title: LocaleKeys.aboutApp.tr(),
+                    imagePath: AppImages.globe,
+                    onTap: () => context.pushNamed(Routes.aboutView),
+                  ),
+                  CompactSettingsTile(
+                    title: LocaleKeys.termsAndConditions.tr(),
+                    imagePath: AppImages.bookOpen,
+                    onTap: () => context.pushNamed(Routes.termsView),
+                  ),
+                  CompactSettingsTile(
+                    title: LocaleKeys.privacyPolicy.tr(),
+                    imagePath: AppImages.shield,
+                    onTap: () => context.pushNamed(Routes.privacyPolicyView),
+                  ),
+                ],
               ),
-            );
-          },
-        ),
+              const SettingsDivider(),
 
-        // SettingsItemWidget(
-        //   title: 'الاشعارات',
-        //   subTitle: "تفعيل الاشعارات",
-        //   image: AppImages.notification,
-        //   onTap: (){},
-        // ),
-
-        /// Static pages from the API (about / terms / privacy policy)
-        SettingsItemWidget(
-          title: LocaleKeys.aboutApp.tr(),
-          subTitle: LocaleKeys.aboutAppMsg.tr(),
-          image: AppImages.globe,
-          onTap: () {
-            context.pushNamed(Routes.aboutView);
-          },
+              // حذف الحساب (داخل الكارت — بدون subtitle)
+              CompactSettingsTile(
+                title: LocaleKeys.deleteAccount.tr(),
+                imagePath: AppImages.trash,
+                tintColor: AppColors.redColor,
+                onTap: () => _push(context, const DeleteAccountView()),
+              ),
+            ],
+          ),
         ),
-        SettingsItemWidget(
-          title: LocaleKeys.termsAndConditions.tr(),
-          subTitle: LocaleKeys.termsAndConditionsMsg.tr(),
-          image: AppImages.bookOpen,
-          onTap: () {
-            context.pushNamed(Routes.termsView);
-          },
-        ),
-        SettingsItemWidget(
-          title: LocaleKeys.privacyPolicy.tr(),
-          subTitle: LocaleKeys.privacyPolicyMsg.tr(),
-          image: AppImages.shield,
-          onTap: () {
-            context.pushNamed(Routes.privacyPolicyView);
-          },
-        ),
-        const Gap(10),
-        Logout(),
+        const SizedBox(height: 12),
+        const Logout(),
       ],
+    );
+  }
+
+  void _push(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      PageTransition(type: PageTransitionType.rightToLeft, child: page),
     );
   }
 }

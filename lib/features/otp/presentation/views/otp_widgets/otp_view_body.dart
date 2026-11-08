@@ -66,8 +66,8 @@ class _OtpViewBodyState extends State<OtpViewBody> {
     startTimer(); // Restart timer after resending
   }
 
-  snackBar(String? message) {
-    return ScaffoldMessenger.of(context).showSnackBar(
+  void snackBar(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message!),
         duration: const Duration(seconds: 2),

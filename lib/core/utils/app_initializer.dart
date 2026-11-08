@@ -44,7 +44,7 @@ class AppInitializer {
 
     // 🔹 Device Token (needs Firebase + DI for token syncing)
     // ignore: unawaited_futures
-  getDeviceToken();
+    getDeviceToken();
 
     // 🔹 Bloc Observer
     Bloc.observer = SimpleBlocObserver();

@@ -13,13 +13,13 @@ class LoginModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> result = <String, dynamic>{};
+    result["status"] = status;
+    result["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      result["data"] = data?.toJson();
     }
-    return _data;
+    return result;
   }
 }
 
@@ -37,13 +37,13 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if(user != null) {
-      _data["user"] = user?.toJson();
+      data["user"] = user?.toJson();
     }
-    _data["isActive"] = isActive;
-    _data["requires_otp"] = requiresOtp;
-    return _data;
+    data["isActive"] = isActive;
+    data["requires_otp"] = requiresOtp;
+    return data;
   }
 }
 
@@ -79,19 +79,19 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["email"] = email;
-    _data["phone"] = phone;
-    _data["age"] = age;
-    _data["image"] = image;
-    _data["token"] = token;
-    _data["center_id"] = centerId;
-    _data["city_id"] = cityId;
-    _data["cityName"] = cityName;
-    _data["centerName"] = centerName;
-    _data["created_at"] = createdAt;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
+    data["name"] = name;
+    data["email"] = email;
+    data["phone"] = phone;
+    data["age"] = age;
+    data["image"] = image;
+    data["token"] = token;
+    data["center_id"] = centerId;
+    data["city_id"] = cityId;
+    data["cityName"] = cityName;
+    data["centerName"] = centerName;
+    data["created_at"] = createdAt;
+    return data;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_nav/new_app_nav.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
@@ -16,96 +15,167 @@ class ProfileDataWidget extends StatelessWidget {
     return BlocConsumer<ProfileCubit, ProfileStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        debugPrint(CacheTokenManger.userToken);
-        debugPrint("ProfileDataWidget");
         var profileCubit = ProfileCubit.get(context);
         final user = profileCubit.profileModel?.data?.user;
         if (state is GetProfileDataLoadingState || user == null) {
-          return const SimmerLoading(height: 44);
+          return const SimmerLoading(height: 80);
         }
         if (state is GetProfileDataSuccessState &&
             state.profileModel.status == false) {
-          return const SimmerLoading(height: 44);
+          return const SimmerLoading(height: 80);
         } else if (state is GetProfileDataErrorState) {
           return const Text("Error");
         }
-        return Row(
-          children: [
-            Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                profileCubit.file != null && profileCubit.file!.path != ""
-                    ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.file(
-                            profileCubit.file!,
-                            fit: BoxFit.cover,
-                            height: 44,
-                            width: 44,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        //padding: const EdgeInsets.all(20),
-                        height: 44,
-                        width: 44,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: AppColors.surfaceVariant,
-                          border: Border.all(color: AppColors.surfaceVariant),
-                        ),
-                        child: CustomNetWorkImage(
-                          imageUrl: user.image ?? '',
-                          raduis: 50,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                InkWell(
-                  onTap: () {
-                    profileCubit.uploadOnlyImage();
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: AppColors.mainColor,
-                    radius: 10,
-                    child: Icon(
-                      size: 14,
-                      Icons.camera_alt,
-                      color: AppColors.whiteColor,
+        return Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.mainColor.withValues(alpha: 0.08),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Container(
+                    height: 56,
+                    width: 56,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColors.surfaceVariant,
+                      border: Border.all(color: AppColors.surfaceVariant),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: profileCubit.file != null &&
+                              profileCubit.file!.path != ""
+                          ? Image.file(
+                              profileCubit.file!,
+                              fit: BoxFit.cover,
+                              height: 56,
+                              width: 56,
+                            )
+                          : CustomNetWorkImage(
+                              imageUrl: user.image ?? '',
+                              raduis: 100,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
+                  InkWell(
+                    onTap: () {
+                      profileCubit.uploadOnlyImage();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: const BoxDecoration(
+                        color: AppColors.mainColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 11,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      user.name ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppStyles.textStyle16W600Black.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.phone_outlined,
+                          size: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            user.phone ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppStyles.textStyle14W500Gray.copyWith(
+                              fontSize: 11.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "${context.tr(LocaleKeys.memberFrom)} ${user.createdAt ?? ''}",
+                      style: AppStyles.textStyle10W400Gray.copyWith(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${user.name ?? ''} - ( ${user.phone ?? ''} )",
-                  style: AppStyles.textStyle16W600Black.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
+              ),
+              InkWell(
+                onTap: () {
+                  NewAppNav.customNavigator(
+                    context: context,
+                    screen: const UpdateProfileDataView(),
+                  );
+                },
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.mainColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.edit_rounded,
+                        size: 13,
+                        color: AppColors.mainColor,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        context.tr(LocaleKeys.change),
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                  " ${context.tr(LocaleKeys.memberFrom)} ${user.createdAt ?? ''}",
-                  style: AppStyles.textStyle10W400Gray,
-                ),
-              ],
-            ),
-            IconButton(
-              onPressed: () {
-                NewAppNav.customNavigator(
-                  context: context,
-                  screen: const UpdateProfileDataView(),
-                );
-              },
-              icon: const Icon(Icons.update, color: AppColors.yellowColor),
-            ),
-          ],
+              ),
+            ],
+          ),
         );
       },
     );

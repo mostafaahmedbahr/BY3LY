@@ -4,7 +4,6 @@ import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dar
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../../main_importants.dart';
 import 'package:by3ly/core/utils/app_consts/storage_keys.dart';
-import 'package:by3ly/core/utils/get_device_token.dart';
 import '../../view_model/login_cubit.dart';
 import '../../view_model/login_states.dart';
 
@@ -57,8 +56,8 @@ class LoginButtonsWidget extends StatelessWidget {
                       style: AppStyles.textStyle14W500White,
                     ),
                     onPressed: () {
-                      loginCubit.phoneCon.text = "01000000000";
-                      loginCubit.passwordCon.text = "12345678";
+                      // loginCubit.phoneCon.text = "01000000000";
+                      // loginCubit.passwordCon.text = "12345678";
                       if (formKey.currentState!.validate()) {
                         loginCubit.login(
                            phone: loginCubit.phoneCon.text,

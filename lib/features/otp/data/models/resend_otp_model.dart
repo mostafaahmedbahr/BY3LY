@@ -13,13 +13,13 @@ class ResendOtpModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> result = <String, dynamic>{};
+    result["status"] = status;
+    result["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      result["data"] = data?.toJson();
     }
-    return _data;
+    return result;
   }
 }
 
@@ -35,9 +35,9 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["phone"] = phone;
-    _data["code"] = code;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["phone"] = phone;
+    data["code"] = code;
+    return data;
   }
 }
