@@ -105,7 +105,15 @@ class SettingsListWidget extends StatelessWidget {
               const SettingsDivider(),
 
               // معلومات قانونية (قابلة للطي: عن التطبيق / الشروط / الخصوصية)
-              ExpansionTile(
+              // Material هنا مهم: الكارت الخارجي DecoratedBox، ومن غير Material
+              // هتبقى الـ ink splash بتاعة الـ ListTile (اللي جوه ExpansionTile)
+              // مخفية ورا الكارت — وده الـ warning اللي بيحصل.
+              Material(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: ExpansionTile(
                 visualDensity: VisualDensity.compact,
                 tilePadding: const EdgeInsets.symmetric(horizontal: 12),
                 childrenPadding: const EdgeInsets.only(bottom: 4),
@@ -165,6 +173,8 @@ class SettingsListWidget extends StatelessWidget {
                     onTap: () => context.pushNamed(Routes.privacyPolicyView),
                   ),
                 ],
+                  ),
+                ),
               ),
               const SettingsDivider(),
 
