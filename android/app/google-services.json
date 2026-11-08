@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "410177285744",
+    "project_id": "by3ly-ed414",
+    "storage_bucket": "by3ly-ed414.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410177285744:android:d995b7e86e0c545768ceb5",
+        "android_client_info": {
+          "package_name": "com.example.by3ly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqcSx8QgvvVXGX3ibkkeDwJ2pZ6cxIhJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

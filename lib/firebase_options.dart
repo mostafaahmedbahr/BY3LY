@@ -50,19 +50,18 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBfR3lo3MehD9ZUqStYdIkIKoDfSdsuv1o',
-    appId: '1:240519364569:android:907537cdcb084ebb32a3c8',
-    messagingSenderId: '240519364569',
-    projectId: 'by3ly-app',
-    storageBucket: 'by3ly-app.firebasestorage.app',
+    apiKey: 'AIzaSyCqcSx8QgvvVXGX3ibkkeDwJ2pZ6cxIhJg',
+    appId: '1:410177285744:android:d995b7e86e0c545768ceb5',
+    messagingSenderId: '410177285744',
+    projectId: 'by3ly-ed414',
+    storageBucket: 'by3ly-ed414.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBg_lgSTAIGDf0TqwPC8FTUI-CRADiNUTA',
-    appId: '1:240519364569:ios:c461da5d655c28d332a3c8',
-    messagingSenderId: '240519364569',
-    projectId: 'by3ly-app',
-    storageBucket: 'by3ly-app.firebasestorage.app',
-    iosBundleId: 'com.example.by3lyApp',
+    apiKey: 'AIzaSyDQY6Aed9tzY4M0bNaQsgjRbGoEQa0ceKM',
+    appId: '1:410177285744:ios:187157a0a5d4e99668ceb5',
+    messagingSenderId: '410177285744',
+    projectId: 'by3ly-ed414',
+    storageBucket: 'by3ly-ed414.firebasestorage.app',
+    iosBundleId: 'com.example.by3ly',
   );
 }
