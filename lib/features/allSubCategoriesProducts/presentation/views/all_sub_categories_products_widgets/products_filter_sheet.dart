@@ -15,154 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_button.dart';
+import 'filter_chip.dart';
+import 'filter_disabled_hint.dart';
+import 'filter_section_card.dart';
+import 'products_filter.dart';
 import '../../../../../core/shared_widgets/custom_text_form_filed.dart';
 import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../../core/utils/app_styles/app_styles.dart';
 import '../../../../../lang/locale_keys.dart';
-
-/// Immutable holder for the filters applied on the products grid.
-///
-/// Server keys: category_id, sub_category_id, min_price, max_price,
-/// city_id, center_id, shipping_type (free/paid), condition (new/used).
-/// `both` for shipping/condition means "no filter" (null).
-///
-/// The place filter uses the same cities/centers data as the
-/// ChooseLocation screen and account creation (ChooseLocationCubit).
-class ProductsFilter {
-  final String? type;
-  final double? minPrice;
-  final double? maxPrice;
-  final int? cityId;
-  final String? cityName;
-  final int? centerId;
-  final String? centerName;
-  final int? categoryId;
-  final String? categoryName;
-  final int? subCategoryId;
-  final String? subCategoryName;
-  final String? shippingType; // 'free' | 'paid' | null(=both)
-  final String? condition; // 'new' | 'used' | null(=both)
-
-  const ProductsFilter({
-    this.type,
-    this.minPrice,
-    this.maxPrice,
-    this.cityId,
-    this.cityName,
-    this.centerId,
-    this.centerName,
-    this.categoryId,
-    this.categoryName,
-    this.subCategoryId,
-    this.subCategoryName,
-    this.shippingType,
-    this.condition,
-  });
-
-  const ProductsFilter.empty()
-      : type = null,
-        minPrice = null,
-        maxPrice = null,
-        cityId = null,
-        cityName = null,
-        centerId = null,
-        centerName = null,
-        categoryId = null,
-        categoryName = null,
-        subCategoryId = null,
-        subCategoryName = null,
-        shippingType = null,
-        condition = null;
-
-  bool get isEmpty =>
-      type == null &&
-      minPrice == null &&
-      maxPrice == null &&
-      cityId == null &&
-      categoryId == null &&
-      subCategoryId == null &&
-      shippingType == null &&
-      condition == null;
-
-  int get activeCount =>
-      (type != null ? 1 : 0) +
-      (minPrice != null ? 1 : 0) +
-      (maxPrice != null ? 1 : 0) +
-      (cityId != null ? 1 : 0) +
-      (categoryId != null ? 1 : 0) +
-      (subCategoryId != null ? 1 : 0) +
-      (shippingType != null ? 1 : 0) +
-      (condition != null ? 1 : 0);
-
-  /// Label shown on the active-filter chip, e.g. "القاهرة - مدينة نصر".
-  String get placeLabel {
-    if (cityName == null) return '';
-    if (centerName != null) return '$cityName - $centerName';
-    return cityName!;
-  }
-
-  /// Exact backend query keys (see products filter API):
-  /// category_id, sub_category_id, min_price, max_price,
-  /// city_id, center_id, shipping_type, condition.
-  /// shipping_type / condition always sent (`both` = no filter).
-  /// Numbers are sent as int when whole (100 not 100.0).
-  Map<String, dynamic> toQueryParams() {
-    final map = <String, dynamic>{};
-    if (categoryId != null) map['category_id'] = categoryId;
-    if (subCategoryId != null) map['sub_category_id'] = subCategoryId;
-    if (minPrice != null) map['min_price'] = _cleanNum(minPrice!);
-    if (maxPrice != null) map['max_price'] = _cleanNum(maxPrice!);
-    if (cityId != null) map['city_id'] = cityId;
-    if (centerId != null) map['center_id'] = centerId;
-    map['shipping_type'] = shippingType ?? 'both';
-    map['condition'] = condition ?? 'both';
-    return map;
-  }
-
-  static dynamic _cleanNum(double v) =>
-      v == v.roundToDouble() ? v.toInt() : v;
-
-  ProductsFilter copyWith({
-    String? type,
-    double? minPrice,
-    double? maxPrice,
-    int? cityId,
-    String? cityName,
-    int? centerId,
-    String? centerName,
-    int? categoryId,
-    String? categoryName,
-    int? subCategoryId,
-    String? subCategoryName,
-    String? shippingType,
-    String? condition,
-    bool clearType = false,
-    bool clearPrice = false,
-    bool clearPlace = false,
-    bool clearCategory = false,
-    bool clearSubCategory = false,
-    bool clearShipping = false,
-    bool clearCondition = false,
-  }) {
-    return ProductsFilter(
-      type: clearType ? null : (type ?? this.type),
-      minPrice: clearPrice ? null : (minPrice ?? this.minPrice),
-      maxPrice: clearPrice ? null : (maxPrice ?? this.maxPrice),
-      cityId: clearPlace ? null : (cityId ?? this.cityId),
-      cityName: clearPlace ? null : (cityName ?? this.cityName),
-      centerId: clearPlace ? null : (centerId ?? this.centerId),
-      centerName: clearPlace ? null : (centerName ?? this.centerName),
-      categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
-      categoryName: clearCategory ? null : (categoryName ?? this.categoryName),
-      subCategoryId:
-          clearSubCategory ? null : (subCategoryId ?? this.subCategoryId),
-      subCategoryName:
-          clearSubCategory ? null : (subCategoryName ?? this.subCategoryName),
-      shippingType: clearShipping ? null : (shippingType ?? this.shippingType),
-      condition: clearCondition ? null : (condition ?? this.condition),
-    );
-  }
-}
 
 /// Opens the shared products filter bottom sheet and returns the
 /// filter picked by the user (or null if dismissed).
@@ -492,7 +352,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
   Widget _subCategoryField() {
     if (_categoryId == null) {
-      return _DisabledHint(text: context.tr(LocaleKeys.chooseSubCategory));
+      return FilterDisabledHint(text: context.tr(LocaleKeys.chooseSubCategory));
     }
     if (_loadingSubs) {
       return const Center(
@@ -709,7 +569,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
               const SizedBox(height: 10),
 
               /// Category + sub-category side by side (related fields).
-              _SectionCard(
+              FilterSectionCard(
                 icon: Icons.grid_view_rounded,
                 title: context.tr(LocaleKeys.chooseCategory),
                 child: Row(
@@ -725,20 +585,20 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
               /// Type
               if (widget.availableTypes.isNotEmpty)
-                _SectionCard(
+                FilterSectionCard(
                   icon: Icons.sell_outlined,
                   title: context.tr(LocaleKeys.type),
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      _FilterChip(
+                      FilterOptionChip(
                         label: context.tr(LocaleKeys.all),
                         selected: _type == null,
                         onSelected: () => setState(() => _type = null),
                       ),
                       ...widget.availableTypes.map(
-                        (t) => _FilterChip(
+                        (t) => FilterOptionChip(
                           label: t,
                           selected: _type == t,
                           onSelected: () => setState(() => _type = t),
@@ -751,7 +611,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 const SizedBox(height: 8),
 
               /// Price range
-              _SectionCard(
+              FilterSectionCard(
                 icon: Icons.payments_outlined,
                 title: context.tr(LocaleKeys.price),
                 child: Row(
@@ -791,7 +651,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
               /// Place (governorate + center from shared cities list).
               /// Listens to ChooseLocationCubit so the dropdowns appear as
               /// soon as the data arrives — no need to reopen the sheet.
-              _SectionCard(
+              FilterSectionCard(
                 icon: Icons.location_on_outlined,
                 title: context.tr(LocaleKeys.place),
                 child: BlocBuilder<ChooseLocationCubit, ChooseLocationStates>(
@@ -925,26 +785,26 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
               const SizedBox(height: 8),
 
               /// Shipping type: both (no filter) / free / paid.
-              _SectionCard(
+              FilterSectionCard(
                 icon: Icons.local_shipping_outlined,
                 title: context.tr(LocaleKeys.chooseShippingType),
                 child: Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.apps_rounded,
                     label: context.tr(LocaleKeys.all),
                     selected: _shippingType == null,
                     onSelected: () => setState(() => _shippingType = null),
                   ),
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.local_shipping_outlined,
                     label: context.tr(LocaleKeys.freeShipping),
                     selected: _shippingType == 'free',
                     onSelected: () => setState(() => _shippingType = 'free'),
                   ),
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.payments_outlined,
                     label: context.tr(LocaleKeys.paidShipping),
                     selected: _shippingType == 'paid',
@@ -956,26 +816,26 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
               const SizedBox(height: 8),
 
               /// Condition: both (no filter) / new / used.
-              _SectionCard(
+              FilterSectionCard(
                 icon: Icons.verified_outlined,
                 title: context.tr(LocaleKeys.chooseProductStatus),
                 child: Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.apps_rounded,
                     label: context.tr(LocaleKeys.all),
                     selected: _condition == null,
                     onSelected: () => setState(() => _condition = null),
                   ),
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.fiber_new_rounded,
                     label: context.tr(LocaleKeys.conditionNew),
                     selected: _condition == 'new',
                     onSelected: () => setState(() => _condition = 'new'),
                   ),
-                  _FilterChip(
+                  FilterOptionChip(
                     icon: Icons.history_rounded,
                     label: context.tr(LocaleKeys.conditionUsed),
                     selected: _condition == 'used',
@@ -1017,143 +877,3 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
   }
 }
 
-class _SectionCard extends StatelessWidget {
-  const _SectionCard({
-    required this.icon,
-    required this.title,
-    required this.child,
-  });
-
-  final IconData icon;
-  final String title;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Container(
-                height: 28,
-                width: 28,
-                decoration: BoxDecoration(
-                  color: AppColors.mainColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: Icon(icon, color: AppColors.accent, size: 16),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.text,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-class _DisabledHint extends StatelessWidget {
-  const _DisabledHint({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
-      ),
-    );
-  }
-}
-
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.selected,
-    required this.onSelected,
-    this.icon,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onSelected;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final content = icon == null
-        ? Text(label)
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: 16,
-                color: selected
-                    ? AppColors.whiteColor
-                    : AppColors.mainColor,
-              ),
-              const SizedBox(width: 6),
-              Text(label),
-            ],
-          );
-    return ChoiceChip(
-      label: content,
-      selected: selected,
-      onSelected: (_) => onSelected(),
-      selectedColor: AppColors.mainColor,
-      backgroundColor: AppColors.surfaceVariant,
-      labelStyle: TextStyle(
-        color: selected ? AppColors.whiteColor : AppColors.text,
-        fontSize: 12.5,
-        fontWeight: FontWeight.w600,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
-        side: BorderSide(
-          color: selected ? AppColors.mainColor : AppColors.border,
-          width: selected ? 1.2 : 1,
-        ),
-      ),
-      showCheckmark: false,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-    );
-  }
-}

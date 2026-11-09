@@ -10,7 +10,7 @@ import 'all_sub_categories_products_repos.dart';
 
 
 class AllSubCategoriesProductsReposImpl implements AllSubCategoriesProductsRepos {
-  final ApiService? apiService;
+  final ApiService apiService;
 
   AllSubCategoriesProductsReposImpl(this.apiService);
 
@@ -20,7 +20,7 @@ class AllSubCategoriesProductsReposImpl implements AllSubCategoriesProductsRepos
     required int subCategoryId,
 }) async{
     try {
-      var response = await apiService!.getData(
+      var response = await apiService.getData(
         endPoint: EndPoints.productBySubCategory,
         
         query: {

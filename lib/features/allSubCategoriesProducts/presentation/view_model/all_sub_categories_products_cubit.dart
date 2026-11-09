@@ -1,34 +1,38 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'package:by3ly/features/allSubCategoriesProducts/data/repos/all_sub_categories_products_repos.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/all_sub_categories_products_model.dart';
-import '../../data/repos/all_sub_categories_products_repos.dart';
 import 'all_sub_categories_products_states.dart';
 
+class AllSubCategoriesProductsCubit
+    extends Cubit<AllSubCategoriesProductsStates> {
+  AllSubCategoriesProductsCubit(this.allSubCategoriesProductsRepos)
+      : super(AllSubCategoriesProductsInitState());
 
-class AllSubCategoriesProductsCubit extends Cubit<AllSubCategoriesProductsStates> {
-  AllSubCategoriesProductsCubit(this.allSubCategoriesProductsRepos) : super(AllSubCategoriesProductsInitState());
+  static AllSubCategoriesProductsCubit get(BuildContext context) =>
+      BlocProvider.of<AllSubCategoriesProductsCubit>(context);
 
-  AllSubCategoriesProductsRepos? allSubCategoriesProductsRepos;
+  final AllSubCategoriesProductsRepos allSubCategoriesProductsRepos;
   AllSubCategoriesProductsModel? allSubCategoriesProductsModel;
 
-  List<Products> allSubCategoriesProductsList=[];
+  List<Products> allSubCategoriesProductsList = [];
+
   Future<void> getAllSubCategoriesProducts({
     required int subCategoryId,
-}) async {
+  }) async {
     emit(GetAllSubCategoriesProductsLoading());
-    var result = await allSubCategoriesProductsRepos!.getAllSubCategoriesProductsData(subCategoryId: subCategoryId);
+    final result = await allSubCategoriesProductsRepos
+        .getAllSubCategoriesProductsData(subCategoryId: subCategoryId);
     return result.fold((failure) {
       debugPrint(
-          'AllSubCategoriesProductsCubit getAllSubCategoriesProducts failed: ${failure.errMessage}');
+        'AllSubCategoriesProductsCubit getAllSubCategoriesProducts failed: ${failure.errMessage}',
+      );
       emit(GetAllSubCategoriesProductsError(failure.errMessage));
     }, (data) {
       allSubCategoriesProductsModel = data;
-      final newProducts = data.data?.products;
-      if (newProducts != null) {
-        allSubCategoriesProductsList =
-            allSubCategoriesProductsList + newProducts;
-      }
+      // Replace (not append) so a refresh never duplicates items.
+      allSubCategoriesProductsList = [...?data.data?.products];
       emit(GetAllSubCategoriesProductsSuccess(data));
     });
   }
