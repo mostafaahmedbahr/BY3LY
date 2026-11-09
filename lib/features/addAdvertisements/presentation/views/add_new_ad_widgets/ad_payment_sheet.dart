@@ -27,6 +27,9 @@ Future<void> showAdPaymentSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    isDismissible: true,
+    enableDrag: true,
+    useSafeArea: true,
     backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -169,14 +172,21 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
         }
       },
       child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        top: false,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            // Never let the sheet eat the whole screen (e.g. with the
+            // keyboard open) — keep barrier / grabber / close reachable.
+            maxHeight: MediaQuery.of(context).size.height * 0.82,
           ),
-          child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 14,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 14,
+            ),
+            child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -245,6 +255,26 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'إغلاق',
+                      onPressed: () => Navigator.pop(context),
+                      icon: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceVariant,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.border.withValues(
+                                alpha: 0.7),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 18,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ),
                   ],
@@ -353,6 +383,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
             ),
           ),
         ),
+      ),
       ),
     );
   }
