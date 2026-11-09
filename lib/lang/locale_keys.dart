@@ -392,4 +392,8 @@ abstract class LocaleKeys {
   static const classificationsSuffix = "classificationsSuffix";
   static const noProductsInSection = "noProductsInSection";
   static const discoverProducts = "discoverProducts";
+  static const changePasswordSubtitle = "changePasswordSubtitle";
+  static const currentPasswordHint = "currentPasswordHint";
+  static const currentPassword = "currentPassword";
+  static const passwordRequirementsTitle = "passwordRequirementsTitle";
 }

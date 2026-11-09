@@ -408,5 +408,9 @@ class EnLang {
     "classificationsSuffix": "sub-sections",
     "noProductsInSection": "No products in this section yet",
     "discoverProducts": "Discover products",
+    "changePasswordSubtitle": "A strong password keeps your account safe",
+    "currentPasswordHint": "Enter your current password",
+    "currentPassword": "Current Password",
+    "passwordRequirementsTitle": "Upper/lowercase + digits + symbols, 8-30 chars",
   };
 }

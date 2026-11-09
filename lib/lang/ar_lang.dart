@@ -398,5 +398,9 @@ class ArLang {
     "classificationsSuffix": "تصنيفات",
     "noProductsInSection": "لا يوجد منتجات في هذا القسم",
     "discoverProducts": "اكتشف المنتجات",
+    "changePasswordSubtitle": "كلمة مرور قوية تحمي حسابك من الاختراق",
+    "currentPasswordHint": "أدخل كلمة المرور الحالية",
+    "currentPassword": "كلمة المرور الحالية",
+    "passwordRequirementsTitle": "حروف كبيرة وصغيرة + أرقام + رموز، 8-30 حرفاً",
   };
 }

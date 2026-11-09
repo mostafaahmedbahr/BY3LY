@@ -83,7 +83,7 @@ class AppRouter {
           builder: (context) => BlocProvider(
             create: (context) =>
                 ChangePasswordCubit(getIt.get<ChangePasswordRepoImpl>()),
-            child: const ChangePasswordView(screenName: ""),
+            child: const ChangePasswordView(),
           ),
         );
       case Routes.allSubCategoriesView:

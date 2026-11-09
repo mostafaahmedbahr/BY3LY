@@ -1,17 +1,17 @@
-import 'package:by3ly/features/changePassword/presentation/views/widgets/change_password_view_body.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 
-import '../../../../main_importants.dart';
-
+import 'widgets/change_password_view_body.dart';
+import 'widgets/premium_app_bar.dart';
 
 class ChangePasswordView extends StatelessWidget {
-  const ChangePasswordView({super.key, required this.screenName});
-  final String screenName;
+  const ChangePasswordView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.changePassword.tr())),
-      body: ChangePasswordViewBody(screenName: screenName),
+      backgroundColor: Colors.transparent,
+      appBar: premiumAppBar(context),
+      body: const ChangePasswordViewBody(),
     );
   }
 }

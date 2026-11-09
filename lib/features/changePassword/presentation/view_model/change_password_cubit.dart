@@ -6,23 +6,29 @@ import 'change_password_states.dart';
 
 class ChangePasswordCubit extends Cubit<ChangePasswordStates> {
   ChangePasswordCubit(this.changePasswordRepo)
-    : super(ChangePasswordInitState());
+      : super(ChangePasswordInitState());
 
-  static ChangePasswordCubit get(context) => BlocProvider.of(context);
+  static ChangePasswordCubit get(BuildContext context) =>
+      BlocProvider.of<ChangePasswordCubit>(context);
 
-  ChangePasswordRepo? changePasswordRepo;
+  final ChangePasswordRepo changePasswordRepo;
 
-  var oldPasswordCon = TextEditingController();
-  var newPasswordCon = TextEditingController();
-  var confirmNewPasswordCon = TextEditingController();
+  final oldPasswordCon = TextEditingController();
+  final newPasswordCon = TextEditingController();
+  final confirmNewPasswordCon = TextEditingController();
 
   ChangePasswordModel? changePasswordModel;
-  Future<void> changePassword({
-    required String screenName,
-  }) async {
+
+  bool isOldPasswordVisible = true;
+  bool isNewPasswordVisible = true;
+  bool isConfirmNewPasswordVisible = true;
+
+  final FocusNode newPasswordFocusNode = FocusNode();
+  final FocusNode confirmNewPasswordFocusNode = FocusNode();
+
+  Future<void> changePassword() async {
     emit(ChangePasswordLoadingState());
-    var result = await changePasswordRepo!.changePassword(
-      screenName: screenName,
+    final result = await changePasswordRepo.changePassword(
       oldPassword: oldPasswordCon.text,
       newPassword: newPasswordCon.text,
       newPasswordConfirmation: confirmNewPasswordCon.text,
@@ -31,28 +37,24 @@ class ChangePasswordCubit extends Cubit<ChangePasswordStates> {
       (failure) {
         emit(ChangePasswordErrorState(failure.errMessage));
       },
-      (data) async {
+      (data) {
         changePasswordModel = data;
         emit(ChangePasswordSuccessState(data));
       },
     );
   }
 
-  bool isOldPasswordVisible = true;
-  bool isNewPasswordVisible = true;
-  bool isConfirmNewPasswordVisible = true;
-
-  changeOldPasswordVisible() {
+  void changeOldPasswordVisible() {
     isOldPasswordVisible = !isOldPasswordVisible;
     emit(ChangeOldPasswordVisibleState());
   }
 
-  changeNewPasswordVisible() {
+  void changeNewPasswordVisible() {
     isNewPasswordVisible = !isNewPasswordVisible;
     emit(ChangeNewPasswordVisibleState());
   }
 
-  changeConfirmNewPasswordVisible() {
+  void changeConfirmNewPasswordVisible() {
     isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible;
     emit(ChangeConfirmNewPasswordVisibleState());
   }
@@ -62,14 +64,12 @@ class ChangePasswordCubit extends Cubit<ChangePasswordStates> {
     oldPasswordCon.dispose();
     newPasswordCon.dispose();
     confirmNewPasswordCon.dispose();
+    newPasswordFocusNode.dispose();
+    confirmNewPasswordFocusNode.dispose();
     return super.close();
   }
 
-  /// Focus Nodes
-  final FocusNode newPasswordFocusNode = FocusNode();
-  final FocusNode confirmNewPasswordFocusNode = FocusNode();
-
-
+  /// Wipes local credentials and sends the user back to the login flow.
   void clearUserData() {
     CacheTokenManger.clearUserToken();
     CacheHelper.removeData(key: "email");

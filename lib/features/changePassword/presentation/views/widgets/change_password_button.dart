@@ -1,38 +1,43 @@
-import 'package:easy_localization/easy_localization.dart';
-import '../../../../../main_importants.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../core/routing/routes.dart';
 import '../../../../layout/presentation/view_model/layout_cubit.dart';
 import '../../view_model/change_password_cubit.dart';
 import '../../view_model/change_password_states.dart';
+import 'premium_cta_button.dart';
 
 class ChangePasswordButton extends StatelessWidget {
   const ChangePasswordButton({
     super.key,
     required this.formKey,
-    required this.screenName,
   });
 
   final GlobalKey<FormState> formKey;
-  final String screenName;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ChangePasswordCubit, ChangePasswordStates>(
-      buildWhen: (previous, current) {
-        return current is ChangePasswordSuccessState ||
-            current is ChangePasswordErrorState ||
-            current is ChangePasswordLoadingState;
-      },
+      buildWhen: (previous, current) =>
+          current is ChangePasswordSuccessState ||
+          current is ChangePasswordErrorState ||
+          current is ChangePasswordLoadingState,
       listener: (context, state) {
         if (state is ChangePasswordSuccessState) {
           Toast.showSuccessToast(
             msg: state.changePasswordModel.message.toString(),
             context: context,
           );
-          context.pushNamedAndRemoveAll(Routes.loginView);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            Routes.loginView,
+            (route) => false,
+          );
           context.read<ChangePasswordCubit>().clearUserData();
-        context.read<LayoutCubit>().changeBottomNav(0, context);
-        }
-        if (state is ChangePasswordErrorState) {
+          context.read<LayoutCubit>().changeBottomNav(0, context);
+        } else if (state is ChangePasswordErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error.toString()),
@@ -42,24 +47,21 @@ class ChangePasswordButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return ConditionalBuilder(
-          condition: state is! ChangePasswordLoadingState,
-          fallback: (context) => const CustomLoading(),
-          builder: (context) {
-            return CustomButton(
-
-              btnText:Text( LocaleKeys.changePassword.tr() ,style: AppStyles.textStyle14W500White,),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  context.read<ChangePasswordCubit>().changePassword(
-                    screenName: screenName,
-                  );
-                }
-              },
-            );
-          },
+        final submitting = state is ChangePasswordLoadingState;
+        return SafeArea(
+          top: false,
+          child: PremiumCtaButton(
+            submitting: submitting,
+            onPressed: submitting ? () {} : () => _submit(context),
+          ),
         );
       },
     );
+  }
+
+  void _submit(BuildContext context) {
+    if (formKey.currentState?.validate() ?? false) {
+      context.read<ChangePasswordCubit>().changePassword();
+    }
   }
 }
