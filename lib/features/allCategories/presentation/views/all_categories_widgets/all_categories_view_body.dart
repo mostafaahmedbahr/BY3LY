@@ -1,10 +1,11 @@
 
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../../../../main_importants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../profile/presentation/views/profile_widgets/profile_view_body_list_item_widget.dart';
 import 'get_all_categories_loading_list.dart';
 
@@ -13,8 +14,7 @@ class AllCategoriesViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AllCategoriesCubit, AllCategoriesStates>(
-      listener: (context, state) {},
+    return BlocBuilder<AllCategoriesCubit, AllCategoriesStates>(
       builder: (context, state) {
         final cubit = context.read<AllCategoriesCubit>();
 
@@ -25,17 +25,17 @@ class AllCategoriesViewBody extends StatelessWidget {
         if (state is GetAllCategoriesError) {
           return CustomErrorWidget(
             error: state.message.toString(),
-            onTap: () {
-              // استدعِ دالة إعادة تحميل الأقسام الموجودة في Cubit هنا.
-            },
+            onTap: () => context.read<AllCategoriesCubit>().getAllCategories(
+                  forceRefresh: true,
+                ),
           );
         }
 
         final categories = cubit.allCategoriesList;
 
         if (categories.isEmpty) {
-          return const Center(
-            child: Text('لا توجد أقسام حالياً'),
+          return Center(
+            child: Text(context.tr(LocaleKeys.noCategoriesYet)),
           );
         }
 
@@ -60,7 +60,7 @@ class AllCategoriesViewBody extends StatelessWidget {
                       child: ProfileViewBodyListItemWidget(
                         title: category.name.toString(),
                         subtitle:
-                        '${category.subCategories?.length ?? 0} قسم فرعي',
+                            '${category.subCategories?.length ?? 0} ${context.tr(LocaleKeys.subCategoriesSuffix)}',
                         image: category.image.toString(),
                         svg: false,
                         style: ProfileItemStyle.premium,

@@ -1,7 +1,8 @@
-import 'package:bloc/bloc.dart';
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart';
+import 'package:by3ly/features/allCategories/data/repos/all_categories_repo.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
@@ -10,7 +11,10 @@ import '../../../../core/errors/failure.dart';
 class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
   AllCategoriesCubit(this.allCategoriesRepo) : super(AllCategoriesInitState());
 
-  AllCategoriesRepo? allCategoriesRepo;
+  static AllCategoriesCubit get(BuildContext context) =>
+      BlocProvider.of<AllCategoriesCubit>(context);
+
+  final AllCategoriesRepo allCategoriesRepo;
   AllCategoriesModel? allCategoriesModel;
 
   List<Categories> allCategoriesList=[];
@@ -28,13 +32,13 @@ class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
       final cached = cachedModel ?? allCategoriesModel;
       if (cached?.data?.categories?.isNotEmpty == true) {
         allCategoriesModel = cached;
-        allCategoriesList = [...cached!.data!.categories!];
+        allCategoriesList = [...?cached?.data?.categories];
         emit(GetAllCategoriesSuccess(cached!));
         return;
       }
     }
     emit(GetAllCategoriesLoading());
-    _inFlight ??= allCategoriesRepo!.getAllCategories();
+    _inFlight ??= allCategoriesRepo.getAllCategories();
     final result = await _inFlight!;
     _inFlight = null;
     return result.fold((failure) {

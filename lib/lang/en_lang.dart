@@ -402,5 +402,8 @@ class EnLang {
     "editAdAction": "Edit ad",
     "adPackages": "Packages",
     "noLocation": "N/A",
+    "allCategoriesTitle": "All Categories",
+    "subCategoriesSuffix": "sub-sections",
+    "noCategoriesYet": "No categories yet",
   };
 }

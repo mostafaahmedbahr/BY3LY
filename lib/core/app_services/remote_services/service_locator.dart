@@ -1,4 +1,4 @@
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
+import 'package:by3ly/features/allCategories/data/repos/all_categories_repo_imple.dart';
 import 'package:by3ly/features/fav/data/repos/fav_repos_imple.dart';
 import 'package:by3ly/features/home/data/repos/home_repo_imple.dart';
 import 'package:by3ly/features/login/data/repos/login_repos_imple.dart';

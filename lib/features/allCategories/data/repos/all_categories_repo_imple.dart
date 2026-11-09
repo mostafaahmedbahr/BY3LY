@@ -1,6 +1,6 @@
 import 'package:by3ly/core/errors/failure.dart';
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart';
+import 'package:by3ly/features/allCategories/data/repos/all_categories_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -9,7 +9,7 @@ import '../../../../core/app_services/remote_services/end_points.dart';
 
 
 class AllCategoriesRepoImpl implements AllCategoriesRepo {
-  final ApiService? apiService;
+  final ApiService apiService;
 
   AllCategoriesRepoImpl(this.apiService);
 
@@ -17,7 +17,7 @@ class AllCategoriesRepoImpl implements AllCategoriesRepo {
   @override
   Future<Either<Failure, AllCategoriesModel>> getAllCategories() async{
     try {
-      var response = await apiService!.getData(
+      var response = await apiService.getData(
           endPoint: EndPoints.viewAllCategories,
         );
       AllCategoriesModel result = AllCategoriesModel.fromJson(response.data);

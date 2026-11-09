@@ -5,8 +5,8 @@ import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/add_new_ad_view_body.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/premium_app_bar.dart';
 import 'package:by3ly/features/advertisements/data/models/my_ads_data_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
+import 'package:by3ly/features/allCategories/data/repos/all_categories_repo_imple.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
 import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
 import 'package:by3ly/lang/locale_keys.dart';

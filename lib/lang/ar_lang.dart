@@ -392,5 +392,8 @@ class ArLang {
     "editAdAction": "تعديل الاعلان",
     "adPackages": "الباقات",
     "noLocation": "لا يوجد",
+    "allCategoriesTitle": "جميع الفئات",
+    "subCategoriesSuffix": "قسم فرعي",
+    "noCategoriesYet": "لا توجد أقسام حالياً",
   };
 }

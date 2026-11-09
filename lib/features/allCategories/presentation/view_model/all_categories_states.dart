@@ -1,4 +1,4 @@
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart';
 
 abstract class AllCategoriesStates{}
 

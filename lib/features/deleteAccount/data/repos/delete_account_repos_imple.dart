@@ -1,6 +1,4 @@
 import 'package:by3ly/core/errors/failure.dart';
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 

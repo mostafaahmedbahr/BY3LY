@@ -1,8 +1,8 @@
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart' as cats;
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart' as cats;
 import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart' as subs;
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:by3ly/features/allCategories/data/repos/all_categories_repo_imple.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
 import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
 import 'package:by3ly/features/chooseLocation/data/models/cities_centers_model.dart';

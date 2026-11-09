@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:by3ly/features/allCategories/data/models/all_categoies_model.dart';
-import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart';
 
 import '../../data/models/delete_account_model.dart';
 import '../../data/repos/delete_account_repos.dart';

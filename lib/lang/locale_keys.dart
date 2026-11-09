@@ -386,4 +386,7 @@ abstract class LocaleKeys {
   static const editAdAction = "editAdAction";
   static const adPackages = "adPackages";
   static const noLocation = "noLocation";
+  static const allCategoriesTitle = "allCategoriesTitle";
+  static const subCategoriesSuffix = "subCategoriesSuffix";
+  static const noCategoriesYet = "noCategoriesYet";
 }

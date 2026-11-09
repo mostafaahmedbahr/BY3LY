@@ -4,7 +4,7 @@ import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
-import 'package:by3ly/features/allCategories/presentation/view_model/states.dart';
+import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
 import 'package:by3ly/features/reportProduct/presentation/views/report_product_widgets/reason_item_widget.dart';
  import 'package:by3ly/lang/locale_keys.dart';
 import 'package:cherry_toast/cherry_toast.dart';
