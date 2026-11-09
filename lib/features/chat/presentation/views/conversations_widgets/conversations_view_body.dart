@@ -1,4 +1,5 @@
 import 'package:by3ly/main_importants.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../view_model/chat_states.dart';
 import '../../view_model/conversations_cubit.dart';
@@ -158,7 +159,7 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'حدث خطأ',
+              context.tr(LocaleKeys.errorTitle),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 17,
@@ -182,7 +183,7 @@ class _ErrorState extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh_rounded, size: 18),
-                label: const Text('محاولة مرة أخرى'),
+                label: Text(context.tr(LocaleKeys.retry)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.accent,
                   foregroundColor: Colors.white,

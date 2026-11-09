@@ -402,5 +402,6 @@ class ArLang {
     "currentPasswordHint": "أدخل كلمة المرور الحالية",
     "currentPassword": "كلمة المرور الحالية",
     "passwordRequirementsTitle": "حروف كبيرة وصغيرة + أرقام + رموز، 8-30 حرفاً",
+    "errorTitle": "حدث خطأ",
   };
 }

@@ -412,5 +412,6 @@ class EnLang {
     "currentPasswordHint": "Enter your current password",
     "currentPassword": "Current Password",
     "passwordRequirementsTitle": "Upper/lowercase + digits + symbols, 8-30 chars",
+    "errorTitle": "Something went wrong",
   };
 }

@@ -396,4 +396,5 @@ abstract class LocaleKeys {
   static const currentPasswordHint = "currentPasswordHint";
   static const currentPassword = "currentPassword";
   static const passwordRequirementsTitle = "passwordRequirementsTitle";
+  static const errorTitle = "errorTitle";
 }

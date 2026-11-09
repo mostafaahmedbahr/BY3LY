@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/chat_models.dart';
 import '../../data/repos/chat_repository.dart';
+import 'chat_rules.dart';
 import 'chat_states.dart';
 import 'chat_unread_cubit.dart';
 
@@ -19,7 +19,6 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
   static ChatCubit get(dynamic context) => BlocProvider.of(context);
 
   static const int _pageSize = 30;
-  static const int _maxImageBytes = 5 * 1024 * 1024;
 
   ConversationModel conversation;
 
@@ -103,11 +102,11 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
           }
           return;
         }
-        final loaded = _sortedDesc(data.data!.messages ?? const []);
+        final loaded = ChatRules.sortedMessagesDesc(data.data!.messages ?? const []);
         for (var m in loaded) {
           debugPrint('📥 LOADED MESSAGE: id=${m.id} type=${m.type} body=${m.body} image=${m.image} isMine=${m.isMine}');
         }
-        final changed = !_sameIds(messages, loaded);
+        final changed = !ChatRules.sameMessageIds(messages, loaded);
         messages
           ..clear()
           ..addAll(loaded);
@@ -147,16 +146,13 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
         emit(ChatOlderMessagesError(data.message ?? 'Something went wrong'));
         return;
       }
-      final older = _sortedDesc(data.data!.messages ?? const []);
+      final older = ChatRules.sortedMessagesDesc(data.data!.messages ?? const []);
       if (older.isEmpty) {
         _hasMoreOlder = false;
         emit(ChatMessagesSuccess(messages));
         return;
       }
-      final existingIds = messages.map((e) => e.id).toSet();
-      final newOnes = older
-          .where((item) => item.id == null || !existingIds.contains(item.id))
-          .toList();
+      final newOnes = ChatRules.filterNewMessages(older, messages);
       if (newOnes.isEmpty) {
         // The backend returned no older messages even though it reported more;
         // stop asking instead of polling the same page on every scroll.
@@ -200,9 +196,10 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       (failure) => debugPrint('ChatCubit poll failed: ${failure.errMessage}'),
       (data) {
         if (data.status != true || data.data == null) return;
-        final incoming = _sortedDesc(
-          data.data!.messages ?? const [],
-        ).where((item) => !messages.any((m) => m.id == item.id)).toList();
+        final incoming = ChatRules.filterNewMessages(
+          ChatRules.sortedMessagesDesc(data.data!.messages ?? const []),
+          messages,
+        );
         if (incoming.isEmpty) return;
 
         messages.insertAll(0, incoming);
@@ -231,11 +228,10 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
         (failure) =>
             debugPrint('ChatCubit markRead failed: ${failure.errMessage}'),
         (data) {
-          for (var i = 0; i < messages.length; i++) {
-            if (messages[i].isRead != true) {
-              messages[i] = messages[i].copyWith(isRead: true);
-            }
-          }
+          final updated = ChatRules.markAllMessagesRead(messages);
+          messages
+            ..clear()
+            ..addAll(updated);
           conversation = conversation.copyWith(unreadCount: 0);
           if (data.unreadCount != null) {
             _unreadCubit.setCount(data.unreadCount!);
@@ -284,19 +280,12 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
   Future<bool> sendImage(String imagePath) async {
     if (isSendingImage) return false;
 
-    final extension = imagePath.split('.').last.toLowerCase();
-    if (!{'jpg', 'jpeg', 'png', 'webp'}.contains(extension)) {
+    if (!ChatRules.isAllowedImageExtension(imagePath)) {
       emit(ChatMessageSendError('unsupportedImageType'));
       return false;
     }
 
-    final file = File(imagePath);
-    if (!await file.exists()) {
-      emit(ChatMessageSendError('unexpectedError'));
-      return false;
-    }
-    final size = await file.length();
-    if (size > _maxImageBytes) {
+    if (!await ChatRules.validateImageFile(imagePath)) {
       emit(ChatMessageSendError('imageTooLarge'));
       return false;
     }
@@ -397,25 +386,7 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
   }
 
   void _updateHasMore(int? total) {
-    if (total == null) {
-      _hasMoreOlder = messages.length >= _pageSize;
-    } else {
-      _hasMoreOlder = messages.length < total;
-    }
-  }
-
-  List<ChatMessageModel> _sortedDesc(List<ChatMessageModel> items) {
-    final copy = [...items];
-    copy.sort((a, b) => (b.id ?? 0).compareTo(a.id ?? 0));
-    return copy;
-  }
-
-  bool _sameIds(List<ChatMessageModel> a, List<ChatMessageModel> b) {
-    if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i].id != b[i].id) return false;
-    }
-    return true;
+    _hasMoreOlder = ChatRules.hasMoreOlder(messages, total, _pageSize);
   }
 
   @override

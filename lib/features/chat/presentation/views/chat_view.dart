@@ -10,6 +10,8 @@ import '../view_model/chat_states.dart';
 import 'chat_helpers.dart';
 import 'chat_widgets/chat_input_bar.dart';
 import 'chat_widgets/chat_messages_list.dart';
+import 'chat_widgets/image_source_sheet.dart';
+import 'chat_widgets/message_action_sheet.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
@@ -90,42 +92,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   Future<void> _pickAndSendImage() async {
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(
-                Icons.photo_camera_outlined,
-                color: AppColors.accent,
-              ),
-              title: Text(
-                sheetContext.tr(LocaleKeys.camera),
-                style: TextStyle(color: AppColors.text),
-              ),
-              onTap: () => Navigator.pop(sheetContext, ImageSource.camera),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.photo_library_outlined,
-                color: AppColors.accent,
-              ),
-              title: Text(
-                sheetContext.tr(LocaleKeys.gallery),
-                style: TextStyle(color: AppColors.text),
-              ),
-              onTap: () => Navigator.pop(sheetContext, ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
-    );
+    final source = await showImageSourceSheet(context);
     if (source == null || !mounted) return;
 
     final picked = await _picker.pickImage(
@@ -150,74 +117,22 @@ class _ChatViewState extends State<ChatView> {
     ChatCubit.get(context).deleteMessage(message);
   }
 
-  /// Shows a chic bottom-sheet with actions for the long-pressed message.
+  /// Shows a bottom sheet with actions for the long-pressed message.
   Future<void> _showMessageActions(ChatMessageModel message) async {
-    final isMine = message.isMine == true;
-    final isDeleted = message.isDeleted == true;
-
-    await showModalBottomSheet<void>(
+    await showMessageActionSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) => Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(20),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.border.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Copy (always available for text messages)
-            if (!isDeleted && (message.body?.trim().isNotEmpty ?? false))
-              _ActionSheetItem(
-                icon: Icons.content_copy_rounded,
-                label: context.tr(LocaleKeys.copy),
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  final data = ClipboardData(text: message.body ?? '');
-                  Clipboard.setData(data).then((_) {
-                    Toast.showSuccessToast(
-                      msg: context.tr(LocaleKeys.copy),
-                      context: context,
-                    );
-                  });
-                },
-              ),
-            // Delete (only for my messages, not already deleted)
-            if (isMine && !isDeleted)
-              _ActionSheetItem(
-                icon: Icons.delete_outline_rounded,
-                label: context.tr(LocaleKeys.deleteMessage),
-                iconColor: AppColors.redColor,
-                isDestructive: true,
-                onTap: () {
-                  Navigator.pop(sheetContext);
-                  _deleteMessage(message);
-                },
-              ),
-            const SizedBox(height: 20),
-            // Cancel
-            _ActionSheetItem(
-              icon: Icons.close_rounded,
-              label: context.tr(LocaleKeys.cancel),
-              onTap: () => Navigator.pop(sheetContext),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
+      message: message,
+      onCopy: () {
+        Clipboard.setData(ClipboardData(text: message.body ?? ''))
+            .then((_) {
+          if (!mounted) return;
+          Toast.showSuccessToast(
+            msg: context.tr(LocaleKeys.copy),
+            context: context,
+          );
+        });
+      },
+      onDelete: () => _deleteMessage(message),
     );
   }
 
@@ -395,57 +310,3 @@ class _ChatViewState extends State<ChatView> {
   }
 }
 
-/// Single item in the message action bottom-sheet.
-class _ActionSheetItem extends StatelessWidget {
-  const _ActionSheetItem({
-    required this.icon,
-    required this.label,
-    this.iconColor,
-    this.isDestructive = false,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final Color? iconColor;
-  final bool isDestructive;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final effectiveIconColor = iconColor ??
-        (isDestructive ? AppColors.redColor : AppColors.accent);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                size: 22,
-                color: effectiveIconColor,
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: isDestructive
-                        ? AppColors.redColor
-                        : AppColors.text,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
