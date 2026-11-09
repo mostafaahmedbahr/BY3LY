@@ -162,6 +162,7 @@ abstract class LocaleKeys {
   static const deliveryTo = 'deliveryTo';
   static const paymentMethods = 'paymentMethods';
   static const numbersConversionInfo = 'numbersConversionInfo';
+  static const couldNotOpenPhone = "couldNotOpenPhone";
   static const numberCopied = 'numberCopied';
   static const back = 'back';
   static const sendReceiptPicture = 'sendReceiptPicture';

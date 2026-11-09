@@ -1,14 +1,13 @@
 import 'package:by3ly/core/shared_widgets/custom_button.dart';
-import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../../confirmPayment/presentation/views/confirm_payment_view.dart';
-import '../../view_model/add_balance_cubit.dart';
+import 'instapay_tile.dart';
+import 'vodafone_cash_tile.dart';
 
 class AddBalanceViewBody extends StatelessWidget {
   const AddBalanceViewBody({super.key});
@@ -16,184 +15,15 @@ class AddBalanceViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ListTile(
-                onTap: () {
-                  AddBalanceCubit.get(context).showPhoneNumbersDialog(context);
-                },
-                tileColor: AppColors.surfaceVariant,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                title:   Text(
-                  LocaleKeys.vodafoneCash.tr(),
-                  style: AppStyles.textStyle16W500Black,
-                ),
-                subtitle: Text(LocaleKeys.now.tr(),
-                    style: AppStyles.textStyle14W500White.copyWith(
-                      color: AppColors.mainColor,
-                    )),
-                trailing: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 16,
-                  color: AppColors.text,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ListTile(
-                tileColor: AppColors.surfaceVariant,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: AppColors.surface,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          top: 20,
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              LocaleKeys.copyThis.tr(),
-                              style: AppStyles.textStyle10W400Green
-                                  .copyWith(fontSize: 16),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ListTile(
-                              subtitle:   Text(
-                                  LocaleKeys.bankDes.tr()),
-                              title:   Text(
-                                LocaleKeys.bankName.tr(),
-                                style: AppStyles.textStyle10W400Green,
-                              ),
-                              trailing: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.copy),
-                                    onPressed: () {
-                                      Clipboard.setData(  ClipboardData(
-                                          text:
-                                          LocaleKeys.bankDes.tr()));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                          SnackBar(
-                                          content: Text(LocaleKeys.copyBankName.tr()),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ListTile(
-                              subtitle: const Text("123456789023"),
-                              title:   Text(
-                                LocaleKeys.accountNumber.tr(),
-                                style: AppStyles.textStyle10W400Green,
-                              ),
-                              trailing: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.copy),
-                                    onPressed: () {
-                                      Clipboard.setData(const ClipboardData(
-                                          text: "123456789023"));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                          SnackBar(
-                                          content: Text(LocaleKeys.copyAccountNumber.tr()),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ListTile(
-                              subtitle:   Text(LocaleKeys.appName.tr()),
-                              title:   Text(
-                                LocaleKeys.companyName.tr(),
-                                style: AppStyles.textStyle10W400Green,
-                              ),
-                              trailing: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.copy),
-                                    onPressed: () {
-                                      Clipboard.setData(  ClipboardData(
-                                          text: LocaleKeys.appName.tr()));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                          SnackBar(
-                                          content: Text(LocaleKeys.copyCompanyName.tr()),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                title:   Text(
-                  LocaleKeys.instaPay.tr(),
-                  style: AppStyles.textStyle16W500Black,
-                ),
-                subtitle: Text( LocaleKeys.now.tr(),
-                    style: AppStyles.textStyle14W500White.copyWith(
-                      color: AppColors.mainColor,
-                    )),
-                trailing: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 16,
-                  color: AppColors.text,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 40,),
+          const VodafoneCashTile(),
+          const SizedBox(height: 12),
+          const InstapayTile(),
+          const Spacer(),
+          const SizedBox(height: 16),
           CustomButton(
             btnText: Text(
               LocaleKeys.confirmPayment.tr(),

@@ -155,6 +155,7 @@ class EnLang {
     "deliveryTo": "Delivery to",
     "paymentMethods": "Payment methods",
     "numbersConversionInfo": "Numbers that can be converted",
+    "couldNotOpenPhone": "Couldn't open the dialer",
     "numberCopied": "Number copied",
     "back": "Back",
     "sendReceiptPicture": "Send a picture of the receipt",
