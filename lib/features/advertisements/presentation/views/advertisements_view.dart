@@ -1,5 +1,7 @@
   import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
 import 'package:by3ly/features/advertisements/data/repos/advertisements_repos_imple.dart';
@@ -17,16 +19,19 @@ class AdvertisementsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AdvertisementsCubit(
-          getIt.get<AdvertisementsRepoImpl>())..getAllMyAdsDataMethod(type: 0),
+          getIt.get<AdvertisementsRepoImpl>())..fetchMyAds(),
       child: SafeArea(child: Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
-        title: const Text("الاعلانات و الباقات",style: TextStyle(
+        title: Text(
+          context.tr(LocaleKeys.adsAndPackages),
+          style: TextStyle(
             color: AppColors.mainColor,
-            fontWeight: FontWeight.bold
-        ),),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       floatingActionButton: Builder(
         builder: (fabContext) {
@@ -45,7 +50,7 @@ class AdvertisementsView extends StatelessWidget {
               if (created == true && fabContext.mounted) {
                 fabContext
                     .read<AdvertisementsCubit>()
-                    .getAllMyAdsDataMethod(type: 0);
+                    .fetchMyAds();
               }
             },
             backgroundColor: AppColors.mainColor,

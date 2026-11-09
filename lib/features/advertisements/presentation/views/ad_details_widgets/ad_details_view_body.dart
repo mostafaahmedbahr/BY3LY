@@ -5,6 +5,9 @@ import 'package:by3ly/core/shared_widgets/product_badges.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
+import '../advertisements_widgets/ad_action_buttons.dart';
+import '../advertisements_widgets/ad_stats_strip.dart';
+import '../advertisements_widgets/ad_status_widgets.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/edit_ad_view.dart';
 import 'package:by3ly/features/advertisements/data/models/my_ads_data_model.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
@@ -60,7 +63,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
     if (updated == true && mounted) {
       // Refresh the ads list behind, then close with true so the
       // caller refreshes as well.
-      AdvertisementsCubit.get(context).getAllMyAdsDataMethod(type: 0);
+      AdvertisementsCubit.get(context).fetchMyAds();
       Navigator.pop(context, true);
     }
   }
@@ -91,21 +94,6 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
       } else {
         cubit.resumeAd(adId: adId);
       }
-    }
-  }
-
-  Future<void> _onDelete() async {
-    final adId = widget.ad.id;
-    if (adId == null) return;
-    final confirmed = await AppConfirmDialog.show(
-      context,
-      title: context.tr(LocaleKeys.deleteAd),
-      message: context.tr(LocaleKeys.deleteAdConfirm),
-      confirmText: context.tr(LocaleKeys.deleteAd),
-      icon: Icons.delete_outline_rounded,
-    );
-    if (confirmed && mounted) {
-      AdvertisementsCubit.get(context).deleteAd(adId: adId);
     }
   }
 
@@ -187,40 +175,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
               Positioned(
                 top: 12,
                 right: 12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _isActive
-                        ? AppColors.mainColor
-                        : const Color(0xff9AA0A6),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        _isActive ? "نشط" : "غير نشط",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: AdStatusPill(isActive: _isActive),
               ),
               if (_gallery.length > 1)
                 Positioned(
@@ -347,7 +302,11 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
           ),
           const SizedBox(height: 14),
           // Stats strip.
-          _StatsStrip(ad: widget.ad),
+          AdStatsStrip(
+            rate: widget.ad.rate ?? 0,
+            comments: widget.ad.countCommenets ?? 0,
+            reviews: widget.ad.reviewsCount ?? 0,
+          ),
           const SizedBox(height: 14),
           // Description.
           if ((widget.ad.desc?.trim().isNotEmpty ?? false) ||
@@ -458,48 +417,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: BlocBuilder<AdvertisementsCubit, AdvertisementsStates>(
-                  builder: (context, state) {
-                    final deleting =
-                        state is DeleteAdLoadingState &&
-                        state.adId == widget.ad.id;
-                    return ElevatedButton.icon(
-                      onPressed: deleting ? null : _onDelete,
-                      icon: deleting
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Icon(
-                              Icons.delete_outline_rounded,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                      label: Text(
-                        context.tr(LocaleKeys.deleteAd),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.redColor,
-                        disabledBackgroundColor: AppColors.redColor.withValues(
-                          alpha: 0.6,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        elevation: 0,
-                      ),
-                    );
-                  },
-                ),
+                child: AdDeleteButton(ad: widget.ad),
               ),
             ],
           ),
@@ -509,98 +427,3 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
   }
 }
 
-class _StatsStrip extends StatelessWidget {
-  const _StatsStrip({required this.ad});
-
-  final Ads ad;
-
-  @override
-  Widget build(BuildContext context) {
-    final stats = [
-      _Stat(
-        Icons.star_rounded,
-        const Color(0xffFFF4D6),
-        ad.rate?.toString() ?? '-',
-        "التقييم",
-      ),
-      _Stat(
-        Icons.chat_bubble_outline_rounded,
-        const Color(0xffE3F2FD),
-        ad.countCommenets?.toString() ?? '-',
-        "التعليقات",
-      ),
-      _Stat(
-        Icons.remove_red_eye_outlined,
-        const Color(0xffE6F4EF),
-        ad.reviewsCount?.toString() ?? '-',
-        "المراجعات",
-      ),
-    ];
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          for (int i = 0; i < stats.length; i++) ...[
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 32,
-                    width: 32,
-                    decoration: BoxDecoration(
-                      color: stats[i].tint,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      stats[i].icon,
-                      size: 16,
-                      color: const Color(0xff1F2937),
-                    ),
-                  ),
-                  const SizedBox(width: 7),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        stats[i].value,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      Text(
-                        stats[i].label,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            if (i != stats.length - 1)
-              Container(width: 1, height: 36, color: AppColors.border),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _Stat {
-  final IconData icon;
-  final Color tint;
-  final String value;
-  final String label;
-
-  const _Stat(this.icon, this.tint, this.value, this.label);
-}

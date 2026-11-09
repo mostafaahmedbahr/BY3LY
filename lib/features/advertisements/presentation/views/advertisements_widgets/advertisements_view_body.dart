@@ -1,6 +1,7 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
 import '../../../../../main_importants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../view_model/advertisements_cubit.dart';
 import 'add_bundle_button.dart';
 import 'ads_types.dart';
@@ -40,9 +41,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
         final hasSearch = advertisementsCubit.searchQuery.trim().isNotEmpty;
         return RefreshIndicator(
           color: AppColors.mainColor,
-          onRefresh: () => advertisementsCubit.getAllMyAdsDataMethod(
-            type: advertisementsCubit.advertisementsTypeIndex,
-          ),
+          onRefresh: () => advertisementsCubit.fetchMyAds(),
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
@@ -52,7 +51,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
               CustomTextFormField(
                 controller: _searchController,
                 keyboardType: TextInputType.text,
-                hintText: "ابحث باسم الإعلان...",
+                hintText: context.tr(LocaleKeys.searchAdName),
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset(AppImages.search),
@@ -69,7 +68,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
               const AdsTypes(),
               const SizedBox(height: 8),
               Text(
-                "عدد الإعلانات (${products.length})",
+                "${context.tr(LocaleKeys.adsCountLabel)} (${products.length})",
                 style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
               ),
               const SizedBox(height: 10),
@@ -80,9 +79,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: CustomErrorWidget(
                     error: state.error,
-                    onTap: () => advertisementsCubit.getAllMyAdsDataMethod(
-                      type: advertisementsCubit.advertisementsTypeIndex,
-                    ),
+                    onTap: () => advertisementsCubit.fetchMyAds(),
                   ),
                 )
               else if (products.isEmpty)
@@ -99,7 +96,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          "لا يوجد اعلانات",
+                          context.tr(LocaleKeys.noAds),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,

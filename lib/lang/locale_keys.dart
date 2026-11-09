@@ -371,4 +371,19 @@ abstract class LocaleKeys {
   static const storeAddress = "storeAddress";
   static const notifyNewProducts = "notifyNewProducts";
   static const settingsUpdated = "settingsUpdated";
+  static const myAdsTitle = "myAdsTitle";
+  static const adsAndPackages = "adsAndPackages";
+  static const activeNow = "activeNow";
+  static const inactiveAd = "inactiveAd";
+  static const noAds = "noAds";
+  static const searchAdName = "searchAdName";
+  static const adsCountLabel = "adsCountLabel";
+  static const ratingLabel = "ratingLabel";
+  static const commentsLabel = "commentsLabel";
+  static const reviewsLabel = "reviewsLabel";
+  static const activeAd = "activeAd";
+  static const optionsLabel = "optionsLabel";
+  static const editAdAction = "editAdAction";
+  static const adPackages = "adPackages";
+  static const noLocation = "noLocation";
 }

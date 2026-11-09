@@ -1,14 +1,24 @@
-import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
+import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
+import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
 import 'package:by3ly/core/shared_widgets/product_badges.dart';
-import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
-import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
-import 'package:easy_localization/easy_localization.dart';
-
-import 'package:by3ly/features/addAdvertisements/presentation/views/edit_ad_view.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/app_images/app_images.dart';
+import 'package:by3ly/features/advertisements/data/models/my_ads_data_model.dart';
 import 'package:by3ly/features/advertisements/presentation/views/ad_details_view.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
+import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_cubit.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
 
-import '../../../../../main_importants.dart';
-import '../../../data/models/my_ads_data_model.dart';
+import 'ad_action_buttons.dart';
+import 'ad_options_sheet.dart';
+import 'ad_stats_strip.dart';
+import 'ad_status_widgets.dart';
 
 class MyAdsListItem extends StatelessWidget {
   const MyAdsListItem({super.key, required this.adsProduct});
@@ -16,145 +26,8 @@ class MyAdsListItem extends StatelessWidget {
 
   bool get _isActive => adsProduct.isPaused != true;
 
-  Future<void> _showOptionsMenu(BuildContext context, Ads ad) async {
-    await showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              const SizedBox(height: 8),
-              _OptionTile(
-                icon: Icons.edit_outlined,
-                title: "تعديل الاعلان",
-                onTap: () async {
-                  Navigator.pop(sheetContext);
-                  final updated = await Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.fade,
-                      child: EditAdView(ad: ad),
-                    ),
-                  );
-                  if (updated == true && context.mounted) {
-                    AdvertisementsCubit.get(
-                      context,
-                    ).getAllMyAdsDataMethod(type: 0);
-                  }
-                },
-              ),
-              _OptionTile(
-                icon: _isActive
-                    ? Icons.pause_circle_outline_rounded
-                    : Icons.play_circle_outline_rounded,
-                title: _isActive
-                    ? context.tr(LocaleKeys.pauseAd)
-                    : context.tr(LocaleKeys.resumeAd),
-                color: _isActive
-                    ? const Color(0xffF59E0B)
-                    : const Color(0xff34C759),
-                onTap: () async {
-                  Navigator.pop(sheetContext);
-                  if (ad.id == null) return;
-                  final pause = _isActive;
-                  final title = pause
-                      ? context.tr(LocaleKeys.pauseAd)
-                      : context.tr(LocaleKeys.resumeAd);
-                  final confirmed = await AppConfirmDialog.show(
-                    context,
-                    title: title,
-                    message: pause
-                        ? context.tr(LocaleKeys.pauseAdConfirm)
-                        : context.tr(LocaleKeys.resumeAdConfirm),
-                    confirmText: title,
-                    icon: pause
-                        ? Icons.pause_circle_outline_rounded
-                        : Icons.play_circle_outline_rounded,
-                    accentColor: pause
-                        ? AppColors.mainColor
-                        : const Color(0xff34C759),
-                  );
-                  if (confirmed && context.mounted) {
-                    final cubit = AdvertisementsCubit.get(context);
-                    if (pause) {
-                      await cubit.pauseAd(adId: ad.id!);
-                    } else {
-                      await cubit.resumeAd(adId: ad.id!);
-                    }
-                    // Status changed (e.g. paused → غير نشط): reload the
-                    // list so the badge/status comes straight from the
-                    // server instead of the cached value.
-                    final state = cubit.state;
-                    if (!cubit.isClosed &&
-                        state is PauseResumeAdSuccessState &&
-                        state.adId == ad.id) {
-                      cubit.getAllMyAdsDataMethod(type: 0);
-                    }
-                  }
-                },
-              ),
-              _OptionTile(
-                icon: Icons.delete_outline_rounded,
-                title: "حذف الاعلان",
-                danger: true,
-                onTap: () async {
-                  Navigator.pop(sheetContext);
-                  if (ad.id == null) return;
-                  final confirmed = await AppConfirmDialog.show(
-                    context,
-                    title: context.tr(LocaleKeys.deleteAd),
-                    message: context.tr(LocaleKeys.deleteAdConfirm),
-                    confirmText: context.tr(LocaleKeys.deleteAd),
-                    icon: Icons.delete_outline_rounded,
-                  );
-                  if (confirmed && context.mounted) {
-                    AdvertisementsCubit.get(context).deleteAd(adId: ad.id!);
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final stats = [
-      _StatData(
-        icon: AppImages.star,
-        tint: const Color(0xffFFF4D6),
-        label: "التقييم",
-        value: adsProduct.rate?.toString() ?? "-",
-      ),
-      _StatData(
-        icon: "assets/images/Chat.svg",
-        tint: const Color(0xffE3F2FD),
-        label: "التعليقات",
-        value: adsProduct.countCommenets?.toString() ?? "-",
-      ),
-      _StatData(
-        icon: "assets/images/eye (1).svg",
-        tint: const Color(0xffE6F4EF),
-        label: "المراجعات",
-        value: adsProduct.reviewsCount?.toString() ?? "-",
-      ),
-    ];
     return InkWell(
       onTap: () async {
         final changed = await Navigator.push(
@@ -166,7 +39,7 @@ class MyAdsListItem extends StatelessWidget {
         );
         // Edit/delete inside details refreshes the list on return.
         if (changed == true && context.mounted) {
-          AdvertisementsCubit.get(context).getAllMyAdsDataMethod(type: 0);
+          AdvertisementsCubit.get(context).fetchMyAds();
         }
       },
       borderRadius: BorderRadius.circular(18),
@@ -199,52 +72,7 @@ class MyAdsListItem extends StatelessWidget {
                       width: 104,
                       height: 118,
                     ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.vertical(
-                            bottom: Radius.circular(14),
-                          ),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withValues(alpha: 0.6),
-                            ],
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: _isActive
-                                    ? const Color(0xff34C759)
-                                    : Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              _isActive ? "نشط" : "غير نشط",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    AdImageStatusOverlay(isActive: _isActive),
                   ],
                 ),
                 const CustomSizedBox(width: 12),
@@ -290,7 +118,7 @@ class MyAdsListItem extends StatelessWidget {
                                           .isNotEmpty ??
                                       false)
                                   ? adsProduct.location.toString()
-                                  : "لا يوجد",
+                                  : context.tr(LocaleKeys.noLocation),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -304,7 +132,8 @@ class MyAdsListItem extends StatelessWidget {
                       const CustomSizedBox(height: 4),
                       Text(
                         [adsProduct.type, adsProduct.model]
-                            .where((e) => (e?.trim().isNotEmpty ?? false))
+                            .where((e) =>
+                                (e?.trim().isNotEmpty ?? false))
                             .join('  •  '),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -334,64 +163,10 @@ class MyAdsListItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Row(
-                children: [
-                  for (int i = 0; i < stats.length; i++) ...[
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: stats[i].tint,
-                              borderRadius: BorderRadius.circular(9),
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                stats[i].icon,
-                                width: 15,
-                                height: 15,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 7),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                stats[i].value,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.text,
-                                ),
-                              ),
-                              Text(
-                                stats[i].label,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (i != stats.length - 1)
-                      Container(width: 1, height: 34, color: AppColors.border),
-                  ],
-                ],
-              ),
+            AdStatsStrip(
+              rate: adsProduct.rate ?? 0,
+              comments: adsProduct.countCommenets ?? 0,
+              reviews: adsProduct.reviewsCount ?? 0,
             ),
             const SizedBox(height: 10),
             BlocConsumer<AdvertisementsCubit, AdvertisementsStates>(
@@ -411,9 +186,7 @@ class MyAdsListItem extends StatelessWidget {
                   ).show(context);
                   // Reload so the page reflects the server state after the
                   // deletion (counts, statuses and remaining ads).
-                  AdvertisementsCubit.get(
-                    context,
-                  ).getAllMyAdsDataMethod(type: 0);
+                  AdvertisementsCubit.get(context).fetchMyAds();
                 } else if (state is DeleteAdErrorState &&
                     (state.adId == null || state.adId == adsProduct.id)) {
                   ScaffoldMessenger.of(
@@ -421,10 +194,10 @@ class MyAdsListItem extends StatelessWidget {
                   ).showSnackBar(SnackBar(content: Text(state.error)));
                 } else if (state is PauseResumeAdSuccessState &&
                     state.adId == adsProduct.id) {
-                  // The success state already carries the new pause value, so
-                  // the right localized label is chosen without guessing.
                   final fallback = context.tr(
-                    state.isPaused ? LocaleKeys.pauseAd : LocaleKeys.resumeAd,
+                    state.isPaused
+                        ? LocaleKeys.pauseAd
+                        : LocaleKeys.resumeAd,
                   );
                   CherryToast.success(
                     title: Text(
@@ -442,173 +215,27 @@ class MyAdsListItem extends StatelessWidget {
                 }
               },
               builder: (context, state) {
-                final deleting =
-                    state is DeleteAdLoadingState &&
+                final deleting = state is DeleteAdLoadingState &&
                     state.adId == adsProduct.id;
-                final pausing =
-                    state is PauseResumeAdLoadingState &&
+                final pausing = state is PauseResumeAdLoadingState &&
                     state.adId == adsProduct.id;
                 final busy = deleting || pausing;
                 return Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: busy
+                      child: AdOptionsButton(
+                        onTap: busy
                             ? null
-                            : () => _showOptionsMenu(context, adsProduct),
-                        icon: const Icon(
-                          Icons.settings_outlined,
-                          size: 18,
-                          color: AppColors.mainColor,
-                        ),
-                        label: const Text(
-                          "خيارات",
-                          style: TextStyle(
-                            color: AppColors.mainColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppColors.mainColor),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 11),
-                        ),
+                            : () => showAdOptionsSheet(context, adsProduct),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: busy
-                            ? null
-                            : () async {
-                                if (adsProduct.id == null) return;
-                                final confirmed = await AppConfirmDialog.show(
-                                  context,
-                                  title: context.tr(LocaleKeys.deleteAd),
-                                  message: context.tr(
-                                    LocaleKeys.deleteAdConfirm,
-                                  ),
-                                  confirmText: context.tr(LocaleKeys.deleteAd),
-                                  icon: Icons.delete_outline_rounded,
-                                );
-                                if (confirmed && context.mounted) {
-                                  AdvertisementsCubit.get(
-                                    context,
-                                  ).deleteAd(adId: adsProduct.id!);
-                                }
-                              },
-                        icon: deleting
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.delete_outline_rounded,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                        label: Text(
-                          context.tr(LocaleKeys.deleteAd),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.redColor,
-                          disabledBackgroundColor: AppColors.redColor
-                              .withValues(alpha: 0.6),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 11),
-                          elevation: 0,
-                        ),
-                      ),
+                      child: AdDeleteButton(ad: adsProduct),
                     ),
                   ],
                 );
               },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatData {
-  final String icon;
-  final Color tint;
-  final String label;
-  final String value;
-
-  const _StatData({
-    required this.icon,
-    required this.tint,
-    required this.label,
-    required this.value,
-  });
-}
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    this.danger = false,
-    this.color,
-  });
-
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-  final bool danger;
-
-  /// Overrides the default accent colour (used by pause/resume).
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final color =
-        this.color ?? (danger ? AppColors.redColor : AppColors.mainColor);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-        child: Row(
-          children: [
-            Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color, size: 20),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.text,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 15,
-              color: AppColors.textSecondary,
             ),
           ],
         ),

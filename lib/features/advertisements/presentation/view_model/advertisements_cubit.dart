@@ -1,5 +1,5 @@
 import 'package:by3ly/core/extensions/log.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/my_ads_data_model.dart';
@@ -8,26 +8,32 @@ import 'advertisements_states.dart';
 
 class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   AdvertisementsCubit(this.advertisementsRepo)
-    : super(AdvertisementsInitState());
+      : super(AdvertisementsInitState());
 
-  static AdvertisementsCubit get(context) => BlocProvider.of(context);
+  static AdvertisementsCubit get(BuildContext context) =>
+      BlocProvider.of<AdvertisementsCubit>(context);
 
-  AdvertisementsRepo? advertisementsRepo;
+  final AdvertisementsRepo advertisementsRepo;
   MyAdsDataModel? myAdsDataModel;
 
   List<Ads> allMyAdsList = [];
 
   int advertisementsTypeIndex = 0;
-  void changeAdvertisementsTypeIndexWay(index) {
+
+  void setAdvertisementsTypeIndex(int index) {
     advertisementsTypeIndex = index;
-    print(advertisementsTypeIndex);
     emit(ChangeAdvertisementsTypeIndexState());
   }
 
-  List<String> types = ["الكل", "النشط الان", "الغير نشط"];
+  /// Tab labels: 0 = all, 1 = active, 2 = inactive.
+  List<String> get types => [
+        'all',
+        'activeNow',
+        'inactiveAd',
+      ];
 
-  /// Backend rule: is_paused == true  -> paused (غير نشط),
-  ///               anything else      -> active (نشط).
+  /// Backend rule: is_paused == true  -> paused (inactive),
+  ///               anything else      -> active.
   bool _isActive(Ads ad) => ad.isPaused != true;
 
   int get allAdsCount => allMyAdsList.length;
@@ -74,7 +80,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   Future<void> deleteAd({required int adId}) async {
     deletingAdId = adId;
     emit(DeleteAdLoadingState(adId));
-    var result = await advertisementsRepo!.deleteAd(adId: adId);
+    final result = await advertisementsRepo.deleteAd(adId: adId);
     return result.fold(
       (failure) {
         debugPrint(
@@ -124,9 +130,9 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     _pauseResumeInFlight.add(adId);
     emit(PauseResumeAdLoadingState(adId, pause: pause));
 
-    var result = pause
-        ? await advertisementsRepo!.pauseAd(adId: adId)
-        : await advertisementsRepo!.resumeAd(adId: adId);
+    final result = pause
+        ? await advertisementsRepo.pauseAd(adId: adId)
+        : await advertisementsRepo.resumeAd(adId: adId);
 
     _pauseResumeInFlight.remove(adId);
     if (isClosed) return;
@@ -172,14 +178,15 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     }
   }
 
-  Future<void> getAllMyAdsDataMethod({required int type}) async {
+  /// Fetches the full ads list from the server (single source of truth).
+  Future<void> fetchMyAds() async {
     allMyAdsList = [];
     emit(GetAllMyAdsDataLoadingState());
-    var result = await advertisementsRepo!.getMyAdsData();
+    final result = await advertisementsRepo.getMyAdsData();
     return result.fold(
       (failure) {
         debugPrint(
-          'AdvertisementsCubit getAllMyAdsDataMethod failed: ${failure.errMessage}',
+          'AdvertisementsCubit fetchMyAds failed: ${failure.errMessage}',
         );
         emit(GetAllMyAdsDataErrorState(failure.errMessage));
       },
@@ -187,7 +194,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
         myAdsDataModel = data;
         allMyAdsList = [...?myAdsDataModel?.data?.ads];
         logSuccess(allMyAdsList.length.toString());
-        logSuccess("length");
+        logSuccess('length');
         emit(GetAllMyAdsDataSuccessState(data));
       },
     );

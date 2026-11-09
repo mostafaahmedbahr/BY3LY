@@ -2,6 +2,8 @@ import 'package:by3ly/core/extensions/navigate.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 
 import '../../../../../core/routing/routes.dart';
 import '../../view_model/advertisements_cubit.dart';
@@ -17,7 +19,7 @@ class AddBundleButton extends StatelessWidget {
         // A bundle/purchase can change ad statuses (e.g. featured), so
         // refresh the page when coming back.
         if (context.mounted) {
-          AdvertisementsCubit.get(context).getAllMyAdsDataMethod(type: 0);
+          AdvertisementsCubit.get(context).fetchMyAds();
         }
       },
       child: Container(
@@ -48,7 +50,7 @@ class AddBundleButton extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Text(
-              "الباقات",
+              context.tr(LocaleKeys.adPackages),
               style: AppStyles.textStyle14W500White.copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
