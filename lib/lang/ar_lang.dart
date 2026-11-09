@@ -395,5 +395,8 @@ class ArLang {
     "allCategoriesTitle": "جميع الفئات",
     "subCategoriesSuffix": "قسم فرعي",
     "noCategoriesYet": "لا توجد أقسام حالياً",
+    "classificationsSuffix": "تصنيفات",
+    "noProductsInSection": "لا يوجد منتجات في هذا القسم",
+    "discoverProducts": "اكتشف المنتجات",
   };
 }

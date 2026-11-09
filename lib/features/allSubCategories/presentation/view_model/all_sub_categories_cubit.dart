@@ -1,19 +1,23 @@
-  import 'package:dartz/dartz.dart';
+import 'package:by3ly/core/errors/failure.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/errors/failure.dart';
+
 import '../../data/models/all_sub_categories_model.dart';
 import '../../data/repos/all_sub_categories_repos.dart';
 import 'all_sub_categories_states.dart';
 
-
 class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
-  AllSubCategoriesCubit(this.allSubCategoriesRepos) : super(AllSubCategoriesInitState());
-  static AllSubCategoriesCubit get(context) => BlocProvider.of(context);
+  AllSubCategoriesCubit(this.allSubCategoriesRepos)
+      : super(AllSubCategoriesInitState());
 
-  AllSubCategoriesRepos? allSubCategoriesRepos;
+  static AllSubCategoriesCubit get(BuildContext context) =>
+      BlocProvider.of<AllSubCategoriesCubit>(context);
+
+  final AllSubCategoriesRepos allSubCategoriesRepos;
   AllSubCategoriesModel? allSubCategoriesModel;
 
-  List<SubCategories> allSubCategoriesList=[];
+  List<SubCategories> allSubCategoriesList = [];
 
   /// Session-wide per-category cache: sub-categories are fetched once
   /// per category instead of on every screen open.
@@ -27,6 +31,13 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
   static AllSubCategoriesModel? cachedFor(int categoryId) =>
       _cache[categoryId];
 
+  /// Test-only helper: resets the static cache between tests.
+  @visibleForTesting
+  static void clearCache() {
+    _cache.clear();
+    _inFlight.clear();
+  }
+
   Future<void> getAllSubCategories({
     required int categoryId,
     bool forceRefresh = false,
@@ -36,16 +47,16 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
       if (cached?.data?.subCategories != null) {
         allSubCategoriesModel = cached;
         allSubCategoriesList = [...cached!.data!.subCategories!];
-        emit(GetAllSubCategoriesSuccess(cached!));
+        emit(GetAllSubCategoriesSuccess(cached));
         return;
       }
     } else {
       _cache.remove(categoryId);
     }
     emit(GetAllSubCategoriesLoading());
-    _inFlight[categoryId] ??=
-        allSubCategoriesRepos!.getAllSubCategoriesData(
-            categoryId: categoryId);
+    _inFlight[categoryId] ??= allSubCategoriesRepos.getAllSubCategoriesData(
+      categoryId: categoryId,
+    );
     final result = await _inFlight[categoryId]!;
     _inFlight.remove(categoryId);
     return result.fold((failure) {

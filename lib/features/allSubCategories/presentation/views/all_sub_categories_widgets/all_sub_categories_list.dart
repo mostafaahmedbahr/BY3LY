@@ -1,8 +1,16 @@
-
-import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart';
-import '../../../../../main_importants.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+/// Responsive 2-column grid of sub-sections with product counts.
+/// Tapping a section opens its products screen.
 class AllSubCategoriesList extends StatelessWidget {
   const AllSubCategoriesList({
     super.key,
@@ -28,40 +36,44 @@ class AllSubCategoriesList extends StatelessWidget {
       itemCount: allSubCategoriesList.length,
       itemBuilder: (context, index) {
         final item = allSubCategoriesList[index];
+        final isEmpty = (item.productsCount ?? 0) == 0;
 
         return Material(
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(22.r),
             onTap: () {
-              if (item.productsCount == 0) {
+              if (isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("لا يوجد منتجات في هذا القسم"),
+                  SnackBar(
+                    content: Text(
+                      context.tr(LocaleKeys.noProductsInSection),
+                    ),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
                 return;
               }
-
+              final subCategoryId = item.id;
+              if (subCategoryId == null) return;
               context.pushNamed(
                 Routes.allSubCategoriesProductsView,
                 arguments: {
-                  "subCategoryId": item.id!,
+                  "subCategoryId": subCategoryId,
                   "subCategoryName": item.name.toString(),
                 },
               );
             },
             child: Ink(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(22.r),
                 border: Border.all(
-                  color: Colors.grey.withValues(alpha: 0.10),
+                  color: AppColors.border.withValues(alpha: 0.6),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.055),
+                    color: AppColors.mainColor.withValues(alpha: 0.10),
                     blurRadius: 18,
                     spreadRadius: 0,
                     offset: const Offset(0, 6),
@@ -73,7 +85,7 @@ class AllSubCategoriesList extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Image
+                    // Image with the products-count badge.
                     Expanded(
                       flex: 7,
                       child: Stack(
@@ -109,8 +121,6 @@ class AllSubCategoriesList extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                          // Products Count
                           Positioned(
                             top: 9.h,
                             right: 9.w,
@@ -124,7 +134,9 @@ class AllSubCategoriesList extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30.r),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.08),
+                                    color: Colors.black.withValues(
+                                      alpha: 0.08,
+                                    ),
                                     blurRadius: 8,
                                   ),
                                 ],
@@ -143,7 +155,7 @@ class AllSubCategoriesList extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 11.sp,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.text,
+                                      color: const Color(0xff0F172A),
                                     ),
                                   ),
                                 ],
@@ -156,7 +168,7 @@ class AllSubCategoriesList extends StatelessWidget {
 
                     SizedBox(height: 12.h),
 
-                    // Name
+                    // Name + arrow.
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4.w),
                       child: Row(
@@ -174,9 +186,9 @@ class AllSubCategoriesList extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 4.w),
-                          Icon(
+                          const Icon(
                             Icons.arrow_forward_ios_rounded,
-                            size: 12.sp,
+                            size: 12,
                             color: AppColors.mainColor,
                           ),
                         ],
@@ -188,10 +200,10 @@ class AllSubCategoriesList extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4.w),
                       child: Text(
-                        'اكتشف المنتجات',
+                        context.tr(LocaleKeys.discoverProducts),
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: Colors.grey.shade500,
+                          color: AppColors.textSecondary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

@@ -405,5 +405,8 @@ class EnLang {
     "allCategoriesTitle": "All Categories",
     "subCategoriesSuffix": "sub-sections",
     "noCategoriesYet": "No categories yet",
+    "classificationsSuffix": "sub-sections",
+    "noProductsInSection": "No products in this section yet",
+    "discoverProducts": "Discover products",
   };
 }

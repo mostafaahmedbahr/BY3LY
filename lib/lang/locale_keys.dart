@@ -389,4 +389,7 @@ abstract class LocaleKeys {
   static const allCategoriesTitle = "allCategoriesTitle";
   static const subCategoriesSuffix = "subCategoriesSuffix";
   static const noCategoriesYet = "noCategoriesYet";
+  static const classificationsSuffix = "classificationsSuffix";
+  static const noProductsInSection = "noProductsInSection";
+  static const discoverProducts = "discoverProducts";
 }

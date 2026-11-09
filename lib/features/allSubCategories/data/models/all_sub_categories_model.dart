@@ -1,4 +1,31 @@
+int? _asInt(dynamic v) {
+  if (v == null) return null;
+  if (v is int) return v;
+  if (v is num) return v.toInt();
+  if (v is bool) return v ? 1 : 0;
+  if (v is String) return int.tryParse(v.trim());
+  return null;
+}
 
+String? _asString(dynamic v) => v?.toString();
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is int) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase().trim();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
+/// GET getSubCategories?category_id={id} →
+/// { status, message, data: { subCategories: [...] } }
+///
+/// Parsing is tolerant: the API may send numeric/boolean fields as
+/// strings depending on the environment.
 class AllSubCategoriesModel {
   bool? status;
   String? message;
@@ -7,19 +34,19 @@ class AllSubCategoriesModel {
   AllSubCategoriesModel({this.status, this.message, this.data});
 
   AllSubCategoriesModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
     data = json["data"] == null ? null : Data.fromJson(json["data"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
-    if(data != null) {
-      _data["data"] = data?.toJson();
+    final jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
+    if (data != null) {
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -29,15 +56,21 @@ class Data {
   Data({this.subCategories});
 
   Data.fromJson(Map<String, dynamic> json) {
-    subCategories = json["subCategories"] == null ? null : (json["subCategories"] as List).map((e) => SubCategories.fromJson(e)).toList();
+    subCategories = json["subCategories"] == null
+        ? null
+        : (json["subCategories"] as List)
+            .whereType<Map<String, dynamic>>()
+            .map((e) => SubCategories.fromJson(e))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    if(subCategories != null) {
-      _data["subCategories"] = subCategories?.map((e) => e.toJson()).toList();
+    final jsonData = <String, dynamic>{};
+    if (subCategories != null) {
+      jsonData["subCategories"] =
+          subCategories?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -50,18 +83,18 @@ class SubCategories {
   SubCategories({this.id, this.name, this.image, this.productsCount});
 
   SubCategories.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    name = json["name"];
-    image = json["image"];
-    productsCount = json["products_count"];
+    id = _asInt(json["id"]);
+    name = _asString(json["name"]);
+    image = _asString(json["image"]);
+    productsCount = _asInt(json["products_count"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["image"] = image;
-    _data["products_count"] = productsCount;
-    return _data;
+    final jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["image"] = image;
+    jsonData["products_count"] = productsCount;
+    return jsonData;
   }
 }
