@@ -1,6 +1,7 @@
 import 'package:by3ly/features/addAdvertisements/data/repos/add_advertisements_repos_imple.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/add_new_ad_view_body.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/premium_app_bar.dart';
 import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
 import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
@@ -32,17 +33,9 @@ class AddNewAdView extends StatelessWidget {
       ],
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.surface,
-          shadowColor: AppColors.mainColor,
-          surfaceTintColor: AppColors.mainColor,
-          title: Text(
-            context.tr(LocaleKeys.addNewAd),
-            style: TextStyle(
-              color: AppColors.text,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        appBar: premiumAppBar(
+          title: context.tr(LocaleKeys.addNewAd),
+          icon: Icons.campaign_rounded,
         ),
         body: const AddNewAdViewBody(),
       ),

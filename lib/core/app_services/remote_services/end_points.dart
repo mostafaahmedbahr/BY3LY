@@ -25,10 +25,6 @@ class EndPoints {
   static const resumeAd = "resumeAd";
   static const compareProducts = "compareProducts";
   static const addCompare = "addCompare";
-  static const addProduct = "addProduct";
-  static const marka = "marka";
-  static const models = "models";
-  static const typies = "typies";
   static const makePurchase = "makePurchase";
   static const purchaseInstructions = "purchaseInstructions";
   static const myAds = "getAllAds";

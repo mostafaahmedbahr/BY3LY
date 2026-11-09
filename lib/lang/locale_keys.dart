@@ -297,6 +297,10 @@ abstract class LocaleKeys {
   static const subCategory = "subCategory";
   static const selectImages = "selectImages";
   static const publishAd = "publishAd";
+  static const premiumFormTagline = "premiumFormTagline";
+  static const premiumFormProgress = "premiumFormProgress";
+  static const imagesHint = "imagesHint";
+  static const priceAndOffer = "priceAndOffer";
   static const editAd = "editAd";
   static const imagesRequired = "imagesRequired";
   static const nameRequired = "nameRequired";

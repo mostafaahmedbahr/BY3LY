@@ -1,22 +1,20 @@
-import 'dart:io';
-
+import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
+import 'package:by3ly/core/shared_widgets/custom_loading.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
+import 'package:by3ly/features/addAdvertisements/data/models/ad_publishing_settings_model.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_states.dart';
+import 'package:by3ly/features/packages/data/repos/packages_repos_imple.dart';
+import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/app_services/remote_services/service_locator.dart';
-import '../../../../../core/shared_widgets/custom_button.dart';
-import '../../../../../core/shared_widgets/custom_loading.dart';
-import '../../../../../core/shared_widgets/custom_text_form_filed.dart';
-import '../../../../../core/utils/app_colors/app_colors.dart';
-import '../../../../../core/utils/new_toast/toast.dart';
-import '../../../data/models/ad_publishing_settings_model.dart';
-import '../../../../packages/data/repos/packages_repos_imple.dart';
-import '../../../../packages/presentation/view_model/packages_cubit.dart';
-import '../../../../packages/presentation/view_model/packages_states.dart';
-import '../../../../packages/presentation/views/packages_widgets/transfer_method_card.dart';
-import '../../../../profile/presentation/view_model/profile_cubit.dart';
-import '../../view_model/add_new_ad_cubit.dart';
-import '../../view_model/add_new_ad_states.dart';
+import 'payment_fee_card.dart';
+import 'payment_option_tile.dart';
+import 'payment_settings_error.dart';
+import 'transfer_form.dart';
 
 /// Payment step shown when publishing a new ad and the package / free
 /// ads are exhausted — mirrors the website's create-ad payment section
@@ -41,19 +39,19 @@ Future<void> showAdPaymentSheet(BuildContext context) {
             ..getPaymentMethods(),
         ),
       ],
-      child: const _AdPaymentSheetBody(),
+      child: const AdPaymentSheetBody(),
     ),
   );
 }
 
-class _AdPaymentSheetBody extends StatefulWidget {
-  const _AdPaymentSheetBody();
+class AdPaymentSheetBody extends StatefulWidget {
+  const AdPaymentSheetBody({super.key});
 
   @override
-  State<_AdPaymentSheetBody> createState() => _AdPaymentSheetBodyState();
+  State<AdPaymentSheetBody> createState() => _AdPaymentSheetBodyState();
 }
 
-class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
+class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
   /// false = choose step, true = transfer form expanded inline.
   bool _showTransfer = false;
 
@@ -182,6 +180,7 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Grabber
                 Container(
                   width: 44,
                   height: 5,
@@ -190,24 +189,65 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'اختر طريقة الدفع',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.text,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'الباقة أو الإعلانات المجانية خلصت — ادفع رسوم النشر لإعلانك',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary,
-                  ),
+                const SizedBox(height: 14),
+                // Premium header: gradient icon badge + title + hint
+                Row(
+                  children: [
+                    Container(
+                      height: 52,
+                      width: 52,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.mainColor,
+                            AppColors.secondColor,
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.mainColor
+                                .withValues(alpha: 0.4),
+                            blurRadius: 12,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.payments_rounded,
+                        color: Colors.white,
+                        size: 26,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'اختر طريقة الدفع',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.text,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'الباقة أو الإعلانات المجانية خلصت — ادفع رسوم النشر لإعلانك',
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              height: 1.45,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 if (_loadingSettings)
@@ -216,11 +256,11 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                     child: CustomLoading(),
                   )
                 else if (_settingsFailed)
-                  _SettingsError(onRetry: _loadSettings)
+                  PaymentSettingsError(onRetry: _loadSettings)
                 else ...[
                   // Publishing fee + wallet balance (same info the
                   // website shows above its payment section).
-                  _FeeCard(
+                  PaymentFeeCard(
                     feeLabel: _settings?.priceLabel ?? '0 ج.م',
                     balanceLabel:
                         '${_formatBalance(balance)} ${_settings?.currencyLabel ?? 'ج.م'}',
@@ -233,7 +273,7 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Wallet: only when the balance covers the fee.
-                          _OptionTile(
+                          PaymentOptionTile(
                             icon:
                                 Icons.account_balance_wallet_outlined,
                             title: 'محفظة بيعلي',
@@ -272,9 +312,10 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                           const SizedBox(height: 12),
                           // Transfer: expands the reference + receipt
                           // form inline (same as the wallet top-up).
-                          _OptionTile(
+                          PaymentOptionTile(
                             icon: Icons.swap_horiz_rounded,
                             title: 'تحويل',
+                            expanded: _showTransfer,
                             subtitle:
                                 'تحويل بنكي أو محافظ إلكترونية',
                             trailing: Icon(
@@ -293,7 +334,7 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                           ),
                           if (_showTransfer) ...[
                             const SizedBox(height: 12),
-                            _TransferForm(
+                            TransferForm(
                               submitting: submitting,
                               referenceController: _referenceCon,
                               onConfirm: () => _submitTransfer(
@@ -310,382 +351,6 @@ class _AdPaymentSheetBodyState extends State<_AdPaymentSheetBody> {
                 ],
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Fee + balance summary card.
-class _FeeCard extends StatelessWidget {
-  const _FeeCard({required this.feeLabel, required this.balanceLabel});
-
-  final String feeLabel;
-  final String balanceLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.mainColor.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'رسوم النشر',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              Text(
-                feeLabel,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.mainColor,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'رصيد المحفظة',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              Text(
-                balanceLabel,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.text,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// ad-publishing-settings failed to load → cannot show the fee.
-class _SettingsError extends StatelessWidget {
-  const _SettingsError({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Column(
-        children: [
-          const Icon(
-            Icons.error_outline_rounded,
-            size: 38,
-            color: AppColors.redColor,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'تعذر تحميل إعدادات النشر. حاول مرة أخرى.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 12),
-          CustomButton(
-            btnText: const Text(
-              'إعادة المحاولة',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-            onPressed: onRetry,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Transfer methods + transfer reference + receipt picker + confirm,
-/// all inside the sheet.
-class _TransferForm extends StatelessWidget {
-  const _TransferForm({
-    required this.submitting,
-    required this.referenceController,
-    required this.onConfirm,
-  });
-
-  final bool submitting;
-  final TextEditingController referenceController;
-  final VoidCallback onConfirm;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PackagesCubit, PackagesStates>(
-      builder: (context, state) {
-        final payCubit = context.read<PackagesCubit>();
-        if (state is GetPaymentMethodsLoadingState &&
-            payCubit.paymentMethods.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: CustomLoading(),
-          );
-        }
-        if (payCubit.paymentMethods.isEmpty) {
-          return Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Text(
-              'لا يوجد طرق تحويل متاحة',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-          );
-        }
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'اختر طريقة التحويل',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: AppColors.text,
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Same method cards as the packages transfer page.
-            ...payCubit.paymentMethods.map((method) {
-              final selected = payCubit.selectedMethod == method;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: TransferMethodCard(
-                  method: method,
-                  selected: selected,
-                  enabled: !submitting,
-                  onTap: () => payCubit.selectMethod(method),
-                ),
-              );
-            }),
-            const SizedBox(height: 4),
-            Text(
-              'رقم مرجع التحويل (اختياري)',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: AppColors.text,
-              ),
-            ),
-            const SizedBox(height: 6),
-            CustomTextFormField(
-              controller: referenceController,
-              keyboardType: TextInputType.number,
-              hintText: 'رقم مرجع التحويل',
-              prefixIcon: const Padding(
-                padding: EdgeInsets.all(12),
-                child: Icon(
-                  Icons.tag_rounded,
-                  color: AppColors.mainColor,
-                  size: 20,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            InkWell(
-              onTap: submitting ? null : () => payCubit.pickReceipt(),
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                height: 120,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: payCubit.receiptImage == null
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.cloud_upload_outlined,
-                            size: 34,
-                            color: AppColors.mainColor,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'ارفع صورة التحويل',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(13),
-                            child: Image.file(
-                              File(payCubit.receiptImage!.path),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const Positioned(
-                            top: 8,
-                            left: 8,
-                            child: _ChangePhotoLabel(),
-                          ),
-                        ],
-                      ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            // Select a method + attach receipt, then publish the ad.
-            CustomButton(
-              btnText: submitting
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text(
-                      'نشر الإعلان',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-              onPressed: onConfirm,
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _ChangePhotoLabel extends StatelessWidget {
-  const _ChangePhotoLabel();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Text(
-        'تغيير الصورة',
-        style: TextStyle(fontSize: 11, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.trailing,
-    required this.onTap,
-    this.enabled = true,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Widget trailing;
-  final VoidCallback? onTap;
-
-  /// false = balance doesn't cover the fee → dimmed, but tapping
-  /// still explains why it can't be used.
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: enabled ? 1 : 0.6,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: Row(
-            children: [
-              Container(
-                height: 46,
-                width: 46,
-                decoration: BoxDecoration(
-                  color:
-                      AppColors.mainColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: AppColors.accent),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              trailing,
-            ],
           ),
         ),
       ),

@@ -20,7 +20,7 @@ import 'add_new_ad_states.dart';
 class AddNewAdCubit extends Cubit<AddNewAdStates> {
   AddNewAdCubit(this.addAdvertisementsRepos) : super(AddNewAdInit());
 
-  static AddNewAdCubit get(context) => BlocProvider.of(context);
+  static AddNewAdCubit get(BuildContext context) => BlocProvider.of<AddNewAdCubit>(context);
 
   AddAdvertisementsRepos? addAdvertisementsRepos;
 
@@ -70,9 +70,9 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     return (discount / price) * 100;
   }
 
-  /// Triggered when price or discount changes so the UI can rebuild
-  /// and show the calculated discount percentage.
-  void onPriceOrDiscountChanged() {
+  /// Triggered on any form field change so the UI rebuilds
+  /// (discount percentage, hero progress, ...).
+  void notifyFormChanged() {
     emit(AddNewAdSelectionChanged());
   }
 

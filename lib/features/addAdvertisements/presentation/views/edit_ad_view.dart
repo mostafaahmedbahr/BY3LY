@@ -3,6 +3,7 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/addAdvertisements/data/repos/add_advertisements_repos_imple.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/add_new_ad_view_body.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_widgets/premium_app_bar.dart';
 import 'package:by3ly/features/advertisements/data/models/my_ads_data_model.dart';
 import 'package:by3ly/features/allCategories/data/repositories/all_categories_repo_imple.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/cubit.dart';
@@ -38,17 +39,9 @@ class EditAdView extends StatelessWidget {
       ],
       child: Scaffold(
         backgroundColor: AppColors.background,
-        appBar: AppBar(
-          backgroundColor: AppColors.surface,
-          shadowColor: AppColors.mainColor,
-          surfaceTintColor: AppColors.mainColor,
-          title: Text(
-            context.tr(LocaleKeys.editAd),
-            style: TextStyle(
-              color: AppColors.text,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        appBar: premiumAppBar(
+          title: context.tr(LocaleKeys.editAd),
+          icon: Icons.edit_note_rounded,
         ),
         body: AddNewAdViewBody(adToEdit: ad),
       ),
