@@ -1,6 +1,4 @@
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
-import 'package:by3ly/lang/locale_keys.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'all_sub_categories_products_widgets/all_sub_categories_products_view_body.dart';
@@ -19,6 +17,7 @@ class AllSubCategoriesProductsView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.darkMainColor,
         elevation: 0,
+        titleSpacing: 0,
         surfaceTintColor: AppColors.mainColor,
         iconTheme: const IconThemeData(color: Colors.white),
         flexibleSpace: Container(
@@ -36,7 +35,7 @@ class AllSubCategoriesProductsView extends StatelessWidget {
           ),
         ),
         title: Text(
-          "${context.tr(LocaleKeys.allProducts)} ( $subCategoryName )",
+          subCategoryName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
