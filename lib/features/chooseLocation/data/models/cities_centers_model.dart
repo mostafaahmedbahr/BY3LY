@@ -13,13 +13,13 @@ class AllCitiesAndCentersModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -33,11 +33,11 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
     if(cities != null) {
-      _data["cities"] = cities?.map((e) => e.toJson()).toList();
+      jsonData["cities"] = cities?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -55,13 +55,13 @@ class Cities {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
     if(centers != null) {
-      _data["centers"] = centers?.map((e) => e.toJson()).toList();
+      jsonData["centers"] = centers?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -77,9 +77,9 @@ class Centers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    return jsonData;
   }
 }
