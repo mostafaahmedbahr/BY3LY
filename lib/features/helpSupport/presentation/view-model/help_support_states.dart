@@ -1,3 +1,6 @@
-abstract class HelpSupportStates{}
+abstract class HelpSupportStates {}
 
-class HelpSupportInitState extends HelpSupportStates{}
+class HelpSupportInitState extends HelpSupportStates {
+  @override
+  String toString() => 'HelpSupportInitState';
+}

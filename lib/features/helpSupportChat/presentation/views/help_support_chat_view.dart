@@ -12,6 +12,7 @@ class HelpSupportChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         backgroundColor: AppColors.surface,
         shadowColor: AppColors.mainColor,
         surfaceTintColor:  AppColors.mainColor,
