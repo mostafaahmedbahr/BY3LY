@@ -497,5 +497,13 @@ class EnLang {
     "settingsSaveFailed": "Could not save settings",
     "shareProductText": "Check out this product on By3ly:",
     "viewStore": "View store",
+    "sellerDataTab": "Seller profile",
+    "currentLiveAds": "Currently live",
+    "previousSales": "Past sales",
+    "contactNow": "Contact now",
+    "sellerNameLabel": "Name",
+    "sellerPhone": "Phone",
+    "sellerReviews": "Seller reviews",
+    "viewAll": "View all",
   };
 }

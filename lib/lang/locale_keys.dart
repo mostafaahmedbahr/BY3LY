@@ -481,4 +481,12 @@ abstract class LocaleKeys {
   static const settingsSaveFailed = "settingsSaveFailed";
   static const shareProductText = "shareProductText";
   static const viewStore = "viewStore";
+  static const sellerDataTab = "sellerDataTab";
+  static const currentLiveAds = "currentLiveAds";
+  static const previousSales = "previousSales";
+  static const contactNow = "contactNow";
+  static const sellerNameLabel = "sellerNameLabel";
+  static const sellerPhone = "sellerPhone";
+  static const sellerReviews = "sellerReviews";
+  static const viewAll = "viewAll";
 }

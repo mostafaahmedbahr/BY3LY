@@ -1,6 +1,7 @@
 import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../main_importants.dart';
 import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 import 'package:by3ly/features/productSeller/data/repos/product_seller_repos.dart';
 
@@ -8,17 +9,18 @@ class ProductSellerCubit extends Cubit<ProductSellerStates> {
   ProductSellerCubit(this.productSellerRepo)
       : super(ProductSellerInitState());
 
-  static ProductSellerCubit get(context) => BlocProvider.of(context);
+  static ProductSellerCubit get(BuildContext context) =>
+      BlocProvider.of<ProductSellerCubit>(context);
 
 
-  ProductSellerRepo? productSellerRepo;
+  final ProductSellerRepo productSellerRepo;
   ProductSellerModel? productSellerModel;
 
   Future<void> getProductSellerData({
     required int sellerId,
   }) async {
     emit(GetProductSellerDataLoadingState());
-    var result = await productSellerRepo!.getProductSellerData(
+    var result = await productSellerRepo.getProductSellerData(
       sellerId: sellerId,
     );
     return result.fold((failure) {
@@ -34,8 +36,7 @@ class ProductSellerCubit extends Cubit<ProductSellerStates> {
   }
 
   int sellerDataIndex = 1 ;
-  changeSellerDataIndex(index)
-  {
+  void changeSellerDataIndex(int index) {
     sellerDataIndex = index;
 
     emit(SellerDataIndexState());

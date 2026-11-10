@@ -487,5 +487,13 @@ class ArLang {
     "settingsSaveFailed": "تعذر حفظ الإعدادات",
     "shareProductText": "شاهد هذا المنتج على بيعلي:",
     "viewStore": "عرض المتجر",
+    "sellerDataTab": "بيانات البائع",
+    "currentLiveAds": "المعروض الان",
+    "previousSales": "المبيعات السابقة",
+    "contactNow": "تواصل الان",
+    "sellerNameLabel": "الاسم",
+    "sellerPhone": "رقم",
+    "sellerReviews": "تقييمات البائع",
+    "viewAll": "مشاهدة الكل",
   };
 }

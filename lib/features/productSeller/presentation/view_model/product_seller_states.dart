@@ -4,7 +4,10 @@ import 'package:by3ly/features/productSeller/data/models/product_seller_model.da
 
 abstract class ProductSellerStates{}
 
-class ProductSellerInitState extends ProductSellerStates{}
+class ProductSellerInitState extends ProductSellerStates{
+  @override
+  String toString() => 'ProductSellerInitState';
+}
 
 class GetProductSellerDataLoadingState extends ProductSellerStates{}
 class GetProductSellerDataSuccessState extends ProductSellerStates{
