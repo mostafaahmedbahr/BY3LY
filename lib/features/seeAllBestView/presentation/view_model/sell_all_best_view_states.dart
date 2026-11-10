@@ -2,7 +2,10 @@ import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_mod
 
 abstract class SellAllBestViewStates{}
 
-class SellAllBestViewInitState extends SellAllBestViewStates{}
+class SellAllBestViewInitState extends SellAllBestViewStates{
+  @override
+  String toString() => 'SellAllBestViewInitState';
+}
 
 class GetAllBestViewProductsLoadingState extends SellAllBestViewStates {
   @override

@@ -1,29 +1,16 @@
-  import 'package:by3ly/features/seeAllBestView/presentation/views/see_all_best_view_widgets/see_all_best_view_body_list.dart';
-  import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 
- import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
-import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
+import 'see_all_best_view_body_list.dart';
 
+/// Most-viewed ads grid with a local search box.
 class SeeAllBestViewBody extends StatelessWidget {
   const SeeAllBestViewBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-     return BlocConsumer<SellAllBestViewCubit , SellAllBestViewStates>(
-       listener: (context ,state){},
-       builder:  (context ,state){
-         return const Padding(
-           padding: EdgeInsets.all(20.0),
-          child:  Column(
-              children: [
-                Expanded(child: SeeAllBestViewBodyList()),
-
-              ],
-            ),
-         );
-       },
-
-     );
+    return const Padding(
+      padding: EdgeInsets.all(20.0),
+      child: SeeAllBestViewBodyList(),
+    );
   }
 }
