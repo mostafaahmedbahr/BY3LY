@@ -1,18 +1,18 @@
-import 'package:by3ly/core/shared_widgets/custom_button.dart';
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
-import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/core/utils/new_toast/toast.dart';
-import 'package:by3ly/features/privacy/data/models/settings_model.dart';
-import 'package:by3ly/features/privacy/presentation/view_model/privacy_states.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../view_model/privacy_cubit.dart';
+import '../../view_model/privacy_states.dart';
+import 'privacy_loading.dart';
+import 'privacy_method_chip.dart';
+import 'privacy_store_card.dart';
 
 class PrivacyViewBody extends StatefulWidget {
   const PrivacyViewBody({super.key});
@@ -43,86 +43,15 @@ class _PrivacyViewBodyState extends State<PrivacyViewBody> {
     }
     for (final method
         in PrivacyCubit.get(context).settings?.contactMethods ?? const []) {
-      if (method.value == value && (method.label?.trim().isNotEmpty ?? false)) {
+      if (method.value == value &&
+          (method.label?.trim().isNotEmpty ?? false)) {
         return method.label!;
       }
     }
     return value;
   }
 
-  Widget _storeCard(BuildContext context, Settings? settings) {
-    final name = settings?.storeName?.trim() ?? '';
-    final address = settings?.storeAddress?.trim() ?? '';
-    if (name.isEmpty && address.isEmpty) return const SizedBox.shrink();
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 44,
-            width: 44,
-            decoration: BoxDecoration(
-              color: AppColors.mainColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.storefront_outlined,
-              color: AppColors.mainColor,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (name.isNotEmpty)
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.text,
-                    ),
-                  ),
-                if (address.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        size: 14,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          address,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  String _fallbackError() => LocaleKeys.settingsLoadFailed.tr();
 
   @override
   Widget build(BuildContext context) {
@@ -149,100 +78,132 @@ class _PrivacyViewBodyState extends State<PrivacyViewBody> {
         final cubit = PrivacyCubit.get(context);
 
         if (state is GetSettingsLoadingState && cubit.settings == null) {
-          return const Center(child: CircularProgressIndicator());
+          return const PrivacyLoading();
         }
         if (state is GetSettingsErrorState && cubit.settings == null) {
           return CustomErrorWidget(
-            error: state.error,
+            error: state.error.isNotEmpty ? state.error : _fallbackError(),
             onTap: cubit.getSettings,
           );
         }
 
         final methods = cubit.contactMethodValues;
 
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
+        return SafeArea(
+          top: false,
           child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
             children: [
-              _storeCard(context, cubit.settings),
-              Text(
-                context.tr(LocaleKeys.connectionWy),
-                style: AppStyles.textStyle16W600Black,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 8,
-                  children: [
-                    for (int i = 0; i < methods.length; i++)
-                      _ConnectionMethodChip(
-                        label: _methodLabel(context, methods[i]),
-                        selected: cubit.wayIndex == i + 1,
-                        onTap: () => cubit.changeConnectionWay(i + 1),
-                      ),
-                  ],
-                ),
-              ),
+              PrivacyStoreCard(settings: cubit.settings),
+              // Premium section label.
+              _SectionLabel(text: context.tr(LocaleKeys.connectionWy)),
               const SizedBox(height: 10),
-              Text(
-                context.tr(LocaleKeys.changePhoneNumber),
-                style: AppStyles.textStyle16W600Black,
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (int i = 0; i < methods.length; i++)
+                    PrivacyMethodChip(
+                      label: _methodLabel(context, methods[i]),
+                      selected: cubit.wayIndex == i + 1,
+                      onTap: () => cubit.changeConnectionWay(i + 1),
+                    ),
+                ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 22),
+              _SectionLabel(text: context.tr(LocaleKeys.changePhoneNumber)),
+              const SizedBox(height: 10),
               CustomTextFormField(
                 controller: cubit.phoneNumberCon,
                 keyboardType: TextInputType.phone,
                 hintText: context.tr(LocaleKeys.enterNewPhoneNumber),
+                fillColor: AppColors.surface,
+                radius: 14,
                 prefixIcon: const Icon(
-                  Icons.phone,
+                  Icons.phone_rounded,
                   size: 20,
                   color: AppColors.mainColor,
                 ),
               ),
-              const SizedBox(height: 20),
-              Material(
-                color: AppColors.surface,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: AppColors.border),
+              const SizedBox(height: 18),
+              // Premium toggle card.
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.mainColor.withValues(alpha: 0.06),
+                      blurRadius: 14,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
                 child: SwitchListTile.adaptive(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                   title: Text(
                     context.tr(LocaleKeys.notifyNewProducts),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.text,
-                    ),
+                      fontWeight: FontWeight.w700,
+                    ).copyWith(color: AppColors.text),
                   ),
                   value: cubit.notifyNewProducts,
                   activeThumbColor: AppColors.mainColor,
+                  activeTrackColor: AppColors.mainColor.withValues(alpha: 0.45),
                   onChanged: cubit.changeNotifyNewProducts,
                 ),
               ),
-              const SizedBox(height: 40),
-              CustomButton(
-                btnText: cubit.isSaving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.whiteColor,
-                        ),
-                      )
-                    : Text(
-                        context.tr(LocaleKeys.save),
-                        style: AppStyles.textStyle16W600Black.copyWith(
-                          color: AppColors.whiteColor,
-                        ),
+              const SizedBox(height: 36),
+              // Premium pinned-looking gradient CTA.
+              SizedBox(
+                height: 52,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.mainColor, AppColors.secondColor],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.mainColor.withValues(alpha: 0.35),
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
                       ),
-                onPressed: () {
-                  if (!cubit.isSaving) cubit.saveSettings();
-                },
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: cubit.isSaving ? null : cubit.saveSettings,
+                      borderRadius: BorderRadius.circular(15),
+                      child: Center(
+                        child: cubit.isSaving
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                context.tr(LocaleKeys.save),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -252,38 +213,36 @@ class _PrivacyViewBodyState extends State<PrivacyViewBody> {
   }
 }
 
-class _ConnectionMethodChip extends StatelessWidget {
-  const _ConnectionMethodChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+/// Premium section label — bold dark title with an accent bar, same
+/// pattern used across the app.
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.text});
 
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: selected ? AppColors.mainColor : AppColors.surface,
-          border: Border.all(
-            color: selected ? AppColors.mainColor : AppColors.border,
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 18,
+          decoration: BoxDecoration(
+            color: AppColors.yellowColor,
+            borderRadius: BorderRadius.circular(2),
           ),
         ),
-        child: Text(
-          label,
+        const SizedBox(width: 8),
+        Text(
+          text,
           style: TextStyle(
-            color: selected ? AppColors.whiteColor : AppColors.textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w800,
+            color: AppColors.text,
+            letterSpacing: 0.2,
           ),
         ),
-      ),
+      ],
     );
   }
 }

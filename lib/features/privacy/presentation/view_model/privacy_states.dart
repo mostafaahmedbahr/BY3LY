@@ -2,7 +2,10 @@ import '../../data/models/settings_model.dart';
 
 abstract class PrivacyStates {}
 
-class PrivacyInitState extends PrivacyStates {}
+class PrivacyInitState extends PrivacyStates {
+  @override
+  String toString() => 'PrivacyInitState';
+}
 
 class PrivacyChangeConnectionWayState extends PrivacyStates {}
 

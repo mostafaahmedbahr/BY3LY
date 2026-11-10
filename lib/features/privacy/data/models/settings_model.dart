@@ -1,3 +1,26 @@
+String? _asString(dynamic v) => v?.toString();
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is num) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase().trim();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) from) {
+  if (raw is! List) return null;
+  final out = <T>[];
+  for (final e in raw) {
+    if (e is Map) out.add(from(Map<String, dynamic>.from(e)));
+  }
+  return out;
+}
+
 class SettingsModel {
   bool? status;
   String? message;
@@ -6,9 +29,14 @@ class SettingsModel {
   SettingsModel({this.status, this.message, this.data});
 
   SettingsModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
+    final raw = json["data"];
+    if (raw is Map) {
+      data = Data.fromJson(Map<String, dynamic>.from(raw));
+    } else {
+      data = null;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -28,9 +56,10 @@ class Data {
   Data({this.settings});
 
   Data.fromJson(Map<String, dynamic> json) {
-    settings = json["settings"] == null
-        ? null
-        : Settings.fromJson(json["settings"]);
+    final raw = json["settings"];
+    settings = raw is Map
+        ? Settings.fromJson(Map<String, dynamic>.from(raw))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -64,18 +93,14 @@ class Settings {
   });
 
   Settings.fromJson(Map<String, dynamic> json) {
-    contactMethod = json["contact_method"];
-    contactMethods = json["contact_methods"] == null
-        ? null
-        : (json["contact_methods"] as List)
-              .map((e) => ContactMethods.fromJson(e))
-              .toList();
-    canChat = json["can_chat"];
-    canCall = json["can_call"];
-    contactPhone = json["contact_phone"];
-    storeName = json["store_name"];
-    storeAddress = json["store_address"];
-    notifyNewProducts = json["notify_new_products"];
+    contactMethod = _asString(json["contact_method"]);
+    contactMethods = _parseList(json["contact_methods"], ContactMethods.fromJson);
+    canChat = _asBool(json["can_chat"]);
+    canCall = _asBool(json["can_call"]);
+    contactPhone = _asString(json["contact_phone"]);
+    storeName = _asString(json["store_name"]);
+    storeAddress = _asString(json["store_address"]);
+    notifyNewProducts = _asBool(json["notify_new_products"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -103,8 +128,8 @@ class ContactMethods {
   ContactMethods({this.value, this.label});
 
   ContactMethods.fromJson(Map<String, dynamic> json) {
-    value = json["value"];
-    label = json["label"];
+    value = _asString(json["value"]);
+    label = _asString(json["label"]);
   }
 
   Map<String, dynamic> toJson() {

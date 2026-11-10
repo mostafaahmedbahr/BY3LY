@@ -6,11 +6,12 @@ import '../../data/repos/privacy_repo.dart';
 import 'privacy_states.dart';
 
 class PrivacyCubit extends Cubit<PrivacyStates> {
-  PrivacyCubit([this.privacyRepo]) : super(PrivacyInitState());
+  PrivacyCubit(this.privacyRepo) : super(PrivacyInitState());
 
-  final PrivacyRepo? privacyRepo;
+  final PrivacyRepo privacyRepo;
 
-  static PrivacyCubit get(BuildContext context) => BlocProvider.of(context);
+  static PrivacyCubit get(BuildContext context) =>
+      BlocProvider.of<PrivacyCubit>(context);
 
   SettingsModel? settingsModel;
   Settings? settings;
@@ -19,7 +20,7 @@ class PrivacyCubit extends Cubit<PrivacyStates> {
   bool notifyNewProducts = true;
   bool isSaving = false;
 
-  var phoneNumberCon = TextEditingController();
+  final TextEditingController phoneNumberCon = TextEditingController();
 
   /// Contact methods provided by the backend, in the order it wants them
   /// displayed. Falls back to the three built-in methods before the first
@@ -43,11 +44,11 @@ class PrivacyCubit extends Cubit<PrivacyStates> {
   bool _isFetchingSettings = false;
 
   Future<void> getSettings() async {
-    if (privacyRepo == null || _isFetchingSettings) return;
+    if (_isFetchingSettings) return;
     _isFetchingSettings = true;
     emit(GetSettingsLoadingState());
 
-    final result = await privacyRepo!.getSettings();
+    final result = await privacyRepo.getSettings();
     _isFetchingSettings = false;
     if (isClosed) return;
 
@@ -66,11 +67,11 @@ class PrivacyCubit extends Cubit<PrivacyStates> {
   }
 
   Future<void> saveSettings() async {
-    if (privacyRepo == null || isSaving) return;
+    if (isSaving) return;
     isSaving = true;
     emit(UpdateSettingsLoadingState());
 
-    final result = await privacyRepo!.updateSettings(
+    final result = await privacyRepo.updateSettings(
       contactMethod: selectedContactMethod,
       contactPhone: phoneNumberCon.text.trim(),
       notifyNewProducts: notifyNewProducts,

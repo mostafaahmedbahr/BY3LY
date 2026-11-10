@@ -493,5 +493,7 @@ class EnLang {
     "receiptSaveFailed": "Couldn't save the image",
     "receiptShareFailed": "Couldn't share the image",
     "debit": "Debit",
+    "settingsLoadFailed": "Could not load settings",
+    "settingsSaveFailed": "Could not save settings",
   };
 }

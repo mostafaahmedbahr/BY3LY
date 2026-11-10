@@ -483,5 +483,7 @@ class ArLang {
     "receiptSaveFailed": "تعذر حفظ الصورة",
     "receiptShareFailed": "تعذر مشاركة الصورة",
     "debit": "خصم",
+    "settingsLoadFailed": "تعذر تحميل الإعدادات",
+    "settingsSaveFailed": "تعذر حفظ الإعدادات",
   };
 }

@@ -477,4 +477,6 @@ abstract class LocaleKeys {
   static const receiptSaveFailed = "receiptSaveFailed";
   static const receiptShareFailed = "receiptShareFailed";
   static const debit = "debit";
+  static const settingsLoadFailed = "settingsLoadFailed";
+  static const settingsSaveFailed = "settingsSaveFailed";
 }
