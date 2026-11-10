@@ -466,4 +466,15 @@ abstract class LocaleKeys {
   static const debitWallet = "debitWallet";
   static const free = "free";
   static const currentUser0 = "currentUser0";
+  static const currentPackageLabel = "currentPackageLabel";
+  static const expiresOn = "expiresOn";
+  static const noPreviousTransactions = "noPreviousTransactions";
+  static const viewReceipt = "viewReceipt";
+  static const downloadReceipt = "downloadReceipt";
+  static const shareReceipt = "shareReceipt";
+  static const receiptTitle = "receiptTitle";
+  static const savedToGallery = "savedToGallery";
+  static const receiptSaveFailed = "receiptSaveFailed";
+  static const receiptShareFailed = "receiptShareFailed";
+  static const debit = "debit";
 }

@@ -2,7 +2,10 @@ import '../../data/models/wallet_history_model.dart';
 
 abstract class WalletStates {}
 
-class WalletInitState extends WalletStates {}
+class WalletInitState extends WalletStates {
+  @override
+  String toString() => 'WalletInitState';
+}
 
 class GetWalletHistoryLoadingState extends WalletStates {}
 

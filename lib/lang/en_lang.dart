@@ -482,5 +482,16 @@ class EnLang {
     "debitWallet": "Wallet balance",
     "free": "Free",
     "currentUser0": "...",
+    "currentPackageLabel": "Current package",
+    "expiresOn": "Expires on",
+    "noPreviousTransactions": "No previous transactions",
+    "viewReceipt": "View receipt",
+    "downloadReceipt": "Download",
+    "shareReceipt": "Share",
+    "receiptTitle": "Transfer receipt",
+    "savedToGallery": "Saved to gallery",
+    "receiptSaveFailed": "Couldn't save the image",
+    "receiptShareFailed": "Couldn't share the image",
+    "debit": "Debit",
   };
 }

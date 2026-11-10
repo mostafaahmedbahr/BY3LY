@@ -472,5 +472,16 @@ class ArLang {
     "debitWallet": "الرصيد المتاح",
     "free": "مجاناً",
     "currentUser0": "...",
+    "currentPackageLabel": "الباقة الحالية",
+    "expiresOn": "ينتهي في",
+    "noPreviousTransactions": "لا يوجد عمليات سابقة",
+    "viewReceipt": "عرض الإيصال",
+    "downloadReceipt": "تحميل",
+    "shareReceipt": "مشاركة",
+    "receiptTitle": "إيصال التحويل",
+    "savedToGallery": "تم حفظ الصورة في المعرض",
+    "receiptSaveFailed": "تعذر حفظ الصورة",
+    "receiptShareFailed": "تعذر مشاركة الصورة",
+    "debit": "خصم",
   };
 }

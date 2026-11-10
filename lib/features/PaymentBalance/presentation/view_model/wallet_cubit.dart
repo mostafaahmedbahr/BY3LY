@@ -11,14 +11,14 @@ class WalletCubit extends Cubit<WalletStates> {
   static WalletCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  WalletRepos? walletRepos;
+  final WalletRepos walletRepos;
   WalletHistoryModel? historyModel;
 
   List<WalletHistoryItem> get history => historyModel?.history ?? [];
 
   Future<void> getHistory() async {
     emit(GetWalletHistoryLoadingState());
-    var result = await walletRepos!.getHistory();
+    var result = await walletRepos.getHistory();
     return result.fold((failure) {
       emit(GetWalletHistoryErrorState(failure.errMessage));
     }, (data) {
@@ -34,7 +34,7 @@ class WalletCubit extends Cubit<WalletStates> {
     String? transferReference,
   }) async {
     emit(TopUpLoadingState());
-    var result = await walletRepos!.topUp(
+    var result = await walletRepos.topUp(
       amount: amount,
       paymentMethod: paymentMethod,
       receiptPath: receiptPath,

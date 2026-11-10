@@ -5,6 +5,18 @@ double? _asDouble(dynamic v) {
   return null;
 }
 
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is num) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase().trim();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 int? _asInt(dynamic v) {
   if (v == null) return null;
   if (v is int) return v;
@@ -22,12 +34,7 @@ class WalletHistoryModel {
   WalletHistoryModel({this.status, this.message, this.history});
 
   WalletHistoryModel.fromJson(Map<String, dynamic> json) {
-    final rawStatus = json['status'];
-    if (rawStatus is bool) {
-      status = rawStatus;
-    } else if (rawStatus is int) {
-      status = rawStatus != 0;
-    }
+    status = _asBool(json['status']);
     message = json['message']?.toString();
     final raw = json['data'];
     if (raw is List) {
