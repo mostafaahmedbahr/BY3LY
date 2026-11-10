@@ -29,8 +29,12 @@ BorderSide get _cardBorder => BorderSide(color: AppColors.border, width: 1);
 
 /// Minimal heart: white circle, hairline frame (always), grey outline
 /// heart that flips to a solid red heart instantly on toggle.
-class _MinimalHeart extends StatefulWidget {
-  const _MinimalHeart({
+///
+/// Public so non-list surfaces (e.g. the compare screen) can show the exact
+/// same heart used on every product card.
+class MinimalHeart extends StatefulWidget {
+  const MinimalHeart({
+    super.key,
     required this.productId,
     required this.initialIsFavourite,
     this.size = 32,
@@ -43,10 +47,10 @@ class _MinimalHeart extends StatefulWidget {
   final double iconSize;
 
   @override
-  State<_MinimalHeart> createState() => _MinimalHeartState();
+  State<MinimalHeart> createState() => _MinimalHeartState();
 }
 
-class _MinimalHeartState extends State<_MinimalHeart> {
+class _MinimalHeartState extends State<MinimalHeart> {
   bool? _localFav;
 
   @override
@@ -93,7 +97,7 @@ class _MinimalHeartState extends State<_MinimalHeart> {
 }
 
 /// Location row is hidden completely when there is no location.
-Widget _locationRow(String? location) {
+Widget locationRow(String? location) {
   if (location?.trim().isNotEmpty != true) {
     return const SizedBox.shrink();
   }
@@ -113,7 +117,7 @@ Widget _locationRow(String? location) {
   );
 }
 
-Widget _ratingChip(String rating) {
+Widget ratingChip(String rating) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -228,7 +232,7 @@ class ProductRowCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                   ],
-                  _locationRow(location),
+                  locationRow(location),
                   const SizedBox(height: 4),
                   Text(
                     [type, model]
@@ -257,10 +261,10 @@ class ProductRowCard extends StatelessWidget {
                         ),
                       ),
                       if (_hasValue(rating) && rating != '-')
-                        _ratingChip(rating!),
+                        ratingChip(rating!),
                       if (productId != null) ...[
                         const SizedBox(width: 8),
-                        _MinimalHeart(
+                        MinimalHeart(
                           productId: productId,
                           initialIsFavourite: initialIsFavourite,
                           size: 34,
@@ -383,7 +387,7 @@ class ProductGridCard extends StatelessWidget {
                   Positioned(
                     top: 8,
                     right: 8,
-                    child: _MinimalHeart(
+                    child: MinimalHeart(
                       productId: productId,
                       initialIsFavourite: initialIsFavourite,
                     ),
@@ -427,7 +431,7 @@ class ProductGridCard extends StatelessWidget {
                   // Location takes space ONLY when it exists.
                   if (_hasValue(location)) ...[
                     const SizedBox(height: 3),
-                    _locationRow(location),
+                    locationRow(location),
                   ],
                   const SizedBox(height: 4),
                   if (_hasValue(price) || (_hasValue(rating) && rating != '-'))
@@ -446,7 +450,7 @@ class ProductGridCard extends StatelessWidget {
                           ),
                         ),
                         if (_hasValue(rating) && rating != '-')
-                          _ratingChip(rating!),
+                          ratingChip(rating!),
                       ],
                     ),
                   if (_hasValue(date) || (views ?? 0) > 0) ...[

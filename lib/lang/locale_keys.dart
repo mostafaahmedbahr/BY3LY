@@ -397,4 +397,16 @@ abstract class LocaleKeys {
   static const currentPassword = "currentPassword";
   static const passwordRequirementsTitle = "passwordRequirementsTitle";
   static const errorTitle = "errorTitle";
+  static const modelLabel = "modelLabel";
+  static const markaLabel = "markaLabel";
+  static const yes = "yes";
+  static const no = "no";
+  static const discountLabel = "discountLabel";
+  static const finalPriceLabel = "finalPriceLabel";
+  static const isNegotiableLabel = "isNegotiableLabel";
+  static const furnishingLabel = "furnishingLabel";
+  static const sellerLabel = "sellerLabel";
+  static const sellerRatingLabel = "sellerRatingLabel";
+  static const commentsCountLabel = "commentsCountLabel";
+  static const noCompareValues = "noCompareValues";
 }

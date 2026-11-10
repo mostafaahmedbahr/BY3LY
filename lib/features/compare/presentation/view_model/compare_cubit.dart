@@ -1,7 +1,7 @@
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart'
     as details;
 import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/compare_model.dart';
@@ -14,10 +14,11 @@ class CompareCubit extends Cubit<CompareStates> {
   CompareCubit(this.compareRepos, [this.productDetailsRepo])
       : super(CompareInitState());
 
-  static CompareCubit get(context) => BlocProvider.of(context);
+  static CompareCubit get(BuildContext context) =>
+      BlocProvider.of<CompareCubit>(context);
 
-  CompareRepos? compareRepos;
-  ProductDetailsRepo? productDetailsRepo;
+  final CompareRepos compareRepos;
+  final ProductDetailsRepo? productDetailsRepo;
   CompareModel? compareModel;
 
   /// Max products allowed in one comparison.
@@ -60,7 +61,7 @@ class CompareCubit extends Cubit<CompareStates> {
   Future<void> fetchComparison() async {
     if (basketIds.length < 2) return;
     emit(CompareProductsLoading());
-    var result = await compareRepos!
+    final result = await compareRepos
         .compareProducts(productIds: [...basketIds]);
     return result.fold((failure) async {
       debugPrint('CompareCubit fetchComparison failed: ${failure.errMessage}');
@@ -123,15 +124,47 @@ class CompareCubit extends Cubit<CompareStates> {
       id: p.id,
       name: p.name,
       desc: p.desc ?? p.description,
+      description: p.description ?? p.desc,
+      discount: p.discount,
+      finalPrice: p.finalPrice,
+      isNegotiable: p.isNegotiable,
+      isUrgent: p.isUrgent,
+      status: p.status,
       price: p.price?.toString() ?? p.finalPrice?.toString(),
+      oldPrice: p.oldPrice?.toString(),
+      currency: p.currency,
+      listingType: p.listingType,
+      listingTypeLabel: p.listingTypeLabel,
+      furnishing: p.furnishing,
+      furnishingLabel: p.furnishingLabel,
+      seller: p.seller == null
+          ? null
+          : Seller(
+              id: p.seller!.id,
+              name: p.seller!.name,
+              image: p.seller!.image,
+              phone: p.seller!.phone,
+              rating: p.seller!.rating,
+              reviewsCount: p.seller!.reviewsCount,
+            ),
       image: p.image,
-      images: p.images?.map((e) => e.image).toList() ?? [],
+      imageUrls: (p.images?.map((e) => e.image).whereType<String>().where((e) => e.isNotEmpty).toList() ?? const []),
       rate: p.rate?.toString(),
+      countCommenets: p.countCommenets,
+      commenets: p.commenets,
+      reviews: p.reviews,
       reviewsCount: p.reviewsCount,
-      type: p.type,
+      isFavourite: p.isFavourite,
+      views: p.views,
+      type: p.type ?? p.listingTypeLabel,
       model: p.model,
       marka: p.marka,
       location: p.location?.toString(),
+      cityId: p.cityId?.toString(),
+      categoryId: p.categoryId,
+      categoryType: p.categoryType,
+      subCategoryId: p.subCategoryId,
+      subCategory: p.subCategory,
       date: p.date,
       createdAt: p.createdAt,
     );

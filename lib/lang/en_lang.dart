@@ -413,5 +413,17 @@ class EnLang {
     "currentPassword": "Current Password",
     "passwordRequirementsTitle": "Upper/lowercase + digits + symbols, 8-30 chars",
     "errorTitle": "Something went wrong",
+    "modelLabel": "Model",
+    "markaLabel": "Brand",
+    "yes": "Yes",
+    "no": "No",
+    "discountLabel": "Discount",
+    "finalPriceLabel": "Final price",
+    "isNegotiableLabel": "Negotiable",
+    "furnishingLabel": "Furnishing",
+    "sellerLabel": "Seller",
+    "sellerRatingLabel": "Seller rating",
+    "commentsCountLabel": "Comments",
+    "noCompareValues": "Nothing to compare yet",
   };
 }

@@ -403,5 +403,17 @@ class ArLang {
     "currentPassword": "كلمة المرور الحالية",
     "passwordRequirementsTitle": "حروف كبيرة وصغيرة + أرقام + رموز، 8-30 حرفاً",
     "errorTitle": "حدث خطأ",
+    "modelLabel": "الموديل",
+    "markaLabel": "الماركة",
+    "yes": "نعم",
+    "no": "لا",
+    "discountLabel": "الخصم",
+    "finalPriceLabel": "السعر النهائي",
+    "isNegotiableLabel": "قابل للتفاوض",
+    "furnishingLabel": "التأثيث",
+    "sellerLabel": "البائع",
+    "sellerRatingLabel": "تقييم البائع",
+    "commentsCountLabel": "التعليقات",
+    "noCompareValues": "لا توجد قيم للمقارنة",
   };
 }
