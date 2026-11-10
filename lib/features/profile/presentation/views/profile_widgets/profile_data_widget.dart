@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_nav/new_app_nav.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
@@ -12,19 +13,25 @@ class ProfileDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileStates>(
-      listener: (context, state) {},
+    return BlocBuilder<ProfileCubit, ProfileStates>(
       builder: (context, state) {
         var profileCubit = ProfileCubit.get(context);
         final user = profileCubit.profileModel?.data?.user;
         if (state is GetProfileDataLoadingState || user == null) {
+          if (state is GetProfileDataErrorState) {
+            return CustomErrorWidget(
+              error: state.error,
+              onTap: () => profileCubit.getProfile(),
+            );
+          }
+          if (state is GetProfileDataSuccessState &&
+              state.profileModel.status == false) {
+            return CustomErrorWidget(
+              error: state.profileModel.message ?? 'Server Error',
+              onTap: () => profileCubit.getProfile(),
+            );
+          }
           return const SimmerLoading(height: 80);
-        }
-        if (state is GetProfileDataSuccessState &&
-            state.profileModel.status == false) {
-          return const SimmerLoading(height: 80);
-        } else if (state is GetProfileDataErrorState) {
-          return const Text("Error");
         }
         return Container(
           padding: const EdgeInsets.all(12),

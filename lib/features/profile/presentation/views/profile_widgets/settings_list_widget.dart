@@ -85,8 +85,7 @@ class SettingsListWidget extends StatelessWidget {
               const SettingsDivider(),
 
               // الإشعارات
-              BlocConsumer<ProfileCubit, ProfileStates>(
-                listener: (context, state) {},
+              BlocBuilder<ProfileCubit, ProfileStates>(
                 builder: (context, state) {
                   return CompactSettingsTile(
                     title: LocaleKeys.notifications.tr(),

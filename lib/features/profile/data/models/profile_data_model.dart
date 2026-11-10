@@ -1,3 +1,24 @@
+// Safe parsing helpers: the API sends the same field as int, String, bool
+// or null depending on the endpoint, so every scalar is normalised before
+// it reaches a typed field.
+bool? _asBool(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value;
+  if (value is num) return value != 0;
+  final text = value.toString().trim().toLowerCase();
+  if (text == 'true' || text == '1') return true;
+  if (text == 'false' || text == '0') return false;
+  return null;
+}
+
+int? _asInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString().trim());
+}
+
+String? _asString(dynamic value) => value?.toString();
+
 
 class ProfileModel {
   bool? status;
@@ -7,9 +28,11 @@ class ProfileModel {
   ProfileModel({this.status, this.message, this.data});
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
+    final raw = json["data"];
+    data = raw is Map ? Data.fromJson(Map<String, dynamic>.from(raw)) : null;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -31,9 +54,12 @@ class Data {
   Data({this.user, this.isActive, this.requiresOtp});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json["user"] == null ? null : User.fromJson(json["user"]);
-    isActive = json["isActive"];
-    requiresOtp = json["requires_otp"];
+    final rawUser = json["user"];
+    user = rawUser is Map
+        ? User.fromJson(Map<String, dynamic>.from(rawUser))
+        : null;
+    isActive = _asBool(json["isActive"]);
+    requiresOtp = _asBool(json["requires_otp"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,21 +93,24 @@ class User {
   User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.walletBalance, this.walletCurrency, this.subscriptionPackage, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    name = json["name"];
-    email = json["email"];
-    phone = json["phone"];
+    id = _asInt(json["id"]);
+    name = _asString(json["name"]);
+    email = _asString(json["email"]);
+    phone = _asString(json["phone"]);
     age = json["age"];
-    image = json["image"];
-    token = json["token"];
-    walletBalance = (json["wallet_balance"] as num).toInt();
-    walletCurrency = json["wallet_currency"];
-    subscriptionPackage = json["subscription_package"] == null ? null : SubscriptionPackage.fromJson(json["subscription_package"]);
-    centerId = (json["center_id"] as num).toInt();
-    cityId = (json["city_id"] as num).toInt();
-    cityName = json["cityName"];
-    centerName = json["centerName"];
-    createdAt = json["created_at"];
+    image = _asString(json["image"]);
+    token = _asString(json["token"]);
+    walletBalance = _asInt(json["wallet_balance"]);
+    walletCurrency = _asString(json["wallet_currency"]);
+    final rawPackage = json["subscription_package"];
+    subscriptionPackage = rawPackage is Map
+        ? SubscriptionPackage.fromJson(Map<String, dynamic>.from(rawPackage))
+        : null;
+    centerId = _asInt(json["center_id"]);
+    cityId = _asInt(json["city_id"]);
+    cityName = _asString(json["cityName"]);
+    centerName = _asString(json["centerName"]);
+    createdAt = _asString(json["created_at"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -121,15 +150,18 @@ class SubscriptionPackage {
   SubscriptionPackage({this.id, this.code, this.name, this.description, this.price, this.currency, this.durationDays, this.adsLimit, this.features});
 
   SubscriptionPackage.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    code = json["code"];
-    name = json["name"];
-    description = json["description"];
-    price = (json["price"] as num).toInt();
-    currency = json["currency"];
-    durationDays = (json["duration_days"] as num).toInt();
-    adsLimit = (json["ads_limit"] as num).toInt();
-    features = json["features"] == null ? null : List<String>.from(json["features"]);
+    id = _asInt(json["id"]);
+    code = _asString(json["code"]);
+    name = _asString(json["name"]);
+    description = _asString(json["description"]);
+    price = _asInt(json["price"]);
+    currency = _asString(json["currency"]);
+    durationDays = _asInt(json["duration_days"]);
+    adsLimit = _asInt(json["ads_limit"]);
+    final rawFeatures = json["features"];
+    features = rawFeatures is List
+        ? rawFeatures.map((e) => e.toString()).toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {

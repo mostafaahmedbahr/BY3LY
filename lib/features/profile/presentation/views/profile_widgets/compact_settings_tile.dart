@@ -130,12 +130,12 @@ class SettingsDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    return Divider(
       height: 1,
       thickness: 0.7,
       indent: 60,
       endIndent: 12,
-      color: Color(0xFFE8E8E8),
+      color: AppColors.border,
     );
   }
 }
