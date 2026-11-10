@@ -1,7 +1,8 @@
   import 'package:by3ly/core/general_models/general_model.dart';
-    import 'package:by3ly/features/fav/data/models/fav_model.dart';
+import 'package:by3ly/features/fav/data/models/fav_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../main_importants.dart';
 import '../../data/repos/fav_repos.dart';
 import 'fav_states.dart';
 
@@ -9,10 +10,11 @@ import 'fav_states.dart';
 class FavCubit extends Cubit<FavStates> {
   FavCubit(this.favRepos) : super(FavInitState());
 
-  static FavCubit get(context) => BlocProvider.of(context);
+  static FavCubit get(BuildContext context) =>
+      BlocProvider.of<FavCubit>(context);
 
 
-  FavRepos? favRepos;
+  final FavRepos favRepos;
   FavDataModel? favDataModel;
 
   /// Source of truth for hearts across the whole app.
@@ -33,7 +35,7 @@ class FavCubit extends Cubit<FavStates> {
 
   Future<void> getFavData() async {
     emit(GetFavDataLoading());
-    var result = await favRepos!.getFavData();
+    var result = await favRepos.getFavData();
     return result.fold((failure) {
       debugPrint('FavCubit getFavData failed: ${failure.errMessage}');
       emit(GetFavDataError(failure.errMessage));
@@ -54,7 +56,7 @@ class FavCubit extends Cubit<FavStates> {
     required int productId,
 }) async {
     emit(RemoveProductFromFavLoading());
-    var result = await favRepos!.removeProductFromFav(productId: productId);
+    var result = await favRepos.removeProductFromFav(productId: productId);
     return result.fold((failure) {
       debugPrint('FavCubit removeProductFromFav failed: ${failure.errMessage}');
       emit(RemoveProductFromFavError(failure.errMessage));
@@ -79,7 +81,7 @@ class FavCubit extends Cubit<FavStates> {
     required int productId,
   }) async {
     emit(AddProductToFavLoading());
-    var result = await favRepos!.addProductToFav(productId: productId);
+    var result = await favRepos.addProductToFav(productId: productId);
     return result.fold((failure) {
       debugPrint('FavCubit addProductToFav failed: ${failure.errMessage}');
       emit(AddProductToFavError(failure.errMessage));
@@ -108,8 +110,8 @@ class FavCubit extends Cubit<FavStates> {
     emit(FavToggleOptimistic(productId, !wasFav));
 
     final result = wasFav
-        ? await favRepos!.removeProductFromFav(productId: productId)
-        : await favRepos!.addProductToFav(productId: productId);
+        ? await favRepos.removeProductFromFav(productId: productId)
+        : await favRepos.addProductToFav(productId: productId);
 
     return result.fold((failure) {
       debugPrint('FavCubit toggleFavourite failed: ${failure.errMessage}');

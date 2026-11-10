@@ -412,4 +412,6 @@ abstract class LocaleKeys {
   static const deleteAccountConfirmMessage = "deleteAccountConfirmMessage";
   static const deleteAccountFailed = "deleteAccountFailed";
   static const deleteAccountConsequence = "deleteAccountConsequence";
+  static const favEmptyTitle = "favEmptyTitle";
+  static const favEmptySubtitle = "favEmptySubtitle";
 }

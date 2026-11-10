@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
@@ -17,7 +18,8 @@ import 'fav_data_list_loading.dart';
 import 'fav_item_widget.dart';
 
 class FavViewBody extends StatefulWidget {
-  const FavViewBody({super.key,});
+  const FavViewBody({super.key});
+
   @override
   State<FavViewBody> createState() => _FavViewBodyState();
 }
@@ -30,6 +32,8 @@ class _FavViewBodyState extends State<FavViewBody> {
     super.initState();
     // The startup call may have run before login (401) or on a bad
     // network, so fetch again when the tab is opened with no data.
+    // Guests never fire the request.
+    if (GuestGuard.isGuest) return;
     final cubit = FavCubit.get(context);
     if (cubit.favDataModel?.data?.favourites == null) {
       cubit.getFavData();
@@ -54,8 +58,12 @@ class _FavViewBodyState extends State<FavViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    // Favourites are account-scoped: guests see the standard wall.
+    if (GuestGuard.isGuest) {
+      return const GuestPlaceholder();
+    }
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
       child: Column(
         children: [
           CustomTextFormField(
@@ -75,15 +83,15 @@ class _FavViewBodyState extends State<FavViewBody> {
                 : null,
             onChanged: (_) => setState(() {}),
           ),
-          const CustomSizedBox(height: 20,),
+          const CustomSizedBox(height: 16),
           Expanded(
-            child: BlocConsumer<FavCubit , FavStates>(
-              listener: (context ,state){
+            child: BlocConsumer<FavCubit, FavStates>(
+              listener: (context, state) {
                 if (state is RemoveProductFromFavSuccess) {
                   final msg = (state.removeProductFromFavModel.message
-                                  ?.trim()
-                                  .isNotEmpty ??
-                              false)
+                              ?.trim()
+                              .isNotEmpty ??
+                          false)
                       ? state.removeProductFromFavModel.message!
                       : context.tr(LocaleKeys.removedFromFav);
                   CherryToast.success(
@@ -103,49 +111,115 @@ class _FavViewBodyState extends State<FavViewBody> {
                   );
                 }
               },
-              builder:  (context ,state){
-                var favCubit = context.read<FavCubit>();
-                if (state is GetFavDataLoading &&
-                    favCubit.favDataModel?.data?.favourites == null) {
+              builder: (context, state) {
+                final favCubit = context.read<FavCubit>();
+                final favorites =
+                    favCubit.favDataModel?.data?.favourites;
+                if (state is GetFavDataLoading && favorites == null) {
                   return const FavDataListLoading();
-                }
-                else if (state is GetFavDataError &&
-                    favCubit.favDataModel?.data?.favourites == null){
+                } else if (state is GetFavDataError && favorites == null) {
                   return CustomErrorWidget(
                     error: state.message,
                     onTap: () => favCubit.getFavData(),
                   );
                 }
-                final items = _filtered(
-                    favCubit.favDataModel?.data?.favourites ??
-                        <Favourites>[]);
+                final query = _searchController.text.trim();
+                final items = _filtered(favorites ?? const <Favourites>[]);
                 if (items.isEmpty) {
-                  return Center(
-                    child: Text(
-                      context.tr(LocaleKeys.noResults),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
+                  // Distinguish "search found nothing" from "nothing saved".
+                  if (query.isNotEmpty) {
+                    return _EmptyHint(text: context.tr(LocaleKeys.noResults));
+                  }
+                  return const _EmptyFavourites();
                 }
                 return RefreshIndicator(
                   onRefresh: () => favCubit.getFavData(),
                   child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
                     itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return FavItemWidget(
-                        favourite: items[index],
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const CustomSizedBox(height: 20,);
-                    },
+                    itemBuilder: (context, index) =>
+                        FavItemWidget(favourite: items[index]),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 14),
                   ),
                 );
               },
-
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// One-line hint used when a search query matches nothing.
+class _EmptyHint extends StatelessWidget {
+  const _EmptyHint({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 14,
+          color: AppColors.textSecondary,
+        ),
+      ),
+    );
+  }
+}
+
+/// Premium empty state — saved favourites show as a soft heart hero.
+class _EmptyFavourites extends StatelessWidget {
+  const _EmptyFavourites();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.redColor.withValues(alpha: 0.08),
+              ),
+              child: Icon(
+                Icons.favorite_border_rounded,
+                size: 44,
+                color: AppColors.redColor,
+              ),
+            ),
+            const SizedBox(height: 18),
+            Text(
+              context.tr(LocaleKeys.favEmptyTitle),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: AppColors.text,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              context.tr(LocaleKeys.favEmptySubtitle),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                height: 1.6,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

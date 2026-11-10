@@ -418,5 +418,7 @@ class ArLang {
     "deleteAccountConfirmMessage": "هل أنت متأكد من حذف حسابك؟ يمكنك استرجاعه خلال 90 يومًا فقط.",
     "deleteAccountFailed": "تعذر حذف الحساب، حاول مرة أخرى",
     "deleteAccountConsequence": "سيتم إيقاف جميع الإعلانات المعروضة الخاصة بك فور تنفيذ الحذف.",
+    "favEmptyTitle": "لا توجد منتجات في المفضلة",
+    "favEmptySubtitle": "اضغط على زر القلب على المنتجات التي تعجبك وستظهر هنا",
   };
 }

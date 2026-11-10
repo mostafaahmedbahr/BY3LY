@@ -428,5 +428,7 @@ class EnLang {
     "deleteAccountConfirmMessage": "Are you sure you want to delete your account? You can restore it within 90 days only.",
     "deleteAccountFailed": "Couldn't delete your account. Please try again.",
     "deleteAccountConsequence": "All your listed ads will be paused as soon as the deletion is processed.",
+    "favEmptyTitle": "No favourite products yet",
+    "favEmptySubtitle": "Tap the heart on products you like and they will show up here",
   };
 }
