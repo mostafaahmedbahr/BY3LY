@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/core/shared_widgets/custom_loading.dart';
+import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/features/statistics/data/models/statistics_model.dart';
@@ -25,7 +25,7 @@ class StatisticsViewBody extends StatelessWidget {
 
         // First load.
         if (state is StatisticsLoadingState) {
-          return const CustomLoading();
+          return const _StatisticsShimmer();
         }
 
         // Failure: show the retry widget like the other features do.
@@ -38,7 +38,7 @@ class StatisticsViewBody extends StatelessWidget {
 
         // Init / unexpected state before the first response.
         if (cubit.statisticsModel == null) {
-          return const CustomLoading();
+          return const _StatisticsShimmer();
         }
 
         return RefreshIndicator(
@@ -384,4 +384,71 @@ String _formatNumber(int? value) {
   }
 
   return number < 0 ? '-$buffer' : buffer.toString();
+}
+
+
+/// Branded shimmer skeleton for the statistics page — month selector bar,
+/// summary tiles grid, period card and timeline placeholder.
+class _StatisticsShimmer extends StatelessWidget {
+  const _StatisticsShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.fromLTRB(16, 14, 16, 24),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 44,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SimmerLoading(height: 36, width: 36, raduis: 18),
+                SimmerLoading(height: 18, width: 140, raduis: 8),
+                SimmerLoading(height: 36, width: 36, raduis: 18),
+              ],
+            ),
+          ),
+          SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+              SizedBox(width: 12),
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+              SizedBox(width: 12),
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+              SizedBox(width: 12),
+              Expanded(child: SimmerLoading(height: 96, raduis: 14)),
+            ],
+          ),
+          SizedBox(height: 16),
+          SimmerLoading(height: 118, raduis: 14),
+          SizedBox(height: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SimmerLoading(height: 62, width: 54, raduis: 12),
+              SimmerLoading(height: 62, width: 54, raduis: 12),
+              SimmerLoading(height: 62, width: 54, raduis: 12),
+              SimmerLoading(height: 62, width: 54, raduis: 12),
+              SimmerLoading(height: 62, width: 54, raduis: 12),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

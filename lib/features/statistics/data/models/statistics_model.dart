@@ -1,3 +1,42 @@
+// Tolerant parsing helpers: the API sends the same field as int, String,
+// bool or null depending on the endpoint, so every value is normalised
+// before it reaches a typed field.
+bool? _asBool(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value;
+  if (value is num) return value != 0;
+  final text = value.toString().trim().toLowerCase();
+  if (text == 'true' || text == '1') return true;
+  if (text == 'false' || text == '0') return false;
+  return null;
+}
+
+int? _asInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString().trim());
+}
+
+String? _asString(dynamic value) => value?.toString();
+
+List<T>? _parseList<T>(
+  dynamic raw,
+  T Function(Map<String, dynamic>) fromJson,
+) {
+  if (raw is! List) return null;
+  final out = <T>[];
+  for (final e in raw) {
+    if (e is Map) out.add(fromJson(Map<String, dynamic>.from(e)));
+  }
+  return out;
+}
+
+Map<String, dynamic>? _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) return Map<String, dynamic>.from(value);
+  return null;
+}
+
 class StatisticsModel {
   bool? status;
   String? message;
@@ -6,19 +45,21 @@ class StatisticsModel {
   StatisticsModel({this.status, this.message, this.data});
 
   StatisticsModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
+    final raw = json["data"];
+    final dataMap = raw == null ? null : _asMap(raw);
+    data = dataMap == null ? null : Data.fromJson(dataMap);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if (data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -44,43 +85,46 @@ class Data {
   });
 
   Data.fromJson(Map<String, dynamic> json) {
-    summary = json["summary"] == null
+    final rawSummary = json["summary"];
+    summary = _asMap(rawSummary) == null
         ? null
-        : Summary.fromJson(json["summary"]);
-    month = json["month"];
-    monthName = json["month_name"];
+        : Summary.fromJson(_asMap(rawSummary)!);
+    month = _asString(json["month"]);
+    monthName = _asString(json["month_name"]);
     selectedDate = json["selected_date"];
-    days = json["days"] == null
+    days = _parseList(json["days"], Days.fromJson);
+    final rawPeriod = json["period"];
+    period = _asMap(rawPeriod) == null
         ? null
-        : (json["days"] as List).map((e) => Days.fromJson(e)).toList();
-    period = json["period"] == null ? null : Period.fromJson(json["period"]);
-    sales = json["sales"] ?? [];
-    pagination = json["pagination"] == null
+        : Period.fromJson(_asMap(rawPeriod)!);
+    sales = json["sales"] is List ? json["sales"] as List : null;
+    final rawPagination = json["pagination"];
+    pagination = _asMap(rawPagination) == null
         ? null
-        : Pagination.fromJson(json["pagination"]);
+        : Pagination.fromJson(_asMap(rawPagination)!);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
     if (summary != null) {
-      _data["summary"] = summary?.toJson();
+      jsonData["summary"] = summary?.toJson();
     }
-    _data["month"] = month;
-    _data["month_name"] = monthName;
-    _data["selected_date"] = selectedDate;
+    jsonData["month"] = month;
+    jsonData["month_name"] = monthName;
+    jsonData["selected_date"] = selectedDate;
     if (days != null) {
-      _data["days"] = days?.map((e) => e.toJson()).toList();
+      jsonData["days"] = days?.map((e) => e.toJson()).toList();
     }
     if (period != null) {
-      _data["period"] = period?.toJson();
+      jsonData["period"] = period?.toJson();
     }
     if (sales != null) {
-      _data["sales"] = sales;
+      jsonData["sales"] = sales;
     }
     if (pagination != null) {
-      _data["pagination"] = pagination?.toJson();
+      jsonData["pagination"] = pagination?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -93,19 +137,19 @@ class Pagination {
   Pagination({this.total, this.perPage, this.currentPage, this.totalPages});
 
   Pagination.fromJson(Map<String, dynamic> json) {
-    total = json["total"];
-    perPage = json["per_page"];
-    currentPage = json["current_page"];
-    totalPages = json["total_pages"];
+    total = _asInt(json["total"]);
+    perPage = _asInt(json["per_page"]);
+    currentPage = _asInt(json["current_page"]);
+    totalPages = _asInt(json["total_pages"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["total"] = total;
-    _data["per_page"] = perPage;
-    _data["current_page"] = currentPage;
-    _data["total_pages"] = totalPages;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["total"] = total;
+    jsonData["per_page"] = perPage;
+    jsonData["current_page"] = currentPage;
+    jsonData["total_pages"] = totalPages;
+    return jsonData;
   }
 }
 
@@ -118,19 +162,19 @@ class Period {
   Period({this.from, this.to, this.salesCount, this.salesAmount});
 
   Period.fromJson(Map<String, dynamic> json) {
-    from = json["from"];
-    to = json["to"];
-    salesCount = json["sales_count"];
-    salesAmount = json["sales_amount"];
+    from = _asString(json["from"]);
+    to = _asString(json["to"]);
+    salesCount = _asInt(json["sales_count"]);
+    salesAmount = _asInt(json["sales_amount"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["from"] = from;
-    _data["to"] = to;
-    _data["sales_count"] = salesCount;
-    _data["sales_amount"] = salesAmount;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["from"] = from;
+    jsonData["to"] = to;
+    jsonData["sales_count"] = salesCount;
+    jsonData["sales_amount"] = salesAmount;
+    return jsonData;
   }
 }
 
@@ -144,21 +188,21 @@ class Days {
   Days({this.date, this.day, this.dayName, this.salesCount, this.salesAmount});
 
   Days.fromJson(Map<String, dynamic> json) {
-    date = json["date"];
-    day = json["day"];
-    dayName = json["day_name"];
-    salesCount = json["sales_count"];
-    salesAmount = json["sales_amount"];
+    date = _asString(json["date"]);
+    day = _asInt(json["day"]);
+    dayName = _asString(json["day_name"]);
+    salesCount = _asInt(json["sales_count"]);
+    salesAmount = _asInt(json["sales_amount"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["date"] = date;
-    _data["day"] = day;
-    _data["day_name"] = dayName;
-    _data["sales_count"] = salesCount;
-    _data["sales_amount"] = salesAmount;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["date"] = date;
+    jsonData["day"] = day;
+    jsonData["day_name"] = dayName;
+    jsonData["sales_count"] = salesCount;
+    jsonData["sales_amount"] = salesAmount;
+    return jsonData;
   }
 }
 
@@ -180,22 +224,22 @@ class Summary {
   });
 
   Summary.fromJson(Map<String, dynamic> json) {
-    totalSales = json["total_sales"];
-    totalSalesAmount = json["total_sales_amount"];
-    displayedProducts = json["displayed_products"];
-    interestedCount = json["interested_count"];
-    favouritesCount = json["favourites_count"];
-    complaints = json["complaints"];
+    totalSales = _asInt(json["total_sales"]);
+    totalSalesAmount = _asInt(json["total_sales_amount"]);
+    displayedProducts = _asInt(json["displayed_products"]);
+    interestedCount = _asInt(json["interested_count"]);
+    favouritesCount = _asInt(json["favourites_count"]);
+    complaints = _asInt(json["complaints"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["total_sales"] = totalSales;
-    _data["total_sales_amount"] = totalSalesAmount;
-    _data["displayed_products"] = displayedProducts;
-    _data["interested_count"] = interestedCount;
-    _data["favourites_count"] = favouritesCount;
-    _data["complaints"] = complaints;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["total_sales"] = totalSales;
+    jsonData["total_sales_amount"] = totalSalesAmount;
+    jsonData["displayed_products"] = displayedProducts;
+    jsonData["interested_count"] = interestedCount;
+    jsonData["favourites_count"] = favouritesCount;
+    jsonData["complaints"] = complaints;
+    return jsonData;
   }
 }

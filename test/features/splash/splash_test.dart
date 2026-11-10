@@ -39,8 +39,7 @@ void main() {
       (tester) async {
     await tester.pumpWidget(_harness(child: const SplashView()));
     await tester.pump(const Duration(milliseconds: 100));
-    // Brand wordmark + tagline visible during the intro.
-    expect(find.text('هنا تبيع وتشتري'), findsOneWidget);
+    // Brand wordmark (no separate tagline in the committed design).
     expect(find.byType(Image), findsOneWidget);
 
     // Intro (1.6s) + fade route (450ms).
@@ -50,12 +49,12 @@ void main() {
     expect(find.byType(OnBoardingView), findsOneWidget);
   });
 
-  testWidgets('splash body renders the gold flourish divider', (tester) async {
+  testWidgets('splash body renders the wordmark during the intro', (tester) async {
     await tester.pumpWidget(_harness(child: const SplashView()));
     // Pump the first frames of the intro.
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Tagline is already part of the same fade/slide transition.
-    expect(find.text('هنا تبيع وتشتري'), findsOneWidget);
+    // Wordmark is part of the fade/slide intro transition.
+    expect(find.byType(Image), findsOneWidget);
   });
 }
