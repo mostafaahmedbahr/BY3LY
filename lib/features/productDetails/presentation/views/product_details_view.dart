@@ -1,13 +1,18 @@
 import 'package:by3ly/core/shared_widgets/app_confirm_dialog.dart';
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_details_loading.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_details_view_body.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../../main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailsView extends StatelessWidget {
   const ProductDetailsView({
@@ -21,8 +26,6 @@ class ProductDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(CacheTokenManger.userToken);
-    debugPrint("ProductDetailsView");
     return BlocConsumer<ProductDetailsCubit, ProductDetailsStates>(
       listener: (context, state) {
         if (state is PauseResumeAdSuccessState) {
@@ -40,7 +43,7 @@ class ProductDetailsView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        var productDetailsCubit = ProductDetailsCubit.get(context);
+        final productDetailsCubit = ProductDetailsCubit.get(context);
         if (state is GetProductDetailsDataLoadingState &&
             productDetailsCubit.productDetailsModel?.data?.product == null) {
           return const ProductDetailsLoading();
@@ -60,7 +63,7 @@ class ProductDetailsView extends StatelessWidget {
         final product = productDetailsCubit.productDetailsModel?.data?.product;
         final relatedProducts =
             productDetailsCubit.productDetailsModel?.data?.relatedProducts ??
-            [];
+                [];
         if (product == null) {
           return Scaffold(
             backgroundColor: AppColors.background,
@@ -80,31 +83,50 @@ class ProductDetailsView extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.background,
           appBar: AppBar(
-            backgroundColor: AppColors.surface,
-            shadowColor: AppColors.mainColor,
-            surfaceTintColor: AppColors.mainColor,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    AppColors.darkMainColor,
+                    AppColors.mainColor,
+                    AppColors.secondColor,
+                  ],
+                  stops: [0.0, 0.55, 1.0],
+                ),
+              ),
+            ),
             bottom: state is PauseResumeAdLoadingState
-                ? PreferredSize(
-                    preferredSize: const Size.fromHeight(3),
+                ? const PreferredSize(
+                    preferredSize: Size.fromHeight(3),
                     child: LinearProgressIndicator(
                       minHeight: 3,
-                      color: AppColors.accent,
-                      backgroundColor: AppColors.border,
+                      color: AppColors.yellowColor,
+                      backgroundColor: Colors.transparent,
                     ),
                   )
                 : null,
             title: Text(
               product.name ?? '',
-              style: TextStyle(
-                color: AppColors.text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
             actions: [
+              // Favourited-heart — frosted glass circle, brand-color heart.
               Container(
                 height: 36,
                 width: 36,
-                margin: const EdgeInsets.only(left: 4),
+                margin: const EdgeInsets.only(left: 6),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   shape: BoxShape.circle,
@@ -116,15 +138,24 @@ class ProductDetailsView extends StatelessWidget {
                     initialIsFavourite: product.isFavourite == true,
                     withBackground: false,
                     iconSize: 20,
+                    favIconColor: AppColors.redColor,
                   ),
                 ),
               ),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
+              // Share the product link.
+              IconButton(
+                tooltip: 'Share',
+                onPressed: () => _shareProduct(context, product.name),
+                icon: const Icon(Icons.share_rounded, color: Colors.white),
+              ),
               if (isOwner)
                 PopupMenuButton<String>(
                   tooltip: '',
                   color: AppColors.surface,
-                  icon: Icon(Icons.more_vert_sharp, color: AppColors.text),
+                  icon: const Icon(
+                    Icons.more_vert_rounded,
+                    color: Colors.white,
+                  ),
                   onSelected: (_) =>
                       _confirmPauseResume(context, isPaused: isPaused),
                   itemBuilder: (context) => [
@@ -137,7 +168,7 @@ class ProductDetailsView extends StatelessWidget {
                                 ? Icons.play_arrow_rounded
                                 : Icons.pause_rounded,
                             size: 20,
-                            color: AppColors.accent,
+                            color: AppColors.mainColor,
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -153,10 +184,7 @@ class ProductDetailsView extends StatelessWidget {
                   ],
                 )
               else
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.more_vert_sharp),
-                ),
+                const SizedBox(width: 4),
             ],
           ),
           body: ProductDetailsViewBody(
@@ -170,12 +198,25 @@ class ProductDetailsView extends StatelessWidget {
     );
   }
 
-  /// Id of the signed-in user, used to detect the seller's own ads.
   int? _currentUserId(BuildContext context) {
     try {
       return ProfileCubit.get(context).profileModel?.data?.user?.id;
     } catch (_) {
       return null;
+    }
+  }
+
+  Future<void> _shareProduct(BuildContext context, String? name) async {
+    final text =
+        '${context.tr(LocaleKeys.shareProductText)}\n${name ?? ''}';
+    try {
+      await SharePlus.instance.share(ShareParams(text: text));
+    } catch (_) {
+      if (!context.mounted) return;
+      Toast.showErrorToast(
+        msg: 'Could not share this product right now.',
+        context: context,
+      );
     }
   }
 
@@ -188,9 +229,8 @@ class ProductDetailsView extends StatelessWidget {
     final confirmed = await AppConfirmDialog.show(
       context,
       title: actionLabel,
-      message:
-          (isPaused ? LocaleKeys.resumeAdConfirm : LocaleKeys.pauseAdConfirm)
-              .tr(),
+      message: (isPaused ? LocaleKeys.resumeAdConfirm : LocaleKeys.pauseAdConfirm)
+          .tr(),
       confirmText: actionLabel,
       icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
       accentColor: isPaused ? AppColors.mainColor : AppColors.yellowColor,

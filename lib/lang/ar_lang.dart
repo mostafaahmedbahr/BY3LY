@@ -485,5 +485,7 @@ class ArLang {
     "debit": "خصم",
     "settingsLoadFailed": "تعذر تحميل الإعدادات",
     "settingsSaveFailed": "تعذر حفظ الإعدادات",
+    "shareProductText": "شاهد هذا المنتج على بيعلي:",
+    "viewStore": "عرض المتجر",
   };
 }

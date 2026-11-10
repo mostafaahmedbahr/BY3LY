@@ -495,5 +495,7 @@ class EnLang {
     "debit": "Debit",
     "settingsLoadFailed": "Could not load settings",
     "settingsSaveFailed": "Could not save settings",
+    "shareProductText": "Check out this product on By3ly:",
+    "viewStore": "View store",
   };
 }

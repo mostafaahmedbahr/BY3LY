@@ -479,4 +479,6 @@ abstract class LocaleKeys {
   static const debit = "debit";
   static const settingsLoadFailed = "settingsLoadFailed";
   static const settingsSaveFailed = "settingsSaveFailed";
+  static const shareProductText = "shareProductText";
+  static const viewStore = "viewStore";
 }

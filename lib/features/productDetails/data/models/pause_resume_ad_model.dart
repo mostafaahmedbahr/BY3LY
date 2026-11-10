@@ -13,13 +13,13 @@ class PauseAdResumeAdModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -37,10 +37,10 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["ad_id"] = adId;
-    _data["is_paused"] = isPaused;
-    _data["status"] = status;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["ad_id"] = adId;
+    jsonData["is_paused"] = isPaused;
+    jsonData["status"] = status;
+    return jsonData;
   }
 }

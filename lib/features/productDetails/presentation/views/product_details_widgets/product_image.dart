@@ -1,10 +1,20 @@
-  import 'package:by3ly/core/shared_widgets/full_screen_gallery.dart';
+import 'package:by3ly/core/shared_widgets/full_screen_gallery.dart';
+import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/app_styles/app_styles.dart';
+import 'package:by3ly/core/utils/app_images/app_images.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
 import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dart';
 import 'package:by3ly/features/compare/presentation/view_model/compare_states.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
-  import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ProductImage extends StatelessWidget {
   const ProductImage({
@@ -62,11 +72,32 @@ class ProductImage extends StatelessWidget {
                     initialIndex: initialIndex,
                   );
                 },
-                child: CustomNetWorkImage(
-                  height: 300,
-                  imageUrl: imageUrl,
-                  fit: BoxFit.cover,
-                  raduis: 0,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CustomNetWorkImage(
+                      height: 300,
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      raduis: 0,
+                    ),
+                    // Bottom scrim so the compare pill stays readable.
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.35),
+                            ],
+                            stops: const [0.55, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -103,20 +134,20 @@ class ProductImage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: inBasket
                               ? AppColors.mainColor
-                              : AppColors.surface,
+                              : Colors.white.withValues(alpha: 0.92),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: inBasket
-                                ? AppColors.mainColor
-                                : AppColors.border,
-                            width: 1.2,
-                          ),
+                          border: inBasket
+                              ? null
+                              : Border.all(
+                                  color: Colors.white,
+                                  width: 1.2,
+                                ),
                           boxShadow: [
                             BoxShadow(
                               color:
                                   Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
