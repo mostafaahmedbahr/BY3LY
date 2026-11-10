@@ -51,6 +51,9 @@ class CustomPinCodeFieldState extends State<CustomPinCodeField> {
           animationDuration: const Duration(milliseconds: 240),
           errorAnimationController: widget.errorController,
           controller: widget.controller,
+          // The parent owns the controller lifecycle — don't let the
+          // package dispose it on unmount (double-dispose otherwise).
+          autoDisposeControllers: false,
           onCompleted: (_) {},
           beforeTextPaste: (_) => true,
           onChanged: (value) {

@@ -49,6 +49,7 @@ class OtpButton extends StatelessWidget {
           CherryToast.success(
             title: Text(msg, style: const TextStyle(color: AppColors.mainColor)),
           ).show(context);
+          FocusScope.of(context).unfocus();
           context.pushNamedAndRemoveAll(Routes.chooseLocationView);
         } else if (state is VerifyOtpErrorState) {
           CherryToast.error(

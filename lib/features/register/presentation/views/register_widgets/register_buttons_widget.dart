@@ -30,6 +30,9 @@ class RegisterButtons extends StatelessWidget {
                   ? "$baseMsg\nOTP : $otp"
                   : baseMsg,
               context: context);
+          // Close the keyboard BEFORE navigating so the focus manager
+          // doesn't try to highlight widgets that are about to deactivate.
+          FocusScope.of(context).unfocus();
           context.pushNamed(Routes.otpView,
             arguments: email,
           );

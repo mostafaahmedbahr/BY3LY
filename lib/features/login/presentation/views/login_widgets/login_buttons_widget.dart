@@ -36,6 +36,7 @@ class LoginButtonsWidget extends StatelessWidget {
           try {
             context.read<ProfileCubit>().getProfile();
           } catch (_) {}
+          FocusScope.of(context).unfocus();
           context.pushNamedAndRemoveAll(Routes.layoutView);
           Toast.showSuccessToast(
               msg: state.loginModel.message?.trim().isNotEmpty == true
