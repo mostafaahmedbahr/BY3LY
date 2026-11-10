@@ -2,16 +2,20 @@ import 'dart:io';
 import 'package:by3ly/features/register/presentation/view_model/register_states.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/app_services/local_services/cache_helper.dart';
 import '../../data/models/register_model.dart';
 import '../../data/repos/register_repo.dart';
 
 class RegisterCubit extends Cubit<RegisterStates> {
   RegisterCubit(this.registerRepo) : super(RegisterInitState());
 
-  RegisterRepo? registerRepo;
+  final RegisterRepo registerRepo;
 
-  static RegisterCubit get(context) => BlocProvider.of(context);
+  static RegisterCubit get(BuildContext context) =>
+      BlocProvider.of<RegisterCubit>(context);
 
   bool isVisible = true;
 
@@ -27,26 +31,12 @@ class RegisterCubit extends Cubit<RegisterStates> {
     emit(ChangeSuffixIconState2());
   }
 
-  var passCon = TextEditingController();
-  var confirmPassCon = TextEditingController();
-  var emailCon = TextEditingController();
-  var mobileCon = TextEditingController();
-  var nameCon = TextEditingController();
-  var ageCon = TextEditingController();
-
-  // File? file;
-  // Future uploadOnlyImage() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //     allowedExtensions: ["jpg", "png", "jpeg"],
-  //     type: FileType.custom,
-  //   );
-  //   file = File(result?.files.single.path ?? "");
-  //   debugPrint("---------- upload is done ------------");
-  //   if(file!.path !=""){
-  //     emit(UploadImageSuccessState());
-  //   }
-  //
-  // }
+  final TextEditingController passCon = TextEditingController();
+  final TextEditingController confirmPassCon = TextEditingController();
+  final TextEditingController emailCon = TextEditingController();
+  final TextEditingController mobileCon = TextEditingController();
+  final TextEditingController nameCon = TextEditingController();
+  final TextEditingController ageCon = TextEditingController();
 
   final ImagePicker picker = ImagePicker();
   File? profileImage;
@@ -86,7 +76,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     required String age,
   }) async {
     emit(SignUpLoading());
-    var result = await registerRepo!.register(
+    var result = await registerRepo.register(
       data: FormData.fromMap({
         if (image != null) "image": await MultipartFile.fromFile(image.path),
         "phone": phoneNumber,

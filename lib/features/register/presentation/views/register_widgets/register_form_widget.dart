@@ -1,7 +1,16 @@
+import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/app_images/app_images.dart';
+import 'package:by3ly/core/utils/app_validator/app_validator.dart';
 import 'package:by3ly/features/register/presentation/view_model/register_cubit.dart';
 import 'package:by3ly/features/register/presentation/view_model/register_states.dart';
-import 'package:by3ly/main_importants.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
