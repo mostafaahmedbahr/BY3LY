@@ -505,5 +505,6 @@ class EnLang {
     "sellerPhone": "Phone",
     "sellerReviews": "Seller reviews",
     "viewAll": "View all",
+    "brandSlogan": "Here you buy and sell",
   };
 }

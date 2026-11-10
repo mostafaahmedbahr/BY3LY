@@ -495,5 +495,6 @@ class ArLang {
     "sellerPhone": "رقم",
     "sellerReviews": "تقييمات البائع",
     "viewAll": "مشاهدة الكل",
+    "brandSlogan": "هنا تبيع وتشتري",
   };
 }
