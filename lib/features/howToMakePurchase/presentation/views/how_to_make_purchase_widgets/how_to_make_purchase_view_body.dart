@@ -3,8 +3,12 @@ import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/features/howToMakePurchase/data/repos/how_to_make_purchase_repos_imple.dart';
 import 'package:by3ly/features/howToMakePurchase/presentation/view_model/how_to_make_purchase_cubit.dart';
 import 'package:by3ly/features/howToMakePurchase/presentation/view_model/how_to_make_purchase_states.dart';
-import 'package:by3ly/main_importants.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'purchase_footer.dart';
+import 'purchase_instructions_card.dart';
 
 class HowToMakePurchaseViewBody extends StatelessWidget {
   const HowToMakePurchaseViewBody({super.key});
@@ -22,13 +26,17 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
 
           if (state is GetHowToMakePurchaseDataLoadingState &&
               cubit.howToMakePurchaseModel?.data?.html == null) {
-            return ListView.separated(
-              padding: const EdgeInsets.all(20),
-              itemCount: 5,
-            itemBuilder: (context, _) =>
-                const SimmerLoading(height: 60, raduis: 12),
-            separatorBuilder: (context, _) =>
-                const SizedBox(height: 12),
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+              children: const [
+                SimmerLoading(height: 40, raduis: 10),
+                SizedBox(height: 12),
+                SimmerLoading(height: 90, raduis: 16),
+                SizedBox(height: 12),
+                SimmerLoading(height: 90, raduis: 16),
+                SizedBox(height: 12),
+                SimmerLoading(height: 60, raduis: 16),
+              ],
             );
           }
 
@@ -36,8 +44,7 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
               cubit.howToMakePurchaseModel?.data?.html == null) {
             return CustomErrorWidget(
               error: state.error,
-              onTap: () =>
-                  cubit.getHowToMakePurchaseData(),
+              onTap: () => cubit.getHowToMakePurchaseData(),
             );
           }
 
@@ -45,75 +52,12 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
           final isRtl = (data?.direction ?? 'rtl') != 'ltr';
 
           return Directionality(
-            textDirection:
-                isRtl ? TextDirection.rtl : TextDirection.ltr,
+            textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
             child: ListView(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
               children: [
-                if ((data?.title?.trim().isNotEmpty ?? false))
-                  Text(
-                    data!.title!,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.mainColor,
-                      height: 1.4,
-                    ),
-                  ),
-                if ((data?.title?.trim().isNotEmpty ?? false))
-                  const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                        color: AppColors.border),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black
-                            .withValues(alpha: 0.04),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Html(
-                    data: data?.html ?? '',
-                    style: {
-                      "body": Style(
-                        fontSize: FontSize(14),
-                        lineHeight: const LineHeight(1.8),
-                        color: AppColors.text,
-                        margin: Margins.zero,
-                        padding: HtmlPaddings.zero,
-                      ),
-                      "h1": Style(
-                        fontSize: FontSize(20),
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.mainColor,
-                      ),
-                      "h2": Style(
-                        fontSize: FontSize(18),
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.mainColor,
-                      ),
-                      "h3": Style(
-                        fontSize: FontSize(16),
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.text,
-                      ),
-                      "a": Style(
-                        color: AppColors.mainColor,
-                        textDecoration: TextDecoration.underline,
-                      ),
-                      "li": Style(
-                        fontSize: FontSize(14),
-                        lineHeight: const LineHeight(1.8),
-                      ),
-                    },
-                  ),
-                ),
+                if (data != null) PurchaseInstructionsCard(data: data),
+                PurchaseFooter(updatedAt: data?.updatedAt),
               ],
             ),
           );

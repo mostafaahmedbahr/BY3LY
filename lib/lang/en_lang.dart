@@ -433,5 +433,8 @@ class EnLang {
     "howBuyOperationDoneAnswer": "By3ly is not responsible for any financial transaction between buyer and seller. We are only a platform connecting buyers with sellers.\n\nNot every product accepts negotiation or offers; some products have fixed prices.\n\nAfter the payment is done, send the receipt to the seller to confirm the payment.",
     "howIsTheSaleProcessAnswer": "Publish your ad with the right price and photos. Listings are reviewed by By3ly moderation before they go live.\n\nOnce your ad is live, interested buyers will reach out via chat or phone call.\n\nAfter you receive the money, send the receipt to the buyer to confirm the payment.",
     "copiedToClipboard": "Copied to clipboard",
+    "howToPurchase": "How to buy",
+    "contactSupport": "Contact support",
+    "lastUpdated": "Last updated",
   };
 }

@@ -30,19 +30,24 @@ class HowToMakePurchaseModel {
   HowToMakePurchaseModel({this.status, this.message, this.data});
 
   HowToMakePurchaseModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json["status"]) ?? json["status"] == 1;
+    status = _asBool(json["status"]);
     message = _asString(json["message"]);
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    final raw = json["data"];
+    if (raw is Map) {
+      data = Data.fromJson(Map<String, dynamic>.from(raw));
+    } else {
+      data = null;
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -66,13 +71,13 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["title"] = title;
-    _data["html"] = html;
-    _data["language"] = language;
-    _data["direction"] = direction;
-    _data["updated_at"] = updatedAt;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["title"] = title;
+    jsonData["html"] = html;
+    jsonData["language"] = language;
+    jsonData["direction"] = direction;
+    jsonData["updated_at"] = updatedAt;
+    return jsonData;
   }
 }

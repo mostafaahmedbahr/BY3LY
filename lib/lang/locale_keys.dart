@@ -417,4 +417,7 @@ abstract class LocaleKeys {
   static const howBuyOperationDoneAnswer = "howBuyOperationDoneAnswer";
   static const howIsTheSaleProcessAnswer = "howIsTheSaleProcessAnswer";
   static const copiedToClipboard = "copiedToClipboard";
+  static const howToPurchase = "howToPurchase";
+  static const contactSupport = "contactSupport";
+  static const lastUpdated = "lastUpdated";
 }
