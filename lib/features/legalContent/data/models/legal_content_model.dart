@@ -24,11 +24,14 @@ class LegalContentModel {
   LegalContentModel({this.status, this.message, this.data});
 
   LegalContentModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json["status"]) ?? (json["status"] == 1);
+    status = _asBool(json["status"]);
     message = _asString(json["message"]);
-    data = json["data"] == null
-        ? null
-        : LegalContentData.fromJson(json["data"]);
+    final raw = json["data"];
+    if (raw is Map) {
+      data = LegalContentData.fromJson(Map<String, dynamic>.from(raw));
+    } else {
+      data = null;
+    }
   }
 
   Map<String, dynamic> toJson() {

@@ -2,7 +2,10 @@ import 'package:by3ly/features/legalContent/data/models/legal_content_model.dart
 
 abstract class LegalContentStates {}
 
-class LegalContentInitState extends LegalContentStates {}
+class LegalContentInitState extends LegalContentStates {
+  @override
+  String toString() => 'LegalContentInitState';
+}
 
 class GetLegalContentLoadingState extends LegalContentStates {
   @override

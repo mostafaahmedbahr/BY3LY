@@ -1,3 +1,4 @@
+import 'package:by3ly/core/shared_widgets/last_updated_label.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/views/help_support_chat_view.dart';
 import 'package:by3ly/lang/locale_keys.dart';
@@ -13,16 +14,6 @@ class PurchaseFooter extends StatelessWidget {
   /// Raw `updated_at` string from the server (ISO-ish formats tolerated).
   final String? updatedAt;
 
-  /// Formats a best-effort readable date. Unknown formats are shown as-is.
-  String _formatUpdated(String raw) {
-    final parsed = DateTime.tryParse(raw.trim());
-    if (parsed == null) return raw;
-    final y = parsed.year.toString().padLeft(4, '0');
-    final m = parsed.month.toString().padLeft(2, '0');
-    final d = parsed.day.toString().padLeft(2, '0');
-    return '$d / $m / $y';
-  }
-
   @override
   Widget build(BuildContext context) {
     final trimmed = updatedAt?.trim();
@@ -35,13 +26,9 @@ class PurchaseFooter extends StatelessWidget {
         if (showUpdated)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Text(
-              '${context.tr(LocaleKeys.lastUpdated)}: ${_formatUpdated(trimmed)}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11.5,
-                color: AppColors.textSecondary,
-              ),
+            child: LastUpdatedLabel(
+              rawUpdatedAt: trimmed,
+              color: AppColors.textSecondary,
             ),
           ),
         SizedBox(

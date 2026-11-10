@@ -1,5 +1,5 @@
 import 'package:by3ly/features/legalContent/data/models/legal_content_model.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:by3ly/features/legalContent/data/repos/legal_content_repos.dart';
@@ -8,7 +8,8 @@ import 'package:by3ly/features/legalContent/presentation/view_model/legal_conten
 class LegalContentCubit extends Cubit<LegalContentStates> {
   LegalContentCubit(this.legalContentRepos) : super(LegalContentInitState());
 
-  static LegalContentCubit get(dynamic context) => BlocProvider.of(context);
+  static LegalContentCubit get(BuildContext context) =>
+      BlocProvider.of<LegalContentCubit>(context);
 
   final LegalContentRepos legalContentRepos;
 
