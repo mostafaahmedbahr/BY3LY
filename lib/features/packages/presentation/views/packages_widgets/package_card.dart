@@ -1,7 +1,9 @@
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/shared_widgets/custom_button.dart';
-import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../data/models/packages_model.dart';
 import 'payment_method_sheet.dart';
 
@@ -14,8 +16,9 @@ class PackageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFree = package.isFree == true;
-    final priceText =
-        isFree ? 'مجاناً' : _formatPrice(package.price);
+    final priceText = isFree
+        ? context.tr(LocaleKeys.free)
+        : _formatPrice(package.price);
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -114,7 +117,7 @@ class PackageCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '${package.adsLimit} إعلان',
+                      '${package.adsLimit} ${context.tr(LocaleKeys.adsCount)}',
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
@@ -169,15 +172,15 @@ class PackageCard extends StatelessWidget {
                   children: [
                     _InfoRow(
                       icon: Icons.calendar_month_outlined,
-                      label: 'تاريخ الانتهاء',
+                      label: context.tr(LocaleKeys.expiryDate),
                       value: _formatDate(package.endsAt),
                     ),
                     const SizedBox(height: 6),
                     _InfoRow(
                       icon: Icons.campaign_outlined,
-                      label: 'الإعلانات المتبقية',
+                      label: context.tr(LocaleKeys.remainingAds),
                       value: package.remainingAds != null
-                          ? '${package.remainingAds} إعلان'
+                          ? '${package.remainingAds} ${context.tr(LocaleKeys.adsCount)}'
                           : '...',
                     ),
                   ],
@@ -188,8 +191,8 @@ class PackageCard extends StatelessWidget {
             CustomButton(
               btnText: Text(
                 package.isSubscriped == true
-                    ? "تجديد الاشتراك"
-                    : "اشترك الآن",
+                    ? context.tr(LocaleKeys.renewSubscription)
+                    : context.tr(LocaleKeys.subscribeNow),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

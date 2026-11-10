@@ -13,16 +13,12 @@ class PackagesCubit extends Cubit<PackagesStates> {
   static PackagesCubit get(BuildContext context) =>
       BlocProvider.of(context);
 
-  PackagesRepos? packagesRepos;
+  final PackagesRepos packagesRepos;
   PackagesModel? packagesModel;
 
-  /// The four duration tabs: monthly / 3 months / 6 months / yearly.
-  static const List<Map<String, dynamic>> durations = [
-    {'months': 1, 'label': 'شهرى'},
-    {'months': 3, 'label': '3 شهور'},
-    {'months': 6, 'label': '6 شهور'},
-    {'months': 12, 'label': 'سنوى'},
-  ];
+  /// The four duration tabs: months values only. Labels are resolved
+  /// by [DurationTabs] from the locale bundle by index.
+  static const List<int> durationMonths = [1, 3, 6, 12];
 
   int selectedDurationIndex = 0;
 
@@ -41,7 +37,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
   List<Packages> get filteredPackages {
     final all = allPackages;
     if (all.isEmpty) return all;
-    final months = durations[selectedDurationIndex]['months'] as int;
+    final months = durationMonths[selectedDurationIndex];
     final hasInfo = all.any((p) => p.durationMonths != null);
     if (!hasInfo) return all;
     return all.where((p) => p.durationMonths == months).toList();
@@ -49,7 +45,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
 
   Future<void> getPackages() async {
     emit(GetPackagesLoadingState());
-    var result = await packagesRepos!.getPackages();
+    var result = await packagesRepos.getPackages();
     return result.fold((failure) {
       emit(GetPackagesErrorState(failure.errMessage));
     }, (data) {
@@ -66,7 +62,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
   Future<void> checkoutWithWallet({required int packageId}) async {
     subscribingPackageId = packageId;
     emit(SubscribePackageLoadingState(packageId));
-    var result = await packagesRepos!.checkout(
+    var result = await packagesRepos.checkout(
       packageId: packageId,
       paymentMethod: 'wallet',
     );
@@ -110,7 +106,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
       return;
     }
     emit(GetPaymentMethodsLoadingState());
-    var result = await packagesRepos!.getPaymentMethods();
+    var result = await packagesRepos.getPaymentMethods();
     return result.fold((failure) {
       emit(GetPaymentMethodsErrorState(failure.errMessage));
     }, (data) {
@@ -144,7 +140,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
     if (method?.code == null || receiptImage == null) return;
     subscribingPackageId = packageId;
     emit(SubscribePackageLoadingState(packageId));
-    var result = await packagesRepos!.checkout(
+    var result = await packagesRepos.checkout(
       packageId: packageId,
       paymentMethod: method!.code!,
       receiptPath: receiptImage!.path,

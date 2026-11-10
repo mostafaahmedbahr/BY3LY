@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../../core/utils/new_toast/toast.dart';
 import '../../../data/models/payment_methods_model.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'brand_logo.dart';
 
 /// Brand identity per payment method (matched by code/name).
@@ -186,13 +188,13 @@ class TransferMethodCard extends StatelessWidget {
             ),
             if ((method.account?.trim().isNotEmpty ?? false))
               IconButton(
-                tooltip: 'نسخ',
+                tooltip: context.tr(LocaleKeys.copyNumber),
                 onPressed: () {
                   Clipboard.setData(
                     ClipboardData(text: method.account!),
                   );
                   Toast.showSuccessToast(
-                    msg: 'تم نسخ الرقم',
+                    msg: context.tr(LocaleKeys.numberCopied),
                     context: context,
                   );
                 },

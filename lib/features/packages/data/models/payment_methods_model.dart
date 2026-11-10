@@ -9,14 +9,19 @@ class PaymentMethodsModel {
     final rawStatus = json["status"];
     if (rawStatus is bool) {
       status = rawStatus;
-    } else if (rawStatus is int) {
+    } else if (rawStatus is num) {
       status = rawStatus != 0;
+    } else if (rawStatus is String) {
+      final v = rawStatus.trim().toLowerCase();
+      status = v == 'true' || v == '1';
     }
     message = json["message"]?.toString();
-    data = json["data"] == null
-        ? null
-        : PaymentMethodsData.fromJson(
-            Map<String, dynamic>.from(json["data"]));
+    final raw = json["data"];
+    if (raw is Map) {
+      data = PaymentMethodsData.fromJson(Map<String, dynamic>.from(raw));
+    } else {
+      data = null;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -36,13 +41,15 @@ class PaymentMethodsData {
   PaymentMethodsData({this.methods});
 
   PaymentMethodsData.fromJson(Map<String, dynamic> json) {
-    methods = json["methods"] == null
-        ? null
-        : (json["methods"] as List)
-            .whereType<Map>()
-            .map((e) => PaymentMethod.fromJson(
-                Map<String, dynamic>.from(e)))
-            .toList();
+    final raw = json["methods"];
+    if (raw is! List) {
+      methods = null;
+      return;
+    }
+    methods = raw
+        .whereType<Map>()
+        .map((e) => PaymentMethod.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {

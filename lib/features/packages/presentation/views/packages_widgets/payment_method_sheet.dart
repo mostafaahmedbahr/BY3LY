@@ -1,3 +1,5 @@
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
@@ -78,7 +80,7 @@ class PaymentMethodSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'اشترك في باقة ${package.name ?? ''}',
+                  '${context.tr(LocaleKeys.subscribeTo)} ${package.name ?? ''}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -88,7 +90,7 @@ class PaymentMethodSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'اختر طريقة الدفع',
+                  context.tr(LocaleKeys.choosePaymentMethod),
                   style: TextStyle(
                     fontSize: 13,
                     color: AppColors.textSecondary,
@@ -98,9 +100,9 @@ class PaymentMethodSheet extends StatelessWidget {
                 // Wallet option.
                 _OptionTile(
                   icon: Icons.account_balance_wallet_outlined,
-                  title: 'محفظة',
+                  title: context.tr(LocaleKeys.wallet),
                   subtitle:
-                      'الرصيد المتاح: ${_formatBalance(balance)} ج.م',
+                      '${context.tr(LocaleKeys.availableBalance)}: ${_formatBalance(balance)} ج.م',
                   trailing: paying
                       ? const SizedBox(
                           width: 24,
@@ -125,8 +127,8 @@ class PaymentMethodSheet extends StatelessWidget {
                 // Transfer option.
                 _OptionTile(
                   icon: Icons.swap_horiz_rounded,
-                  title: 'تحويل',
-                  subtitle: 'تحويل بنكي أو محافظ إلكترونية',
+                  title: context.tr(LocaleKeys.bankTransfer),
+                  subtitle: context.tr(LocaleKeys.bankTransferSubtitle),
                   trailing: Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,

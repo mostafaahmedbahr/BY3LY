@@ -1,9 +1,11 @@
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_error_widget.dart';
 import '../../../../../core/shared_widgets/custom_loading.dart';
-import '../../../../../core/utils/app_colors/app_colors.dart';
 import '../../../../../core/utils/new_toast/toast.dart';
 import '../../view_model/packages_cubit.dart';
 import '../../view_model/packages_states.dart';
@@ -21,7 +23,7 @@ class PackagesViewBody extends StatelessWidget {
           Toast.showSuccessToast(
             msg: state.message.isNotEmpty
                 ? state.message
-                : "تم الاشتراك بنجاح",
+                : context.tr(LocaleKeys.subscriptionSuccessful),
             context: context,
           );
           // Refresh the packages page after a successful subscription.
@@ -63,7 +65,7 @@ class PackagesViewBody extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          "لا يوجد باقات لهذه المدة",
+                          context.tr(LocaleKeys.noPackagesForThisDuration),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,

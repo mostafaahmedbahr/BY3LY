@@ -1,16 +1,18 @@
 import 'dart:io';
 
+import 'package:by3ly/core/shared_widgets/custom_button.dart';
+import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
+import 'package:by3ly/core/shared_widgets/custom_loading.dart';
+import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
+import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_cubit.dart';
+import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_states.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/shared_widgets/custom_button.dart';
-import '../../../../core/shared_widgets/custom_error_widget.dart';
-import '../../../../core/shared_widgets/custom_loading.dart';
-import '../../../../core/shared_widgets/custom_text_form_filed.dart';
-import '../../../../core/utils/app_colors/app_colors.dart';
-import '../../../../core/utils/new_toast/toast.dart';
-import '../../../PaymentBalance/presentation/view_model/wallet_cubit.dart';
-import '../../../PaymentBalance/presentation/view_model/wallet_states.dart';
 import '../../data/models/packages_model.dart';
 import '../view_model/packages_cubit.dart';
 import '../view_model/packages_states.dart';
@@ -64,15 +66,49 @@ class _TransferViewState extends State<TransferView> {
     final scaffold = Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        shadowColor: AppColors.mainColor,
-        surfaceTintColor: AppColors.mainColor,
-        title: Text(
-          topUpMode ? "شحن رصيد المحفظة" : "إتمام الاشتراك",
-          style: const TextStyle(
-            color: AppColors.mainColor,
-            fontWeight: FontWeight.bold,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                AppColors.darkMainColor,
+                AppColors.mainColor,
+                AppColors.secondColor,
+              ],
+              stops: [0.0, 0.55, 1.0],
+            ),
           ),
+        ),
+        title: Row(
+          children: [
+            Icon(
+              topUpMode
+                  ? Icons.account_balance_wallet_rounded
+                  : Icons.card_membership_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                topUpMode
+                    ? context.tr(LocaleKeys.topUpWallet)
+                    : context.tr(LocaleKeys.completeSubscription),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: BlocConsumer<PackagesCubit, PackagesStates>(
@@ -101,7 +137,7 @@ class _TransferViewState extends State<TransferView> {
                   CustomTextFormField(
                     controller: _amountController,
                     keyboardType: TextInputType.number,
-                    hintText: "المبلغ",
+                    hintText: context.tr(LocaleKeys.amountHint),
                   )
                 else
                   Container(
@@ -137,7 +173,7 @@ class _TransferViewState extends State<TransferView> {
                   ),
                 const SizedBox(height: 16),
                 Text(
-                  "اختر طريقة التحويل",
+                  context.tr(LocaleKeys.chooseTransferMethod),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -160,7 +196,7 @@ class _TransferViewState extends State<TransferView> {
                     child: cubit.paymentMethods.isEmpty
                         ? Center(
                             child: Text(
-                              "لا يوجد طرق تحويل متاحة",
+                              context.tr(LocaleKeys.noPaymentMethodsAvailable),
                               style: TextStyle(
                                   color: AppColors.textSecondary),
                             ),
@@ -208,7 +244,7 @@ class _TransferViewState extends State<TransferView> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                "ارفع صورة التحويل",
+                                context.tr(LocaleKeys.uploadTransferReceipt),
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -242,8 +278,8 @@ class _TransferViewState extends State<TransferView> {
                                     borderRadius:
                                         BorderRadius.circular(10),
                                   ),
-                                  child: const Text(
-                                    "تغيير الصورة",
+                                  child: Text(
+                                    context.tr(LocaleKeys.changeImage),
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: Colors.white,
@@ -258,7 +294,7 @@ class _TransferViewState extends State<TransferView> {
                 const SizedBox(height: 16),
                 if (topUpMode) ...[
                   Text(
-                    "رقم مرجع التحويل (اختياري)",
+                    context.tr(LocaleKeys.transferReferenceOptional),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -269,7 +305,7 @@ class _TransferViewState extends State<TransferView> {
                   CustomTextFormField(
                     controller: _referenceCon,
                     keyboardType: TextInputType.number,
-                    hintText: "رقم مرجع التحويل",
+                    hintText: context.tr(LocaleKeys.transferReferenceHint),
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(
@@ -288,7 +324,7 @@ class _TransferViewState extends State<TransferView> {
                           walletState is TopUpLoadingState;
                       return _ConfirmButton(
                         loading: walletPaying,
-                        label: "تأكيد الشحن",
+                        label: context.tr(LocaleKeys.confirmTopUp),
                         onPressed: walletPaying
                             ? null
                             : () {
@@ -299,7 +335,7 @@ class _TransferViewState extends State<TransferView> {
                                     double.tryParse(amount) ==
                                         null) {
                                   Toast.showErrorToast(
-                                    msg: "من فضلك أدخل المبلغ",
+                                    msg: context.tr(LocaleKeys.enterValidAmount),
                                     context: context,
                                   );
                                   return;
@@ -332,7 +368,7 @@ class _TransferViewState extends State<TransferView> {
                 else
                   _ConfirmButton(
                     loading: paying,
-                    label: "تأكيد الاشتراك",
+                    label: context.tr(LocaleKeys.confirmSubscription),
                     onPressed: !canConfirm || package?.id == null
                         ? null
                         : () => cubit.checkoutWithTransfer(
@@ -354,7 +390,7 @@ class _TransferViewState extends State<TransferView> {
             Toast.showSuccessToast(
               msg: state.message.isNotEmpty
                   ? state.message
-                  : "تم إرسال طلب الشحن بنجاح",
+                  : context.tr(LocaleKeys.subscriptionSuccessful),
               context: context,
             );
             Navigator.pop(context, true);
