@@ -420,4 +420,6 @@ abstract class LocaleKeys {
   static const howToPurchase = "howToPurchase";
   static const contactSupport = "contactSupport";
   static const lastUpdated = "lastUpdated";
+  static const loginFailed = "loginFailed";
+  static const loginSuccess = "loginSuccess";
 }

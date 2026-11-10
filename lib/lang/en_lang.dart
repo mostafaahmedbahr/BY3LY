@@ -436,5 +436,7 @@ class EnLang {
     "howToPurchase": "How to buy",
     "contactSupport": "Contact support",
     "lastUpdated": "Last updated",
+    "loginFailed": "Couldn't sign in. Please try again.",
+    "loginSuccess": "Signed in successfully",
   };
 }

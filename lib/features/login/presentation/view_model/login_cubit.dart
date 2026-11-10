@@ -1,77 +1,109 @@
-import 'package:bloc/bloc.dart';
 import 'package:by3ly/features/login/presentation/view_model/login_states.dart';
-import 'package:easy_localization/easy_localization.dart' as context;
-import 'package:flutter/cupertino.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
- import '../../../../core/app_services/local_services/cache_helper.dart';
+
+import '../../../../core/app_services/local_services/cache_helper.dart';
 import '../../../../core/app_services/local_services/cache_token.dart';
-import '../../../../lang/locale_keys.dart';
 import '../../data/models/login_model.dart';
 import '../../data/repos/login_repos.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 
 class LoginCubit extends Cubit<LoginStates> {
   LoginCubit(this.loginRepo) : super(LoginInitState());
 
+  static LoginCubit get(BuildContext context) =>
+      BlocProvider.of<LoginCubit>(context);
 
-  var phoneCon = TextEditingController();
-  var emailCon = TextEditingController();
-  var passwordCon = TextEditingController();
-
-
+  final TextEditingController phoneCon = TextEditingController();
+  final TextEditingController emailCon = TextEditingController();
+  final TextEditingController passwordCon = TextEditingController();
 
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-  LoginRepo? loginRepo;
+  final LoginRepo loginRepo;
   LoginModel? loginModel;
   bool isPasswordVisible = true;
 
-  void changePasswordVisible()
-  {
+  void changePasswordVisible() {
     isPasswordVisible = !isPasswordVisible;
     emit(ChangePasswordVisibleState());
   }
 
   Future<void> login({
-    required String phone , required String password , required String deviceToken
-})
-  async {
+    required String phone,
+    required String password,
+    required String deviceToken,
+  }) async {
+    if (state is LoginLoadingState) return; // debounce double taps
     emit(LoginLoadingState());
-    var result = await loginRepo!.login(phone: phone, password: password, deviceToken: deviceToken);
-    return result.fold((failure) {
-      emit(LoginErrorState(failure.errMessage));
-    }, (data) async {
-      if (data.status==true){
-        if(data.data!.isActive==true){
-          loginModel = data;
-          await CacheTokenManger.saveUserToken("${data.data!.user!.token}");
-          CacheHelper.saveData(key: "email", value: data.data!.user!.email);
-          CacheHelper.saveData(key: "isActive", value: data.data!.isActive);
-          emit(LoginSuccessState(data));
-        }else if(data.data!.isActive==false){
-          CacheHelper.saveData(key: "email", value: data.data!.user!.email);
-          CacheHelper.saveData(key: "requiresOtp", value: data.data!.requiresOtp);
-          CacheHelper.saveData(key: "isActive", value: data.data!.isActive);
+    final result = await loginRepo.login(
+      phone: phone,
+      password: password,
+      deviceToken: deviceToken,
+    );
+    return result.fold(
+      (failure) => emit(LoginErrorState(failure.errMessage)),
+      (data) async {
+        final envelopeData = data.data;
+        if (data.status == true && envelopeData != null) {
+          if (envelopeData.isActive == true) {
+            loginModel = data;
+            final user = envelopeData.user;
+            try {
+              await CacheTokenManger.saveUserToken(user?.token?.toString() ?? '');
+            } catch (e) {
+              // Secure storage is best-effort — a failing keychain must not
+              // block login. In-memory token above still authenticates.
+              debugPrint('LoginCubit: token persist failed — $e');
+            }
+            await CacheHelper.saveData(
+              key: 'email',
+              value: user?.email,
+            );
+            await CacheHelper.saveData(
+              key: 'isActive',
+              value: envelopeData.isActive,
+            );
+            emit(LoginSuccessState(data));
+          } else {
+            // Account exists but is not activated yet — the UI routes to
+            // the OTP screen instead of hanging on the loading spinner.
+            await CacheHelper.saveData(
+              key: 'email',
+              value: envelopeData.user?.email,
+            );
+            await CacheHelper.saveData(
+              key: 'requiresOtp',
+              value: envelopeData.requiresOtp,
+            );
+            await CacheHelper.saveData(
+              key: 'isActive',
+              value: envelopeData.isActive,
+            );
+            emit(LoginSuccessWithNoActiveState());
+          }
+        } else {
+          final message = data.message?.trim();
+          emit(LoginErrorState(
+            (message == null || message.isEmpty)
+                ? trFallback()
+                : message,
+          ));
         }
-      }
-      else{
-        emit(LoginErrorState(data.message.toString()));
-      }
-    });
+      },
+    );
   }
 
+  /// Server rejected the sign in without a message — use the localized
+  /// fallback string from the caller's locale if available.
+  String trFallback() => LocaleKeys.loginFailed.tr();
 
-  Future<void> openUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      throw context.tr(LocaleKeys.theLinkCannotBeOpened);
-    }
+  @override
+  Future<void> close() {
+    phoneCon.dispose();
+    emailCon.dispose();
+    passwordCon.dispose();
+    return super.close();
   }
-
-
 }

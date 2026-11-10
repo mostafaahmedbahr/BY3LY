@@ -426,5 +426,7 @@ class ArLang {
     "howToPurchase": "كيف تتم عملية الشراء؟",
     "contactSupport": "تواصل مع الدعم",
     "lastUpdated": "آخر تحديث",
+    "loginFailed": "تعذر تسجيل الدخول. حاول مرة أخرى",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
   };
 }

@@ -1,22 +1,45 @@
 import 'package:by3ly/features/login/data/models/login_model.dart';
 
-abstract class LoginStates{}
+abstract class LoginStates {}
 
+class LoginInitState extends LoginStates {
+  @override
+  String toString() => 'LoginInitState';
+}
 
-class LoginInitState extends LoginStates{}
+class LoginLoadingState extends LoginStates {
+  @override
+  String toString() => 'LoginLoadingState';
+}
 
-class LoginLoadingState extends LoginStates{}
-class LoginSuccessState extends LoginStates{
-  LoginModel loginModel;
+class LoginSuccessState extends LoginStates {
   LoginSuccessState(this.loginModel);
-}
-class LoginSuccessWithNoActiveState extends LoginStates{
-  final int? code;
-  LoginSuccessWithNoActiveState({required this.code});
-}
-class LoginErrorState extends LoginStates{
-  final String error;
-  LoginErrorState(this.error);
+  final LoginModel loginModel;
+
+  @override
+  String toString() => 'LoginSuccessState';
 }
 
-class ChangePasswordVisibleState extends LoginStates{}
+/// Account exists but hasn't been activated yet — the listener routes
+/// to the OTP screen. `code` is kept nullable for backwards compatibility
+/// (older servers embedded the code in the payload).
+class LoginSuccessWithNoActiveState extends LoginStates {
+  LoginSuccessWithNoActiveState({this.code});
+  final int? code;
+
+  @override
+  String toString() => 'LoginSuccessWithNoActiveState(code: $code)';
+}
+
+class LoginErrorState extends LoginStates {
+  LoginErrorState(this.error);
+  final String error;
+
+  @override
+  String toString() => 'LoginErrorState(error: $error)';
+}
+
+class ChangePasswordVisibleState extends LoginStates {
+  @override
+  String toString() => 'ChangePasswordVisibleState';
+}

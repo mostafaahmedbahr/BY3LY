@@ -3,6 +3,7 @@ class AppImages
 
   static const String logo1 = "assets/images/logo.jpg";
   static const String logo2 = "assets/images/logo2.png";
+  static const String brandSloganTransparent = "assets/images/logo2_transparent.png";
   static const String egyptLogo = "assets/images/emojione_flag-for-egypt.svg";
   static const String shield = "assets/images/Shield.svg";
   static const String notification = "assets/images/Notification.svg";
