@@ -1,12 +1,8 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
 import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
-import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../../main_importants.dart';
 import 'notifications_list.dart';
 import 'notifications_loading.dart';
 
@@ -44,9 +40,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                 const _ReadStatusFilter(),
-                const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
                 const Expanded(child: NotificationsLoading()),
               ],
             ),
@@ -58,9 +54,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                 const _ReadStatusFilter(),
-                const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
                 Expanded(
                   child: CustomErrorWidget(
                     error: state.message,
@@ -97,9 +93,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
                     ),
                   ),
                 ),
-              const SizedBox(height: 4),
+                SizedBox(height: 4.h),
               const _ReadStatusFilter(),
-              const SizedBox(height: 6),
+                SizedBox(height: 12.h),
               const Expanded(child: NotificationsList()),
             ],
           ),

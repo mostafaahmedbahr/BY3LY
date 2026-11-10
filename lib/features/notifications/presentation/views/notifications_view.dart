@@ -32,6 +32,7 @@ class NotificationsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        titleSpacing: 0,
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
