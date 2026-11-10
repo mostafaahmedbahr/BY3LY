@@ -431,5 +431,6 @@ class ArLang {
     "deleteAllNotificationsConfirm": "سيتم حذف كل الإشعارات نهائياً. فهل أنت متأكد؟",
     "markedEverythingRead": "تم تعليم كل الإشعارات كمقروءة",
     "notificationsCleared": "تم مسح كل الإشعارات",
+    "getStarted": "ابدأ الآن",
   };
 }

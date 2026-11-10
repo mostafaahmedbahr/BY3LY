@@ -441,5 +441,6 @@ class EnLang {
     "deleteAllNotificationsConfirm": "This will delete every notification permanently. Are you sure?",
     "markedEverythingRead": "All notifications were marked as read",
     "notificationsCleared": "All notifications were cleared",
+    "getStarted": "Get Started",
   };
 }

@@ -425,4 +425,5 @@ abstract class LocaleKeys {
   static const deleteAllNotificationsConfirm = "deleteAllNotificationsConfirm";
   static const markedEverythingRead = "markedEverythingRead";
   static const notificationsCleared = "notificationsCleared";
+  static const getStarted = "getStarted";
 }
