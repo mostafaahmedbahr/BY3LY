@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'banner_link.dart';
+
 /// Modern home banners slider shown above the search,
 /// powered by the getBanners endpoint.
 class HomeBannerSlider extends StatefulWidget {
@@ -24,15 +26,15 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
       CarouselSliderController();
 
   Future<void> _openLink(String? link) async {
-    if (link == null || link.trim().isEmpty) return;
-    var url = link.trim();
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://$url';
-    }
-    final uri = Uri.tryParse(url);
-    if (uri == null) return;
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final url = BannerLink.normalizeUrl(link);
+    if (url == null) return;
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      debugPrint('HomeBannerSlider: failed to open banner link — $e');
     }
   }
 

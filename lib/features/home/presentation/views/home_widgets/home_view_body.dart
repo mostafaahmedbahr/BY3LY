@@ -1,13 +1,13 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_cubit.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_states.dart';
+import 'package:by3ly/features/home/presentation/views/home_widgets/banner_to_login.dart';
 import 'package:by3ly/features/home/presentation/views/home_widgets/best_view_products.dart';
 import 'package:by3ly/features/home/presentation/views/home_widgets/categories_list.dart';
-import 'package:by3ly/main_importants.dart';
+import 'package:by3ly/features/home/presentation/views/home_widgets/home_banner_slider.dart';
+import 'package:by3ly/features/home/presentation/views/home_widgets/home_loading_widget.dart';
 import '../../../../../core/shared_widgets/container_search_widget.dart';
-import 'banner_to_login.dart';
-import 'home_banner_slider.dart';
-import 'home_loading_widget.dart';
+import '../../../../../main_importants.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
@@ -34,6 +34,7 @@ class HomeViewBody extends StatelessWidget {
         return const HomeLoadingWidget();
       }
       final bestView = homeCubit.homeModel?.data?.bestView ?? [];
+      final ads = homeCubit.homeModel?.data?.ads ?? [];
       return RefreshIndicator(
         color: AppColors.accent,
         backgroundColor: AppColors.surface,
@@ -59,9 +60,12 @@ class HomeViewBody extends StatelessWidget {
             /// CategoriesList (title + horizontal, first 5).
             const CategoriesList(),
 
+            // /// Sponsored ads strip (first image of available ads).
+            // if (ads.isNotEmpty) HomeAdsStrip(ads: ads),
+
             ///BannerToLogin
             const BannerToLogin(),
-
+            Gap(10.h),
             /// BestView grid (vertical scroll, all items).
             if (bestView.isNotEmpty)
               BestViewProducts(bestView: bestView),

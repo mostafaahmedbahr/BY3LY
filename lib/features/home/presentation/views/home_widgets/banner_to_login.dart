@@ -1,7 +1,15 @@
-import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
+import 'package:by3ly/core/shared_widgets/custom_button.dart';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/addAdvertisements/presentation/views/add_new_ad_view.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
+
 import '../../view_model/home_cubit.dart';
 import '../../view_model/home_states.dart';
 
@@ -12,10 +20,7 @@ class BannerToLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeStates>(
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          child: _buildBackground(context),
-        );
+        return _buildBackground(context);
       },
     );
   }

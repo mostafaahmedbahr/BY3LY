@@ -81,7 +81,7 @@ class _BannerAdsState extends State<BannerAds> {
                         shape: BoxShape.circle,
                         color: _activeIndex == index
                             ? AppColors.mainColor
-                            : Colors.grey.withOpacity(0.5),
+                            : Colors.grey.withValues(alpha: 0.5),
                       ),
                     ),
                   ),

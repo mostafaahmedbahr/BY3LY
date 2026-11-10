@@ -30,7 +30,7 @@ class BannersModel {
   BannersModel({this.status, this.message, this.banners});
 
   BannersModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json["status"]) ?? json["status"] == 1;
+    status = _asBool(json["status"]);
     message = _asString(json["message"]);
     final rawData = json["data"];
     List<dynamic>? rawList;

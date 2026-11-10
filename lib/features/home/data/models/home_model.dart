@@ -21,6 +21,32 @@ bool? _asBool(dynamic v) {
   return null;
 }
 
+/// Maps a raw list into model objects, skipping junk entries silently —
+/// a single malformed entry must never take the whole home response down.
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) {
+  if (raw is! List) return null;
+  final out = <T>[];
+  for (final e in raw) {
+    if (e is Map) out.add(fromJson(Map<String, dynamic>.from(e)));
+  }
+  return out;
+}
+
+/// Same as [_parseList] for product images, which may arrive as a mix of
+/// plain URL strings and `{id, image}` objects.
+List<Images>? _parseImages(dynamic raw) {
+  if (raw is! List) return null;
+  final out = <Images>[];
+  for (final e in raw) {
+    if (e is Map) {
+      out.add(Images.fromJson(Map<String, dynamic>.from(e)));
+    } else if (e is String && e.trim().isNotEmpty) {
+      out.add(Images(image: e.trim()));
+    }
+  }
+  return out;
+}
+
 class HomeModel {
   bool? status;
   String? message;
@@ -29,19 +55,20 @@ class HomeModel {
   HomeModel({this.status, this.message, this.data});
 
   HomeModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json["status"]) ?? json["status"] == 1;
+    status = _asBool(json["status"]);
     message = _asString(json["message"]);
-    data = json["data"] == null ? null : HomeDataModel.fromJson(json["data"]);
+    final rawData = json["data"];
+    data = rawData is Map ? HomeDataModel.fromJson(Map<String, dynamic>.from(rawData)) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if (data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -53,31 +80,23 @@ class HomeDataModel {
   HomeDataModel({this.categories, this.bestView, this.ads});
 
   HomeDataModel.fromJson(Map<String, dynamic> json) {
-    categories = json["categories"] == null
-        ? null
-        : (json["categories"] as List)
-              .map((e) => Categories.fromJson(e))
-              .toList();
-    bestView = json["bestView"] == null
-        ? null
-        : (json["bestView"] as List).map((e) => BestView.fromJson(e)).toList();
-    ads = json["ads"] == null
-        ? null
-        : (json["ads"] as List).map((e) => Ads.fromJson(e)).toList();
+    categories = _parseList(json["categories"], Categories.fromJson);
+    bestView = _parseList(json["bestView"], BestView.fromJson);
+    ads = _parseList(json["ads"], Ads.fromJson);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
     if (categories != null) {
-      _data["categories"] = categories?.map((e) => e.toJson()).toList();
+      jsonData["categories"] = categories?.map((e) => e.toJson()).toList();
     }
     if (bestView != null) {
-      _data["bestView"] = bestView?.map((e) => e.toJson()).toList();
+      jsonData["bestView"] = bestView?.map((e) => e.toJson()).toList();
     }
     if (ads != null) {
-      _data["ads"] = ads?.map((e) => e.toJson()).toList();
+      jsonData["ads"] = ads?.map((e) => e.toJson()).toList();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -177,7 +196,9 @@ class Ads {
     listingTypeLabel = _asString(json["listing_type_label"]);
     furnishing = json["furnishing"];
     furnishingLabel = json["furnishing_label"];
-    seller = json["seller"] == null ? null : Seller1.fromJson(json["seller"]);
+    seller = json["seller"] is Map
+        ? Seller1.fromJson(Map<String, dynamic>.from(json["seller"] as Map))
+        : null;
     image = _asString(json["image"]);
     location = json["location"];
     cityId = json["city_id"];
@@ -186,19 +207,11 @@ class Ads {
     subCategoryId = _asInt(json["sub_category_id"]);
     subCategory = _asString(json["sub_category"]);
     date = _asString(json["date"]);
-    images = json["images"] == null
-        ? null
-        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    images = _parseImages(json["images"]);
     rate = _asInt(json["rate"]);
     countCommenets = _asInt(json["countCommenets"]);
-    commenets = json["commenets"] == null
-        ? null
-        : (json["commenets"] as List)
-              .map((e) => Commenets.fromJson(e))
-              .toList();
-    reviews = json["reviews"] == null
-        ? null
-        : (json["reviews"] as List).map((e) => Reviews.fromJson(e)).toList();
+    commenets = _parseList(json["commenets"], Commenets.fromJson);
+    reviews = _parseList(json["reviews"], Reviews.fromJson);
     reviewsCount = _asInt(json["reviews_count"]);
     isFavourite = _asBool(json["isFavourite"]);
     model = _asString(json["model"]);
@@ -209,53 +222,53 @@ class Ads {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["desc"] = desc;
-    _data["description"] = description;
-    _data["discount"] = discount;
-    _data["final_price"] = finalPrice;
-    _data["is_negotiable"] = isNegotiable;
-    _data["is_urgent"] = isUrgent;
-    _data["status"] = status;
-    _data["price"] = price;
-    _data["old_price"] = oldPrice;
-    _data["currency"] = currency;
-    _data["listing_type"] = listingType;
-    _data["listing_type_label"] = listingTypeLabel;
-    _data["furnishing"] = furnishing;
-    _data["furnishing_label"] = furnishingLabel;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["desc"] = desc;
+    jsonData["description"] = description;
+    jsonData["discount"] = discount;
+    jsonData["final_price"] = finalPrice;
+    jsonData["is_negotiable"] = isNegotiable;
+    jsonData["is_urgent"] = isUrgent;
+    jsonData["status"] = status;
+    jsonData["price"] = price;
+    jsonData["old_price"] = oldPrice;
+    jsonData["currency"] = currency;
+    jsonData["listing_type"] = listingType;
+    jsonData["listing_type_label"] = listingTypeLabel;
+    jsonData["furnishing"] = furnishing;
+    jsonData["furnishing_label"] = furnishingLabel;
     if (seller != null) {
-      _data["seller"] = seller?.toJson();
+      jsonData["seller"] = seller?.toJson();
     }
-    _data["image"] = image;
-    _data["location"] = location;
-    _data["city_id"] = cityId;
-    _data["category_id"] = categoryId;
-    _data["category_type"] = categoryType;
-    _data["sub_category_id"] = subCategoryId;
-    _data["sub_category"] = subCategory;
-    _data["date"] = date;
+    jsonData["image"] = image;
+    jsonData["location"] = location;
+    jsonData["city_id"] = cityId;
+    jsonData["category_id"] = categoryId;
+    jsonData["category_type"] = categoryType;
+    jsonData["sub_category_id"] = subCategoryId;
+    jsonData["sub_category"] = subCategory;
+    jsonData["date"] = date;
     if (images != null) {
-      _data["images"] = images?.map((e) => e.toJson()).toList();
+      jsonData["images"] = images?.map((e) => e.toJson()).toList();
     }
-    _data["rate"] = rate;
-    _data["countCommenets"] = countCommenets;
+    jsonData["rate"] = rate;
+    jsonData["countCommenets"] = countCommenets;
     if (commenets != null) {
-      _data["commenets"] = commenets?.map((e) => e.toJson()).toList();
+      jsonData["commenets"] = commenets?.map((e) => e.toJson()).toList();
     }
     if (reviews != null) {
-      _data["reviews"] = reviews?.map((e) => e.toJson()).toList();
+      jsonData["reviews"] = reviews?.map((e) => e.toJson()).toList();
     }
-    _data["reviews_count"] = reviewsCount;
-    _data["isFavourite"] = isFavourite;
-    _data["model"] = model;
-    _data["marka"] = marka;
-    _data["type"] = type;
-    _data["created_at"] = createdAt;
-    _data["views"] = views;
-    return _data;
+    jsonData["reviews_count"] = reviewsCount;
+    jsonData["isFavourite"] = isFavourite;
+    jsonData["model"] = model;
+    jsonData["marka"] = marka;
+    jsonData["type"] = type;
+    jsonData["created_at"] = createdAt;
+    jsonData["views"] = views;
+    return jsonData;
   }
 }
 
@@ -292,16 +305,16 @@ class Reviews {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["rate"] = rate;
-    _data["commenet"] = commenet;
-    _data["user"] = user;
-    _data["user_id"] = userId;
-    _data["user_image"] = userImage;
-    _data["created_at"] = createdAt;
-    _data["time_ago"] = timeAgo;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["rate"] = rate;
+    jsonData["commenet"] = commenet;
+    jsonData["user"] = user;
+    jsonData["user_id"] = userId;
+    jsonData["user_image"] = userImage;
+    jsonData["created_at"] = createdAt;
+    jsonData["time_ago"] = timeAgo;
+    return jsonData;
   }
 }
 
@@ -338,16 +351,16 @@ class Commenets {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["rate"] = rate;
-    _data["commenet"] = commenet;
-    _data["user"] = user;
-    _data["user_id"] = userId;
-    _data["user_image"] = userImage;
-    _data["created_at"] = createdAt;
-    _data["time_ago"] = timeAgo;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["rate"] = rate;
+    jsonData["commenet"] = commenet;
+    jsonData["user"] = user;
+    jsonData["user_id"] = userId;
+    jsonData["user_image"] = userImage;
+    jsonData["created_at"] = createdAt;
+    jsonData["time_ago"] = timeAgo;
+    return jsonData;
   }
 }
 
@@ -363,10 +376,10 @@ class Images {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["image"] = image;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["image"] = image;
+    return jsonData;
   }
 }
 
@@ -397,14 +410,14 @@ class Seller1 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["image"] = image;
-    _data["phone"] = phone;
-    _data["rating"] = rating;
-    _data["reviews_count"] = reviewsCount;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["image"] = image;
+    jsonData["phone"] = phone;
+    jsonData["rating"] = rating;
+    jsonData["reviews_count"] = reviewsCount;
+    return jsonData;
   }
 }
 
@@ -504,7 +517,9 @@ class BestView {
     listingTypeLabel = _asString(json["listing_type_label"]);
     furnishing = json["furnishing"];
     furnishingLabel = json["furnishing_label"];
-    seller = json["seller"] == null ? null : Seller.fromJson(json["seller"]);
+    seller = json["seller"] is Map
+        ? Seller.fromJson(Map<String, dynamic>.from(json["seller"] as Map))
+        : null;
     image = _asString(json["image"]);
     location = json["location"];
     cityId = json["city_id"];
@@ -513,11 +528,11 @@ class BestView {
     subCategoryId = _asInt(json["sub_category_id"]);
     subCategory = _asString(json["sub_category"]);
     date = _asString(json["date"]);
-    images = json["images"] ?? [];
+    images = json["images"] is List ? (json["images"] as List) : const [];
     rate = _asString(json["rate"]);
     countCommenets = _asInt(json["countCommenets"]);
-    commenets = json["commenets"] ?? [];
-    reviews = json["reviews"] ?? [];
+    commenets = json["commenets"] is List ? (json["commenets"] as List) : const [];
+    reviews = json["reviews"] is List ? (json["reviews"] as List) : const [];
     reviewsCount = _asInt(json["reviews_count"]);
     isFavourite = _asBool(json["isFavourite"]);
     model = _asString(json["model"]);
@@ -528,53 +543,53 @@ class BestView {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["desc"] = desc;
-    _data["description"] = description;
-    _data["discount"] = discount;
-    _data["final_price"] = finalPrice;
-    _data["is_negotiable"] = isNegotiable;
-    _data["is_urgent"] = isUrgent;
-    _data["status"] = status;
-    _data["price"] = price;
-    _data["old_price"] = oldPrice;
-    _data["currency"] = currency;
-    _data["listing_type"] = listingType;
-    _data["listing_type_label"] = listingTypeLabel;
-    _data["furnishing"] = furnishing;
-    _data["furnishing_label"] = furnishingLabel;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["desc"] = desc;
+    jsonData["description"] = description;
+    jsonData["discount"] = discount;
+    jsonData["final_price"] = finalPrice;
+    jsonData["is_negotiable"] = isNegotiable;
+    jsonData["is_urgent"] = isUrgent;
+    jsonData["status"] = status;
+    jsonData["price"] = price;
+    jsonData["old_price"] = oldPrice;
+    jsonData["currency"] = currency;
+    jsonData["listing_type"] = listingType;
+    jsonData["listing_type_label"] = listingTypeLabel;
+    jsonData["furnishing"] = furnishing;
+    jsonData["furnishing_label"] = furnishingLabel;
     if (seller != null) {
-      _data["seller"] = seller?.toJson();
+      jsonData["seller"] = seller?.toJson();
     }
-    _data["image"] = image;
-    _data["location"] = location;
-    _data["city_id"] = cityId;
-    _data["category_id"] = categoryId;
-    _data["category_type"] = categoryType;
-    _data["sub_category_id"] = subCategoryId;
-    _data["sub_category"] = subCategory;
-    _data["date"] = date;
+    jsonData["image"] = image;
+    jsonData["location"] = location;
+    jsonData["city_id"] = cityId;
+    jsonData["category_id"] = categoryId;
+    jsonData["category_type"] = categoryType;
+    jsonData["sub_category_id"] = subCategoryId;
+    jsonData["sub_category"] = subCategory;
+    jsonData["date"] = date;
     if (images != null) {
-      _data["images"] = images;
+      jsonData["images"] = images;
     }
-    _data["rate"] = rate;
-    _data["countCommenets"] = countCommenets;
+    jsonData["rate"] = rate;
+    jsonData["countCommenets"] = countCommenets;
     if (commenets != null) {
-      _data["commenets"] = commenets;
+      jsonData["commenets"] = commenets;
     }
     if (reviews != null) {
-      _data["reviews"] = reviews;
+      jsonData["reviews"] = reviews;
     }
-    _data["reviews_count"] = reviewsCount;
-    _data["isFavourite"] = isFavourite;
-    _data["model"] = model;
-    _data["marka"] = marka;
-    _data["type"] = type;
-    _data["created_at"] = createdAt;
-    _data["views"] = views;
-    return _data;
+    jsonData["reviews_count"] = reviewsCount;
+    jsonData["isFavourite"] = isFavourite;
+    jsonData["model"] = model;
+    jsonData["marka"] = marka;
+    jsonData["type"] = type;
+    jsonData["created_at"] = createdAt;
+    jsonData["views"] = views;
+    return jsonData;
   }
 }
 
@@ -605,14 +620,14 @@ class Seller {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["image"] = image;
-    _data["phone"] = phone;
-    _data["rating"] = rating;
-    _data["reviews_count"] = reviewsCount;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["image"] = image;
+    jsonData["phone"] = phone;
+    jsonData["rating"] = rating;
+    jsonData["reviews_count"] = reviewsCount;
+    return jsonData;
   }
 }
 
@@ -630,10 +645,10 @@ class Categories {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["image"] = image;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["image"] = image;
+    return jsonData;
   }
 }

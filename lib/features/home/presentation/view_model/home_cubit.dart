@@ -1,4 +1,4 @@
-    import 'package:flutter/foundation.dart';
+    import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/banners_model.dart';
@@ -10,9 +10,10 @@ import 'home_states.dart';
 class HomeCubit extends Cubit<HomeStates> {
     HomeCubit(this.homeRepo) : super(HomeInitState());
 
-    static HomeCubit get(context) => BlocProvider.of(context);
+    static HomeCubit get(BuildContext context) =>
+        BlocProvider.of<HomeCubit>(context);
 
-  HomeRepo? homeRepo;
+  final HomeRepo homeRepo;
   HomeModel? homeModel;
 
   BannersModel? bannersModel;
@@ -25,26 +26,24 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> getHome() async {
     emit(GetHomeDataLoading());
-    var result = await homeRepo!.getHomeData();
+    final result = await homeRepo.getHomeData();
     return result.fold((failure) {
       debugPrint('HomeCubit getHome failed: ${failure.errMessage}');
       emit(GetHomeDataError(failure.errMessage));
     }, (data) {
       homeModel = data;
-      final ads = data.data?.ads ?? [];
-      debugPrint('HomeCubit getHome: categories=${data.data?.categories?.length ?? 0}, '
-          'bestView=${data.data?.bestView?.length ?? 0}, '
-          'ads=${ads.length}, '
-          'adsImages=${ads.map((a) => a.images?.length ?? 0).toList()}, '
-          'adsSingleImage=${ads.map((a) => a.image).toList()}');
-       emit(GetHomeDataSuccess(data));
+      final payload = data.data;
+      debugPrint('HomeCubit getHome: categories=${payload?.categories?.length ?? 0}, '
+          'bestView=${payload?.bestView?.length ?? 0}, '
+          'ads=${payload?.ads?.length ?? 0}');
+      emit(GetHomeDataSuccess(data));
     });
   }
 
   Future<void> getBanners() async {
     final hadBanners = banners.isNotEmpty;
     if (!hadBanners) emit(GetBannersLoading());
-    var result = await homeRepo!.getBanners();
+    final result = await homeRepo.getBanners();
     return result.fold((failure) {
       debugPrint('HomeCubit getBanners failed: ${failure.errMessage}');
       // Silent fail when we already show banners; full error only

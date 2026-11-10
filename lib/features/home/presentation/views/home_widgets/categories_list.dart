@@ -1,68 +1,56 @@
+import 'package:by3ly/core/extensions/navigate.dart';
+import 'package:by3ly/core/routing/routes.dart';
+import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../../../main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+
 import '../../view_model/home_cubit.dart';
 import '../../view_model/home_states.dart';
 import 'categories_list_item.dart';
+import 'section_header.dart';
 
 class CategoriesList extends StatelessWidget {
   const CategoriesList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(context.tr(LocaleKeys.categories),
-                style: AppStyles.textStyle16W600Black,),
-              TextButton(
-                onPressed: (){
-                  context.pushNamed(Routes.allCategoriesView);
-                },
-                child:   Text(context.tr(LocaleKeys.seeAll),
-                  style: const TextStyle(
-                      color: AppColors.mainColor
-                  ),),
-              ),
-            ],
+    return Column(
+      children: [
+        SectionHeader(
+          title: context.tr(LocaleKeys.categories),
+          actionLabel: context.tr(LocaleKeys.seeAll),
+          onAction: () => context.pushNamed(Routes.allCategoriesView),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 92.h,
+          child: BlocBuilder<HomeCubit, HomeStates>(
+            builder: (context, state) {
+              final homeCubit = context.read<HomeCubit>();
+              final categories = homeCubit.homeModel?.data?.categories ?? [];
+              if (categories.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              // Show first 5 only; the full list lives in the see-all page.
+              final visible = categories.take(5).toList();
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemBuilder: (context, index) => CategoriesListItem(
+                  id: visible[index].id ?? 0,
+                  image: visible[index].image ?? '',
+                  name: visible[index].name ?? '',
+                ),
+                separatorBuilder: (context, index) => const Gap(14),
+                itemCount: visible.length,
+              );
+            },
           ),
-          SizedBox(
-            height: 80.h,
-            child:
-            BlocConsumer<HomeCubit , HomeStates>(
-                listener:(context ,state){} ,
-                builder: (context ,state){
-                  var homeCubit = context.read<HomeCubit>();
-                  final categories =
-                      homeCubit.homeModel?.data?.categories ?? [];
-                  if (categories.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-                  // Show first 5 only, full list lives in see-all page.
-                  final visible = categories.take(5).toList();
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context , index){
-                      return CategoriesListItem(
-                        id: visible[index].id ?? 0,
-                        image: visible[index].image ?? '',
-                        name: visible[index].name ?? '',
-                      );
-                    },
-                    separatorBuilder: (context , index){
-                      return   Gap(25.w);
-                    },
-                    itemCount: visible.length,
-                  );
-                }
-
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
