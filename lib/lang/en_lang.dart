@@ -506,5 +506,6 @@ class EnLang {
     "sellerReviews": "Seller reviews",
     "viewAll": "View all",
     "brandSlogan": "Here you buy and sell",
+    "noChangesToSave": "No changes to save",
   };
 }

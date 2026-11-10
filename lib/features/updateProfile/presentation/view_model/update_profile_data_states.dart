@@ -2,9 +2,15 @@ import 'package:by3ly/features/updateProfile/data/models/update_profile_data_mod
 
 abstract class UpdateProfileDataStates{}
 
-class UpdateProfileDataInitState extends UpdateProfileDataStates{}
+class UpdateProfileDataInitState extends UpdateProfileDataStates{
+  @override
+  String toString() => 'UpdateProfileDataInitState';
+}
 
-class UpdateProfileDataLoadingState extends UpdateProfileDataStates{}
+class UpdateProfileDataLoadingState extends UpdateProfileDataStates{
+  @override
+  String toString() => 'UpdateProfileDataLoadingState';
+}
 class UpdateProfileDataSuccessState extends UpdateProfileDataStates{
   final UpdateProfileDataModel updateProfileDataModel;
   UpdateProfileDataSuccessState(this.updateProfileDataModel);

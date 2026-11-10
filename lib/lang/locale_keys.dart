@@ -489,5 +489,5 @@ abstract class LocaleKeys {
   static const sellerPhone = "sellerPhone";
   static const sellerReviews = "sellerReviews";
   static const viewAll = "viewAll";
-  static const brandSlogan = "brandSlogan";
+  static const brandSlogan = "brandSlogan";  static const noChangesToSave = "noChangesToSave";
 }

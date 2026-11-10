@@ -496,5 +496,6 @@ class ArLang {
     "sellerReviews": "تقييمات البائع",
     "viewAll": "مشاهدة الكل",
     "brandSlogan": "هنا تبيع وتشتري",
+    "noChangesToSave": "مفيش تغييرات لتحفظها",
   };
 }

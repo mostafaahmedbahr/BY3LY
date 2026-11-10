@@ -1,3 +1,29 @@
+// Tolerant parsing helpers: the API sends the same field as int, String, bool
+// or null depending on the endpoint, so every scalar is normalised before it
+// reaches a typed field.
+bool? _asBool(dynamic value) {
+  if (value == null) return null;
+  if (value is bool) return value;
+  if (value is num) return value != 0;
+  final text = value.toString().trim().toLowerCase();
+  if (text == 'true' || text == '1') return true;
+  if (text == 'false' || text == '0') return false;
+  return null;
+}
+
+int? _asInt(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value.toInt();
+  return int.tryParse(value.toString().trim());
+}
+
+String? _asString(dynamic value) => value?.toString();
+
+Map<String, dynamic>? _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) return Map<String, dynamic>.from(value);
+  return null;
+}
 
 class UpdateProfileDataModel {
   bool? status;
@@ -7,19 +33,21 @@ class UpdateProfileDataModel {
   UpdateProfileDataModel({this.status, this.message, this.data});
 
   UpdateProfileDataModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
+    final raw = json["data"];
+    final map = raw == null ? null : _asMap(raw);
+    data = map == null ? null : Data.fromJson(map);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
-    if(data != null) {
-      _data["data"] = data?.toJson();
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
+    if (data != null) {
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -29,15 +57,17 @@ class Data {
   Data({this.user});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json["user"] == null ? null : User.fromJson(json["user"]);
+    final rawUser = json["user"];
+    final map = rawUser == null ? null : _asMap(rawUser);
+    user = map == null ? null : User.fromJson(map);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    if(user != null) {
-      _data["user"] = user?.toJson();
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    if (user != null) {
+      jsonData["user"] = user?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -57,32 +87,32 @@ class User {
   User({this.id, this.name, this.email, this.phone, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = (json["id"] as num).toInt();
-    name = json["name"];
-    email = json["email"];
-    phone = json["phone"];
-    image = json["image"];
-    token = json["token"];
-    centerId = (json["center_id"] as num).toInt();
-    cityId = (json["city_id"] as num).toInt();
-    cityName = json["cityName"];
-    centerName = json["centerName"];
-    createdAt = json["created_at"];
+    id = _asInt(json["id"]);
+    name = _asString(json["name"]);
+    email = _asString(json["email"]);
+    phone = _asString(json["phone"]);
+    image = _asString(json["image"]);
+    token = _asString(json["token"]);
+    centerId = _asInt(json["center_id"]);
+    cityId = _asInt(json["city_id"]);
+    cityName = _asString(json["cityName"]);
+    centerName = _asString(json["centerName"]);
+    createdAt = _asString(json["created_at"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["email"] = email;
-    _data["phone"] = phone;
-    _data["image"] = image;
-    _data["token"] = token;
-    _data["center_id"] = centerId;
-    _data["city_id"] = cityId;
-    _data["cityName"] = cityName;
-    _data["centerName"] = centerName;
-    _data["created_at"] = createdAt;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["name"] = name;
+    jsonData["email"] = email;
+    jsonData["phone"] = phone;
+    jsonData["image"] = image;
+    jsonData["token"] = token;
+    jsonData["center_id"] = centerId;
+    jsonData["city_id"] = cityId;
+    jsonData["cityName"] = cityName;
+    jsonData["centerName"] = centerName;
+    jsonData["created_at"] = createdAt;
+    return jsonData;
   }
 }
