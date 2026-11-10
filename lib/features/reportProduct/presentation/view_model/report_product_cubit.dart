@@ -1,47 +1,54 @@
-import 'package:by3ly/features/reportProduct/data/report_product_repos/report_product_repos.dart';
-import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_states.dart';
-import 'package:by3ly/main_importants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:by3ly/features/reportProduct/data/report_product_models/add_complaint_model.dart';
 import 'package:by3ly/features/reportProduct/data/report_product_models/report_model.dart';
 import 'package:by3ly/features/reportProduct/data/report_product_models/report_product_model.dart';
+import 'package:by3ly/features/reportProduct/data/report_product_repos/report_product_repos.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_states.dart';
 
 class ReportProductCubit extends Cubit<ReportProductStates> {
   ReportProductCubit(this.reportProductsRepos)
       : super(ReportProductInitState());
 
-  static ReportProductCubit get(context) => BlocProvider.of(context);
+  static ReportProductCubit get(BuildContext context) =>
+      BlocProvider.of<ReportProductCubit>(context);
 
-  int reasonIndex = 0;
-  var   messageCon = TextEditingController();
+  final ReportProductsRepos reportProductsRepos;
 
-  resetValues()
-  {
-    reasonIndex = 0;
+  /// Currently selected complaint reason — null until the user picks one.
+  int? reasonIndex;
+  final TextEditingController messageCon = TextEditingController();
+
+  void resetValues() {
+    reasonIndex = null;
     messageCon.clear();
     emit(ResetValuesState());
   }
-  chooseReason(index) {
+
+  void chooseReason(int? index) {
     reasonIndex = index;
     emit(ReportProductChooseReasonState());
   }
 
-  ReportProductsRepos? reportProductsRepos;
   ReportProductComplaintsTypesModel? reportProductComplaintsTypesModel;
 
   List<Complaints> allComplaintsTypesList = [];
 
   Future<void> getAllComplaintsTypesData() async {
     emit(GetComplaintsTypesLoading());
-    var result = await reportProductsRepos!.getComplaintsTypes();
-    return result.fold((failure) {
-      emit(GetComplaintsTypesError(failure.errMessage));
-    }, (data) {
-      reportProductComplaintsTypesModel = data;
-      allComplaintsTypesList = allComplaintsTypesList +
-          reportProductComplaintsTypesModel!.data!.complaints!;
-      emit(GetComplaintsTypesSuccess(data));
-    });
+    var result = await reportProductsRepos.getComplaintsTypes();
+    return result.fold(
+      (failure) {
+        emit(GetComplaintsTypesError(failure.errMessage));
+      },
+      (data) {
+        reportProductComplaintsTypesModel = data;
+        // Replace, never accumulate (refetch must not duplicate rows).
+        allComplaintsTypesList = data.data?.complaints ?? [];
+        emit(GetComplaintsTypesSuccess(data));
+      },
+    );
   }
 
   AddComplaintModel? addComplaintModel;
@@ -53,18 +60,21 @@ class ReportProductCubit extends Cubit<ReportProductStates> {
     required int complaintId,
   }) async {
     emit(AddComplaintLoading());
-    var result = await reportProductsRepos!.addComplaint(
+    var result = await reportProductsRepos.addComplaint(
       sellerId: sellerId,
       productId: productId,
       message: message,
       complaintId: complaintId,
     );
-    return result.fold((failure) {
-      emit(AddComplaintError(failure.errMessage));
-    }, (data) {
-      addComplaintModel = data;
-      emit(AddComplaintSuccess(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(AddComplaintError(failure.errMessage));
+      },
+      (data) {
+        addComplaintModel = data;
+        emit(AddComplaintSuccess(data));
+      },
+    );
   }
 
   // ---- Report-ad flow (reasons + reportAd) ----
@@ -73,19 +83,23 @@ class ReportProductCubit extends Cubit<ReportProductStates> {
   List<Reasons> get reportReasons => reportModel?.data?.reasons ?? [];
 
   String? selectedReasonKey;
-  var reportDescCon = TextEditingController();
+  final TextEditingController reportDescCon = TextEditingController();
 
   Future<void> getReportReasons() async {
     if (reportReasons.isNotEmpty) return;
     emit(GetReportReasonsLoading());
-    var result = await reportProductsRepos!.getReportReasons();
-    return result.fold((failure) {
-      debugPrint('ReportProductCubit getReportReasons failed: ${failure.errMessage}');
-      emit(GetReportReasonsError(failure.errMessage));
-    }, (data) {
-      reportModel = data;
-      emit(GetReportReasonsSuccess());
-    });
+    var result = await reportProductsRepos.getReportReasons();
+    return result.fold(
+      (failure) {
+        debugPrint(
+            'ReportProductCubit getReportReasons failed: ${failure.errMessage}');
+        emit(GetReportReasonsError(failure.errMessage));
+      },
+      (data) {
+        reportModel = data;
+        emit(GetReportReasonsSuccess());
+      },
+    );
   }
 
   void selectReportReason(String key) {
@@ -109,22 +123,26 @@ class ReportProductCubit extends Cubit<ReportProductStates> {
       return;
     }
     emit(ReportAdLoading());
-    var result = await reportProductsRepos!.reportAd(
+    var result = await reportProductsRepos.reportAd(
       sellerId: sellerId,
       productId: productId,
       reason: reason,
       description: reportDescCon.text.trim(),
     );
-    return result.fold((failure) {
-      debugPrint('ReportProductCubit submitReportAd failed: ${failure.errMessage}');
-      emit(ReportAdError(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        emit(ReportAdSuccess(data.message));
-        resetReportAd();
-      } else {
-        emit(ReportAdError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        debugPrint(
+            'ReportProductCubit submitReportAd failed: ${failure.errMessage}');
+        emit(ReportAdError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          emit(ReportAdSuccess(data.message));
+          resetReportAd();
+        } else {
+          emit(ReportAdError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 }

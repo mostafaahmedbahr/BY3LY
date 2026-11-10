@@ -1,6 +1,5 @@
-import 'package:by3ly/core/shared_widgets/custom_button.dart';
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
-import 'package:by3ly/core/shared_widgets/custom_loading.dart';
+import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
@@ -8,7 +7,7 @@ import 'package:by3ly/core/utils/app_styles/app_styles.dart';
 import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_cubit.dart';
 import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_states.dart';
 import 'package:by3ly/lang/locale_keys.dart';
-import 'package:cherry_toast/cherry_toast.dart';
+import 'package:by3ly/core/utils/new_toast/toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,23 +39,19 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
     return BlocConsumer<ReportProductCubit, ReportProductStates>(
       listener: (context, state) {
         if (state is ReportAdSuccess) {
-          CherryToast.success(
-            title: Text(
-              (state.message?.trim().isNotEmpty ?? false)
-                  ? state.message!
-                  : context.tr(LocaleKeys.reportSent),
-              style:
-                  const TextStyle(color: AppColors.mainColor),
-            ),
-          ).show(context);
+          final msg = state.message?.trim();
+          Toast.showSuccessToast(
+            msg: (msg != null && msg.isNotEmpty)
+                ? msg
+                : context.tr(LocaleKeys.reportSent),
+            context: context,
+          );
           Navigator.pop(context, true);
         } else if (state is ReportAdError) {
           final msg = state.message == 'selectReason'
               ? context.tr(LocaleKeys.pleaseSelectReason)
               : state.message;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(msg)),
-          );
+          Toast.showErrorToast(msg: msg, context: context);
         }
       },
       builder: (context, state) {
@@ -64,7 +59,24 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
 
         if (state is GetReportReasonsLoading &&
             cubit.reportReasons.isEmpty) {
-          return const CustomLoading();
+          return const Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                SimmerLoading(height: 26, raduis: 8),
+                SizedBox(height: 14),
+                SimmerLoading(height: 14, width: 180, raduis: 8),
+                SizedBox(height: 18),
+                SimmerLoading(height: 50, raduis: 14),
+                SizedBox(height: 10),
+                SimmerLoading(height: 50, raduis: 14),
+                SizedBox(height: 10),
+                SimmerLoading(height: 50, raduis: 14),
+                SizedBox(height: 10),
+                SimmerLoading(height: 50, raduis: 14),
+              ],
+            ),
+          );
         }
         if (state is GetReportReasonsError &&
             cubit.reportReasons.isEmpty) {
@@ -99,8 +111,8 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                   style: TextStyle(color: AppColors.textSecondary),
                 )
               else
-                ...reasons.map((reason) {
-                  final key = reason.id ?? '${reason.id}';
+                ...reasons.where((r) => (r.id ?? '').isNotEmpty).map((reason) {
+                  final key = reason.id!;
                   final selected =
                       cubit.selectedReasonKey == key;
                   return Padding(
@@ -186,34 +198,41 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                 controller: cubit.reportDescCon,
               ),
               const CustomSizedBox(height: 24),
-              CustomButton(
-                btnText: submitting
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.5,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text(
-                        context.tr(LocaleKeys.send),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.whiteColor,
-                        ),
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        AppColors.yellowColor,
+                        Color(0xffE08B1B),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            AppColors.yellowColor.withValues(alpha: 0.40),
+                        blurRadius: 14,
+                        offset: const Offset(0, 6),
                       ),
-                onPressed: submitting
-                    ? () {}
-                    : () {
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(15),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(15),
+                      onTap: submitting
+                          ? null
+                          : () {
                         if (cubit.selectedReasonKey == null) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                            SnackBar(
-                              content: Text(context.tr(
-                                  LocaleKeys.pleaseSelectReason)),
-                            ),
+                          Toast.showErrorToast(
+                            msg: context.tr(LocaleKeys.pleaseSelectReason),
+                            context: context,
                           );
                           return;
                         }
@@ -222,6 +241,29 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                           productId: widget.productId,
                         );
                       },
+                      child: Center(
+                        child: submitting
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: Color(0xff1A1205),
+                                ),
+                              )
+                            : Text(
+                                context.tr(LocaleKeys.send),
+                                style: const TextStyle(
+                                  color: Color(0xff1A1205),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.1,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
