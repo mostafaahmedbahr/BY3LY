@@ -409,4 +409,7 @@ abstract class LocaleKeys {
   static const sellerRatingLabel = "sellerRatingLabel";
   static const commentsCountLabel = "commentsCountLabel";
   static const noCompareValues = "noCompareValues";
+  static const deleteAccountConfirmMessage = "deleteAccountConfirmMessage";
+  static const deleteAccountFailed = "deleteAccountFailed";
+  static const deleteAccountConsequence = "deleteAccountConsequence";
 }

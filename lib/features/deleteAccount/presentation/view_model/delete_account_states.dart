@@ -1,6 +1,6 @@
 import '../../data/models/delete_account_model.dart';
 
-abstract class DeleteAccountStates{}
+abstract class DeleteAccountStates {}
 
 class DeleteAccountInitState extends DeleteAccountStates {}
 
@@ -12,6 +12,8 @@ class DeleteAccountSuccess extends DeleteAccountStates {
 }
 
 class DeleteAccountError extends DeleteAccountStates {
-  final String message;
+  /// Null when the server rejected the deletion without a message —
+  /// the view substitutes a localized fallback.
+  final String? message;
   DeleteAccountError(this.message);
 }

@@ -425,5 +425,8 @@ class EnLang {
     "sellerRatingLabel": "Seller rating",
     "commentsCountLabel": "Comments",
     "noCompareValues": "Nothing to compare yet",
+    "deleteAccountConfirmMessage": "Are you sure you want to delete your account? You can restore it within 90 days only.",
+    "deleteAccountFailed": "Couldn't delete your account. Please try again.",
+    "deleteAccountConsequence": "All your listed ads will be paused as soon as the deletion is processed.",
   };
 }

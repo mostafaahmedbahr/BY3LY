@@ -415,5 +415,8 @@ class ArLang {
     "sellerRatingLabel": "تقييم البائع",
     "commentsCountLabel": "التعليقات",
     "noCompareValues": "لا توجد قيم للمقارنة",
+    "deleteAccountConfirmMessage": "هل أنت متأكد من حذف حسابك؟ يمكنك استرجاعه خلال 90 يومًا فقط.",
+    "deleteAccountFailed": "تعذر حذف الحساب، حاول مرة أخرى",
+    "deleteAccountConsequence": "سيتم إيقاف جميع الإعلانات المعروضة الخاصة بك فور تنفيذ الحذف.",
   };
 }
