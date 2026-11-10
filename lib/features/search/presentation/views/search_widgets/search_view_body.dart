@@ -1,4 +1,4 @@
-import 'package:by3ly/core/shared_widgets/custom_button.dart';
+import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/views/all_sub_categories_products_widgets/products_filter.dart';
@@ -197,6 +197,15 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                   ? AppColors.mainColor
                                   : AppColors.border,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: active
+                                    ? AppColors.mainColor.withValues(alpha: 0.30)
+                                    : Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Icon(
                             Icons.tune,
@@ -245,26 +254,9 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                 }
                 if (state is GetAllProductsForSearchError &&
                     cubit.allProductsForSearchList.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          state.message,
-                          textAlign: TextAlign.center,
-                        ),
-                        const CustomSizedBox(height: 12),
-                        CustomButton(
-                          width: 160,
-                          btnText: Text(
-                            context.tr(LocaleKeys.search),
-                            style: AppStyles.textStyle14W500White,
-                          ),
-                          onPressed: () =>
-                              cubit.getAllProductsForSearch(),
-                        ),
-                      ],
-                    ),
+                  return CustomErrorWidget(
+                    error: state.message,
+                    onTap: () => cubit.getAllProductsForSearch(),
                   );
                 }
 
