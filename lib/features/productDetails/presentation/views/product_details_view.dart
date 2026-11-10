@@ -122,26 +122,27 @@ class ProductDetailsView extends StatelessWidget {
               ),
             ),
             actions: [
-              // Favourited-heart — frosted glass circle, brand-color heart.
-              Container(
-                height: 36,
-                width: 36,
-                margin: const EdgeInsets.only(left: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.border, width: 1.2),
-                ),
-                child: Center(
-                  child: FavHeartButton(
-                    productId: productId,
-                    initialIsFavourite: product.isFavourite == true,
-                    withBackground: false,
-                    iconSize: 20,
-                    favIconColor: AppColors.redColor,
+              // Favourites only apply to products you DON'T sell yourself.
+              if (!isOwner)
+                Container(
+                  height: 36,
+                  width: 36,
+                  margin: const EdgeInsets.only(left: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.border, width: 1.2),
+                  ),
+                  child: Center(
+                    child: FavHeartButton(
+                      productId: productId,
+                      initialIsFavourite: product.isFavourite == true,
+                      withBackground: false,
+                      iconSize: 20,
+                      favIconColor: AppColors.redColor,
+                    ),
                   ),
                 ),
-              ),
               // Share the product link.
               IconButton(
                 tooltip: 'Share',

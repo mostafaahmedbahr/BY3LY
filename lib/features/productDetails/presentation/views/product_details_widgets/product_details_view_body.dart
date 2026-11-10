@@ -151,7 +151,7 @@ class ProductDetailsViewBody extends StatelessWidget {
                     ),
                   ],
                   const CustomSizedBox(height: 16),
-                  if (product?.id != null)
+                  if (product?.id != null && !isOwner)
                     RateProductWidget(
                       productId: product!.id!,
                       type: type,
