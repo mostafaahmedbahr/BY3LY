@@ -1,4 +1,18 @@
 
+String? _asString(dynamic v) => v?.toString();
+
+bool? _asBool(dynamic v) {
+  if (v == null) return null;
+  if (v is bool) return v;
+  if (v is num) return v != 0;
+  if (v is String) {
+    final lower = v.toLowerCase().trim();
+    if (lower == 'true' || lower == '1') return true;
+    if (lower == 'false' || lower == '0') return false;
+  }
+  return null;
+}
+
 class OtpModel {
   bool? status;
   String? message;
@@ -7,9 +21,10 @@ class OtpModel {
   OtpModel({this.status, this.message, this.data});
 
   OtpModel.fromJson(Map<String, dynamic> json) {
-    status = json["status"];
-    message = json["message"];
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    status = _asBool(json["status"]);
+    message = _asString(json["message"]);
+    final raw = json["data"];
+    data = raw is Map ? Data.fromJson(Map<String, dynamic>.from(raw)) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -46,17 +61,18 @@ class Data {
   });
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json["user"] == null ? null : User.fromJson(json["user"]);
-    isActive = json["isActive"] ?? json["is_active"];
-    code = json["code"]?.toString() ?? json["otp"]?.toString();
-    email = json["email"]?.toString() ?? user?.email;
+    final rawUser = json["user"];
+    user = rawUser is Map
+        ? User.fromJson(Map<String, dynamic>.from(rawUser))
+        : null;
+    isActive = _asBool(json["isActive"]) ?? _asBool(json["is_active"]);
+    code = _asString(json["code"] ?? json["otp"]);
+    email = _asString(json["email"]) ?? user?.email;
     // token can be top-level in data OR inside user
-    token = json["token"]?.toString() ??
-        json["access_token"]?.toString() ??
-        user?.token;
-    requiresOtp = json["requires_otp"];
-    otp = json["otp"]?.toString();
-    nextStep = json["next_step"]?.toString();
+    token = _asString(json["token"]) ?? _asString(json["access_token"]) ?? user?.token;
+    requiresOtp = _asBool(json["requires_otp"]);
+    otp = _asString(json["otp"]);
+    nextStep = _asString(json["next_step"]);
   }
 
   /// Token whatever shape the backend used.

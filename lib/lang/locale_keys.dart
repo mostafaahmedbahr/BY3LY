@@ -426,4 +426,8 @@ abstract class LocaleKeys {
   static const markedEverythingRead = "markedEverythingRead";
   static const notificationsCleared = "notificationsCleared";
   static const getStarted = "getStarted";
+  static const resendCode = "resendCode";
+  static const resendCodeIn = "resendCodeIn";
+  static const checkEmail = "checkEmail";
+  static const otpSubtitle = "otpSubtitle";
 }

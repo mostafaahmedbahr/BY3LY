@@ -3,7 +3,10 @@ import '../../data/models/resend_otp_model.dart';
 
 abstract class OtpStates{}
 
-class OtpInitState extends OtpStates{}
+class OtpInitState extends OtpStates {
+  @override
+  String toString() => 'OtpInitState';
+}
 
 class VerifyOtpLoadingState extends OtpStates{}
 class VerifyOtpSuccessState extends OtpStates{

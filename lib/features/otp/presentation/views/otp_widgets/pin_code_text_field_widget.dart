@@ -1,13 +1,10 @@
 import 'dart:async';
+import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:easy_localization/easy_localization.dart';
-import '../../../../../main_importants.dart';
 
 class CustomPinCodeField extends StatefulWidget {
-  final TextEditingController controller;
-  final StreamController<ErrorAnimationType>? errorController;
-  final Function(String)? onChanged;
-
   const CustomPinCodeField({
     super.key,
     required this.controller,
@@ -15,63 +12,53 @@ class CustomPinCodeField extends StatefulWidget {
     this.onChanged,
   });
 
+  final TextEditingController controller;
+  final StreamController<ErrorAnimationType>? errorController;
+  final ValueChanged<String>? onChanged;
+
   @override
   CustomPinCodeFieldState createState() => CustomPinCodeFieldState();
 }
 
 class CustomPinCodeFieldState extends State<CustomPinCodeField> {
-  String currentText = "";
+  String currentText = '';
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:   EdgeInsets.symmetric(vertical: 40.h),
-      child: PinCodeTextField(
-        validator: (v) {
-          if (v!.length < 4) {
-            return context.tr(LocaleKeys.numberMustBeAtLeast4Digits);
-          } else {
-            return null;
-          }
-        },
-        length: 6,
-        obscureText: false,
-        animationType: AnimationType.fade,
-        pinTheme: PinTheme(
-          activeColor: AppColors.mainColor,
-          selectedColor: AppColors.mainColor,
-          selectedFillColor: AppColors.mainColor,
-          inactiveFillColor: AppColors.surface,
-          inactiveColor: AppColors.border,
-          disabledColor: AppColors.mainColor,
-          errorBorderColor: AppColors.mainColor,
-          shape: PinCodeFieldShape.box,
-          borderRadius: BorderRadius.circular(5),
-          fieldHeight: 40.h,
-          fieldWidth: 40.w,
-          activeFillColor: AppColors.surface,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 24.h),
+        child: PinCodeTextField(
+          length: 6,
+          obscureText: false,
+          animationType: AnimationType.fade,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(16),
+            fieldHeight: 56.h,
+            fieldWidth: 46.w,
+            activeColor: AppColors.mainColor,
+            selectedColor: AppColors.mainColor,
+            selectedFillColor: AppColors.mainColor.withValues(alpha: 0.12),
+            activeFillColor: AppColors.surface,
+            inactiveFillColor: AppColors.surface,
+            inactiveColor: AppColors.border,
+            disabledColor: AppColors.border,
+            errorBorderColor: AppColors.redColor,
+          ),
+          enableActiveFill: true,
+          animationDuration: const Duration(milliseconds: 240),
+          errorAnimationController: widget.errorController,
+          controller: widget.controller,
+          onCompleted: (_) {},
+          beforeTextPaste: (_) => true,
+          onChanged: (value) {
+            setState(() => currentText = value);
+            widget.onChanged?.call(value);
+          },
+          appContext: context,
         ),
-        animationDuration: const Duration(milliseconds: 300),
-        backgroundColor: AppColors.surface,
-        enableActiveFill: true,
-        errorAnimationController: widget.errorController,
-        controller: widget.controller,
-        onCompleted: (v) {
-
-        },
-        onChanged: (value) {
-          setState(() {
-            currentText = value;
-          });
-          if (widget.onChanged != null) {
-            widget.onChanged!(value);
-          }
-        },
-        beforeTextPaste: (text) {
-
-          return true; // Allow paste
-        },
-        appContext: context,
       ),
     );
   }

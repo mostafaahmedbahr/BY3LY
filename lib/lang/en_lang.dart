@@ -442,5 +442,9 @@ class EnLang {
     "markedEverythingRead": "All notifications were marked as read",
     "notificationsCleared": "All notifications were cleared",
     "getStarted": "Get Started",
+    "resendCode": "Resend Code",
+    "resendCodeIn": "Resend code in {seconds}s",
+    "checkEmail": "Enter the code we sent to",
+    "otpSubtitle": "Check your inbox",
   };
 }

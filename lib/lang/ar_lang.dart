@@ -432,5 +432,9 @@ class ArLang {
     "markedEverythingRead": "تم تعليم كل الإشعارات كمقروءة",
     "notificationsCleared": "تم مسح كل الإشعارات",
     "getStarted": "ابدأ الآن",
+    "resendCode": "إعادة الإرسال",
+    "resendCodeIn": "إعادة الإرسال خلال {seconds} ث",
+    "checkEmail": "أدخل الكود الذي أرسلناه إلى",
+    "otpSubtitle": "تحقق من بريدك الإلكتروني",
   };
 }
