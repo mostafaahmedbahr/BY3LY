@@ -1,7 +1,7 @@
 
 import 'package:by3ly/features/notifications/data/models/notifications_model.dart';
 import 'package:by3ly/features/notifications/data/repos/notifications_repos.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/guest_guard.dart';
@@ -17,7 +17,8 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
   /// The cubit instance wired into the widget tree (Home badge + list).
   static NotificationsCubit? activeInstance;
 
-  static NotificationsCubit get(context) => BlocProvider.of(context);
+  static NotificationsCubit get(BuildContext context) =>
+      BlocProvider.of<NotificationsCubit>(context);
 
   @override
   Future<void> close() {
@@ -25,24 +26,10 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
     return super.close();
   }
 
-  int buttonIndex = 1;
-
-  buttonsToggle(newIndexValue){
-    buttonIndex = newIndexValue;
-    emit(NotificationsButtonsToggleState());
-  }
-
-  Map<String, String> buttonMap = {
-    "الكل": "general",
-    "الغير مقروء": "unread",
-    "طلبات الشراء": "purchaseRequests",
-    "الرسائل العاديه": "regularMessages",
-  };
-
-  /// buttonIndex is 1-based (item 0 -> buttonIndex 1), matching the UI.
-  String get currentType =>
-      buttonMap.values
-          .elementAt((buttonIndex - 1).clamp(0, buttonMap.length - 1));
+  /// The notifications endpoint requires a `type` filter. The server-side
+  /// tab switcher was removed in favour of the client-side read-status
+  /// filter, so the app always fetches the general bucket.
+  static const String defaultType = 'general';
 
   /// Client-side read-status filter applied on top of the loaded pages.
   /// 'all' | 'read' | 'unread'
@@ -68,7 +55,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
     }
   }
 
-  NotificationsRepos? notificationsRepos;
+  final NotificationsRepos notificationsRepos;
   NotificationsModel? notificationsModel;
 
   List<Notifications> notificationsList = [];
@@ -119,15 +106,14 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
   /// the user sees on screen while the new notification fades in.
   Future<void> silentRefresh() async {
     if (_isSilentSyncing ||
-        notificationsRepos == null ||
         isClosed ||
         GuestGuard.isGuest) {
       return;
     }
     _isSilentSyncing = true;
     try {
-      final result = await notificationsRepos!.getNotificationsData(
-        type: currentType,
+      final result = await notificationsRepos.getNotificationsData(
+        type: defaultType,
         page: 1,
       );
       if (isClosed) return;
@@ -164,7 +150,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
     String? type,
     bool loadMore = false,
   }) async {
-    final t = type ?? currentType;
+    final t = type ?? defaultType;
     if (loadMore) {
       if (isLoadingMore || !hasMore) return;
       isLoadingMore = true;
@@ -175,7 +161,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
       emit(GetNotificationsDataLoading());
     }
     final page = loadMore ? currentPage + 1 : 1;
-    var result = await notificationsRepos!.getNotificationsData(
+    var result = await notificationsRepos.getNotificationsData(
       type: t,
       page: page,
     );
@@ -224,7 +210,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
   }
 
   Future<void> refresh() =>
-      getNotificationsData(type: currentType);
+      getNotificationsData(type: defaultType);
 
   /// Mark one as read (optimistic, badge decreases instantly).
   Future<void> markAsRead(String? notificationId) async {
@@ -238,7 +224,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
       if (wasUnread && unreadCount > 0) unreadCount--;
       emit(NotificationMarkedRead(notificationId));
     }
-    var result = await notificationsRepos!
+    var result = await notificationsRepos
         .markNotificationRead(notificationId: notificationId);
     return result.fold((failure) {
       debugPrint('NotificationsCubit markAsRead failed: ${failure.errMessage}');
@@ -261,7 +247,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
     unreadCount = 0;
     emit(AllNotificationsMarkedRead());
     var result =
-        await notificationsRepos!.markAllNotificationsRead();
+        await notificationsRepos.markAllNotificationsRead();
     return result.fold((failure) {
       debugPrint('NotificationsCubit markAllAsRead failed: ${failure.errMessage}');
       for (int i = 0; i < notificationsList.length; i++) {
@@ -283,7 +269,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
       if (removed.isRead != true && unreadCount > 0) unreadCount--;
       emit(NotificationDeleted(notificationId));
     }
-    var result = await notificationsRepos!
+    var result = await notificationsRepos
         .deleteNotification(notificationId: notificationId);
     return result.fold((failure) {
       debugPrint('NotificationsCubit delete failed: ${failure.errMessage}');
@@ -302,7 +288,7 @@ class NotificationsCubit extends Cubit<NotificationsStates> {
     unreadCount = 0;
     emit(AllNotificationsDeleted());
     var result =
-        await notificationsRepos!.deleteAllNotifications();
+        await notificationsRepos.deleteAllNotifications();
     return result.fold((failure) {
       debugPrint('NotificationsCubit deleteAll failed: ${failure.errMessage}');
       notificationsList = backup;

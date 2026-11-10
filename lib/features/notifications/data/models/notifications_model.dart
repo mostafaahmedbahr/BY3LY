@@ -22,6 +22,17 @@ bool? _asBool(dynamic v) {
   return null;
 }
 
+/// Maps a raw list into models, skipping junk entries silently —
+/// one malformed entry must never take the whole response down.
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) from) {
+  if (raw is! List) return null;
+  final out = <T>[];
+  for (final e in raw) {
+    if (e is Map) out.add(from(Map<String, dynamic>.from(e)));
+  }
+  return out;
+}
+
 class NotificationsModel {
   bool? status;
   String? message;
@@ -30,19 +41,22 @@ class NotificationsModel {
   NotificationsModel({this.status, this.message, this.data});
 
   NotificationsModel.fromJson(Map<String, dynamic> json) {
-    status = _asBool(json["status"]) ?? json["status"] == 1;
+    status = _asBool(json["status"]);
     message = _asString(json["message"]);
-    data = json["data"] == null ? null : Data.fromJson(json["data"]);
+    final raw = json["data"];
+    data = raw is Map
+        ? Data.fromJson(Map<String, dynamic>.from(raw))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["message"] = message;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["status"] = status;
+    jsonData["message"] = message;
     if(data != null) {
-      _data["data"] = data?.toJson();
+      jsonData["data"] = data?.toJson();
     }
-    return _data;
+    return jsonData;
   }
 }
 
@@ -54,21 +68,24 @@ class Data {
   Data({this.notifications, this.pagination, this.unreadCount});
 
   Data.fromJson(Map<String, dynamic> json) {
-    notifications = json["notifications"] == null ? null : (json["notifications"] as List).map((e) => Notifications.fromJson(e)).toList();
-    pagination = json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]);
+    notifications = _parseList(json["notifications"], Notifications.fromJson);
+    final rawPagination = json["pagination"];
+    pagination = rawPagination is Map
+        ? Pagination.fromJson(Map<String, dynamic>.from(rawPagination))
+        : null;
     unreadCount = _asInt(json["unread_count"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
     if(notifications != null) {
-      _data["notifications"] = notifications?.map((e) => e.toJson()).toList();
+      jsonData["notifications"] = notifications?.map((e) => e.toJson()).toList();
     }
     if(pagination != null) {
-      _data["pagination"] = pagination?.toJson();
+      jsonData["pagination"] = pagination?.toJson();
     }
-    _data["unread_count"] = unreadCount;
-    return _data;
+    jsonData["unread_count"] = unreadCount;
+    return jsonData;
   }
 }
 
@@ -88,12 +105,12 @@ class Pagination {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["current_page"] = currentPage;
-    _data["last_page"] = lastPage;
-    _data["per_page"] = perPage;
-    _data["total"] = total;
-    return _data;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["current_page"] = currentPage;
+    jsonData["last_page"] = lastPage;
+    jsonData["per_page"] = perPage;
+    jsonData["total"] = total;
+    return jsonData;
   }
 }
 
@@ -122,17 +139,17 @@ class Notifications {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["type"] = type;
-    _data["title"] = title;
-    _data["body"] = body;
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["id"] = id;
+    jsonData["type"] = type;
+    jsonData["title"] = title;
+    jsonData["body"] = body;
     if(data != null) {
-      _data["data"] = data;
+      jsonData["data"] = data;
     }
-    _data["is_read"] = isRead;
-    _data["read_at"] = readAt;
-    _data["created_at"] = createdAt;
-    return _data;
+    jsonData["is_read"] = isRead;
+    jsonData["read_at"] = readAt;
+    jsonData["created_at"] = createdAt;
+    return jsonData;
   }
 }

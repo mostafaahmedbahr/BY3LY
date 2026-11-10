@@ -428,5 +428,8 @@ class ArLang {
     "lastUpdated": "آخر تحديث",
     "loginFailed": "تعذر تسجيل الدخول. حاول مرة أخرى",
     "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "deleteAllNotificationsConfirm": "سيتم حذف كل الإشعارات نهائياً. فهل أنت متأكد؟",
+    "markedEverythingRead": "تم تعليم كل الإشعارات كمقروءة",
+    "notificationsCleared": "تم مسح كل الإشعارات",
   };
 }

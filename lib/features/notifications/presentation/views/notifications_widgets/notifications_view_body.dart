@@ -7,10 +7,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 
-'notifications_list.dart';
-import 
-'notifications_loading.dart';
+import 'notifications_list.dart';
+import 'notifications_loading.dart';
 
 class NotificationsViewBody extends StatefulWidget {
   const NotificationsViewBody({super.key});
@@ -38,35 +36,31 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
     return BlocBuilder<NotificationsCubit, NotificationsStates>(
       builder: (context, state) {
         final cubit = NotificationsCubit.get(context);
+        final hadCachedData = cubit.notificationsList.isNotEmpty;
 
-        if (state is GetNotificationsDataLoading &&
-            cubit.notificationsList.isEmpty) {
-          return const Padding(
-            padding:   EdgeInsets.symmetric(horizontal: 20),
+        if (state is GetNotificationsDataLoading && !hadCachedData) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 4),
-                _ReadStatusFilter(),
-                SizedBox(height: 20),
+                const SizedBox(height: 6),
+                const _ReadStatusFilter(),
+                const SizedBox(height: 18),
                 const Expanded(child: NotificationsLoading()),
               ],
             ),
           );
         }
-        if (state is GetNotificationsDataError &&
-            cubit.notificationsList.isEmpty) {
+        if (state is GetNotificationsDataError && !hadCachedData) {
           return Padding(
-
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 4),
-                _ReadStatusFilter(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 6),
+                const _ReadStatusFilter(),
+                const SizedBox(height: 18),
                 Expanded(
                   child: CustomErrorWidget(
                     error: state.message,
@@ -79,29 +73,33 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
         }
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (cubit.unreadCount > 0)
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
-                  child: TextButton(
-                      onPressed: () => cubit.markAllAsRead(),
-                      child: Text(
-                        context.tr(LocaleKeys.markAllAsRead),
-                        style: const TextStyle(
-                          color: AppColors.mainColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  child: TextButton.icon(
+                    onPressed: () => cubit.markAllAsRead(),
+                    icon: const Icon(
+                      Icons.done_all_rounded,
+                      size: 18,
+                      color: AppColors.mainColor,
+                    ),
+                    label: Text(
+                      context.tr(LocaleKeys.markAllAsRead),
+                      style: const TextStyle(
+                        color: AppColors.mainColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
                       ),
+                    ),
                   ),
                 ),
               const SizedBox(height: 4),
-              _ReadStatusFilter(),
-              const SizedBox(height: 8),
+              const _ReadStatusFilter(),
+              const SizedBox(height: 6),
               const Expanded(child: NotificationsList()),
             ],
           ),
@@ -111,8 +109,8 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
   }
 }
 
-/// Read-status filter chips (All / Read / Unread) applied
-/// client-side on top of the loaded notifications.
+/// Premium read-status filter chips (All / Read / Unread) with
+/// per-chip counts derived from the loaded notifications.
 class _ReadStatusFilter extends StatelessWidget {
   const _ReadStatusFilter();
 
@@ -121,44 +119,104 @@ class _ReadStatusFilter extends StatelessWidget {
     return BlocBuilder<NotificationsCubit, NotificationsStates>(
       builder: (context, state) {
         final cubit = NotificationsCubit.get(context);
+        final allCount = cubit.notificationsList.length;
+        final readCount =
+            cubit.notificationsList.where((n) => n.isRead == true).length;
+        final unreadCount = allCount - readCount;
+
         final options = [
-          ('all', context.tr(LocaleKeys.filterAll)),
-          ('read', context.tr(LocaleKeys.filterRead)),
-          ('unread', context.tr(LocaleKeys.filterUnread)),
+          ('all', context.tr(LocaleKeys.filterAll), allCount),
+          ('read', context.tr(LocaleKeys.filterRead), readCount),
+          ('unread', context.tr(LocaleKeys.filterUnread), unreadCount),
         ];
+
         return Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-              for (final o in options)
-                ChoiceChip(
-                  label: Text(o.$2),
-                  selected: cubit.readFilter == o.$1,
-                  onSelected: (_) =>
-                      cubit.setReadFilter(o.$1),
-                  selectedColor: AppColors.mainColor,
-                  backgroundColor:
-                      AppColors.surfaceVariant,
-                  labelStyle: TextStyle(
-                    color: cubit.readFilter == o.$1
-                        ? Colors.white
-                        : AppColors.text,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(
-                      color: cubit.readFilter == o.$1
-                          ? AppColors.mainColor
-                          : AppColors.border,
-                    ),
-                  ),
-                  showCheckmark: false,
-                ),
-            ],
-          );
+            for (final option in options)
+              _FilterChip(
+                label: option.$2,
+                count: option.$3,
+                selected: cubit.readFilter == option.$1,
+                onTap: () => cubit.setReadFilter(option.$1),
+              ),
+          ],
+        );
       },
+    );
+  }
+}
+
+/// Premium pill chip: white inactive / brand-green filled active,
+/// always with a count badge.
+class _FilterChip extends StatelessWidget {
+  const _FilterChip({
+    required this.label,
+    required this.count,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final int count;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = selected ? Colors.white : AppColors.text;
+    final countFg =
+        selected ? AppColors.yellowColor : AppColors.mainColor;
+
+    return Material(
+      color: selected ? AppColors.mainColor : AppColors.surface,
+      borderRadius: BorderRadius.circular(22),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: selected ? AppColors.mainColor : AppColors.border,
+              width: 1.2,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: fg,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(
+                  color: countFg.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '$count',
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w800,
+                    color: countFg,
+                    height: 1.1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

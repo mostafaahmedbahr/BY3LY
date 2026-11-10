@@ -422,4 +422,7 @@ abstract class LocaleKeys {
   static const lastUpdated = "lastUpdated";
   static const loginFailed = "loginFailed";
   static const loginSuccess = "loginSuccess";
+  static const deleteAllNotificationsConfirm = "deleteAllNotificationsConfirm";
+  static const markedEverythingRead = "markedEverythingRead";
+  static const notificationsCleared = "notificationsCleared";
 }

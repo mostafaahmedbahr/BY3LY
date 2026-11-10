@@ -438,5 +438,8 @@ class EnLang {
     "lastUpdated": "Last updated",
     "loginFailed": "Couldn't sign in. Please try again.",
     "loginSuccess": "Signed in successfully",
+    "deleteAllNotificationsConfirm": "This will delete every notification permanently. Are you sure?",
+    "markedEverythingRead": "All notifications were marked as read",
+    "notificationsCleared": "All notifications were cleared",
   };
 }
