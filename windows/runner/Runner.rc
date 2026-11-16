@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "by3ly" "\0"
+            VALUE "FileDescription", "BY3LY" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "by3ly" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "by3ly.exe" "\0"
-            VALUE "ProductName", "by3ly" "\0"
+            VALUE "ProductName", "BY3LY" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

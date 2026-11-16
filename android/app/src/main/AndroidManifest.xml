@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:label="by3ly"
+        android:label="BY3LY"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,6 +1,6 @@
 class EnLang {
   static const Map<String, dynamic> en = {
-    "appName": "By3ly",
+    "appName": "BY3LY",
     "writeYourPhoneNumberHere": "Write your phone number here",
     "uploadImages": "Upload up to 10 images",
     "next": "Next",
