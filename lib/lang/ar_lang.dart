@@ -370,6 +370,9 @@ class ArLang {
     "unsupportedImageType": "نوع الصورة غير مدعوم، استخدم JPG أو PNG أو WEBP",
     "contactSeller": "تواصل مع البائع",
     "refresh": "تحديث",
+    "supportTeam": "الدعم",
+    "supportReplies": "ردود الدعم",
+    "supportSubtitle": "نحن هنا لمساعدتك",
     "cannotChatWithYourself": "لا يمكنك بدء محادثة مع نفسك",
 
     // Privacy / account settings

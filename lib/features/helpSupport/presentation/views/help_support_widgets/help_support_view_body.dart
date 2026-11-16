@@ -12,6 +12,9 @@ import 'package:page_transition/page_transition.dart';
 
 import 'common_questions_widget.dart';
 import 'help_support_list_item_widget.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
+import 'package:by3ly/features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HelpSupportViewBody extends StatelessWidget {
   const HelpSupportViewBody({super.key});
@@ -33,14 +36,20 @@ class HelpSupportViewBody extends StatelessWidget {
     ).show(context);
   }
 
-  void _openChat(BuildContext context) {
+  Future<void> _openChat(BuildContext context) async {
+    // The support thread is account-scoped; visitors are asked to log in.
+    if (!await GuestGuard.requireLogin(context)) return;
+    if (!context.mounted) return;
     Navigator.push(
       context,
       PageTransition(
         type: PageTransitionType.fade,
         child: const HelpSupportChatView(),
       ),
-    );
+    ).then((_) {
+      // Staff replies were marked as read inside the chat; sync the badge.
+      if (context.mounted) SupportUnreadCubit.get(context).refresh();
+    });
   }
 
   void _openReport(BuildContext context) {
@@ -76,12 +85,15 @@ class HelpSupportViewBody extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
         children: [
-          HelpSupportListItemWidget(
-            icon: Icons.chat_bubble_rounded,
-            iconColor: AppColors.secondColor,
-            onTap: () => _openChat(context),
-            title: context.tr(LocaleKeys.chat),
-            subTitle: context.tr(LocaleKeys.speakWithUsDirectly),
+          BlocBuilder<SupportUnreadCubit, SupportUnreadStates>(
+            builder: (context, _) => HelpSupportListItemWidget(
+              icon: Icons.chat_bubble_rounded,
+              iconColor: AppColors.secondColor,
+              onTap: () => _openChat(context),
+              title: context.tr(LocaleKeys.chat),
+              subTitle: context.tr(LocaleKeys.speakWithUsDirectly),
+              unreadCount: SupportUnreadCubit.get(context).count,
+            ),
           ),
           HelpSupportListItemWidget(
             icon: Icons.mail_rounded,

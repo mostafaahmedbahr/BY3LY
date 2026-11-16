@@ -11,6 +11,7 @@ class HelpSupportListItemWidget extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.onTap,
+    this.unreadCount = 0,
   });
 
   final IconData icon;
@@ -18,6 +19,9 @@ class HelpSupportListItemWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final VoidCallback onTap;
+
+  /// When > 0, shows a red badge with the number of unread support replies.
+  final int unreadCount;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +77,27 @@ class HelpSupportListItemWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
+                if (unreadCount > 0) ...[
+                  Container(
+                    constraints: const BoxConstraints(minWidth: 22),
+                    height: 22,
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.redColor,
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: Text(
+                      unreadCount > 99 ? '99+' : '$unreadCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                ],
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 15,

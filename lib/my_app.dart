@@ -27,7 +27,9 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:by3ly/features/addBalance/presentation/view_model/add_balance_cubit.dart';
 import 'package:by3ly/features/confirmPayment/presentation/view_model/confirm_payment_cubit.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
-import 'package:by3ly/features/helpSupportChat/presentation/view_model/help_support_chat_cubit.dart';
+import 'features/helpSupportChat/presentation/view_model/help_support_chat_cubit.dart';
+import 'features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
+import 'features/helpSupportChat/data/repos/support_chat_repository_impl.dart';
 import 'package:by3ly/features/home/data/repos/home_repo_imple.dart';
 import 'package:by3ly/features/home/presentation/view_model/home_cubit.dart';
 import 'package:by3ly/features/profile/data/repos/profile_repos_imple.dart';
@@ -71,7 +73,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) => HelpSupportCubit()),
         BlocProvider(create: (context) => AddBalanceCubit()),
-        BlocProvider(create: (context) => HelpSupportChatCubit()),
+        BlocProvider(
+          create: (context) => HelpSupportChatCubit(
+            getIt.get<SupportChatRepositoryImpl>(),
+            getIt.get<SupportUnreadCubit>(),
+          ),
+        ),
         BlocProvider(create: (context) => ConfirmPaymentCubit()),
         BlocProvider(
           create: (context) {
@@ -130,6 +137,15 @@ class MyApp extends StatelessWidget {
           value: () {
             // Shared singleton: the badge stays in sync with the chat screens.
             final cubit = getIt.get<ChatUnreadCubit>();
+            if (!GuestGuard.isGuest) cubit.refresh();
+            return cubit;
+          }(),
+        ),
+        BlocProvider<SupportUnreadCubit>.value(
+          value: () {
+            // Shared singleton: the badge on the help screen stays in sync
+            // with the support chat.
+            final cubit = getIt.get<SupportUnreadCubit>();
             if (!GuestGuard.isGuest) cubit.refresh();
             return cubit;
           }(),

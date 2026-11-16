@@ -380,6 +380,9 @@ class EnLang {
     "unsupportedImageType": "Unsupported image type. Use JPG, PNG or WEBP",
     "contactSeller": "Contact seller",
     "refresh": "Refresh",
+    "supportTeam": "Support",
+    "supportReplies": "Support replies",
+    "supportSubtitle": "We're here to help",
     "cannotChatWithYourself": "You cannot start a conversation with yourself",
 
     // Privacy / account settings

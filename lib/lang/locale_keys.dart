@@ -365,6 +365,9 @@ abstract class LocaleKeys {
   static const contactSeller = "contactSeller";
   static const refresh = "refresh";
   static const cannotChatWithYourself = "cannotChatWithYourself";
+  static const supportTeam = "supportTeam";
+  static const supportReplies = "supportReplies";
+  static const supportSubtitle = "supportSubtitle";
 
   // Privacy / account settings
   static const storeName = "storeName";

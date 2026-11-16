@@ -1,6 +1,8 @@
 import 'package:by3ly/core/shared_widgets/last_updated_label.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/views/help_support_chat_view.dart';
+import 'package:by3ly/features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +37,22 @@ class PurchaseFooter extends StatelessWidget {
           width: double.infinity,
           height: 48,
           child: OutlinedButton.icon(
-            onPressed: () {
+            onPressed: () async {
+              // The support thread is account-scoped; visitors are asked
+              // to log in first.
+              if (!await GuestGuard.requireLogin(context)) return;
+              if (!context.mounted) return;
               Navigator.push(
                 context,
                 PageTransition(
                   type: PageTransitionType.fade,
                   child: const HelpSupportChatView(),
                 ),
-              );
+              ).then((_) {
+                if (context.mounted) {
+                  SupportUnreadCubit.get(context).refresh();
+                }
+              });
             },
             icon: const Icon(Icons.headset_mic_rounded, size: 19),
             label: Text(context.tr(LocaleKeys.contactSupport)),

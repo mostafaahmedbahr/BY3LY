@@ -25,6 +25,8 @@ import '../../../../features/updateProfile/data/repos/update_profile_data_repo_i
 import '../../../../features/changePassword/data/repos/change_password_repo_imple.dart';
 import '../../../../features/chat/data/repos/chat_repository_impl.dart';
 import '../../../../features/chat/presentation/view_model/chat_unread_cubit.dart';
+import '../../../../features/helpSupportChat/data/repos/support_chat_repository_impl.dart';
+import '../../../../features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
 import '../../../features/otp/data/repos/otp_repos_imple.dart';
 import '../../../features/packages/data/repos/packages_repos_imple.dart';
 import '../../../features/PaymentBalance/data/repos/wallet_repos_imple.dart';
@@ -137,5 +139,12 @@ void setup() {
   );
   getIt.registerSingleton<ChatUnreadCubit>(
     ChatUnreadCubit(getIt.get<ChatRepositoryImpl>()),
+  );
+
+  getIt.registerSingleton<SupportChatRepositoryImpl>(
+    SupportChatRepositoryImpl(getIt.get<ApiService>()),
+  );
+  getIt.registerSingleton<SupportUnreadCubit>(
+    SupportUnreadCubit(getIt.get<SupportChatRepositoryImpl>()),
   );
 }

@@ -86,4 +86,13 @@ class EndPoints {
   static String conversationRead(int id) => "conversations/$id/read";
   static String conversationMessage(int conversationId, int messageId) =>
       "conversations/$conversationId/messages/$messageId";
+
+  /// Support chat: customer <-> platform support.
+  /// One conversation per user; reopened automatically on the next customer
+  /// message if support closed it. Image streaming requires the bearer token.
+  static const supportConversation = "support/conversation";
+  static const supportUnreadCount = "support/unread-count";
+  static const supportMessages = "support/messages";
+  static const supportRead = "support/read";
+  static String supportMessageImage(int id) => "support/messages/$id/image";
 }
