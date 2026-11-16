@@ -59,7 +59,6 @@ class HomeViewBody extends StatelessWidget {
 
             /// CategoriesList (title + horizontal, first 5).
             const CategoriesList(),
-
             // /// Sponsored ads strip (first image of available ads).
             // if (ads.isNotEmpty) HomeAdsStrip(ads: ads),
 
