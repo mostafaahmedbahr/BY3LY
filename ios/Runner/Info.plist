@@ -26,8 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>BY3LY needs camera access to take photos for product ads, chat attachments and payment receipts.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save receipt images to your photo gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>BY3LY needs photo library access to let you attach images to product ads, your profile, chat and payment receipts.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
