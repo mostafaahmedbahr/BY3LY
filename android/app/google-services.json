@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:410177285744:android:d995b7e86e0c545768ceb5",
+        "mobilesdk_app_id": "1:410177285744:android:286369f15b74f85668ceb5",
         "android_client_info": {
-          "package_name": "com.example.by3ly"
+          "package_name": "com.zerobugs.by3ly"
         }
       },
       "oauth_client": [],

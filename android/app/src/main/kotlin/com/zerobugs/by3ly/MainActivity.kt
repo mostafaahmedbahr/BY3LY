@@ -1,4 +1,4 @@
-package com.example.by3ly
+package com.zerobugs.by3ly
 
 import io.flutter.embedding.android.FlutterActivity
 

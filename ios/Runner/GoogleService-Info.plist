@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.by3ly</string>
+	<string>com.zerobugs.by3ly</string>
 	<key>PROJECT_ID</key>
 	<string>by3ly-ed414</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:410177285744:ios:187157a0a5d4e99668ceb5</string>
+	<string>1:410177285744:ios:ef8c19fb23824e0568ceb5</string>
 </dict>
 </plist>
