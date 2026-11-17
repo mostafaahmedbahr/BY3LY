@@ -7,7 +7,7 @@ class HelpSupportConfig {
   const HelpSupportConfig._();
 
   /// Email shown to the user and used as the mailto target.
-  static const String email = 'bi3lyapp@example.com';
+  static const String email = 'by3ly3app@gmail.com';
 
   /// Phone number exactly as shown on the tile (local Egyptian format).
   static const String phone = '01110690299';

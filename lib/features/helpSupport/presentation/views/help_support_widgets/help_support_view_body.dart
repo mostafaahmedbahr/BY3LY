@@ -116,8 +116,8 @@ class HelpSupportViewBody extends StatelessWidget {
           //   title: context.tr(LocaleKeys.report),
           //   subTitle: context.tr(LocaleKeys.reportProduct),
           // ),
-          const SizedBox(height: 16),
-          const CommonQuestionsWidget(),
+          // const SizedBox(height: 16),
+          // const CommonQuestionsWidget(),
         ],
       ),
     );
