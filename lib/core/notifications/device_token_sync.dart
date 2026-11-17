@@ -23,8 +23,8 @@ class DeviceTokenSync {
   static String? _lastSyncedToken;
   static Future<void>? _inFlight;
 
-  /// True only when a real backend endpoint was supplied at build time.
-  static bool get isConfigured => EndPoints.updateDeviceToken.trim().isNotEmpty;
+  /// True when a backend endpoint is available for token rotation.
+  static bool get isConfigured => EndPoints.updateFirebaseToken.trim().isNotEmpty;
 
   /// Prevents duplicate POSTs when startup, token refresh and login all fire
   /// at the same time.
@@ -67,9 +67,7 @@ class DeviceTokenSync {
 
     if (!isConfigured) {
       logWarning(
-        'DeviceTokenSync: no verified backend endpoint configured; '
-        'token kept locally. Supply FCM_UPDATE_ENDPOINT once the backend '
-        'contract is confirmed.',
+        'DeviceTokenSync: no backend endpoint configured; token kept locally.',
       );
       return;
     }
@@ -81,7 +79,7 @@ class DeviceTokenSync {
 
     try {
       final response = await getIt<ApiService>().postData(
-        endPoint: EndPoints.updateDeviceToken,
+        endPoint: EndPoints.updateFirebaseToken,
         data: jsonEncode({'device_token': token}),
       );
       if (!_isSuccess(response.data)) {
@@ -97,7 +95,7 @@ class DeviceTokenSync {
       _lastSyncedToken = null;
       logError(
         'DeviceTokenSync: failed to sync token to '
-        '"${EndPoints.updateDeviceToken}": $e',
+        '"${EndPoints.updateFirebaseToken}": $e',
       );
     }
   }

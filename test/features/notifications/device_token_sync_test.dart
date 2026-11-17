@@ -3,9 +3,9 @@ import 'package:by3ly/core/notifications/device_token_sync.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('no device-token endpoint is assumed without build configuration', () {
-    expect(EndPoints.updateDeviceToken, isEmpty);
-    expect(DeviceTokenSync.isConfigured, isFalse);
+  test('FCM token sync uses the confirmed updateFirebaseToken endpoint', () {
+    expect(EndPoints.updateFirebaseToken, 'updateFirebaseToken');
+    expect(DeviceTokenSync.isConfigured, isTrue);
   });
 
   test('only the confirmed login/verifyCode contracts carry device_token', () {

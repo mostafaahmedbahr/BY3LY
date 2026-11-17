@@ -49,16 +49,8 @@ class EndPoints {
   static const resetPassword = "resetPassword";
   static const changePassword = "changePassword";
 
-  /// Endpoint that accepts `{ "device_token": "..." }` for the logged-in user.
-  ///
-  /// The backend contract for token rotation has NOT been published. The only
-  /// confirmed contract so far is that `login` / `verifyCode` accept
-  /// `device_token`. No path is assumed: sync stays disabled until the backend
-  /// team supplies one via:
-  ///   --dart-define=FCM_UPDATE_ENDPOINT=verified-backend-path
-  static const String updateDeviceToken = String.fromEnvironment(
-    'FCM_UPDATE_ENDPOINT',
-  );
+  /// Rotates the logged-in user's FCM token. Accepts `{ "device_token": "..." }`.
+  static const String updateFirebaseToken = "updateFirebaseToken";
 
   /// Account settings / privacy: GET = read, PATCH = update.
   static const settings = "settings";
