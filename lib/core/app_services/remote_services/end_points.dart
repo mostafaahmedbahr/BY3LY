@@ -50,10 +50,13 @@ class EndPoints {
   static const changePassword = "changePassword";
 
   /// Endpoint that accepts `{ "device_token": "..." }` for the logged-in user.
-  /// The current backend only accepts the token on login, so this is null
-  /// until a dedicated endpoint is added. Set it to the real path (and
-  /// [DeviceTokenSync] starts syncing automatically).
-  static const String? updateDeviceToken = null;
+  ///
+  /// Override at build time if the backend uses a different path:
+  ///   --dart-define=FCM_UPDATE_ENDPOINT=your-backend-path
+  static const String updateDeviceToken = String.fromEnvironment(
+    'FCM_UPDATE_ENDPOINT',
+    defaultValue: 'updateDeviceToken',
+  );
 
   /// Account settings / privacy: GET = read, PATCH = update.
   static const settings = "settings";

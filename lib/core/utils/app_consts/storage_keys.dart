@@ -10,5 +10,6 @@ class StorageKeys {
   static const String userLastName = 'userLastName';
   static const String userName = 'userName';
   static const String fcmToken = 'fcmToken';
+  static const String fcmTokenSynced = 'fcmTokenSynced';
   static const String isDarkMode = 'isDarkMode';
 }
