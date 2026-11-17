@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>بيعلي — قائمة الاختبار اليدوي (كل التطبيق)</title>
+<style>
+  :root{ --bg:#f5f6f8; --card:#fff; --line:#e2e5ea; --text:#1d2430; --muted:#6b7280; --brand:#0E8565; --ok:#0E8565; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding-bottom:50px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 14px}
+  header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .head{padding:14px 0}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  h1{font-size:1.1rem;margin:0}
+  .hint{color:var(--muted);font-size:.8rem;margin:4px 0 0}
+  button{font-family:inherit;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+  button:hover{border-color:var(--brand);color:var(--brand)}
+  .bar{height:9px;background:#e9edf1;border-radius:99px;overflow:hidden;margin:12px 0 6px}
+  .bar i{display:block;height:100%;width:0;background:var(--brand);border-radius:99px;transition:width .25s}
+  .stat{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+  .stat b{color:var(--text)}
+  .grp{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+  summary{cursor:pointer;padding:13px 15px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px;list-style:none;background:#fafbfc}
+  summary::-webkit-details-marker{display:none}
+  summary:hover{background:#f2f5f4}
+  .gtitle{font-size:.92rem}
+  .gnum{display:inline-block;background:var(--brand);color:#fff;border-radius:6px;padding:1px 7px;font-size:.72rem;margin-left:6px}
+  .gcount{font-size:.76rem;color:var(--muted);font-weight:400;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .items{padding:6px 0}
+  .item{display:flex;align-items:flex-start;gap:10px;padding:10px 15px;cursor:pointer;font-size:.86rem;border-top:1px solid #eef0f3}
+  .item:first-child{border-top:0}
+  .item:hover{background:#f7faf9}
+  .item input{width:19px;height:19px;accent-color:var(--brand);flex-shrink:0;margin:3px 0 0;cursor:pointer}
+  .body{flex:1;min-width:0}
+  .line1{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .tid{color:var(--brand);font-size:.72rem;font-weight:700;min-width:52px;font-variant-numeric:tabular-nums}
+  .ttl{font-weight:600;flex:1}
+  .det{margin-top:5px;padding-right:6px;border-right:2px solid #dde3e8;font-size:.78rem;color:#5b6470;line-height:1.65}
+  .det.exp{border-right-color:var(--brand);color:#27624f;margin-top:4px}
+  .key{font-weight:700;color:#374151}
+  .det.exp .key{color:var(--brand)}
+  .item.done .ttl{color:#9aa1ac;text-decoration:line-through}
+  .item.done .det{opacity:.55}
+  footer{text-align:center;color:var(--muted);font-size:.75rem;margin-top:22px}
+  @media(max-width:520px){ h1{font-size:1rem} .item{padding:10px 12px} .gtitle{font-size:.85rem} }
+  @media print{ header{position:static} button{display:none} body{background:#fff} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap head">
+    <div class="top">
+      <div>
+        <h1>🧪 بيعلي — قائمة الاختبار اليدوي (التطبيق كامل)</h1>
+        <p class="hint">تحت كل حالة تجد <b>الخطوات</b> و<b>السلوك المتوقع</b> — نفّذ وقارن وعلّم الصح. التقدّم بيُحفظ تلقائياً.</p>
+      </div>
+      <button id="reset">↺ إعادة ضبط</button>
+    </div>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="stat"><span id="txt">تم اختبار 0 من 300</span><span id="pct">0%</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<details class="grp" open data-group="3.1">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.1</span> Splash &amp; Onboarding</span>
+    <span class="gcount" data-count="3.1">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-001">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-001</span><span class="ttl">ظهور شاشة البداية بشكل صحيح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ثبّت التطبيق وافتحه.<br>راقب أول 4 ثوانٍ.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خلفية الشاشة بلون AppColors.mainColor (0xff0E8565).<br>شعار التطبيق (AppImages.logo2) يظهر في المنتصف مع حركة Curves.bounceOut متحركة خلال ~4 ثوانٍ.<br>لا توجد أخطاء على الشاشة، ثم الانتقال تلقائيًا للشاشة التالية (حسب حالة الحساب).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-002">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-002</span><span class="ttl">أول تشغيل يمسح بيانات التخزين</span></div>
+        <div class="det"><span class="key">الخطوات:</span> adb shell pm clear com.example.by3ly (أول تشغيل &quot;نظيف&quot;).<br>افتح التطبيق.<br>لاحظ التوجيه: يجب ألا يدخل مباشرة إلى LayoutView.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى OnBoardingView (لا يوجد token ولا Guest flag بعد المسح).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-003">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-003</span><span class="ttl">فتح Onboarding من أول تشغيل ثم تخطيه</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من شاشة Onboarding، اضغط Skip (أو زر التخطي) في الشريحة الأولى.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال فورًا إلى LoginView (pushAndRemoveAll). Flutter IntroductionScreen تُنهي بدون استكمال الشرائح.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-004">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-004</span><span class="ttl">إكمال Onboarding عبر زر Done في الشريحة الأخيرة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من Onboarding، اسحب/انتقل حتى الشريحة الثالثة.<br>اضغط زر Done.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى LoginView مع مسح الـ stack (لا عودة بـ Back).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-005">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-005</span><span class="ttl">توجيه المستخدم المُسجل إلى LayoutView مباشرة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أغلق التطبيق بالكامل (kill) ثم افتحه مجددًا.<br>راقب شاشة Splash ثم ما بعدها.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خلال ~4 ثوانٍ يتم التوجيه إلى LayoutView مباشرة (بدون Onboarding/Login).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.2">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.2</span> Register &amp; OTP</span>
+    <span class="gcount" data-count="3.2">0/10</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-006">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-006</span><span class="ttl">إنشاء حساب بنجاح (المسار السعيد)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من LoginView اضغط زر التسجيل.<br>املأ الحقول (الاسم، الإيميل، الهاتف، العمر، كلمة المرور، تأكيد كلمة المرور).<br>(اختياري) ارفع صورة شخصية.<br>اضغط زر &quot;إنشاء الحساب&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر CustomLoading أثناء الإرسال، ثم Toast بنجاح + الانتقال إلى OtpView مع بريد المستخدم كمُعامل.<br>تصل رسالة/كود إلى البريد المسجل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-007">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-007</span><span class="ttl">التحقق من OTP بنجاح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في OtpView، أدخل الكود في الخانات الست.<br>اضغط زر &quot;Verify/تحقق&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast نجاح؛ يتم حفظ التوكن (secure storage) وتتحول حالة isGuest=false؛ الانتقال إلى ChooseLocationView.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-008">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-008</span><span class="ttl">اختيار المحافظة والمركز وحفظ الموقع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في ChooseLocationView، اختر محافظة من القائمة.<br>لاحظ ظهور قائمة المراكز المفلترة.<br>اختر مركزًا.<br>اضغط زر &quot;تأكيد / Choose&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر المراكز الخاصة بالمحافظة فقط (فلترة).<br>عند التأكيد: CherryToast نجاح والانتقال إلى LayoutView (إنهاء كامل للـ stack) وتحديث بيانات البروفايل (ProfileCubit.getProfile()).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-009">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-009</span><span class="ttl">حقول التسجيل فارغة بالكامل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اترك كل الحقول فارغة.<br>اضغط زر إنشاء الحساب.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لكل حقل مطلوب تظهر رسالة التحقق المترجمة الخاصة به (لا يوجد submit ناجح).<br>لا يبدأ أي طلب شبكة (يمكن مراقبته عبر logcat: لا يوجد POST register).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-010">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-010</span><span class="ttl">هاتف مصري غير صالح (بادئة/طول)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لكل قيمة: أدخلها في حقل الهاتف ثم اضغط زر إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القيم غير المطابقة للنمط ^01[0-9]{9}$ تُرفض برسالة تحقق.<br>01012345678 (11 خانة تبدأ بـ 01) تُقبل على مستوى الحقل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-011">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-011</span><span class="ttl">كلمة المرور مخالفة لقواعد القوة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لكل قيمة: أدخلها ككلمة مرور وكتأكيد.<br>اضغط زر إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل قيمة تُرفض برسالة توضح المتطلبات (8–30 + كبيرة + صغيرة + رقم + رمز !@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-012">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-012</span><span class="ttl">تأكيد كلمة المرور غير مطابق</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كلمة المرور.<br>أدخل تأكيدًا مختلفًا وصحح باقي الحقول صالحة.<br>اضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة تحقق بأن كلمتي المرور غير متطابقتين؛ لا يتم الإرسال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-013">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-013</span><span class="ttl">العمر خارج الحدود 18–100</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة في حقل العمر واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 17, 101, 0, -5, abc تُرفض برسالة نطاق العمر (18–100) ورسالة عدد صحيح.<br>18 و100 تُقبل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-014">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-014</span><span class="ttl">OTP خاطئ ثم صحيح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل 000000 واضغط تحقق.<br>لاحظ النتيجة.<br>أدخل الكود الصحيح واضغط تحقق.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (1) رسالة خطأ من السيرفر/التحقق، لا يتم الدخول.<br>(3) نجاح والانتقال إلى ChooseLocationView.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-015">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-015</span><span class="ttl">إعادة إرسال OTP بعد انتهاء مؤقت 60 ثانية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لاحظ أن زر &quot;Resend code in N s&quot; غير متاح قبل انتهاء العد.<br>انتظر حتى ينتهي العد ويظهر &quot;Resend Code&quot;.<br>اضغط Resend Code.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر CherryToast يعرض الكود الجديد من السيرفر (السلوك الفعلي الحالي — انظر ملاحظة)، ويعود العد التنازلي 60 ثانية.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.3">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.3</span> Home</span>
+    <span class="gcount" data-count="3.3">0/7</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-016">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-016</span><span class="ttl">تحميل بيانات الرئيسية بنجاح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل الدخول.<br>راقب Shimmer ثم المحتوى.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر البانرات (إن وُجدت)، شريط الفئات (أول 5)، شبكة &quot;أفضل المشاهدات&quot;؛ لا أخطاء؛ RefreshIndicator يعمل عند السحب لأسفل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-017">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-017</span><span class="ttl">البانرات تفتح روابطها خارجية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الرئيسية اضغط على بانر إعلاني.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> إذا كان للبانر link: يُفتح في المتصفح الخارجي عبر url_launcher.<br>إذا لم يكن له رابط: لا يحدث شيء (أو لا ينهار).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-018">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-018</span><span class="ttl">السحب لأسفل لإعادة تحميل الرئيسية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اسحب الشاشة من الأعلى لأسفل وحرّر.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر مؤشر التحديث؛ يُعاد طلب getHome() وgetBanners()؛ المحتوى يتحدث؛ لا تكرار غير مرغوب للبانرات.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-019">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-019</span><span class="ttl">الضغط على فئة ينقل إلى صفحة الفئات كلها</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;See all&quot;/عرض الكل بجانب قسم الفئات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى AllCategoriesView (عنوان مهاردكود: &quot;جميع الفئات&quot;).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-020">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-020</span><span class="ttl">الضغط على منتج في Best View يفتح التفاصيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط على أي بطاقة منتج في شبكة &quot;أفضل المشاهدات&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى ProductDetailsView مع type: &quot;home&quot;؛ الشاشة تجلب تفاصيل المنتج نفسها من GET /productDetials.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-021">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-021</span><span class="ttl">زر البحث في الرئيسية ينقل إلى تبويب البحث</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط حقل/زر البحث في الرئيسية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى تبويب Search (الفهرس 2 من LayoutCubit).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-022">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-022</span><span class="ttl">حالة عدم وجود بيانات (Home فارغة) تعرض حالة مناسبة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الرئيسية في بيئة بلا بيانات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعرض الشاشة هيكلها بدون انهيار (لا توجد عناصر bestView، ولا خطأ شاشة كاملة).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.4">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.4</span> All Categories</span>
+    <span class="gcount" data-count="3.4">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-023">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-023</span><span class="ttl">عرض جميع الفئات الرئيسية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الرئيسية اضغط &quot;See all&quot; للفئات (أو افتح allCategoriesView من أي نقطة دخول).<br>راقب القائمة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> قائمة staggered animated تعرض كل الفئات بصورها وأسمائها وعدد الفئات الفرعية ({n} قسم فرعي).<br>أثناء التحميل تظهر قائمة Shimmer (20 عنصرًا).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-024">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-024</span><span class="ttl">الضغط على فئة ينقل إلى أقسامها الفرعية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أي عنصر فئة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى AllSubCategoriesView مع تمرير mainCategoryId وmainCategoryName وmainCategoryImage؛ تظهر ترويصة الفئة الرئيسية فوق شبكة الأقسام الفرعية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-025">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-025</span><span class="ttl">فشل تحميل الفئات يعرض خطأ قابل للمحاولة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح جميع الفئات بدون إنترنت.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر حالة خطأ واضحة (رسالة مترجمة) مع زر/إمكانية إعادة المحاولة؛ لا يحدث انهيار ولا شاشة بيضاء.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-026">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-026</span><span class="ttl">كاش الفئات جلسة-واحدة (لا إعادة تحميل متكررة)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح جميع الفئات ولاحظ طلب الشبكة الواحد (logcat: GET viewAllCategories).<br>ارجع وافتح ورقة الفلتر في صفحة منتجات قسم فرعي.<br>لاحظ عدد الطلبات لنفس المسار.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خلال الجلسة الواحدة يُرسل الطلب مرة واحدة فقط (الكاش المشترك cachedModel)؛ الورقة تستهلك الكاش دون طلب جديد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-027">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-027</span><span class="ttl">انتقالات الشاشة تحتفظ بوضع RTL</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة الفئات في العربية ثم بدّل الإنجليزية وافتحها مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> العربية: محاذاة RTL (يمين)، الإنجليزية: LTR مع انعكاس الأيقونات الاتجاهية؛ لا تراكب (overlap) للنصوص.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.5">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.5</span> Sub-Categories &amp; منتجات الفئة الفرعية</span>
+    <span class="gcount" data-count="3.5">0/8</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-028">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-028</span><span class="ttl">عرض الأقسام الفرعية مع عدد المنتجات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح جميع الفئات ← اختر فئة.<br>لاحظ الترويصة وعدد الأقسام.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعرض الترويصة صورة الفئة واسمها وعدد الأقسام ({n} تصنيفات).<br>كل قسم فرعي يعرض: صورته، اسمه، وشارة بعدد المنتجات (products_count).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-029">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-029</span><span class="ttl">الضغط على قسم فرعي برصيد صفر منتجات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط القسم ذي العدد صفر.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Snackbar رسالة: &quot;لا يوجد منتجات في هذا القسم&quot; (النص مهاردكود بالعربية) — لا انتقال إلى شاشة المنتجات.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-030">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-030</span><span class="ttl">الانتقال من قسم فرعي إلى شبكة منتجاته</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط القسم.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى AllSubCategoriesProductsView بعنوان &quot;allProducts (اسم القسم)&quot; وشبكة عمودين للمنتجات.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-031">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-031</span><span class="ttl">بحث محلي داخل منتجات القسم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب جزءًا من الاسم في حقل البحث أعلى الشبكة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تتضيق الشبكة فورًا إلى المنتجات المطابقة (name/desc/type/Ids/price/city/center/shipping/condition — الفلترة هنا محلية على القائمة المحملة).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-032">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-032</span><span class="ttl">ورقة الفلتر تطبق جميع الفلاتر مجتمعة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط زر الفلتر (الأيقونة).<br>اختر: فئة، فئة فرعية، نوعًا، سعرًا (من-إلى)، محافظة ومركز، شحن، حالة.<br>اضغط Apply.<br>لاحظ الشارات النشطة فوق الشبكة (chips بحذف فردي).<br>اضغط Clear All.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشبكة تصفي وفقًا للفلاتر مجتمعة؛ الشارات تعكس الاختيارات؛ Clear All تعيد القائمة كاملة؛ عدّاد النشط على زر الفلتر يعكس العدد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-033">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-033</span><span class="ttl">الانتقال من منتج في الشبكة إلى تفاصيله</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أي بطاقة منتج.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى ProductDetailsView — type=home.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-034">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-034</span><span class="ttl">خطأ تحميل منتجات القسم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ادخل شاشة منتجات القسم بدون إنترنت.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> حالة خطأ مع إمكانية إعادة المحاولة؛ لا انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-035">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-035</span><span class="ttl">رسالة تراكم القائمة عند إعادة التحميل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة منتجات القسم.<br>احصِ العناصر المعروضة.<br>ارجع ثم افتح مجددًا.<br>احصِ مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا يظهر تفريغ للقائمة؛ التطبيق يعيد الجلب؛ (سلوك معروف: الكيوبت يُلحق بالقائمة — راقب أي تضاعف للعناصر).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.6">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.6</span> Search</span>
+    <span class="gcount" data-count="3.6">0/9</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-036">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-036</span><span class="ttl">بحث نصي عن منتج موجود</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب Search (التبويب الثالث من الـ layout).<br>اكتب الكلمة في حقل البحث.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر النتائج المطابقة قائمة ListView؛ العدّاد يعرض &quot;{العدد} (n)&quot;؛ كل النتائج نسبة إلى النص (فلترة محلية للصفحة المحملة).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-037">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-037</span><span class="ttl">البحث بدون نتائج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب القيمة المذكورة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر حالة عدم وجود نتائج (أو قائمة فارغة بدون انهيار)؛ لا خطأ شاشة كاملة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-038">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-038</span><span class="ttl">الفلتر السيرفري يطبق ويعيد تحميل الصفحة الأولى</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط زر الفلتر (الأيقونة) أعلى البحث.<br>املأ الفلاتر المذكورة.<br>اضغط Apply؛ راقب إعادة تحميل الصفحة الأولى بالنظر إلى logcat: GET products?....</div>
+        <div class="det exp"><span class="key">المتوقع:</span> URL يحتوي: category_id, sub_category_id, min_price, max_price, city_id, center_id, shipping_type, condition + page=1.<br>العدّاد النشط يعكس عدد الفلاتر المختارة؛ الشارات قابلة للحذف الفردي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-039">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-039</span><span class="ttl">تحميل المزيد عند الوصول لـ 300px من النهاية (Infinite Scroll)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ابحث باستعلام يعيد عدة صفحات.<br>مرّر لأسفل ببطء حتى النهاية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يبدأ جلب الصفحة التالية تلقائيًا (لا يوجد تقطع أثناء التمرير بلا قفزات)؛ عدّاد page يتزايد؛ تتوقف القائمة عند last_page.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-040">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-040</span><span class="ttl">فشل تحميل الصفحات التالية يظهر زر إعادة المحاولة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ابحث وناقش إلى آخر الصفحة الأولى.<br>افصل الإنترنت.<br>مرّر للأسفل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر تذييل &quot;خطأ مع زر Retry&quot;؛ النتائج المحملة تبقى ظاهرة؛ لا استبدال للقائمة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-041">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-041</span><span class="ttl">حذف جميع الفلاتر يعيد القائمة الأصلية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;Clear All&quot; من ورقة الفلتر.<br>راقب النتائج والشارات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تختفي كل الشارات؛ يُعاد الطلب بدون params؛ الشاشة كما بعد البحث الحر.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-042">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-042</span><span class="ttl">الانتقال من نتيجة بحث إلى تفاصيل المنتج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أي SearchItemWidget.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى ProductDetailsView بـ type: &quot;home&quot;.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-043">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-043</span><span class="ttl">حالة التحميل الأولى في البحث (Shimmer)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب البحث ولاحظ أول لحظة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 10 عناصر Shimmer متموجة (Staggered) تظهر أثناء التحميل ثم تستبدل بالنتائج.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-044">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-044</span><span class="ttl">استجابة 401 أثناء البحث تخرج المستخدم (سلوك شامل)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بعد تسجيل الدخول، اجعل التوكن منتهيًا (أو سجّل خروج المستخدم من الخادم).<br>نفّذ بحثًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> عند 401: تظهر Toast &quot;youLoggedOutPleaseLoginAgain&quot; ويُمسح التوكن وينتقل المستخدم إلى LoginView (سلوك ApiService._performLogout).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.7">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.7</span> SeeAllBestView (أفضل المشاهدات — عرض الكل)</span>
+    <span class="gcount" data-count="3.7">0/3</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-045">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-045</span><span class="ttl">صفحة عرض الكل تحمل شبكة منتجات Best View</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الرئيسية اضغط &quot;See all&quot; بجانب شبكة أفضل المشاهدات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> عنوان &quot;bestView&quot;؛ شبكة عمودين؛ كل بطاقة تُفيدك بسعر/موقع/تقييم؛ التحميل يظهر Shimmer 20 عنصرًا ولو فشلت حالة status != true تظهر رسالة خطأ.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-046">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-046</span><span class="ttl">بحث محلي داخل صفحة عرض الكل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب في حقل البحث أعلى الشبكة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تضيق القائمة للعناصر المطابقة (name/desc/price)؛ لا إعادة طلب شبكة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-047">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-047</span><span class="ttl">فتح منتج من شبكة عرض الكل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أي منتج.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى ProductDetailsView — type=home.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.8">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.8</span> Product Details</span>
+    <span class="gcount" data-count="3.8">0/13</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-048">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-048</span><span class="ttl">تحميل تفاصيل المنتج بالكامل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل أي منتج من الرئيسية أو البحث.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر: صورة رئيسية 300px، شريط مصغرات (حد أقصى 56px بحدود accent للحالية)، الاسم، تاريخ وعدد المشاهدات، الموقع (إن وُجد)، السعر والجنيه، وصف (2 سطر مع Read more)، شارة &quot;عاجل&quot;/&quot;مميز&quot; إن وجدا.<br>الأزرار: قلب مفضلة، مقارنة، (دردشة) تُخفى للمالك، زر تعليمات شراء، زر الإبلاغ.<br>Shimmer أثناء التحميل، وحالات خطأ قابلة للمحاولة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-049">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-049</span><span class="ttl">معرض الصور ملء الشاشة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط الصورة الرئيسية.<br>اسحب بين الصور؛ قرص للتقريب.<br>أغلق المعرض.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> FullScreenGallery بخلفية سوداء + عنوان &quot;i / n&quot;؛ التكبير حتى 4x؛ الإغلاق يعيدك للشاشة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-050">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-050</span><span class="ttl">تقييم المنتج بتعليق ونجوم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح &quot;معدل المنتج&quot;/لوحة التقييم في نهاية الشاشة.<br>اختر عدد النجوم واكتب تعليقًا.<br>اضغط إرسال.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast نجاح (أو رسالة السيرفر)؛ تُعاد جلب التفاصيل (الطلب يتكرر في logcat: GET productDetials) ويظهر التقييم/العدد محدثًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-051">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-051</span><span class="ttl">الزائر يحاول التقييم — يُطلب تسجيل دخول</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر، افتح شاشة منتج.<br>حاول التفاعل مع التقييم/القلب.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر حوار &quot;تسجيل مطلوب&quot; (loginRequiredTitle/Message)؛ التأكيد ينقلك إلى LoginView؛ الإلغاء يبقي الزائر على الشاشة دون التقييم.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-052">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-052</span><span class="ttl">مالك الإعلان يرى قائمة إيقاف/تفعيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل إعلانك.<br>اضغط أيقونة الـ PopupMenu (⋮) في شريط التطبيق.<br>اختر &quot;إيقاف الإعلان&quot; ثم أكد في حوار AppConfirmDialog.<br>افتح  مجددًا ثم اختر &quot;تفعيل الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (3) LinearProgressIndicator يظهر أثناء الطلب؛ Toast نجاح؛ قيمة is_paused محليًا تتغير؛ الإعلان يختفي من الحالة &quot;نشط&quot;.<br>(4) يعود نشطًا بالعكس؛ أزرار &quot;التواصل الآن&quot; ودردشة تختفي تلقائيًا للمالك في جميع الأحوال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-053">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-053</span><span class="ttl">المستخدم العادي لا يرى قائمة الإيقاف/التفعيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل إعلان شخص آخر.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا تظهر قائمة ⋮ (pause/resume) في شريط التطبيق؛ زر الشات/التواصل ظاهر.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-054">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-054</span><span class="ttl">التقرير عن المنتج يفتح مسار &quot;التبليغ عن إعلان&quot;</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;الإبلاغ والدعم&quot; أسفل شاشة المنتج.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى ReportTheProductView بسياق sellerId + productId → عرض ReportAdViewBody (أسباب من GET /reportReasons).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-055">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-055</span><span class="ttl">زر &quot;تعليمات الشراء&quot; يعرض HTML من السيرفر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;كيف يتم الشراء؟&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> HowToMakePurchaseView تعرض Html من GET /purchaseInstructions مع RTL (أو حسب direction)؛ روابط تواصل خارجي تفتح المتصفح؛ عند الخطأ تظهر CustomErrorWidget مع إعادة محاولة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-056">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-056</span><span class="ttl">قائمة المنتجات المرتبطة (Related Products)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> انزل إلى نهاية الشاشة؛ لاحظ قسم &quot;المنتجات المرتبطة&quot;.<br>اضغط &quot;مشاهدة الكل&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القسم يعرض بطاقات أفقية؛ &quot;مشاهدة الكل&quot; تفتح AllRelatedProductsView (شبكة كاملة)؛ الضغط على بطاقة يفتح تفاصيل ذلك المنتج.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-057">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-057</span><span class="ttl">الصورة المصغرة في شريط المصغرات تُحدّث المعروضة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط ثاني صورة مصغرة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الصورة الرئيسية تتحول للثانية بحد accent 3px حول المصغرة المختارة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-058">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-058</span><span class="ttl">زر المشاركة (Share) لا يسبب انهيارًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أيقونة المشاركة في شريط التطبيق.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار؛ (السلوك الحالي: الزر فارغ onPressed: () {} — لا يحدث شيء؛ يُوثّق كملاحظة).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-059">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-059</span><span class="ttl">زر المقارنة على المنتج الأول</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط زر &quot;مقارنة&quot; (الشريط العائم على الصورة).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast يعرض &quot;addToCompare (1/2)&quot;؛ المنتج يُضاف لسلة المقارنة؛ لا يحدث انتقال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-060">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-060</span><span class="ttl">إضافة منتج ثانٍ تنقل إلى شاشة المقارنة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل منتج B.<br>اضغط زر &quot;مقارنة&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال تلقائيًا إلى CompareView بالمنتجين؛ الجدول يعرض: السعر، القديم (مشطوب)، النوع، الموديل، الماركة، المكان، التقييم، تاريخ الإضافة + بطاقة الوصف.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.9">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.9</span> Compare</span>
+    <span class="gcount" data-count="3.9">0/6</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-061">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-061</span><span class="ttl">إزالة المنتج الأقدم عند إضافة ثالث</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح منتج C.<br>اضغط زر المقارنة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُزال A (الأقدم) وتُضاف C؛ تنتقل للشاشة بالزوج (B, C).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-062">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-062</span><span class="ttl">إفراغ سلة المقارنة من شاشة المقارنة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;clear all&quot; (أيقونة في الـ AppBar).<br>أكد في AppConfirmDialog.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تفرغ السلة؛ تعرض الشاشة حالة &quot;اختر المنتج الثاني&quot; فارغة مع زر رجوع.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-063">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-063</span><span class="ttl">منتج واحد فقط في السلة — رسالة الانتظار</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة المقارنة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر رسالة &quot;اختر المنتج الثاني&quot; + زر رجوع؛ لا يتم استدعاء POST /compareProducts (يتطلب 2).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-064">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-064</span><span class="ttl">فشل مقارنة السيرفر يرجع لتفاصيل المنتج (fallback)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سلة بها A و B.<br>احجب compareProducts عبر proxy.<br>افتح شاشة المقارنة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) التطبيق يطلب productDetials لـ A و B ويدمجهما للعرض بدل خطأ كامل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-065">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-065</span><span class="ttl">جدول المقارنة يعرض فروقات الأسعار والتقييمات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة المقارنة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> السعر مميز بخلفية؛ السعر القديم مشطوب عند وجوده؛ التقييم بجانب reviews_count؛ صف التاريخ بتنسيق واضح؛ &quot;VS&quot; بين البطاقتين.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-066">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-066</span><span class="ttl">إزالة منتج من المقارنة من داخل التفاصيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل المنتج A.<br>اضغط زر المقارنة مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast &quot;removeFromCompare&quot;؛ يخرج A من السلة؛ عدّاد (0/2) في الضغطات التالية.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.10">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.10</span> Favorites</span>
+    <span class="gcount" data-count="3.10">0/7</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-067">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-067</span><span class="ttl">إضافة منتج للمفضلة من البطاقة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في الرئيسية/البحث، اضغط قلب أي بطاقة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القلب يتحول ممتلئًا فورًا (تفاؤل)؛ Toast &quot;addedToFav&quot; أو رسالة السيرفر؛ عند re-fetch يتزامن القيد؛ عنصر logcat: POST favourites بـ product_id.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-068">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-068</span><span class="ttl">إزالة منتج من المفضلة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط القلب مجددًا على نفس البطاقة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القلب يعود فارغًا فورًا؛ Toast &quot;removedFromFav&quot;؛ (logcat: DELETE favourites?product_id=).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-069">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-069</span><span class="ttl">فشل إضافة للمفضلة يُرجع القلب ويظهر Snackbar</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افصل الإنترنت.<br>اضغط قلب أحد المنتجات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القلب يتغير فورًا ثم يرتد لحالته الأصلية بعد فشل الطلب؛ Snackbar/Toast خطأ؛ الحالة متسقة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-070">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-070</span><span class="ttl">شاشة المفضلة تعرض المنتجات المفضلة وتبحث فيها</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من تبويب الحساب → &quot;Favorite&quot; (الدفع والرصيد ← Favorite).<br>لاحظ القائمة ثم اكتب في البحث.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> قائمة ProductRowCard للمفضّلة؛ بحث محلي بالاسم/الوصف؛ زر قلب بداخل كل عنصر للإزالة؛ Shimmer أثناء التحميل ثم RefreshIndicator.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-071">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-071</span><span class="ttl">إزالة من المفضلة داخل شاشة المفضلة بقلب</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط القلب في أحد العناصر بالقائمة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُحذَف العنصر من القائمة فورًا (تفاؤل) وToast تأكيد؛ بعد المزامنة تبقى القائمة متسقة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-072">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-072</span><span class="ttl">الزائر لا يستطيع إضافة مفضلة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر اضغط قلب أي منتج.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر حوار &quot;تسجيل مطلوب&quot;؛ لا يتم أي طلب شبكة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-073">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-073</span><span class="ttl">تزامن حالة القلب عبر الشاشات (Fav → Home → Details)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الرئيسية أضف A للمفضلة.<br>افتح تفاصيل A — لاحظ القلب.<br>ارجع للرئيسية — لاحظ القلب.<br>أزل A من شاشة المفضلة.<br>افتح تفاصيل A — لاحظ القلب.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القلب يظهر ممتلئًا في كل الشاشات بعد الإضافة، وفارغًا بعد الإزالة (لوجود |FavouriteIds|Set مشترك في FavCubit).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.11">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.11</span> Add New Ad (التدفق الموحّد)</span>
+    <span class="gcount" data-count="3.11">0/15</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-074">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-074</span><span class="ttl">فتح شاشة إضافة إعلان من &quot;إعلاناتي&quot;</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب &quot;Ads&quot; (إعلاناتي).<br>اضغط زر (+) العائم.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى AddNewAdView بخمسة بطاقات مرقمة (صور → بيانات → فئة → شحن → موقع).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-075">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-075</span><span class="ttl">رفع صورة من الكاميرا ومن المعرض (حد أقصى 5)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط بلاطة &quot;add&quot; → اختر من الكاميرا → التقط صورة.<br>اضغط add مجددًا → اختر من المعرض → أضف حتى 5 صور.<br>حاول إضافة صورة سادسة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر المصغرات؛ بلاطة &quot;add&quot; تُظهر العداد 3/5 وتختفي عند الامتلاء (5/5) — لا يمكن تجاوز 5.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-076">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-076</span><span class="ttl">النشر بدون صور يُرفض بالتحقق</span></div>
+        <div class="det"><span class="key">الخطوات:</span> املأ البيانات (الاسم/الوصف/السعر/الفئة/القسم/المحافظة/المركز) فقط بدون صور.<br>اضغط &quot;نشر الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة تحقق imagesRequired تُعرض؛ لا يبدأ أي إرسال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-077">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-077</span><span class="ttl">حساب نسبة الخصم تلقائيًا بجانب السعر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب السعر 1000 والخصم 150.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر نسبة الخصم المحسوبة (~15%) بجوار السعر بخط أحمر (-15%).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-078">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-078</span><span class="ttl">النشر مع تغطية اشتراك كاملة — بدون حقول دفع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> املأ الإعلان بالبيانات والصور.<br>اضغط &quot;نشر الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support للتأكد من رد subscriptions/current) لا تُفتح ورقة الدفع؛ يبدأ إرسال POST addNewAds بدون payment_method/receipt؛ Toast نجاح؛ الصفحة تُغلق بـ true.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-079">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-079</span><span class="ttl">النشر بدون تغطية — تُفتح ورقة الدفع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;نشر الإعلان&quot; بحساب غير مشترك.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُفتح ورقة &quot;اختر طريقة الدفع&quot; (Arabic): تشرح أن الباقة/الإعلانات المجانية خلصت؛ تُظهر &quot;رسوم النشر&quot; و&quot;رصيد المحفظة&quot;.<br>خيار &quot;محفظة بيعلي&quot; معطّل إن كان الرصيد &lt; الرسوم.<br>خيار &quot;تحويل&quot; قابل للتوسعة inline.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-080">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-080</span><span class="ttl">الدفع عبر المحفظة بقيمة كافية ينشر الإعلان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح ورقة الدفع.<br>اختر &quot;محفظة بيعلي&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast &quot;تم خصم الرسوم ونُشر الإعلان&quot; (أو رسالة السيرفر)؛ addNewAds يُرسل بـ payment_method: &#39;wallet&#39;؛ الصفحة تُغلق بـ true.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-081">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-081</span><span class="ttl">الدفع عبر المحفظة برصيد غير كافٍ — Snackbar رفض</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح ورقة الدفع.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خيار المحفظة يظهر معطّل/غير قابل للضغط؛ عند الضغط بالقوة تظهر Snackbar &quot;الرصيد غير كافٍ&quot;.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-082">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-082</span><span class="ttl">الدفع بتحويل بنكي بدون رفع إيصال يُرفض</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اختر طريقة تحويل (مثلاً Vodafone Cash).<br>اضغط &quot;نشر الإعلان&quot; في الورقة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast/Snackbar تطلب رفع صورة الإيصال (&quot;ارفع صورة التحويل&quot;)؛ لا يُرسل الطلب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-083">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-083</span><span class="ttl">الدفع بتحويل مع إيصال ينشر الإعلان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اختر طريقة تحويل.<br>أدخل رقم مرجع اختياري TRX123456.<br>اضغط &quot;ارفع صورة التحويل&quot; واختر صورة.<br>اضغط &quot;نشر الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُرسل POST addNewAds multipart بـ payment_method: &lt;code&gt; وtransfer_reference وreceipt: file؛ Toast &quot;تم إرسال طلب النشر&quot;؛ الصفحة تُغلق بـ true.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-084">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-084</span><span class="ttl">رفض السيرفر لحقول الدفع يعيد فتح الورقة (safety net)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> املأ إعلانًا وانشر (يحتاج تغطية معطلة).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) رسالة خطأ تُصنف كـ PaymentRequired؛ يُعاد فتح ورقة الدفع تلقائيًا بدل خطأ عام.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-085">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-085</span><span class="ttl">الفئات المعتمدة: اختيار الفئة يحمّل أقسامها الفرعية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اختر الفئة الرئيسية من القائمة المنسدلة.<br>لاحظ القائمة الفرعية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُحمَّل الأقسام الفرعية لتلك الفئة فقط (AllSubCategoriesCubit.getAllSubCategories(categoryId:))؛ القيم السابقة تُمسح عند تغيير الفئة (ValueKey).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-086">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-086</span><span class="ttl">تغيير الشحن والحالة (chips) يعمل كاختيار مفرد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;Paid Shipping&quot; ثم &quot;Free Shipping&quot; ثم &quot;Used&quot; ثم &quot;New&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يتبقى خيار واحد محدد في كل مجموعة؛ الألوان/الحدود تدل على التحديد (ChoiceChip).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-087">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-087</span><span class="ttl">اختيار المحافظة يرشح المراكز + الافتراضيات من البروفايل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لاحظ قيم القائمتين عند فتح الشاشة (الافتراضيات).<br>غيّر المحافظة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الافتراضيات = مدينة/مركز البروفايل؛ تغيير المحافظة يعيد بناء قائمة المراكز المفلترة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-088">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-088</span><span class="ttl">النموذج بكل الحقول صالح ينشر الإعلان بدون اشتراك وبناءً على fee=0</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بحساب بدون اشتراك، حاول النشر.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) ورقة الدفع تُنشأ وتُستدعى submit تلقائيًا (fee=0 → نشر مجاني) دون تدخل المستخدم.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.12">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.12</span> Edit Ad</span>
+    <span class="gcount" data-count="3.12">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-089">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-089</span><span class="ttl">فتح شاشة تعديل إعلان مملوك</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من &quot;إعلاناتي&quot; افتح قائمة تعديل/زر &quot;تعديل&quot; في العنصر (إن وجد).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تنفتح EditAdView مع pre-fill: الاسم، الوصف، السعر، الخصم، الفئة والمسار الفرعي، الشحن/الحالة، المحافظة والمركز، الصور الحالية كبطاقة existingImages.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-090">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-090</span><span class="ttl">تعديل السعر والحفظ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> غيّر السعر.<br>اضغط &quot;تعديل الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST /editAds multipart بـ ad_id وبيانات التحديث؛ Toast &quot;تم التعديل&quot;؛ الصفحة تُغلق بـ true.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-091">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-091</span><span class="ttl">إضافة صور جديدة والإبقاء على القديمة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> احذف صورة واحدة من القديمة محليًا (X).<br>أضف صورتين جديدتين.<br>احفظ.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> العدد الإجمالي ≤ 5؛ تُرسل images[] = الجديدة فقط؛ (ملاحظة: لا يُعاد إرسال الصور القديمة — يعتمد على السيرفر لحذف المحذوف).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-092">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-092</span><span class="ttl">تعديل بدون أي تغييرات يُقبل ولا يفسد شيئًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;تعديل الإعلان&quot; مباشرة بدون أي تغيير.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُقبل الطلب؛ Toast نجاح؛ لا Corruption للبيانات (رد GeneralModel بـ status: true).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-093">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-093</span><span class="ttl">رجوع بدون حفظ لا يغيّر الإعلان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> عدّل الاسم ثم اضغط زر الرجوع.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُغلق الشاشة بدون طلب editAds؛ الإعلان على السيرفر كما هو (يظهر بالاسم القديم في &quot;إعلاناتي&quot;).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.13">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.13</span> My Ads (إعلاناتي)</span>
+    <span class="gcount" data-count="3.13">0/7</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-094">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-094</span><span class="ttl">تبويبات الحالة تحصر العدادات بشكل صحيح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب &quot;Ads&quot;.<br>بدّل بين التبويبات الثلاثة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل تبويب يعرض العناصر المناسبة فقط (is_paused == true → &quot;الغير نشط&quot;؛ غير ذلك &quot;النشط الان&quot;؛ الكل = المجموع) والعدادات صحيحة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-095">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-095</span><span class="ttl">بحث في إعلاناتي بالاسم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب في حقل &quot;ابحث باسم الإعلان...&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تتضيق القائمة بالاسم/الوصف؛ العدّادات تتبع المصنّف والفرز محلي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-096">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-096</span><span class="ttl">إيقاف إعلان من إعلاناتي مع حوار تأكيد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح خيارات أحد الإعلانات ← &quot;pause&quot;/&quot;pauseAd&quot;.<br>أكد في الحوار.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> LinearProgress أثناء الطلب؛ POST pauseAd بـ {ad_id}؛ تُحدّث القائمة محليًا؛ Toast نجاح.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-097">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-097</span><span class="ttl">إعادة تفعيل إعلان متوقف</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح قائمة الإعلان ← &quot;resumeAd&quot; ← أكد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST resumeAd بـ {ad_id}؛ is_paused=false محليًا؛ يعود للتبويب &quot;النشط الان&quot;.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-098">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-098</span><span class="ttl">حذف إعلان مع حوار تأكيد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح خيارات الإعلان ← &quot;حذف&quot;.<br>أكد في الحوار.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST deleteAds بـ {ad_id}؛ يُزال العنصر من القائمة نهائيًا؛ Toast تأكيد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-099">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-099</span><span class="ttl">الضغط المزدوج على زر إيقاف لا يُرسل مرتين</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;pause&quot; مرتين بسرعة متتالية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يصل طلب واحد فقط للسيرفر (_pauseResumeInFlight)؛ لا تكرار للتوست ولا للطلب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-100">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-100</span><span class="ttl">الاشتراك بباقة من زر &quot;الباقات&quot; داخل إعلاناتي</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط زر &quot;الباقات&quot; (AddBundleButton).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى PackagesView (GET subscriptionPackages)؛ العنوان/الخطط كما في قسم 3.14.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.14">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.14</span> Packages &amp; Subscription (الباقات)</span>
+    <span class="gcount" data-count="3.14">0/8</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-101">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-101</span><span class="ttl">عرض الباقات المتاحة بالتبويبات الزمنية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح &quot;الباقات&quot;.<br>بدّل بين التبويبات: شهري / 3 شهور / 6 شهور / سنوي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُفلتر البطاقات محليًا حسب المدة؛ كل بطاقة تعرض: الاسم، السعر، features[]، زر &quot;اشترك الآن&quot; أو &quot;تجديد الاشتراك&quot; للمشترك.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-102">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-102</span><span class="ttl">الاشتراك عبر المحفظة (مبلغ كافٍ)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الباقة ← &quot;اشترك الآن&quot;.<br>اختر &quot;محفظة&quot; من الورقة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST /subscriptions/checkout بجسم JSON {package_id, payment_method: &#39;wallet&#39;}؛ Toast نجاح؛ إعادة تحميل الباقات؛ زر التجديد يظهر للباقة المشترك بها.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-103">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-103</span><span class="ttl">الاشتراك عبر التحويل: اختيار الطريقة ورفع الإيصال</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الباقة ← التحويل ← انتقل إلى TransferView.<br>لاحظ قائمة طرق الدفع (GET /payment-methods — قد تعرض فودافون/اورانج/اتصالات/انستاباي/فوري/بنك/محفظة/كاش).<br>اختر طريقة ← أدخل رقم مرجع اختياري ← ارفع الإيصال.<br>اضغط &quot;تأكيد الاشتراك&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST /subscriptions/checkout multipart بـ package_id, payment_method, receipt؛ Toast نجاح؛ (تفعيل عبر الخادم قد يتطلب مراجعة الإيصال — يختلف حسب السيرفر).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-104">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-104</span><span class="ttl">نسخ رقم الحساب من بطاقة طريقة الدفع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط زر النسخ (أيقونة النسخ) في بطاقة طريقة الدفع.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رقم/حساب الطريقة يُنسخ للحافظة؛ Toast &quot;تم نسخ الرقم&quot;؛ (يحتاج صلاحية الحافظة — على iOS قد تُطلب أول مرة).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-105">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-105</span><span class="ttl">عرض الباقة الحالية في شاشة المحفظة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الدفع والرصيد (تبويب الحساب ← Payment and Balance).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بطاقة &quot;الباقة الحالية&quot; تُعرض (الباقة حيث is_subscribed == true) مع تفاصيلها.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-106">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-106</span><span class="ttl">الاشتراك برصيد محفظة غير كافٍ (السيرفر يرفض)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> خلال الورقة اختر &quot;محفظة&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> السيرفر يرفض (4xx برسالة) ويعرضها التطبيق كـ Toast/رسالة؛ لا اشتراك يُسجل؛ ولا يتغير الرصيد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-107">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-107</span><span class="ttl">بيانات الطرق المجلوبة من السيرفر تُعرض بالكامل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح TransferView.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر كل طرق الدفع القادمة من السيرفر بـ name و account؛ الأحرف العربية تتعرف عبر brandForPaymentMethod() (فودافون/أورانج/اتصالات/انستاباي/فوري/بنك/محفظة/كاش) لوجو/لون صحيح.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-108">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-108</span><span class="ttl">تجديد اشتراك منتهٍ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الباقات.<br>لاحظ زر الباقة المنتهية: &quot;تجديد الاشتراك&quot; بدل &quot;اشترك الآن&quot;.<br>أكمل مسار الدفع مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُنشأ اشتراك جديد عبر checkout عادي؛ لا يظهر انتهاء القديمة معطلًا للدفع.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.15">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.15</span> Wallet &amp; Payment (الدفع والرصيد)</span>
+    <span class="gcount" data-count="3.15">0/9</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-109">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-109</span><span class="ttl">شاشة الدفع والرصيد تُظهر الرصيد والحركات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تبويب الحساب ← &quot;Payment and Balance&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُظهر رصيد المحفظة بعملة wallet_balance (من البروفايل) + قائمة الحركات مع: النوع (إيداع/خصم)، التاريخ، المبلغ، حالة (approved/rejected/pending)، طريقة الدفع مترجمة، زر &quot;عرض الإيصال&quot; عند توفره.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-110">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-110</span><span class="ttl">شحن الرصيد بتحويل (Wallet Top-up)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في شاشة الدفع اضغط &quot;أضف رصيد&quot;.<br>أدخل المبلغ 100.<br>اختر طريقة تحويل ← ارفع إيصال ← رقم مرجع اختياري.<br>اضغط &quot;تأكيد الشحن&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST /wallet/top-up multipart {amount, payment_method, transfer_reference?, receipt}؛ Toast &quot;تم إرسال طلب الشحن&quot;؛ الصفحة تصعد true؛ تتحدث بيانات البروفايل والسجل بعد العودة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-111">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-111</span><span class="ttl">مبلغ شحن غير صالح (سالب/صفر/حروف)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة في حقل المبلغ ثم اضغط تأكيد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 0 أو سالب أو حروف تُمنع/ترفض برسالة واضحة؛ رقم ضخم جدًا يُرفض من السيرفر برسالة (422) وتظهر كـ Toast.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-112">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-112</span><span class="ttl">عرض الإيصال من سجل الحركات (تحميل/مشاركة)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من سجل الحركات اضغط &quot;عرض الإيصال&quot;.<br>في الـ bottom sheet: اضغط &quot;تحميل&quot; (Save to gallery) ثم &quot;مشاركة&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُفتح صورة الإيصال؛ التحميل يحفظها في المعرض (Gal) بإذن؛ المشاركة تفتح ورقة مشاركة النظام (share_plus).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-113">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-113</span><span class="ttl">السجل يميز بين الإيداع والخصم بالألوان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لاحظ مؤشرات الحركات في السجل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الإيداع بالأخضر/لون التطبيق (▼) والخصم بالأحمر (▲) &quot;خصم&quot; حسب isCredit heuristic.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-114">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-114</span><span class="ttl">السجل يعرض حالات &quot;قيد المراجعة&quot; للتحويلات الجديدة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أجرِ شحنًا ثم ارجع فورًا للسجل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحركة تظهر بحالة &quot;قيد المراجعة&quot;/&quot;انتظار&quot; (pill بخلفية مناسبة) حسب تمييز status في الكود.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-115">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-115</span><span class="ttl">سجل فارغ (لا حركات سابقة)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة الدفع والرصيد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُعرض الشاشة بلا حركات (قائمة فارغة/حالة مناسبة) دون انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-116">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-116</span><span class="ttl">خطأ أثناء جلب سجل الحركات (offline)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افصل الإنترنت ← ادخل شاشة الدفع والرصيد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر حالة خطأ/رسالة مناسبة؛ لا انهيار؛ عند توفر الإنترنت + إعادة المحاولة يُحل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-117">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-117</span><span class="ttl">الدفع للباقة عبر المحفظة يُخصم من الرصيد (تكامل كامل)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجل الرصيد الحالي (X).<br>اشترك بباقة عبر &quot;محفظة&quot;.<br>عد إلى شاشة الدفع والرصيد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الرصيد ≤ X (ناقص سعر الباقة Y) بمجرد موافقة السيرفر على الشحنة؛ حركة &quot;خصم&quot; تظهر بالسجل؛ الباقة الحالية تُعرض.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.16">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.16</span> Statistics (إحصائيات البائع)</span>
+    <span class="gcount" data-count="3.16">0/3</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-118">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-118</span><span class="ttl">عرض ملخص الشهر الحالي</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الحساب ← &quot;Statistics&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُعرض 6 بطاقات: إجمالي المبيعات، المبلغ، المنتجات المعروضة، المهتمون، المفضلة، الشكاوى؛ بطاقة &quot;periodTotal&quot;؛ خط زمني للأيام (EasyDateTimeLine)؛ أسهم تنقل الشهر (‖LTR‖).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-119">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-119</span><span class="ttl">التنقل بين الأشهر السابقة/التالية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط سهم الشهر السابق ← لاحظ الاسم والبيانات.<br>اضغط سهم الشهر التالي حتى الشهر الحالي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تتغير month_name والبيانات (تُطلب من السيرفر month=YYYY-MM)؛ التحميل يظهر LinearProgressIndicator رفيعًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-120">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-120</span><span class="ttl">اختيار يوم من الخط الزمني لا يُعيد طلب الشبكة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط على أي يوم في الخط الزمني.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تتحدث بطاقة period بأرقام ذلك اليوم محليًا (بدون طلب شبكة جديد — البيانات مضمنة في days[]).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.17">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.17</span> Profile &amp; Update Profile</span>
+    <span class="gcount" data-count="3.17">0/7</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-121">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-121</span><span class="ttl">بيانات البروفايل تُعرض بشكل صحيح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تبويب &quot;Account&quot;.<br>لاحظ القسم العلوي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الصورة (أو placeholder)، الاسم، الهاتف، &quot;Member From&quot; + تاريخ created_at، زر &quot;Change&quot; بجانب الاسم.<br>أثناء التحميل تظهر ProfileInfoShimmer؛ خطأ → نص &quot;Error&quot;.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-122">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-122</span><span class="ttl">تعديل الاسم والبريد والهاتف وحفظ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;Change&quot;.<br>عدّل الاسم والهاتف واضغط &quot;Save&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST updateProfile multipart بالحقول غير الفارغة فقط؛ Toast نجاح؛ الانتقال إلى LayoutView؛ البروفايل يُحدّث (ProfileCubit.getProfile()).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-123">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-123</span><span class="ttl">تغيير صورة البروفايل من المعرض</span></div>
+        <div class="det"><span class="key">الخطوات:</span> شاشة التعديل ← اضغط الدائرة → &quot;change&quot; → اختر صورة.<br>اضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الصورة تُعالج (800px / جودة 85) وتُرفع multipart (image)؛ تظهر الصورة الجديدة في البروفايل بعد الحفظ.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-124">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-124</span><span class="ttl">حذف الصورة المعلّقة (&quot;delete&quot;) يرجع للصورة الأصلية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اختر صورة جديدة.<br>اضغط &quot;delete&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُلغى الصورة المعلّقة؛ تظهر صورة البروفايل الأصلية من السيرفر مجددًا؛ عند الحفظ لا تُرفق صورة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-125">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-125</span><span class="ttl">التحقق من حقول الاسم/الإيميل في تعديل البروفايل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الاسم: يرفض (&lt; 2 أو أرقام/رموز) برسالة displayName؛ الإيميل يرفض برسالة email.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-126">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-126</span><span class="ttl">الاختصارات الأربعة في البروفايل تعمل كلها</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط كلًّا من الأزرار الأربعة بالتتابع.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Payment and Balance → PaymentAndBalanceView؛ Favorite → FavView؛ Statistics → StatisticsView؛ Comparison → CompareView؛ كلها تفتح بدون انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-127">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-127</span><span class="ttl">عرض صورة بروفايل مكسورة لا ينهار</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب الحساب.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر أيقونة/widget الخطأ بدل الصورة (errorBuilder)؛ لا انهيار؛ لا شاشة بيضاء.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.18">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.18</span> Settings / Change Password / Delete Account</span>
+    <span class="gcount" data-count="3.18">0/8</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-128">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-128</span><span class="ttl">شاشة الإعدادات تعرض كل العناصر بالترتيب</span></div>
+        <div class="det"><span class="key">الخطوات:</span> انزل في تبويب الحساب إلى قسم &quot;Settings&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> العناصر بالترتيب: Reporting and Support ← Privacy ← Change Password ← Change Language ← Theme (مفتاح فاتح/داكن) ← Notify (مفتاح محلي) ← Legal info (قابل للطي: About / Terms / Privacy Policy) ← Delete Account (أحمر) ← زر Sign Out الأحمر في الأسفل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-129">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-129</span><span class="ttl">Change Language — التبديل للإنجليزية LTR</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← &quot;Change Language&quot; (أو showChangeLangSheet).<br>اختر &quot;English&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> ورقة سفلية بقائمتين (العربية/English) مع علامة الصح على الحالي؛ عند الاختيار: يحفظ language=en ثم EasyLocalization.setLocale؛ كل النصوص تتحول للإنجليزية فورًا (LTR)؛ تُعاد كل البيانات (Home/Search/…) تلقائيًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-130">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-130</span><span class="ttl">Change Language — العودة للعربية RTL</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح ورقة تغيير اللغة ← اختر &quot;اللغة العربية&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعود كل الواجهات للعربية RTL؛ Accept-Language يُرسل ar في الطلبات التالية (logcat).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-131">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-131</span><span class="ttl">Theme — التبديل للوضع الداكن وحفظه</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← &quot;Theme&quot; — بدّل للوضع الداكن.<br>اخرج من التطبيق وأعد فتحه.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تتغير كل الألوان للوضع الداكن فورًا (خلفية 0xff0F172A إلخ)؛ بعد إعادة الفتح يبقى الوضع الداكن (isDarkMode محفوظ في prefs).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-132">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-132</span><span class="ttl">تغيير كلمة المرور بنجاح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← &quot;Change Password&quot;.<br>(حقل كلمة المرور القديمة موجود لكن بدون تحقق).<br>أدخل الجديدة NewTest1234! والتأكيد نفسه.<br>اضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> POST changePassword multipart بـ {email, reset_token: &lt;userToken&gt;, new_password, confirm_new_password}؛ Toast نجاح؛ الانتقال إلى LoginView (إخراج كامل) ومسح بيانات الدخول؛ LayoutCubit.pageIndex = 0.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-133">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-133</span><span class="ttl">تأكيد كلمة المرور غير المتطابق مرفوض</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل القيمتين واضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة تحقق تطابق كلمتي المرور؛ لا يُرسل الطلب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-134">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-134</span><span class="ttl">كلمة مرور ضعيفة في تغيير كلمة المرور</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل test مرتين واضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة المتطلبات (8–30 + كبيرة + صغيرة + رقم + رمز)؛ مرفوض.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-135">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-135</span><span class="ttl">حذف الحساب نهائيًا من الإعدادات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← &quot;Delete Account&quot;.<br>اقرأ التحذيرين (accountDeletionWarning, accountRestorationInfo).<br>اضغط الزر الأحمر &quot;Delete now&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (سلوك الكود الحالي): POST deleteAccount بلا جسم؛ Toast نجاح؛ الانتقال إلى LoginView (finish)؛ ملاحظة: التوكن والكاش لا يُمسح (لا يحدث Logout صريح) — انظر القسم 11/10؛ اضغط Back للتأكد أنك لا تعود للحساب المحذوف بدون تسجيل جديد.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.19">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.19</span> Notifications</span>
+    <span class="gcount" data-count="3.19">0/8</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-136">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-136</span><span class="ttl">عرض الإشعارات مع عدّاد غير المقروء</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من جرس الإشعارات في Home (الأيقونة العلوية) افتح Notifications.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> قائمة الكروت: غير المقروء بخلفية بلون التطبيق الفاتح ونقطة accent؛ العنوان بسطر والجسم بثلاثة؛ التاريخ؛ عدّاد &quot;غير مقروء&quot; في AppBar إن وُجد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-137">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-137</span><span class="ttl">تحديد إشعار كمقروء عند الضغط عليه</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط على الإشعار غير المقروء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تومض البطاقة كمقروءة على الفور (optimistic)؛ يتناقص عدّاد AppBar؛ يُرسل PATCH notifications/:id/read؛ (عند فشل الشبكة يتراجع القلب ومعها العدّاد).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-138">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-138</span><span class="ttl">تحديد الكل كمقروء</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أيقونة done_all_rounded (تظهر فقط إن كان unreadCount &gt; 0).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الكل يصبح مقروءًا فورًا؛ يعود العدّاد صفرًا؛ (logcat: PATCH notifications/read-all).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-139">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-139</span><span class="ttl">حذف إشعار بالسحب (Swipe to delete)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اسحب إشعارًا لليسار (Dismissible).<br>أكد في الحوار (deleteNotificationConfirm).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يظهر خلفية حمراء للسحب؛ بعد التأكيد يُحذف العنصر؛ يتناقص العدّاد إن كان غير مقروء؛ (logcat: DELETE notifications/:id).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-140">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-140</span><span class="ttl">حذف الكل (Clear all) مع تأكيد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أيقونة delete_sweep_outlined ← أكد في الحوار العربي (&quot;سيتم حذف كل الإشعارات نهائيًا؟&quot;).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُمسح القائمة كلها (تفاؤلي مع تراجع عند الفشل)؛ عدّاد صفر؛ logcat: DELETE notifications.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-141">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-141</span><span class="ttl">فلتر All / Read / Unread المحلية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل الشرائح: All ← Read ← Unread.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل فلتر يعرض المناسب فقط؛ لا طلبات شبكة مع كل تبديل (فصل محلي).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-142">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-142</span><span class="ttl">عدّاد الجرس على Home يتزامن مع القراءة/الحذف</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل عدّاد الجرس في Home.<br>افتح الإشعارات ← اقرأ واحدًا (বা الكل).<br>ارجع للـ Home.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> عدّاد الجرس متراجع بنفس المقدار (نفس NotificationsCubit instance app-wide)؛ يختفي عند 0.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-143">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-143</span><span class="ttl">حالة عدم وجود إشعارات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الإشعارات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> NoDataWidget (أيقونة Validation.svg + رسالة noNotificationsOfThisType)؛ لا شريط أخطاء.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.20">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.20</span> Chat</span>
+    <span class="gcount" data-count="3.20">0/13</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-144">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-144</span><span class="ttl">فتح محادثة مع بائع من شاشة المنتج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من تفاصيل منتج بائع آخر اضغط &quot;تواصل الآن&quot; (StartChatButton).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُنشأ/يُعاد فتح Conversation وتنتقل للمحادثات بـ pushNamed(Routes.chatView)؛ يحدث قرص/تحديث القائمة؛ الزر مخفي إن كنت مالك المنتج (زرار التواصل لا يظهر لك أصلًا).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-145">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-145</span><span class="ttl">إرسال رسالة نصية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب النص في حقل الكتابة.<br>اضغط زر الإرسال (الممتلئ accent).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر فقاعتي &quot;أنا&quot; فورًا (optimistic) على اليمين بأرضية accent ونص أبيض + ticks (✓✓ زرقاء إن قُرئت)؛ الإرسال للسيرفر في الخلفية؛ النص يبقى في القائمة بلا تكرار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-146">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-146</span><span class="ttl">إرسال صورة (كاميرا ثم معرض)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح attachment sheet ← اختر &quot;كاميرا&quot; ← التقط الصورة.<br>كرّر بخيار &quot;معرض&quot; ← اختر صورة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُعرض المصغرات في المحادثة immmediately (optimistic)؛ تُرفع multipart image؛ النوع image؛ حجم ≤ 5MB يُقبل؛ أكبر يُرفض برسالة محلية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-147">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-147</span><span class="ttl">استقبال رسائل من الطرف الآخر (Polling)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من حساب B أرسل &quot;اختبار الطرف الآخر&quot;.<br>على شاشة A انتظر التحديث التلقائي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر الرسالة تلقائيًا خلال دقيقة (poll بـ after_id) بعد عودة التطبيق للواجهة (resume)؛ إن كانت الواجهة مفتوحة تُدمج لحظيًا؛ ticks أزرق على رسائلك بعد قراءة B.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-148">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-148</span><span class="ttl">تعليم المحادثة كمقروءة وتصفير العدادات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح المحادثة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> PATCH .../read يُرسل؛ تُكتب is_read=true محليًا؛ عدّاد المحادثة يُصفر؛ ChatUnreadCubit يتناقص عالميًا؛ شارة تبويب الشات تتناقص.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-149">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-149</span><span class="ttl">حذف رسالتك (stub &quot;رسالة محذوفة&quot;)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> Long-press رسالتك ← &quot;حذف&quot; (أو delete icon).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُستبدل ببطاقة &quot;رسالة محذوفة&quot; (blocked icon، أحمر) محل fallback؛ يُنفذ DELETE message؛ الطرف الآخر عند poll يرى نفس الـ stub.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-150">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-150</span><span class="ttl">حذف/إخفاء محادثة من القائمة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في القائمة: اضغط مطولًا أو أيقونة الحذف ← أكد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تختفي المحادثة من قائمتك فقط (hide, not delete for other party)؛ عدّاد غير المقروء يتناقص؛ السجل لطرف A فقط لا يتأثر.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-151">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-151</span><span class="ttl">عداد التبويب غير المقروء على Tabs يعكس الواقع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الحساب B أرسل 3 رسائل.<br>على A تعطّل التطبيق وافتحه (resume).<br>لاحظ شارة تبويب الشات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشارة تُظهر عدد غير المقروء (99+ cap)؛ عند فتح المحادثات تُحدّث/تصفر حسب ما قرأ؛ 99+ إن تجاوزت 99.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-152">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-152</span><span class="ttl">صفحة المحادثات — حالة فارغة + حالة تحميل + خطأ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تبويب المحادثات بحساب جديد.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر ConversationsEmpty (أيقونة forum + رسالة noConversations)؛ أثناء الجلب Shimmer 6 عناصر؛ عند خطأ: زر &quot;محاولة مرة أخرى&quot;.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-153">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-153</span><span class="ttl">السيرفر يعيد unread_count → ألويتها للمحفوظ محليًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بحساب A: افتح المحادثة من جهاز ثانٍ وقرأ الكل.<br>على الجهاز الأول انتظر التحديث (poll 2 دقيقة/resume).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُصفر الشارات بعد التزامن مع unread_count السيرفري (اللي بدوره يتحدث مع كل قراءة).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-154">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-154</span><span class="ttl">صورة أكبر من 5MB تُرفض برسالة محلية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> حاول إرسال الصورة من المرفقات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة محلية &quot;حجم الصورة يجب ألا يتجاوز 5MB&quot;؛ لا يُرفع الملف.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-155">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-155</span><span class="ttl">Send button معطل عند فارغ النص</span></div>
+        <div class="det"><span class="key">الخطوات:</span> راقب زر الإرسال بحقل فارغ ثم اكتب شيئًا ثم امسحه.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> أخضر معبأ accent إلا والنص فارغ → رمادي/غير مفعل؛ توقيت إرسال ≈ لحظة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-156">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-156</span><span class="ttl">الكتابة بالعربية متعددة الأسطر في حقل الرسالة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب نصًا فيها سطرًا جديدًا (Enter).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحقل يتوسع حتى ~42px ارتفاع؛ النص يُرسل بفواصله الحقيقية؛ الفقاعات تعرض التنسيق بطريقة سليمة.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.21">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.21</span> Report &amp; Complaints (الإبلاغ)</span>
+    <span class="gcount" data-count="3.21">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-157">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-157</span><span class="ttl">التبليغ عن إعلان من شاشة تفاصيّل: اختيار سبب والإرسال</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من تفاصيل المنتج ← &quot;الإبلاغ والدعم&quot;.<br>اختر سببًا من القائمة (شارة accent + ✓).<br>أضف وصفًا اضافيًا.<br>اضغط &quot;Send&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast نجاح (reportSent)؛ POST reportAd بـ {seller_id, product_id, reason, description}؛ تُعاد الشاشة pop(true)؛ تُمسح الاختيارات.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-158">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-158</span><span class="ttl">الإرسال بدون اختيار سبب يُظهر رسالة تحقق</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لا تختر أي سبب؛ اكتب وصفًا فقط.<br>اضغط &quot;Send&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Snackbar pleaseSelectReason؛ لا يُرسل الطلب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-159">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-159</span><span class="ttl">شكوى عامة (من المساعدة) بأنواع من السيرفر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> المساعدة ← &quot;Report&quot; (Subtitle: reportProduct).<br>اختر نوع الشكوى من القائمة.<br>اكتب الرسالة ← اضغط &quot;Send&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القائمة ممتلئة بأنواع من السيرفر (ديناميكية)؛ POST addComplaint بـ {complaint_id, message}؛ Toast نجاح؛ تُصفَر الحقول.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-160">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-160</span><span class="ttl">قائمة أنواع الشكاوى الفاشلة (لا تُحمّل)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدون إنترنت افتح مسار الشكوى العامة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> القائمة فارغة/أو خطأ بحالة مناسبة؛ لا انهيار؛ (ملاحظة: ما يجيب getAllComplaintsTypesData يقع مرة واحدة عند الإقلاع).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-161">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-161</span><span class="ttl">التبليغ كـ Guest يُمنع بالدخول</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر اضغط &quot;الإبلاغ والدعم&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> حوار &quot;تسجيل مطلوب&quot; يظهر؛ لا يفتح مسار التبليغ.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.22">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.22</span> Help &amp; Support (بيعلي — المساعدة والدعم)</span>
+    <span class="gcount" data-count="3.22">0/3</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-162">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-162</span><span class="ttl">فتح شاشة المساعدة وكل عناصرها</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من الإعدادات ← &quot;Reporting and Support&quot;.<br>راجع كل العناصر: Chat / Email / Call us / Report / Common Questions.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Chat → HelpSupportChatView؛ Email → mailto (يفتح تطبيق البريد برسالة بمفتاح subject)؛ Call us → حوار الاتصال بـ tel:؛ Report → ReportTheProductView (الشكوى العامة)؛ &quot;Common Questions&quot; → بطاقتي الأسئلة الشائعة القابلة للتمديد (نصوص عربية ثابتة).<br>ملاحظة: أرقام الهاتف/البريد في الشاشة مهاردكود وقد لا تتطابق مع الروابط الفعلية (بين bi3lyapp@example.com المعروض وmustafa.bahr12323@gmail.com في mailto).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-163">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-163</span><span class="ttl">شات الدعم المحلي — إرسال رسالة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب في الحقل ← اضغط أيقونة الإرسال.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُضاف رسالتك إلى القائمة (newest-first)؛ التمرير للأسفل تلقائيًا؛ الرسائل محفوظة في الذاكرة فقط وتُفقد عند مغادرة الشاشة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-164">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-164</span><span class="ttl">زر الكاميرا في شات الدعم لا يفعل شيئًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط أيقونة الكاميرا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (سلوك الكود الحالي) لا يحدث شيء — توثيق ملاحظة فقط، وليست دليل فشل متوقع.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.23">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.23</span> Legal Content &amp; How to Purchase</span>
+    <span class="gcount" data-count="3.23">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-165">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-165</span><span class="ttl">صفحة About تعرض HTML السيرفر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← Legal info ← &quot;About the App&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> LegalContentView بنوع About؛ تعرض HTML بـ flutter_html؛ العناوين بلون التطبيق؛ الخط RTL إن كانت direction=rtl؛ لدى الخطأ: CustomErrorWidget + إعادة محاولة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-166">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-166</span><span class="ttl">صفحة Terms &amp; Conditions</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← Legal info ← &quot;Terms &amp; Conditions&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعرض محتوى الشروط بتنسيق HTML؛ روابط السيرفر تفتح بالمتصفح الخارجي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-167">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-167</span><span class="ttl">صفحة Privacy Policy</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← Legal info ← &quot;Privacy Policy&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعرض سياسة الخصوصية HTML؛ نفس سلوك RTL والخطأ أعلاه.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-168">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-168</span><span class="ttl">صفحة &quot;تعليمات الشراء&quot; من تفاصيل المنتج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من تفاصيل أي منتج اضغط &quot;How is the purchase made?&quot; / &quot;تعليمات الشراء&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تعرض HTML من السيرفر؛ RTL إن كان direction=rtl؛ عند خطأ: زر إعادة المحاولة يعمل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-169">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-169</span><span class="ttl">الروابط داخل المحتويات القانونية تفتح خارجيًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح About ← اضغط أي رابط داخل النص.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الرابط يُفتح في المتصفح الخارجي (LaunchMode.externalApplication)؛ لا داخل التطبيق.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.24">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.24</span> Privacy Settings / Change Language / Theme</span>
+    <span class="gcount" data-count="3.24">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-170">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-170</span><span class="ttl">إعدادات الخصوصية — وسيلة التواصل المفضلة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> الإعدادات ← &quot;Privacy&quot;.<br>لاحظ رقائق الطرق الثلاث (شات بيعلي / هاتف / كلاهما — أو كما يرجع السيرفر contact_methods).<br>اختر &quot;Phone&quot;؛ عدّل رقم الهاتف.<br>اضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> GET settings يعبئ القيم الحالية؛ PATCH settings بـ {contact_method, contact_phone, notify_new_products, store_name?, store_address?}؛ Toast تأكيد (settingsUpdated)؛ الصفحة تُغلق بـ pop والبريد البروفايل يُزامَن.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-171">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-171</span><span class="ttl">مفتاح &quot;إشعارات المنتجات الجديدة&quot; يُحفظ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل مفتاح &quot;New products notifications&quot; ← اضغط Save ← ارجع ← افتح مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحالة تُحفظ بعد الـ PATCH؛ عند إعادة الفتح تبقى الحالة الجديدة (من السيرفر).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-172">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-172</span><span class="ttl">بطاقة المتجر تُعرض عند وجود بيانات متجر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الخصوصية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر بطاقة &quot;المتجر&quot;/العنوان مع أيقونة المتجر؛ لا تظهر إن كانت فارغة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-173">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-173</span><span class="ttl">مفتاح &quot;Notify&quot; في البروفايل لا يُحفظ ولا يؤثر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل مفتاح Notify في بطاقة الإعدادات.<br>أغلق التطبيق وافتح مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (سلوك الكود الحالي) المفتاح يعود افتراضيًا (switchValue محلي وغير محفوظ ولا متصل بأي API)؛ توثيق ملاحظة فقط.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-174">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-174</span><span class="ttl">حفظ/فشل حفظ إعدادات الخصوصية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدون إنترنت غيّر وسيلة التواصل واضغط Save.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة خطأ (إن لم يوجد تخزين مؤقت للحالة)؛ لا انهيار؛ القيم تعود للسابقة بعد إعادة الفتح مع الإنترنت.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="3.25">
+  <summary>
+    <span class="gtitle"><span class="gnum">3.25</span> Guest Mode (وضع الزائر)</span>
+    <span class="gcount" data-count="3.25">0/5</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-175">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-175</span><span class="ttl">الدخول كزائر — كل شيء مقروء</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في LoginView ← اضغط &quot;Continue as guest&quot; (أو زر المتابعة كزائر).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> AuthCubit.loginAsGuest() → isGuest=true؛ الانتقال إلى LayoutView؛ التبويبات 0 (Home) و2 (Search) تعمل بحرية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-176">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-176</span><span class="ttl">الزائر يُمنع من تبويب Chat</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر اضغط تبويب Chat.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا يتبدل التبويب؛ حوار &quot;تسجيل مطلوب&quot; مع خيار &quot;تسجيل دخول&quot;؛ (إلغاء → تبقى على Home).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-177">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-177</span><span class="ttl">الزائر يُمنع من تبويب Ads وتبويب Account</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر اضغط تبويب Ads.<br>كزائر اضغط تبويب Account.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> نفس الحوار في كليهما؛ التبويبات لا تفتح.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-178">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-178</span><span class="ttl">الزائر يرى GuestPlaceholder في تبويب الحساب بعد قفزة غير متوقعة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر حاول فتح الحساب بطريقة غير مباشرة إن أمكن (مثلاً وقت تشغيل ProfileView مباشرة — Needs Dev Support).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> GuestPlaceholder مع أيقونة شخص وزر &quot;تسجيل الدخول&quot; يعيد exitToLogin → LoginView + مسح LayoutCubit.pageIndex = 0.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-179">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-179</span><span class="ttl">من الزائر إلى حساب مسجل (ترقية الجلسة)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر اضغط أيقونة شخص/تسجيل دخول (أو سجّل خروج ثم ادخل ببياناته).<br>سجّل دخولًا بحساب حقيقي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> AuthCubit.loginWithToken يحذف علم guest (isGuest=false) ويحفظ التوكن؛ تصبح التبويبات Chat/Ads/Account متاحة فورًا؛ Home تعيد جلب البيانات بحساب جديد (بما فيها البروفايل والعدادات).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="4">
+  <summary>
+    <span class="gtitle"><span class="gnum">4</span> اختبارات المصادقة (Authentication)</span>
+    <span class="gcount" data-count="4">0/17</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-180">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-180</span><span class="ttl">تسجيل دخول ببيانات صحيحة (مسموح)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من Onboarding ← Login.<br>أدخل الهاتف وكلمة المرور.<br>اضغط &quot;تسجيل الدخول&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> CustomLoading ثم Toast نجاح (رسالة السيرفر)؛ AuthCubit.loginWithToken يحفظ التوكن؛ الانتقال إلى LayoutView (إزالة كل الـ stack)؛ البروفايل يتحدث.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-181">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-181</span><span class="ttl">تسجيل دخول بكلمة مرور خاطئة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل الهاتف الصحيح بكلمة مرور خاطئة.<br>اضغط تسجيل الدخول.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة خطأ واضحة (رسالة السيرفر — status=false) في Toast؛ لا انتقال؛ التوكن لا يُحفظ (التطبيق لا يدخل).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-182">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-182</span><span class="ttl">حقول الدخول فارغة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;تسجيل الدخول&quot; مع حقل فارغ/فارغين.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة تحقق للهاتف (حقل مطلوب) تظهر؛ (كلمة المرور ليست لها validator في الكود الحالي — أي قيمة تُمر رغم عدم وجودها) — ملاحظة توثيقية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-183">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-183</span><span class="ttl">هاتف مرخص/فارغ غير موجود في النظام</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا بهذا الهاتف مع أي كلمة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة خطأ واضحة؛ لا الدخول؛ لا توكن.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-184">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-184</span><span class="ttl">تكرار كلمة المرور الخاطئة — لا قفل واضح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كلمة المرور الخاطئة 5 مرات متتالية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (السلوك الحالي) لا يوجد قفل للحساب على مستوى التطبيق (لا حد للمحاولات، لا captcha)؛ كل محاولة تُظهر خطأ فقط. يُوثّق كملاحظة أمنية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-185">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-185</span><span class="ttl">تسجيل خروج ثم Back لا يعيد الدخول للجلسة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من Profile ← Sign Out ← أكد.<br>اضغط Back عدة مرات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الانتقال إلى LoginView (pushNamedAndRemoveUntil مسح كامل للـ stack)؛ لا رجوع إلى LayoutView بدون تسجيل دخول جديد؛ التوكن ممسوح.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-186">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-186</span><span class="ttl">استمرارية الجلسة عبر إعادة تشغيل التطبيق</span></div>
+        <div class="det"><span class="key">الخطوات:</span> Kill التطبيق كليًا.<br>افتحه مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> شاشة سبلاش تمضي ثم LayoutView مباشرة (لا Onboarding/Login) بفضل التوكن المحفوظ في secure storage.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-187">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-187</span><span class="ttl">انتهاء الجلسة (401) يجبر الخروج إلى Login</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بعد تسجيل الدخول، اجعل التوكن منتهيًا.<br>نفّذ أي طلب (مثلاً افتح Profile).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر Toast &quot;youLoggedOutPleaseLoginAgain&quot;؛ يُمسح التوكن والكاش؛ الانتقال القسري إلى LoginView؛ (لا داعي لطلب آخر لإثبات الخروج).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-188">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-188</span><span class="ttl">الدخول كزائر ← تسجيل دخول ← يعود للحساب</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر افتح صفحة أي منتج.<br>ارجع إلى الحساب/الإعدادات ← سجّل دخول.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد الدخول تتحول فئة المستخدم (Guest→User)؛ كل الشاشات المقيدة تتفعل؛ البيانات الخاصة بالحساب (profile/fav/notifications) تُجلب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-189">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-189</span><span class="ttl">تسجيل الدخول بدون إنترنت</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افصل الإنترنت.<br>أدخل بيانات صحيحة واضغط تسجيل الدخول.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Toast/Error بنوع &quot;noInternet&quot;/فشل الاتصال؛ لا انتقال؛ الحقول تبقى بما هو مكتوب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-190">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-190</span><span class="ttl">التسجيل ببريد/هاتف مستخدم سابقًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> حاول التسجيل بنفس البريد والهدف.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة خطأ من السيرفر (بالبريد أو الهاتف مكرر) تظهر في Toast؛ لا يتم الدخول.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-191">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-191</span><span class="ttl">تسجيل دخول ثم إغلاق التطبيق أثناء التنقل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا ناجحًا.<br>Kill التطبيق فورًا عند الوصول للـ LayoutView.<br>افتح مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا دخول مكسور للشاشة السابقة؛ يفتح على LayoutView بحالة سليمة؛ العدادات تتجدد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-192">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-192</span><span class="ttl">تأكيد مسح التوكن من التخزين عند تسجيل الخروج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تحقق عبر App Inspector/adb من وجود userToken في FlutterSecureStorage.<br>سجّل خروجًا.<br>تحقق مرة أخرى.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد الخروج يمسح التطبيق: FlutterSecureStorage.deleteAll() + CacheTokenManger.clearUserToken() + CacheHelper.clearUserData()؛ لا توكن متبقٍ.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-193">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-193</span><span class="ttl">مصفوفة الوصول حسب الدور (Guest vs User)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر حاول كلًا من: فتح Chat، فتح Ads، فتح Account، فتح شاشة التفضلة (Fav)، فتح الإشعارات، إضافة مفضلة، تقييم، تبليغ، نشر إعلان.<br>سجّل دخولًا كمستخدم وكرر نفس المسار.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> Guest: لا تصل لأيٍّ منها (حوار تسجيل مطلوب أو GuestPlaceholder)؛ المقيّد لا يُنفّذ عبر أي مسار.<br>User: كل ما سبق متاح ويُنفّذ.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-194">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-194</span><span class="ttl">تسجيل دخول بحساب غير مفعل (إن وجد)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا بالحساب غير المفعل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (السلوك الحالي) الشاشة تجمد على حالة تحميل (isActive == false لا تُصدر أي state في الكود)؛ ملاحظة توثيقية موجهة للمطور — سلوك فعلي حالي وليس مفترضًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-195">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-195</span><span class="ttl">OTP منتهي الصلاحية / تستخدم كودًا قديمًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كود OTP القديم في OtpView.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة خطأ واضحة من السيرفر (كود خاطئ/منتهي)؛ لا الدخول؛ خيار Resend متاح بعد 60 ث لطلب كود جديد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-196">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-196</span><span class="ttl">تحويل الحساب من Guest إلى مسجل ثم نفس المحتوى يُزامن</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر لاحظ تفاصيل منتج X.<br>سجّل دخولًا.<br>ارجع لنفس تفاصيل X.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد الدخول يظهر زر القلب/التفضلة يعمل وحالة المفضلة تتناغم مع السيرفر (لا تُورث أي قلب &quot;وهمي&quot; من جلسة Guest).</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="5">
+  <summary>
+    <span class="gtitle"><span class="gnum">5</span> اختبارات الواجهة والتنقل (UI &amp; Navigation)</span>
+    <span class="gcount" data-count="5">0/17</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-197">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-197</span><span class="ttl">زر الرجوع مرتين للخروج من التطبيق</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط Back مرة واحدة — لاحظ Snackbar goBackExit.<br>خلال ثانيتين اضغط Back مرة أخرى.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الضغطة الأولى: Snackbar &quot;اذهب للخلف مرة أخرى للخروج&quot;؛ الضغطة الثانية خلال المهلة: خروج التطبيق (SystemNavigator.pop).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-198">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-198</span><span class="ttl">التبديل بين التبويبات الخمسة كلها</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط بالتتابع: Home ← Chat ← Search ← Ads ← Account.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل تبويب يفتح محتواه الصحيح؛ التحديد الحالي بلون accent؛ الشات يُظهر شارة بجانب الأيقونة إن وُجدت رسائل غير مقروءة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-199">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-199</span><span class="ttl">شارة تبويب الشات تُظهر 99+ عند تجاوز 99</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح LayoutView.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشارة تعرض 99+ بدل الرقم الكامل (حد أقصى).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-200">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-200</span><span class="ttl">جرس الإشعارات على Home يعرض العدّاد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> راقب أيقونة الجرس أعلى Home.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> شارة بالرقم غير المقروء؛ تختفي عند صفر؛ عند فتح الإشعارات وقراءة الكل يختفي فورًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-201">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-201</span><span class="ttl">RTL كامل عند العربية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تنقل بين: Home، Search، Profile، ProductDetails، Settings.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> المحاذاة يمين، الأيقونات الاتجاهية معكوسة، حقول تبدأ من اليمين؛ لا تراكبات للنصوص العربية؛ الشعارات والتبويبات متناسقة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-202">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-202</span><span class="ttl">LTR كامل عند الإنجليزية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تنقل بين نفس الشاشات بالإنجليزية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> المحاذاة يسار؛ النصوص الإنجليزية سلسة؛ لا العربية المهاردكود المكسورة أوضحت نفسها (نصوص ثابتة مثل &quot;Resend Code&quot;, &quot;لا يوجد منتجات في هذا القسم&quot; تبقى عربية — ملاحظة فقط).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-203">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-203</span><span class="ttl">Skeleton/Shimmer في كل الشاشات أثناء التحميل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> امسح الكاش وافتح كل شاشة على حدة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لكل شاشة يظهر Shimmer مطابق لهيكلها (لا أشرطة سوداء فارغة)؛ ينتهي ويُستبدل بالمحتوى.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-204">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-204</span><span class="ttl">Responsive — سلوك على شاشة تابلت/صغيرة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح Home على تابلت.<br>صغّر النافذة/استخدم محاكٍ صغير.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> عند 450+ → TABLET (أعمدة أكثر/أقسام أعرض حسب استخدام responsive_framework)؛ عند ~320 لا قص للنصوص ولا تكسر للأزرار؛ .sp تتكيف.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-205">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-205</span><span class="ttl">كل Empty State تظهر ولا تُخطئ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح بالتتابع: Ads ← Fav ← Conversations ← Notifications ← Wallet history.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل شاشة تعرض حالة عدم وجود بيانات مترجمة أو مناسبة (أيقونة + نص) بدون انهيار وبدون أشرطة خطأ.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-206">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-206</span><span class="ttl">صور مكسورة لا تُسقط الشاشات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الشاشة التي تعرض الصورة المكسورة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر أيقونة خطأ بدل الصورة (errorBuilder / CustomNetWorkImage) بقياس متسق؛ لا قفزات مرئية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-207">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-207</span><span class="ttl">أيقونات وأزرار كل شاشة تعمل (sanity sweep)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> مرّ بكل شاشة الرئيسية، واضغط كل زر/أيقونة تكامل معًا (Back، Edit، Share، Search، Filter...).<br>لاحظ الأزرار الفارغة (share في المنتج، عدّل حجم الحملة) ولا تنهار الشاشة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الأزرار الوظيفية تستجيب؛ الأزرار غير المربوطة (Share في productDetails) لا تسقط عند الضغط (توثيق فقط).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-208">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-208</span><span class="ttl">الانتقال بروابط باسم المسار + وسائط صحيحة/خاطئة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Dev) أرسلت otpView بـ arguments كـ int بدل String عبر route name hand-crafted.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support): التطبيق ينهار (Type cast crash) لأن الـ route يتوقع String — توثيق فعلى لسلوك الكود؛ لا يجب على الواجهة القائمة أن تسببه، لكن توثيق ضروري للـ Deep Link readiness.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-209">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-209</span><span class="ttl">الانتقال لحفظ/استعادة حالة التبويب بعد تسجيل الدخول</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support لمحاكاة العودة) بعد إعادة الدخول لاحظ التبويب النشط يعود الافتراضي (Home = 0) بعد تسجيل خروج كامل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> LayoutCubit.pageIndex = 0 بعد Logout (السلوك الموثق) — التبويب يعاد إلى Home.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-210">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-210</span><span class="ttl">كل أيقونة Back تعيد للوراء بشكل طبيعي</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح سلسلة: Home ← Search ← Details ← شاشة التواصل… اضغط Back في كل واحدة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل Back ينقل للوراء خطوة واحدة؛ لا خروج كامل من التطبيق؛ لا مكث على شاشة فارغة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-211">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-211</span><span class="ttl">Splash يظهر الشعار بلا اختفاء مفاجئ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> راقب أول 4 ثوانٍ ببطء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> حجم الشعار يكبر بسلاسة (scale animation Curves.bounceOut) ثم يُستبدل بالشاشة التالية بدون وميض أسود.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-212">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-212</span><span class="ttl">الانتقال إلى شاشة غير معرفة عبر deep link (لا انهيار صريح)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Dev) حاول push لمسار غير مسجل مثل /nonExistent.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يعود null من generateRoute (السلوك الحالي) — لا تنهار الشاشات المعروفة؛ (تحذير: هذه تعتمد على Flutter behavior للـ unknown routes).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-213">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-213</span><span class="ttl">Flutter system back على Android يطابق أيقونة Back الداخلية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> في شاشة فرعية اضغط زر الرجوع الخاص بالنظام (gesture/3-button) ثم زر Back داخل الـ AppBar ولاحظ نفس السلوك.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كلاهما يعود للشاشة السابقة؛ لا يوجد تناقض بين النظام والواجهة.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="6">
+  <summary>
+    <span class="gtitle"><span class="gnum">6</span> اختبارات الوظائف (Functional)</span>
+    <span class="gcount" data-count="6">0/11</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-214">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-214</span><span class="ttl">دورة حياة إعلان كامل: نشر ← ظهور ← إيقاف ← تفعيل ← حذف</span></div>
+        <div class="det"><span class="key">الخطوات:</span> انشر إعلانًا (اختر المسار المدفوع/المجاني حسب الحساب).<br>ابحث عنه في &quot;إعلاناتي&quot; ← تبويب &quot;النشط&quot;.<br>أوقفه ← تأكد أنه في &quot;الغير نشط&quot;.<br>فعّله ← تأكد أنه نشط من جديد.<br>احذفه ← تأكد اختفائه.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد كل خطوة تتغير الحالة في القائمة/التبويبات فورًا (تفاؤل محلي + تزامن مع السيرفر)؛ لا حاجة لإعادة تشغيل التطبيق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-215">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-215</span><span class="ttl">تكامل الغريبين: البحث ← المنتج ← الشات ← التقييم بعد &quot;الشراء&quot;</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (A) انشر منتجًا معروفًا بـ QA Flow Product.<br>(B) ابحث عنه، افتح تفاصيله.<br>(B) اضغط &quot;تواصل الآن&quot;.<br>(B) أرسل رسالة هل المنتج متاح؟.<br>(B) بعد استلام الرد افتح شاشة التقييم ← قيّم بـ 5 نجوم وتعليق تعامل ممتاز.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل تسليم يعمل بسلاسة؛ الشات يُنشئ المحادثة؛ التقييم يعيد جلب التفاصيل؛ تترافق البيانات في كل الشاشات باستمرار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-216">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-216</span><span class="ttl">تفضلة من تفاصيل ثم العودة ومراقبتها في المفضلة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل منتج ← اضغط القلب.<br>تبويب الحساب ← Favorite.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> المنتج ظاهر في شاشة المفضلة فورًا؛ القلب ممتلئ أيضًا في شاشة التفاصيل والنتائج الأصلية.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-217">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-217</span><span class="ttl">شراء باقة ← اشتراك يغطي النشر ← نشر مجاني</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اشترِ الباقة عبر &quot;محفظة&quot;.<br>فورًا أضف إعلانًا جديدًا بـ addNewAds حتى اكتماله.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا تُفتح ورقة رسوم النشر؛ الإعلان يُنشر مباشرة عبر بوابة subscriptions/current (حالته سارية وغير منتهية).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-218">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-218</span><span class="ttl">شراء باقة بالتحويل ثم ظهورها كـ &quot;معلقة&quot; ثم التفعيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اشترِ باقة عبر التحويل، ارفع الإيصال.<br>افتح شاشة المحفظة والدفع.<br>(Needs Backend) الإدارة تقبل الإيصال.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (قبل الموافقة) الحركة تُعرض بحالة &quot;قيد المراجعة&quot;؛ بعد الموافقة تظهر الباقة كـ اشتراك نشط (is_subscribed)؛ النشر التالي يكون مجانيًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-219">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-219</span><span class="ttl">شحن المحفظة ثم الدفع منها للنشر المتتابع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اشحن المحفظة 100.<br>بعد قبول الإدارة (أو رصيد متاح) انشر الإعلان الأول من ورقة الدفع بـ &quot;محفظة&quot;.<br>انشر الإعلان الثاني بنفس الطريقة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل نشر يُخصم من الرصيد؛ الحركات تظهر في السجل كرسم نشر/إيداع على الترتيب؛ لا طلبات انتقال دون دفع.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-220">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-220</span><span class="ttl">التصفية المركبة: فئة + سعر + شحن &quot;مجاني فقط&quot; في البحث</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح ورقة الفلتر في البحث.<br>اختر: فئة محددة، min_price=1000, max_price=10000, shipment=free, condition=new.<br>Apply؛ لاحظ النتائج.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل النتائج تطابق الشروط معًا؛ Query params في logcat: category_id=X&amp;sub_category_id=Y&amp;min_price=1000&amp;max_price=10000&amp;shipping_type=free&amp;condition=new&amp;page=1.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-221">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-221</span><span class="ttl">إحصائيات البائع: نشر منتج ← ترى عدّاد &quot;المنتجات المعروضة&quot; يرتفع</span></div>
+        <div class="det"><span class="key">الخطوات:</span> لاحظ بطاقة &quot;المنتجات المعروضة&quot; في الإحصائيات.<br>انشر إعلانًا جديدًا.<br>ارجع للإحصائيات (refresh).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> عدّاد &quot;المنتجات المعروضة&quot; يزداد بوحدات ما أُضيف من إعلان نشط؛ لا أخطاء.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-222">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-222</span><span class="ttl">التزامن الشامل للقلب: Home ← Details ← Fav ← Search</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من Home اضغط قلب A.<br>افتح Details ← لاحظ القلب.<br>افتح Search ← ابحث A ← لاحظ القلب.<br>تبويب الحساب ← Favorite ← لاحظ وجود A.<br>اضغط القلب من أي نقطة لإلغاء التفضيل.<br>تحقق من كل النقاط مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل النقاط تعكس نفس حالة التفضيل (قلب ممتلئ/فارغ) بدون تناقض؛ الحذف يزيل من شاشة المفضلة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-223">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-223</span><span class="ttl">الفلاتر تتراكم على شاشة منتجات القسم الفرعي وتُزال بشارات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الفلتر ← اختر: فئة، سعر، محافظة.<br>Apply ← لاحظ 3 شارات.<br>احذف شارة السعر (×).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشارات تعرض الحقل المناسب؛ حذف شارة السعر يزيلها من المعادلة والقائمة تصفي للباقي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-224">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-224</span><span class="ttl">إيقاف إشعار الكل ← تظهر فارغة ← تفعيل أوراق أخرى</span></div>
+        <div class="det"><span class="key">الخطوات:</span> فلتر &quot;Unread&quot; ← لاحظ.<br>فلتر &quot;Read&quot; ← لاحظ.<br>فلتر &quot;All&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل فلتر متسق مع حالات العناصر الحالية؛ عند تحديد الكل لا تبقى عناصر &quot;غير مقروء&quot; كاذبة.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="7">
+  <summary>
+    <span class="gtitle"><span class="gnum">7</span> اختبارات التحقق من المدخلات (Input Validation)</span>
+    <span class="gcount" data-count="7">0/16</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-225">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-225</span><span class="ttl">صيغ الهاتف المصري — جدول كامل (بادئة 01/11 خانة/أرقام فقط)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط زر إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل 11 خانة تبدأ بـ 01 تُقبل على مستوى الحقل؛ باقي الصيغ مرفوضة برسالة المترجم phoneEgyptInvalid.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-226">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-226</span><span class="ttl">حدود كلمة المرور — حرف واحد فوق/تحت الحد الأدنى</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة ولاحظ الرسالة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 8 أحرف بكل الشروط تُقبل؛ 7 تُرفض (&quot;الحد الأدنى&quot;)؛ &gt;30 تُرفض (&quot;الحد الأقصى&quot;).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-227">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-227</span><span class="ttl">كلمة مرور بلا رموز خاصة / بلا أرقام / بلا أحرف كبيرة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل قيمة تُرفض مع رسالة المتطلبات المرقمة (تتضمن: حرف صغير ≥1، كبير ≥1، رقم ≥1، رمز !@#$%^&amp;*(),.?&quot;:{}|&lt;&gt; ≥1).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-228">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-228</span><span class="ttl">حدود الاسم المعروض (2–50 بدون أرقام/رموز)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحدود المقبولة وحدها تُقبل؛ بقية مرفوضة برسالة الاسم.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-229">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-229</span><span class="ttl">حدود العمر 18–100 وأيام وأرقام غير عددية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 17 و101 و-3 و25.5 و٩ وabc تُرفض (عدد صحيح ضمن 18–100)؛ 18 و100 تُقبل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-230">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-230</span><span class="ttl">تنسيقات البريد الإلكتروني الصالحة والباطلة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الصحيحة تُقبل؛ الباطلة مرفوضة برسالة البريد المترجم.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-231">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-231</span><span class="ttl">تأكيد كلمة المرور — تطابق حساس لحالة الأحرف</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل الكلمة والتأكيد المختلف الحالة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة &quot;كلمتا المرور غير متطابقتين&quot;؛ لا إرسال (حساس لحالة الأحرف).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-232">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-232</span><span class="ttl">السعر — صفر/سالب/حروف/قيمة ضخمة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل كل قيمة كسعر واضغط &quot;نشر الإعلان&quot;.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> 0 مرفوض (priceRequired): يُرفض فارغٌ أو صفر؛ -100 حروف؛ abc غير رقمي؛ قيمة ضخمة جدًا يرفضها السيرفر برسالة (422) وتظهر لك؛ 150.50 تُقبل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-233">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-233</span><span class="ttl">نسبة الخصم أكبر من 100</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل السعر والخصم الأكبر منه، لاحظ نسبة الخصم.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> النسبة القصدية تُظهر &gt; 100% ضغطة حمراء، ولا كراش؛ (لا يُتحقق في الكود أن discount ≤ price — يرسلها للسيرفر ما دام الرقم رقميًا وقد يرفضه هو).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-234">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-234</span><span class="ttl">حقول مسافة غير مرئية (whitespace only)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> املأ الحقول بـ مسافات فقط واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الاسم يُرفض (displayName لا يقبل فراغات/طول مناسب)؛ لا إرسال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-235">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-235</span><span class="ttl">محارف خاصة في حقول البحث (RTL مع رموز)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب كل قيمة في حقل البحث.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار؛ لا نتائج<br>(على الأقل) أو نتائج عادية؛ أي خطأ شبكة يُلتقط كـ Error state لا crash.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-236">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-236</span><span class="ttl">حقن XSS في حقول النص (&lt;script&gt;alert(1)&lt;/script&gt;)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> انشر إعلانًا باسم &lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;QA.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> النص يُعرض حرفيًا (لا يُنفذ كـ HTML)؛ إن عرضه HTML قانوني/محتوى، يبقى معروضًا كسلاسل عادية؛ لا شيء يفتح أو ينفذ في WebView.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-237">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-237</span><span class="ttl">حقن SQL-like (&#39; OR &#39;1&#39;=&#39;1) في حقول التسجيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل وحاول إنشاء الحساب.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار ولا دخول غير مشروع؛ الحقل يرفض (displayName بـ regex) أو يرسل كقيمة عادية والسيرفر يرفضها برسالة؛ لا اختراق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-238">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-238</span><span class="ttl">رموز تعبيرية (Emoji) في حقل الاسم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل واضغط إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (regex الحالي يقبل/يرفض حسب الصيغة — لا انهيار)؛ إن قبل: الحقل يعرض الإيموجي دون تقطيع؛ إن رفض: رسالة displayName.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-239">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-239</span><span class="ttl">مسافة في اسم المستخدم بالعربية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل وراقب الحقل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (displayName regex الحالي — كلمة واحدة بدون رموز؟) — لاحظ سلوك الكود: الاسم مع مسافة يُقبل إن كان النمط يسمح بالمسافات؛ إن لم يسمح ستُرفض بمسافة — وثّق السلوك الفعلي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-240">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-240</span><span class="ttl">أرقام عربية (١٢٣) في حقل الهاتف</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل على لوحة مفاتيح عربية واضغط زر إنشاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحقل (TextInputType.number) على أندرويد قد يحول الأرقام — الاختبار فقط يوثق ما يحدث (قبول/رفض/كتابة كأرقام إنجليزية)؛ لا انهيار.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="8">
+  <summary>
+    <span class="gtitle"><span class="gnum">8</span> اختبارات الـ API والتكامل (API &amp; Integration)</span>
+    <span class="gcount" data-count="8">0/20</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-241">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-241</span><span class="ttl">استجابة /login الناجحة تُحلل بشكل صحيح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (تحتاج اعتراض proxy) لاحظ رد login raw.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> {status:true, message, data:{user:{...}, isActive:true}}؛ LoginModel يُبنى بلا استثناء parsing؛ التوكن ينحفظ؛ لا حقول غامضة تكسر الشاشة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-242">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-242</span><span class="ttl">رد /login الفاشل (status=false) يُعرض برسالة السيرفر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا بكلمة مرور خاطئة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة السيرفر تُعرض كما هي (العربية/الإنجليزية حسب lang السابق) — لا رسالة عامة فقط؛ لا يتغير الـ stack.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-243">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-243</span><span class="ttl">رد 422 على /register يعرض أول حقل خطأ</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل ببريد مستخدم.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) Toast يعرض أول رسالة حقلية (مثلاً &quot;البريد مستخدم بالفعل&quot;)؛ لا ينهار؛ (422 تُرسل كـ fieldErrors وتُستدعى في النشر).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-244">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-244</span><span class="ttl">/verifyCode بكود خاطئ يستجيب بخطأ واضح</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أدخل الكود الخاطئ واضغط تحقق.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> رسالة سيرفر عربية/إنجليزية واضحة (كود غير صحيح)؛ لا الدخول؛ لا توكن.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-245">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-245</span><span class="ttl">/home عند الضغط المزدوج السريع (لا race condition)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اسحب للتحديث 3 مرات متتالية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا تكرار للـ Shimmer nor فساد للعرض؛ كل طلب يعود ويُحل بأمان؛ (HomeCubit عند الخطأ يظهر خطأ أو يهمله بصمت حسب الخيار).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-246">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-246</span><span class="ttl">استجابة getBanners بصيغة غير متوقعة لا تطيح الشاشة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) حقن رد سيئ صيغته عبر أداة اعتراض.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) BannersModel تتسامح مع صيغ متعددة (banners|data|slides|items) وتتجاهل ما لا تفهمه؛ لا انهيار؛ البانرات تبقى فارغة فحسب.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-247">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-247</span><span class="ttl">أي endpoint يُرجع 401 → خروج كامل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا ثم اجعل التوكن منتهيًا ثم افتح أي شاشة تُنفذ طلبًا (Home/Profile/Ads).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خروج قسري إلى Login + Toast &quot;youLoggedOutPleaseLoginAgain&quot; + مسح كل التخزين.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-248">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-248</span><span class="ttl">استجابة 500 على /home → حالة خطأ قابلة للتعامل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح الرئيسية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (Needs Dev Support) HomeCubit يُصدر GetHomeDataError → واجهة مناسبة (رسالة + زر محاولة حسب الشاشات)؛ لا انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-249">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-249</span><span class="ttl">مهلة الاتصال 30 ثانية ترجع timeout</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) اجعل الاستجابة بطيئة ثم افتح الشاشة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> connectionTimeout/receiveTimeout → ServerFailure(&quot;connectionTimeOut&quot;) → حالة خطأ مناسبة — لا تجميد لا نهائي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-250">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-250</span><span class="ttl">التصفح عبر صفحات البحث بعد last_page</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ابحث بكلمة واسعة ← تنقل للصفحة last_page + 1 (يراقب page).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> hasMore تصبح false عند currentPage &gt;= lastPage؛ لا يُطلب بعد ذلك؛ القائمة تنتهي بشكل طبيعي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-251">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-251</span><span class="ttl">PATCH read-all يُطبق دفعة واحدة دون طلب لكل إشعار</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط done_all؛ راقب logcat.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> طلب PATCH notifications/read-all واحد فقط (لا N طلب PATCH فردي)؛ كل العناصر تُحدث محليًا تفاؤليًا.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-252">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-252</span><span class="ttl">polling للمحادثات كل 2 دقيقة يُرجع unread_count</span></div>
+        <div class="det"><span class="key">الخطوات:</span> على A: افتح قائمة المحادثات ودعها ظاهرة.<br>من B أرسل رسالة.<br>على A انتظر حتى لحظة الـ poll (أوان resume).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> خلال ≤ 2 دقائق (أو عند resume فورًا) تظهر الرسالة/الشارة تُحدث — logcat: GET /conversations/unread-count.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-253">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-253</span><span class="ttl">FCM — إشعار Foreground يزيد العداد ويُظهر local notification</span></div>
+        <div class="det"><span class="key">الخطوات:</span> التطبيق مفتوح وعلى أي شاشة.<br>أرسل FCM من Admin/Backoffice.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُعرض إشعار محلي BigTextStyle في شريط الإشعارات؛ عدّاد الجرس يزيد بالرقم؛ وعند المسح الإجمالي/الفتح يتزامن.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-254">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-254</span><span class="ttl">FCM — التطبيق مغلقة (Terminated) وفتحها بالنقر على الإشعار</span></div>
+        <div class="det"><span class="key">الخطوات:</span> أرسل FCM للمستخدم.<br>التطبيق مغلق — اضغط الإشعار.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> التطبيق يفتح ويُعرض شاشة الإشعارات (Routes.notificationsView) مباشرة عبر pending navigation (مع استثناء Guest).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-255">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-255</span><span class="ttl">حذف مفضلة من جهاز آخر يتزامن (re-fetch resync)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> على الجهاز الثاني فعّل/أزل مفضلة منتج X.<br>على الجهاز الأول اسحب للتحديث أو افتح شاشة المفضلة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تُعالج البيانات من جديد من السيرفر (toggle → getFavData silent resync)؛ الحالة تصطف النهائي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-256">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-256</span><span class="ttl">الدفع بالتحويل ← admin إدارة قبول ← تجربة النشر مجانًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اشترك عبر تحويل ← ارفع إيصالًا ← انتظر تفعيل الإدارة.<br>بعد التفعيل انشر إعلانًا جديدًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الإدارة تقبل الإيصال؛ subscriptions/current تُرجع باقة نشطة؛ النشر التالي بدون حقول دفع.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-257">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-257</span><span class="ttl">سجل الحركات — الصيغتَان تتعاملا معهما بمرونة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) قدم ردًا بديل الصيغة عبر أداة اعتراض.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> WalletHistoryModel.fromJson يقرأ amount|balance وtype_label|title وcreated_at|date|created — لا انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-258">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-258</span><span class="ttl">إحصائيات ردود الشهر التالي: قيم صفرية واضحة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تنقل بـ&quot;الشهر التالي&quot; (شهر فارغ).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل العدادات تظهر 0 مع فواصل آلاف؛ لا تكرار للأصفاد بكسور؛ الخانتين فارغتين.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-259">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-259</span><span class="ttl">Accept-Language: تبديل اللغة يغيّر ترويسة الطلبات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل اللغة؛ راقب logcat headers لطلب GET home.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الترويستان Accept-Language وlang تتحولان للغة المحفوظة: ar ثم en بعد التبديل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-260">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-260</span><span class="ttl">حقول نشرت (payment_method/receipt/transfer_reference) → الورقة تظهر مجددًا</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) حقن رد 422 مع fieldErrors بالدفعات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> التطبيق يُحوّل الحالة إلى AddNewAdPaymentRequired؛ ورقة الدفع تُعاد فتحها بدل Toast عام؛ المستخدم يكمل الدفع من الورقة.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="9">
+  <summary>
+    <span class="gtitle"><span class="gnum">9</span> اختبارات قاعدة البيانات والتخزين المحلي</span>
+    <span class="gcount" data-count="9">0/7</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-261">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-261</span><span class="ttl">firstRun يمسح كل التخزين في أول تشغيل فقط</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ثبّت التطبيق/امسح بياناته ثم افتحه (التشغيل الأول).<br>تحقق من التخزين بعد الإقلاع.<br>أغلق وافتح التطبيق مرة ثانية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (1) FlutterSecureStorage.deleteAll() + clearUserData() يُنفذان؛ firstRun=false يُحفظ.<br>(2) الثانية: المسح لا يعاد (firstRun=false موجود).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-262">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-262</span><span class="ttl">التوكن محفوظ في secure storage (وليس في prefs كنص صريح لنقطة الدخول الحالية)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) افحص FlutterSecureStorage عبر App Inspector بعد الدخول.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> التوكن موجود بمفتاح userToken داخل secure storage (مشفر)؛ وملاحظة: shared_preferences يحوي userToken بنص صريح (التطبيق يحتفظ بنسختين) — تُوثّق كملاحظة أمنية في القسم 10.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-263">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-263</span><span class="ttl">فحص مفاتيح prefs بعد دورة كاملة (firstRun/language/fcmToken/isDarkMode/isGuest)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) افحص prefs: غيّر اللغة والثيم وguest ← ادخل خروج ← تحقق من المفاتيح.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> المفاتيح: language (ar/en)، isDarkMode (true/false)، firstRun=false، isGuest، fcmToken، userToken (نصية — ملاحظة أمنية)، email — كلها مكتوبة بقيم متوقعة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-264">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-264</span><span class="ttl">تسجيل الخروج يمسح التوكن من التخزينين</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) تحقق من التخزين قبل الخروج.<br>سجّل خروجًا.<br>تحقق من التخزين مرة أخرى.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد الخروج: لا userToken في secure storage؛ لكن CacheHelper.clearUserData() تمسح فقط مفاتيح محددة (otp/userEmail/userId/userPhone) — لا تمسح userToken من prefs صراحةً؛ ملاحظة موثقة (الدخول القسري يعتمد أساسًا على مسح secure storage).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-265">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-265</span><span class="ttl">اللغة المحفوظة تبقى بعد إعادة التشغيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل الإنجليزية.<br>Kill التطبيق ثم افتحه.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يفتح مباشرة بالإنجليزية (من CacheHelper[language]) مع Tier LTR.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-266">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-266</span><span class="ttl">الثيم المحفوظ يبقى بعد إعادة التشغيل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل للداكن.<br>Kill وافتح التطبيق.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> التطبيق يفتح بالوضع الداكن (initial = dark من StorageKeys.isDarkMode)؛ كل الشاشات تُحمّل داكنة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-267">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-267</span><span class="ttl">اتساق بيانات البروفايل بين السيرفر والكاش بعد التعديل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> عدّل الاسم.<br>لاحظ Toast + البروفايل + Home location chip.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> بعد الحفظ (updateProfile ثم getProfile): كل الشاشات (Home/Profile/Details ownership checks) تستخدم نفس الاسم/الإيميل/الهاتف المحدثة؛ لا قِيَم قديمة متبقية.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="10">
+  <summary>
+    <span class="gtitle"><span class="gnum">10</span> اختبارات الأمان (Security)</span>
+    <span class="gcount" data-count="10">0/12</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-268">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-268</span><span class="ttl">كل الطلبات تذهب لـ HTTPS فقط</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) راقب كل الطلبات الصادرة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل العناوين تبدأ بـ https://by3li.axeviadigital.com؛ لا طلب HTTP عادي أصلًا في المسار الحالي (الراوئتان القديمتان معلقتان في الكود).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-269">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-269</span><span class="ttl">لا مفاتيح/أسرار معروضة على الشاشة أو السجلات في البناء العادي</span></div>
+        <div class="det"><span class="key">الخطوات:</span> راقب logcat في حوارات الدخول/OTP/الإشعارات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (debug) السجلات تعرض headers وbody وFCM كامل (ملاحظة — الكود يطبعها)؛ في بناء release kDebugMode يعطل PrettyDioLogger لكن debugPrint العادي والتصريحات الملونة تظل؛ لا مفاتيح خاصة (private keys) في السجلات.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-270">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-270</span><span class="ttl">كود OTP لا يظهر في الشاشات للإنتاج</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بعد التسجيل (TC-006) راقب toast النجاح وشاشة OtpView (زر Resend بعد 60 ث).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (السلوك الحالي) toast يعرض OTP : &lt;code&gt; والتوست عند Resend يعرض الكود — ملاحظة أمنية حرجة محددة في القسم 11 ويجب إزالتها قبل الإطلاق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-271">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-271</span><span class="ttl">الزائر لا يصل لأي endpoint خاص بالحساب (حتى بالتحايل)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> كزائر حاول مباشرة (عبر شاشة التفاصيل ← زر الشراء؟ لا يوجد؛ احتاج محاولة عبر مسارات UI).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل الأزرار/الأفعال الخاصة بالحساب مقيدة بالحوار (loginRequired)؛ لا تُرسل طلبات للسيرفر أصلًا من مسارات الزائر (مثلاً: التفضلة → لا طلب، الإشعارات ← لا fetch للـ 401).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-272">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-272</span><span class="ttl">مستخدم يحاول إيقاف/تفعيل إعلان شخص آخر (لا يظهر له الخيار)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح تفاصيل إعلان شخص آخر في كل مكان (Home/Search/Details).<br>ابحث عن أيقونة ⋮ (القائمة) وعن إيقاف/تفعيل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> تظهر قائمة ⋮ فقط عندما profile.id == seller.id؛ مستخدم آخر لا يراها أصلًا. (ملاحظة: الأمان على مستوى العرض؛ السيرفر يجب أن يفرض الصلاحية وهو حقل خارج هذا الريبو.)</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-273">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-273</span><span class="ttl">شريط بيانات داخل شاشات مشتركة لا يعرض توكنًا من السجلات عند الاسترخاء في عام</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجل logcat ← أدخل أي شاشة ← ابحث عن Bearer.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (debug) الترويسة Authorization: Bearer &lt;token&gt; تظهر عبر PrettyDioLogger فقط في وضع debug — في release يغيب (kDebugMode) لكن debugPrint العادي في onRequest/onResponse يبقى — يوثق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-274">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-274</span><span class="ttl">لا تظهر كلمة المرور دائمًا في حقل الدخول/التسجيل (إلا أثناء الضغط على عين الإظهار)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اكتب كلمة المرور في كل حقل وراقب الإخفاء.<br>اضغط أيقونة العين لإظهار/إخفاء.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الكلمة مخفية بنقوط؛ الضغط على العين يُظهرها (أو العكس) بالتبادل؛ لا يبقى النص واضحًا بمجرد الخروج من الحقل (للتسجيل/التغيير).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-275">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-275</span><span class="ttl">حذف الحساب بدون أي تأكيد ثانٍ (موثق كخطر)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح شاشة حذف الحساب ← اضغط &quot;Delete now&quot; مباشرة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (السلوك الحالي) الحذف يبدأ فورًا بدون حوار تأكيد ثانٍ — موثق كخطر في القسم 11؛ تأكد أن كل مستخدم QA يعلم أن هذا الزر نهائي.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-276">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-276</span><span class="ttl">التحقق من غياب FLAG_SECURE (معلومات فقط)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> التقط screenshot لشاشة المحفظة/البيانات الشخصية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الالتقاط ينجح (لا FLAG_SECURE) — يوثق كحالة مقبولة للتطبيق الحالي؛ (ينصح بالإضافة لشاشات المحفظة فقط).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-277">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-277</span><span class="ttl">توكن المستخدم المحذوف يبقى في التخزين (Local token after delete — موثق)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> احذف حسابًا ← (Needs Dev Support) افحص التخزين.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> (السلوك الحالي) التوكن يبقى في secure storage بعد الحذف لأن الشاشة لا تمسح Storage ولا تستدعي logout؛ يوثق كعيب. (على الجانب: LoginView يفتح لكن الدخول سيفشل بالسيرفر عند بقاء التوكن غير صالح).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-278">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-278</span><span class="ttl">لا يوجد شهادات مثبتة (Certificate Pinning) — للمراجعة فقط</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) اعترض الطلب عبر proxy وMITM لاختبار السيرفر (بيئة خاصة).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الاتصال يمر دون خطأ certificate pinning — التطبيق يعتمد على ثقة النظام (طبيعي لـ Flutter الافتراضي) — توثق كملاحظة عدم وجود pinning وليس عيبًا بالضرورة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-279">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-279</span><span class="ttl">لا بيانات حساسة محفوظة في النسخ الاحتياطية (android:allowBackup) — للمراجعة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) راجع AndroidManifest.xml — لا يوجد allowBackup مضبوط صراحة (الافتراضي true).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> النسخ الاحتياطية قد تحتوي SharedPreferences (منها نسخة userToken النصية) — التسريب محتمل عبر نسخ Pixel/Google — موثق للمطور بتعيين android:allowBackup=&quot;false&quot; أو استبعاد الملفات الحساسة.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="11">
+  <summary>
+    <span class="gtitle"><span class="gnum">11</span> اختبارات معالجة الأخطاء (Error Handling)</span>
+    <span class="gcount" data-count="11">0/13</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-280">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-280</span><span class="ttl">انقطاع الإنترنت تمامًا — التطبيق كامل سلوك</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح التطبيق مع قطع الإنترنت وفتح كل الشاشات: Home ← Search ← Details ← Notifications ← Ads ← Profile.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل شاشة تعرض حالة خطأ مترجمة + إمكانية إعادة المحاولة؛ لا انهيار؛ لا شاشة بيضاء؛ عند عودة الإنترنت + refresh يعود كل شيء.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-281">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-281</span><span class="ttl">انقطاع أثناء عملية إيقاف إعلان — هل تتسق الحالة؟</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من إعلاناتي اضغط &quot;إيقاف&quot; ← افصل الإنترنت أثناء الحوار/الطلب.<br>لاحظ النتيجة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> LinearProgress يظهر ثم خط أخطاء (Toast/Snackbar)؛ القائمة تحتفظ بالحالة الأصلية (لا تتغير بصمت إلى &quot;غير نشط&quot; بدون تأكيد)؛ عند عودة الإنترنت + refresh يُحل.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-282">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-282</span><span class="ttl">فشل الدفع أثناء checkout — لا رصيد يُخصم ولا باقة تُفعّل</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح ورقة الدفع ← اختر &quot;محفظة&quot; ← افصل الإنترنت في اللحظة الحاسمة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> فشل الطلب يُعرض برسالة واضحة؛ لا يُخصم الرصيد (السيرفر هو من يخصم — تعتمد النتيجة على السيرفر)؛ لا تتفعل الباقة؛ يمكن إعادة المحاولة بأمان.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-283">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-283</span><span class="ttl">السيرفر يُرجع 500 — رسالة مفهومة للمستخدم</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) اجعل السيرفر يرجع 500 لكل طلب؛ افتح 3 شاشات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل شاشة تعرض خطأ (رسالة مترجمة من ServerFailure — response[&quot;message&quot;] إن وُجد) +زر محاولة إن وُجد؛ لا سلوك غير متوقع.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-284">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-284</span><span class="ttl">منتج محذوف/غير موجود — 404 على productDetials</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (Needs Dev Support) افتح productDetials بمعرف وهمي عبر route يدوي.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> CustomErrorWidget مع رسالة + زر &quot;Retry&quot;؛ لا انهيار.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-285">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-285</span><span class="ttl">رفع ملف ليس صورة (PDF/APK) كإيصال/إعلان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> حاول رفع PDF كإيصال (من gallery).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> أداة الاختيار (image_picker) تعذر أجيال محددة للصور (JPG/PNG) — تُرفع صور فقط؛ إن رفع شيء ليس صورة: رسالة خطأ أو لوحة اختيار تُبرز الصور فقط؛ لا إرسال.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-286">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-286</span><span class="ttl">صورة/إيصال أكبر من 5MB في الشات والنشر</span></div>
+        <div class="det"><span class="key">الخطوات:</span> حاول رفع الملف كصورة شات عابرة للحجم.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشات: رفض برسالة حجم (≤ 5MB)؛ الدفع والنشر: الحد يحدده السيرفر ويرد (422) إن تجاوز — يرى المستخدم الرسالة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-287">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-287</span><span class="ttl">رفض إذن الكاميرا/المعرض عند رفع صورة إعلان</span></div>
+        <div class="det"><span class="key">الخطوات:</span> ارفض إذن الصور/الكاميرا؛ اضغط زر الإضافة/الالتقاط.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار؛ تُعرض رسالة/لا يحدث شيء (image_picker لا يفتح)؛ (يفضل التطبيق يعرض Snackbar إرشادي — وإن لم يفعل يوثق).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-288">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-288</span><span class="ttl">الضغط المزدوج السريع على زر الدفع/الحفظ لا يصدر مرتين</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اضغط &quot;نشر الإعلان&quot;/&quot;Save&quot; مرتين بسرعة شديدة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> حالة التحميل تعمل كمانع (IgnorePointer/CustomLoading)؛ لا يُرسل إلا طلب واحد؛ لا duplicate charges.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-289">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-289</span><span class="ttl">العودة أثناء التحميل (شاشة معلقة)</span></div>
+        <div class="det"><span class="key">الخطوات:</span> افتح التفاصيل (التحميل بطيئة) ← اضغط Back أثناء التحميل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار؛ عند عودة الرد يعالج للكيوبت/الشاشة المناسبة دون setState after dispose؛ Debug log إن وُجد تحذير يوثق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-290">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-290</span><span class="ttl">الرد بقائمة منتجات فارغة (0 منتج) — شاشة صريمة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> تحقق من قسم فيه products_count = 0.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشبكة تعرض حالة مناسبة (&quot;لا يوجد عناصر&quot;) أو تمنع حتى فتح الشاشة (السلوك الحالي: Snackbar &quot;لا يوجد منتجات في هذا القسم&quot;).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-291">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-291</span><span class="ttl">انتهاء التوكن أثناء محادثة مفتوحة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> مع محادثة مفتوحة، اجعل التوكن منتهيًا.<br>حاول إرسال رسالة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> يُرد 401 → يتم خروج كامل إلى Login + Toast &quot;youLoggedOutPleaseLoginAgain&quot;؛ المحادثة تُغلق.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-292">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-292</span><span class="ttl">التبديل السريع بين التبويبات أثناء طلبات معلقة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بدّل بين Home ← Chat ← Search ← Ads بسرعة (×10).</div>
+        <div class="det exp"><span class="key">المتوقع:</span> لا انهيار ولا تسجيل أخطاء widget tree؛ كل تبويب يكتفي بطلباته؛ لا تكلفة تتزايد بعد العودة للتبويب المطلوب.</div>
+      </div>
+    </label>
+  </div>
+</details>
+
+<details class="grp" data-group="12">
+  <summary>
+    <span class="gtitle"><span class="gnum">12</span> اختبارات المسارات الكاملة (End-to-End)</span>
+    <span class="gcount" data-count="12">0/8</span>
+  </summary>
+  <div class="items">
+    <label class="item">
+      <input type="checkbox" value="TC-293">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-293</span><span class="ttl">رحلة المشتري الكاملة: تثبيت ← تصفح ← تسجيل ← شراء عبر شات</span></div>
+        <div class="det"><span class="key">الخطوات:</span> (B) افتح التطبيق ← Onboarding ← تسجيل ← OTP ← اختيار الموقع.<br>(B) افتح الرئيسية ← ابحث &quot;QA E2E Bike&quot; ← افتح تفاصيل المنتج المنشور من A.<br>(B) اضغط &quot;تواصل الآن&quot;.<br>(B) أرسل &quot;هل يمكن التسليم اليوم؟&quot;.<br>(A) رد &quot;نعم بإذن الله&quot;.<br>(B) ارجع للتفاصيل ← قيّم 5 نجوم ← علق &quot;بائع ممتاز&quot;.<br>(B) أضف للسلة؟ لا — اضغط &quot;طلب الشراء&quot;؟ لا — ببساطة أضف للتفضلة.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل خطوة تنجح بالترتيب؛ المحادثة تُنشأ بين الاثنين؛ التقييم يُحفظ؛ التفضلة تُضاف؛ لا فقدان للسياق بين الشاشات؛ التجربة سلسة لكل من A وB.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-294">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-294</span><span class="ttl">رحلة البائع المدفوعة: التسجيل ← نشر أول إعلان بدفع رسوم ← نشر ثاني بباقة مشتركة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل حسابًا بائعًا كاملًا حتى ChooseLocation.<br>أضف إعلانًا (صور/بيانات) ← اضغط نشر ← اختر &quot;محفظة&quot; ← أكد.<br>تحقق أن الإعلان يظهر في &quot;إعلاناتي&quot;/Home.<br>افتح الباقات ← اشترِ الباقة الشهرية بـ &quot;محفظة&quot;.<br>أضف إعلانًا ثانيًا ← اضغط نشر ← يجب أن يُنشر مباشرة دون ورقة دفع.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الإعلان الأول يخصم الرسوم ويظهر؛ الثاني ينشر مجانًا بعد الاشتراك؛ كل الحركات تظهر في سجل المحفظة بالتوالي؛ إحصائيات البائع تتصاعد.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-295">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-295</span><span class="ttl">Guest → تسجيل ← تحويل كل تفاعليته إلى الحساب</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل دخولًا كزائر ← تصفح: Home ← تفاصيل منتج ← حاول التفضلة (يُمنع).<br>من الحوار → &quot;تسجيل الدخول&quot; ← أنشئ حسابًا ← OTP ← الموقع ← LayoutView.<br>ارجع لنفس المنتج ← أضف للتفضلة ← تحقق من تبويب Ads/Account يعمل.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الترقية تنجح دون إعادة تشغيل؛ كل ما كان ممنوعًا كـ Guest أصبح متاحًا؛ كل شاشة تعرض بيانات الحساب الجديد؛ لا بيانات/عدادات Guest مختلطة تظهر للمستخدم.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-296">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-296</span><span class="ttl">دورة الاشتراك الكاملة: شراء ← استخدام ← انتهاء ← تجديد</span></div>
+        <div class="det"><span class="key">الخطوات:</span> اشترِ الباقة الشهرية.<br>تحقق أن النشر مجاني.<br>(Needs Backoffice/الوقت) انتظر انتهاء الباقة (أو Needs Backend session).<br>حاول نشر إعلان ← يجب أن تُفتح ورقة الدفع مجددًا.<br>جدد الاشتراك ← النشر مجاني مجددًا.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> قبل الانتهاء: نشر مجاني؛ بعد الانتهاء: تُفرض الرسوم؛ بعد التجديد: مجاني؛ جميع الطبقات تزامنت (Ads/Statistics/My Ads).</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-297">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-297</span><span class="ttl">رحلة الدفع بالتحويل: شحن المحفظة ← التفعيل ← النشر المجاني</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بائع جديد بدون رصيد.<br>اشحن المحفظة بتحويل ← ارفع الإيصال ← انتظر تفعيل الإدارة.<br>بعد القبول: الرصيد يظهر؛ انشر إعلان الدفع الأولى بـ &quot;محفظة&quot; (Apps uses same TransferView for top-up).<br>تنقل إلى الإحصائيات ← تحقق من التحديثات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الشحن بالتحويل ← موافقة ← الرصيد يزيد ← النشر يتسرب بالخصم التلقائي؛ الإحصائيات + سجل الحركات مصطفة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-298">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-298</span><span class="ttl">رحلة حذف الحساب من البداية للنهاية</span></div>
+        <div class="det"><span class="key">الخطوات:</span> سجّل بالحانتين ← انشر إعلانين ← اشحن المحفظة بتحويل ← تفاعل (مفضلة/رسائل).<br>من الإعدادات ← Delete Account ← &quot;Delete now&quot;.<br>حاول تسجيل الدخول بنفس الجلسة/البيانات.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> الحذف يتم بالكامل؛ الحساب يختفي من بيانات السيرفر (لا يملك الدخول مجددًا إلا بإعادة التسجيل)؛ المنتج/الرسائل المتاحة للطرف الآخر وفقًا لسياسات السيرفر.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-299">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-299</span><span class="ttl">رحلة تبديل اللغة أثناء مراجعة إحصائيات/إعدادات معقدة</span></div>
+        <div class="det"><span class="key">الخطوات:</span> بالعربية: افتح الإحصائيات ← لاحظ الأسهم وردود الشهر.<br>افتح ورقة تغيير اللغة ← اختر English.<br>لاحظ كل الشاشات: Home ← Search ← Statistics ← Settings ← Details.<br>ارجع للعربية.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل النصوص تتبدل فورًا؛ RTL↔LTR يتبدل كاملًا؛ اتجاهات الشهور (الشهر السابق/التالي) تتبع الاتجاه؛ لا تراكبات في أي شاشة.</div>
+      </div>
+    </label>
+    <label class="item">
+      <input type="checkbox" value="TC-300">
+      <div class="body">
+        <div class="line1"><span class="tid">TC-300</span><span class="ttl">رحلة الإشعار ← فتح الإشعار ← الشات ← Mark all read</span></div>
+        <div class="det"><span class="key">الخطوات:</span> من Backoffice أرسل FCM إلى حساب A بعنوان &quot;رسالة من البائع&quot;.<br>على A (مفتوح بالخلفية): لاحظ الإشعار المحلي + زيادة عدّاد الجرس.<br>اضغط الإشعار ← تُفتح شاشة الإشعارات.<br>اضغط على الإشعار ← يصبح مقروءًا.<br>افتح المنشور المرتبط بالشات ← تجد رسالة البائع؛ رد عليها.</div>
+        <div class="det exp"><span class="key">المتوقع:</span> كل دورة الاتصال تعمل من إشعار إلى رد؛ عدّادات الجرس والتبويب متوافقة؛ الإشعار يعالج حتى عند الخلفية عبر resume path.</div>
+      </div>
+    </label>
+  </div>
+</details>
+  <footer>إجمالي الحالات: 300 — مبنية على TEST_SCENARIOS.md (TC-001 إلى TC-300)</footer>
+</main>
+
+<script>
+(function(){
+  var KEY = "by3ly_full_checklist_v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll(".item input"));
+  var done = {};
+  try{ var s = localStorage.getItem(KEY); if(s) done = JSON.parse(s)||{}; }catch(e){}
+
+  function escData(v){ return v; }
+  function update(){
+    var total = boxes.length, n = 0;
+    var per = {};
+    boxes.forEach(function(b){
+      if(b.checked){ n++; done[b.value]=1; }
+      else{ delete done[b.value]; }
+      var g = b.closest(".grp").getAttribute("data-group");
+      per[g] = per[g] || [0,0];
+      per[g][1]++;
+      if(b.checked) per[g][0]++;
+    });
+    document.getElementById("fill").style.width = (total? Math.round(n/total*100):0) + "%";
+    document.getElementById("txt").textContent = "تم اختبار " + n + " من " + total;
+    document.getElementById("pct").textContent = (total? Math.round(n/total*100):0) + "%";
+    document.querySelectorAll("[data-count]").forEach(function(el){
+      var p = per[el.getAttribute("data-count")] || [0,0];
+      el.textContent = p[0] + "/" + p[1];
+    });
+    try{ localStorage.setItem(KEY, JSON.stringify(done)); }catch(e){}
+  }
+
+  boxes.forEach(function(b){
+    if(done[b.value]){ b.checked = true; b.parentNode.classList.add("done"); }
+    b.addEventListener("change", function(){
+      b.parentNode.classList.toggle("done", b.checked);
+      update();
+    });
+  });
+  update();
+
+  document.getElementById("reset").addEventListener("click", function(){
+    if(!confirm("هتمسح كل العلامات وتعود للبداية. متأكد؟")) return;
+    boxes.forEach(function(b){ b.checked=false; b.parentNode.classList.remove("done"); });
+    done = {}; update();
+  });
+})();
+</script>
+</body>
+</html>
