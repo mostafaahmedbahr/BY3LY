@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../../features/layout/presentation/view_model/layout_cubit.dart';
 import '../../errors/failure.dart';
+import '../../extensions/log.dart';
 import '../../routing/app_router.dart';
 import '../../routing/routes.dart';
 import '../../utils/app_consts/storage_keys.dart';
@@ -46,26 +47,26 @@ class ApiService {
                 "Bearer ${CacheTokenManger.userToken}";
           }
 
-          debugPrint("➡️ [REQUEST] ${options.method} ${options.uri}");
-          debugPrint("Headers: ${options.headers}");
-          debugPrint("Data: ${options.data}");
-          debugPrint("Query: ${options.queryParameters}");
+          logWarning('➡️ [REQUEST] ${options.method} ${options.uri}');
+          logWarning('Headers: ${options.headers}');
+          logWarning('Data: ${options.data}');
+          logWarning('Query: ${options.queryParameters}');
 
           return handler.next(options); // continue
         },
         onResponse: (response, handler) {
-          debugPrint(
-            "✅ [RESPONSE] [${response.statusCode}] ${response.requestOptions.uri}",
+          logSuccess(
+            '✅ [RESPONSE] [${response.statusCode}] ${response.requestOptions.uri}',
           );
-          debugPrint("Response Data: ${response.data}");
+          logSuccess('Response Data: ${response.data}');
           return handler.next(response); // continue
         },
         onError: (DioException error, handler) async {
-          debugPrint("❌ [ERROR] ${error.message}");
-          debugPrint("Request: ${error.requestOptions.uri}");
+          logError('❌ [ERROR] ${error.message}');
+          logError('Request: ${error.requestOptions.uri}');
           // Example: handle token expiration (401 Unauthorized)
           final failure = ServerFailure.fromDioError(error);
-          debugPrint("❌ [ERROR] ${failure.errMessage}");
+          logError('❌ [ERROR] ${failure.errMessage}');
           if (error.response?.statusCode == 401) {
             // for some reasons the token can be invalidated before it is expired by the backend.
             // then we should navigate the user back to login page
@@ -76,6 +77,7 @@ class ApiService {
       ),
     );
 
+    // كل شيء يظهر كاملًا في Debug فقط — ولا شيء في Release.
     if (kDebugMode) {
       _dio.interceptors.add(
         PrettyDioLogger(
@@ -98,12 +100,12 @@ class ApiService {
     await storage.deleteAll();
     await CacheHelper.clearUserData();
     LayoutCubit.pageIndex = 0;
-    
+
     // Show error toast and navigate to login
     if (getIt<AppRouter>().navigatorKey.currentContext != null) {
       Toast.showErrorToast(
         msg: LocaleKeys.youLoggedOutPleaseLoginAgain.tr(),
-        context: getIt<AppRouter>().navigatorKey.currentContext!
+        context: getIt<AppRouter>().navigatorKey.currentContext!,
       );
       getIt<AppRouter>().navigatorKey.currentState?.pushNamedAndRemoveUntil(
         Routes.loginView,
@@ -111,6 +113,7 @@ class ApiService {
       );
     }
   }
+
   // Now no need to manually add headers everywhere
   Future<Response> postData({
     required String endPoint,
