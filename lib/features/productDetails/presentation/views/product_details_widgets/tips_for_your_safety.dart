@@ -9,11 +9,11 @@ class TipsForYourSafety extends StatelessWidget {
   const TipsForYourSafety({super.key});
 
   static List<String> _tips(BuildContext context) => [
-        context.tr(LocaleKeys.inspectProductThoroughlyBeforeBuying),
-        context.tr(LocaleKeys.takeSomeoneWithYou),
-        context.tr(LocaleKeys.dontPayUntilEnsuringSafety),
-        context.tr(LocaleKeys.meetSellerInPublicPlace),
-      ];
+    context.tr(LocaleKeys.inspectProductThoroughlyBeforeBuying),
+    context.tr(LocaleKeys.takeSomeoneWithYou),
+    context.tr(LocaleKeys.dontPayUntilEnsuringSafety),
+    context.tr(LocaleKeys.meetSellerInPublicPlace),
+  ];
 
   @override
   Widget build(BuildContext context) {

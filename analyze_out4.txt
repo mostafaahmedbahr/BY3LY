@@ -1,0 +1,37 @@
+﻿Analyzing by3ly...                                              
+
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\core\notifications\app_notifications.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\core\notifications\notification_service.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/material.dart'. Try removing the import directive - lib\core\utils\bloc_observer.dart:2:8 - unused_import
+warning - Duplicate import. Try removing all but one import of the library - lib\core\utils\bloc_observer.dart:5:8 - duplicate_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\PaymentBalance\data\repos\wallet_repos_imple.dart:4:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\addAdvertisements\data\repos\add_advertisements_repos_imple.dart:8:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\advertisements\data\repos\advertisements_repos_imple.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\allSubCategoriesProducts\data\repos\all_sub_categories_products_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\allSubCategories\data\repos\all_sub_categories_repos_imple.dart:7:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\chat\data\repos\chat_repository_impl.dart:4:8 - unused_import
+   info - The import of 'package:by3ly/core/extensions/log.dart' is unnecessary because all of the used elements are also provided by the import of 'package:by3ly/main_importants.dart'. Try removing the import directive - lib\features\chat\presentation\views\chat_widgets\chat_message_bubble.dart:1:8 - unnecessary_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\compare\data\repos\compare_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\deleteAccount\data\repos\delete_account_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\fav\data\repos\fav_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\helpSupportChat\data\repos\support_chat_repository_impl.dart:4:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\home\data\repos\home_repo_imple.dart:7:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\howToMakePurchase\data\repos\how_to_make_purchase_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\legalContent\data\repos\legal_content_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\notifications\data\repos\notifications_repos_imple.dart:5:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\otp\presentation\view_model\otp_cubit.dart:8:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\packages\data\repos\packages_repos_imple.dart:4:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\privacy\data\repos\privacy_repo_imple.dart:3:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\productDetails\data\repos\product_details_repo_imple.dart:11:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\reportProduct\data\report_product_repos\report_product_repos_imple.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\search\data\repos\search_repos_imple.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\seeAllBestView\data\repos\sell_all_best_view_repo_imple.dart:6:8 - unused_import
+warning - Unused import: 'package:flutter/foundation.dart'. Try removing the import directive - lib\features\statistics\data\repos\statistics_repos_imple.dart:3:8 - unused_import
+
+flutter : 27 issues found. (ran in 2.3s)
+At line:1 char:1
++ flutter analyze 2>&1 | Out-File -FilePath "E:\projects\by3ly\analyze_ ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (27 issues found. (ran in 2.3s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

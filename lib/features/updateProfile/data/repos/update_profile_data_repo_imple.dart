@@ -13,16 +13,18 @@ class UpdateProfileDataRepoImpl implements UpdateProfileDataRepos {
   UpdateProfileDataRepoImpl(this.apiService);
 
   @override
-  Future<Either<Failure, UpdateProfileDataModel>> updateProfileData(
-      {required dynamic data}) async {
+  Future<Either<Failure, UpdateProfileDataModel>> updateProfileData({
+    required dynamic data,
+  }) async {
     try {
       var response = await apiService!.postData(
         endPoint: EndPoints.updateProfile,
         isMultipart: true,
         data: data,
       );
-      UpdateProfileDataModel result =
-          UpdateProfileDataModel.fromJson(response.data);
+      UpdateProfileDataModel result = UpdateProfileDataModel.fromJson(
+        response.data,
+      );
       return right(result);
     } catch (e) {
       if (e is DioException) {

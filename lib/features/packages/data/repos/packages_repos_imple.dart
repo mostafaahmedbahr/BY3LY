@@ -1,6 +1,6 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
@@ -22,12 +22,13 @@ class PackagesRepoImpl implements PackagesRepos {
         endPoint: EndPoints.subscriptionPackages,
       );
       PackagesModel result = PackagesModel.fromJson(response.data);
-      debugPrint(
-          'PackagesRepo get: ${(result.data?.packages ?? []).length} packages');
+      logWarning(
+        'PackagesRepo get: ${(result.data?.packages ?? []).length} packages',
+      );
       return right(result);
     } catch (e, s) {
-      debugPrint('PackagesRepo get error: $e');
-      debugPrint(s.toString());
+      logWarning('PackagesRepo get error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -42,14 +43,14 @@ class PackagesRepoImpl implements PackagesRepos {
       var response = await apiService!.getData(
         endPoint: EndPoints.paymentMethods,
       );
-      PaymentMethodsModel result =
-          PaymentMethodsModel.fromJson(response.data);
-      debugPrint(
-          'PackagesRepo methods: ${(result.data?.methods ?? []).length}');
+      PaymentMethodsModel result = PaymentMethodsModel.fromJson(response.data);
+      logWarning(
+        'PackagesRepo methods: ${(result.data?.methods ?? []).length}',
+      );
       return right(result);
     } catch (e, s) {
-      debugPrint('PackagesRepo methods error: $e');
-      debugPrint(s.toString());
+      logWarning('PackagesRepo methods error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -71,17 +72,18 @@ class PackagesRepoImpl implements PackagesRepos {
           'package_id': packageId,
           'payment_method': paymentMethod,
         });
-        formData.files.add(MapEntry(
-          'receipt',
-          await MultipartFile.fromFile(receiptPath,
-              filename: receiptPath.split('/').last),
-        ));
+        formData.files.add(
+          MapEntry(
+            'receipt',
+            await MultipartFile.fromFile(
+              receiptPath,
+              filename: receiptPath.split('/').last,
+            ),
+          ),
+        );
         payload = formData;
       } else {
-        payload = {
-          "package_id": packageId,
-          "payment_method": paymentMethod,
-        };
+        payload = {"package_id": packageId, "payment_method": paymentMethod};
       }
       var response = await apiService!.postData(
         endPoint: EndPoints.subscriptionsCheckout,
@@ -90,8 +92,8 @@ class PackagesRepoImpl implements PackagesRepos {
       final result = SubscribePackageModel.fromJson(response.data);
       return right(result);
     } catch (e, s) {
-      debugPrint('PackagesRepo checkout error: $e');
-      debugPrint(s.toString());
+      logWarning('PackagesRepo checkout error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

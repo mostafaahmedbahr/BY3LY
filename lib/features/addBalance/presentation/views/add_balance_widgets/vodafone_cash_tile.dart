@@ -19,8 +19,7 @@ class VodafoneCashTile extends StatelessWidget {
       tint: _vodafoneRed,
       title: context.tr(LocaleKeys.vodafoneCash),
       subtitle: context.tr(LocaleKeys.now),
-      onTap: () => AddBalanceCubit.get(context)
-          .showPhoneNumbersDialog(context),
+      onTap: () => AddBalanceCubit.get(context).showPhoneNumbersDialog(context),
     );
   }
 }

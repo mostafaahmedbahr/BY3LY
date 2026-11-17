@@ -33,10 +33,7 @@ class LoginMessageTextWidget extends StatelessWidget {
         Text(
           context.tr(LocaleKeys.loginMsg2),
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 12.5,
-          ),
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
         ),
         Gap(22.h),
       ],

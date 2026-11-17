@@ -12,7 +12,8 @@ import 'confirm_payment_states.dart';
 class ConfirmPaymentCubit extends Cubit<ConfirmPaymentStates> {
   ConfirmPaymentCubit() : super(ConfirmPaymentInitState());
 
-  static ConfirmPaymentCubit get(context) => BlocProvider.of(context);
+  static ConfirmPaymentCubit get(BuildContext context) =>
+      BlocProvider.of(context);
 
   final ImagePicker picker = ImagePicker();
   File? image;
@@ -28,10 +29,10 @@ class ConfirmPaymentCubit extends Cubit<ConfirmPaymentStates> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  title:   Row(
+                  title: Row(
                     children: [
-                      Image.asset(AppImages.camera2,height: 40,),
-                      const SizedBox(width: 10,),
+                      Image.asset(AppImages.camera2, height: 40),
+                      const SizedBox(width: 10),
                       Text(context.tr(LocaleKeys.uploadImageFromCamera)),
                     ],
                   ),
@@ -41,10 +42,10 @@ class ConfirmPaymentCubit extends Cubit<ConfirmPaymentStates> {
                   },
                 ),
                 ListTile(
-                  title:   Row(
+                  title: Row(
                     children: [
-                      Image.asset(AppImages.gallery,height: 40,),
-                      const SizedBox(width: 10,),
+                      Image.asset(AppImages.gallery, height: 40),
+                      const SizedBox(width: 10),
                       Text(context.tr(LocaleKeys.uploadImageFromGallery)),
                     ],
                   ),
@@ -61,22 +62,23 @@ class ConfirmPaymentCubit extends Cubit<ConfirmPaymentStates> {
     );
   }
 
-
   Future<void> pickImageFromCamera() async {
-    final XFile? xfileImage = await picker.pickImage(source: ImageSource.camera);
+    final XFile? xfileImage = await picker.pickImage(
+      source: ImageSource.camera,
+    );
     if (xfileImage != null) {
       image = File(xfileImage.path);
       emit(PickImageFromCameraSuccessStates(image!));
     }
   }
 
-
   Future<void> pickImageFromGallery() async {
-   final XFile? xfileImage = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? xfileImage = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (xfileImage != null) {
-        image = File(xfileImage.path);
-        emit(PickImageFromGallerySuccessStates(image!));
+      image = File(xfileImage.path);
+      emit(PickImageFromGallerySuccessStates(image!));
     }
   }
-
 }

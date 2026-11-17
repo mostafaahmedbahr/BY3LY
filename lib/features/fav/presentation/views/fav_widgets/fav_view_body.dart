@@ -77,8 +77,7 @@ class _FavViewBodyState extends State<FavViewBody> {
             suffixIcon: _searchController.text.trim().isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.clear, size: 20),
-                    onPressed: () =>
-                        setState(() => _searchController.clear()),
+                    onPressed: () => setState(() => _searchController.clear()),
                   )
                 : null,
             onChanged: (_) => setState(() {}),
@@ -88,15 +87,18 @@ class _FavViewBodyState extends State<FavViewBody> {
             child: BlocConsumer<FavCubit, FavStates>(
               listener: (context, state) {
                 if (state is RemoveProductFromFavSuccess) {
-                  final msg = (state.removeProductFromFavModel.message
+                  final msg =
+                      (state.removeProductFromFavModel.message
                               ?.trim()
                               .isNotEmpty ??
                           false)
                       ? state.removeProductFromFavModel.message!
                       : context.tr(LocaleKeys.removedFromFav);
                   CherryToast.success(
-                    title: Text(msg,
-                        style: const TextStyle(color: AppColors.mainColor)),
+                    title: Text(
+                      msg,
+                      style: const TextStyle(color: AppColors.mainColor),
+                    ),
                   ).show(context);
                 } else if (state is RemoveProductFromFavError ||
                     state is FavToggleError) {
@@ -113,8 +115,7 @@ class _FavViewBodyState extends State<FavViewBody> {
               },
               builder: (context, state) {
                 final favCubit = context.read<FavCubit>();
-                final favorites =
-                    favCubit.favDataModel?.data?.favourites;
+                final favorites = favCubit.favDataModel?.data?.favourites;
                 if (state is GetFavDataLoading && favorites == null) {
                   return const FavDataListLoading();
                 } else if (state is GetFavDataError && favorites == null) {
@@ -164,10 +165,7 @@ class _EmptyHint extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 14,
-          color: AppColors.textSecondary,
-        ),
+        style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
       ),
     );
   }

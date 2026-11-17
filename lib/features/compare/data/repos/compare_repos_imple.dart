@@ -1,7 +1,7 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
@@ -20,16 +20,14 @@ class CompareReposImpl implements CompareRepos {
     try {
       var response = await apiService!.postData(
         endPoint: EndPoints.compareProducts,
-        data: {
-          "product_ids": productIds,
-        },
+        data: {"product_ids": productIds},
       );
       CompareModel result = CompareModel.fromJson(response.data);
-      debugPrint('CompareReposImpl compareProducts: status=${result.status}');
+      logWarning('CompareReposImpl compareProducts: status=${result.status}');
       return right(result);
     } catch (e, s) {
-      debugPrint('CompareReposImpl compareProducts error: $e');
-      debugPrint(s.toString());
+      logWarning('CompareReposImpl compareProducts error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

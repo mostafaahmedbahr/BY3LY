@@ -6,14 +6,15 @@ import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import '../models/register_model.dart';
 
-
 class RegisterRepoImpl implements RegisterRepo {
   final ApiService? apiService;
 
   RegisterRepoImpl(this.apiService);
 
   @override
-  Future<Either<Failure, RegisterModel>> register({required dynamic data}) async{
+  Future<Either<Failure, RegisterModel>> register({
+    required dynamic data,
+  }) async {
     try {
       var response = await apiService!.postData(
         endPoint: EndPoints.register,

@@ -46,9 +46,7 @@ class AllSubCategoriesList extends StatelessWidget {
               if (isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                      context.tr(LocaleKeys.noProductsInSection),
-                    ),
+                    content: Text(context.tr(LocaleKeys.noProductsInSection)),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -107,17 +105,16 @@ class AllSubCategoriesList extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Container(
-                                      color: AppColors.mainColor.withValues(
-                                        alpha: 0.07,
-                                      ),
-                                      child: Icon(
-                                        Icons.category_rounded,
-                                        size: 45.sp,
-                                        color: AppColors.mainColor,
-                                      ),
-                                    ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: AppColors.mainColor.withValues(
+                                    alpha: 0.07,
+                                  ),
+                                  child: Icon(
+                                    Icons.category_rounded,
+                                    size: 45.sp,
+                                    color: AppColors.mainColor,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -134,9 +131,7 @@ class AllSubCategoriesList extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30.r),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(
-                                      alpha: 0.08,
-                                    ),
+                                    color: Colors.black.withValues(alpha: 0.08),
                                     blurRadius: 8,
                                   ),
                                 ],

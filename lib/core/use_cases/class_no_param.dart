@@ -1,1 +1,1 @@
-class NoParam{}
+class NoParam {}

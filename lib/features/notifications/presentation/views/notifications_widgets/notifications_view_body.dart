@@ -10,8 +10,7 @@ class NotificationsViewBody extends StatefulWidget {
   const NotificationsViewBody({super.key});
 
   @override
-  State<NotificationsViewBody> createState() =>
-      _NotificationsViewBodyState();
+  State<NotificationsViewBody> createState() => _NotificationsViewBodyState();
 }
 
 class _NotificationsViewBodyState extends State<NotificationsViewBody> {
@@ -40,9 +39,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  SizedBox(height: 6.h),
+                SizedBox(height: 6.h),
                 const _ReadStatusFilter(),
-                  SizedBox(height: 18.h),
+                SizedBox(height: 18.h),
                 const Expanded(child: NotificationsLoading()),
               ],
             ),
@@ -54,9 +53,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  SizedBox(height: 6.h),
+                SizedBox(height: 6.h),
                 const _ReadStatusFilter(),
-                  SizedBox(height: 18.h),
+                SizedBox(height: 18.h),
                 Expanded(
                   child: CustomErrorWidget(
                     error: state.message,
@@ -93,9 +92,9 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
                     ),
                   ),
                 ),
-                SizedBox(height: 4.h),
+              SizedBox(height: 4.h),
               const _ReadStatusFilter(),
-                SizedBox(height: 12.h),
+              SizedBox(height: 12.h),
               const Expanded(child: NotificationsList()),
             ],
           ),
@@ -116,8 +115,9 @@ class _ReadStatusFilter extends StatelessWidget {
       builder: (context, state) {
         final cubit = NotificationsCubit.get(context);
         final allCount = cubit.notificationsList.length;
-        final readCount =
-            cubit.notificationsList.where((n) => n.isRead == true).length;
+        final readCount = cubit.notificationsList
+            .where((n) => n.isRead == true)
+            .length;
         final unreadCount = allCount - readCount;
 
         final options = [
@@ -162,8 +162,7 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fg = selected ? Colors.white : AppColors.text;
-    final countFg =
-        selected ? AppColors.yellowColor : AppColors.mainColor;
+    final countFg = selected ? AppColors.yellowColor : AppColors.mainColor;
 
     return Material(
       color: selected ? AppColors.mainColor : AppColors.surface,

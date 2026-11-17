@@ -21,7 +21,10 @@ void showLogoutDialog(BuildContext context) {
             context.read<ProfileCubit>().clearProfile();
           } catch (_) {}
           CacheTokenManger.userToken = null;
-          Toast.showSuccessToast(msg: state.logoutModel.message!, context: context);
+          Toast.showSuccessToast(
+            msg: state.logoutModel.message!,
+            context: context,
+          );
           LayoutCubit.pageIndex = 0;
           context.pushNamedAndRemoveAll(Routes.loginView);
         } else if (state is LogoutErrorState) {
@@ -47,9 +50,9 @@ void showLogoutDialog(BuildContext context) {
                 profileCubit.logout();
               },
               child: state is LogoutLoadingState
-                  ?   SizedBox(height: 30.h, width: 30.w, child: CustomLoading())
+                  ? SizedBox(height: 30.h, width: 30.w, child: CustomLoading())
                   : Text(
-                LocaleKeys.logout.tr(),
+                      LocaleKeys.logout.tr(),
                       style: const TextStyle(color: AppColors.redColor),
                     ),
             ),

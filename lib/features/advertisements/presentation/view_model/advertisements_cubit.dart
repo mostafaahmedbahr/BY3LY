@@ -1,4 +1,4 @@
-import 'package:by3ly/core/extensions/log.dart';
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +8,7 @@ import 'advertisements_states.dart';
 
 class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   AdvertisementsCubit(this.advertisementsRepo)
-      : super(AdvertisementsInitState());
+    : super(AdvertisementsInitState());
 
   static AdvertisementsCubit get(BuildContext context) =>
       BlocProvider.of<AdvertisementsCubit>(context);
@@ -26,11 +26,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
   }
 
   /// Tab labels: 0 = all, 1 = active, 2 = inactive.
-  List<String> get types => [
-        'all',
-        'activeNow',
-        'inactiveAd',
-      ];
+  List<String> get types => ['all', 'activeNow', 'inactiveAd'];
 
   /// Backend rule: is_paused == true  -> paused (inactive),
   ///               anything else      -> active.
@@ -83,7 +79,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     final result = await advertisementsRepo.deleteAd(adId: adId);
     return result.fold(
       (failure) {
-        debugPrint(
+        logWarning(
           'AdvertisementsCubit deleteAd failed: ${failure.errMessage}',
         );
         deletingAdId = null;
@@ -139,7 +135,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
 
     return result.fold(
       (failure) {
-        debugPrint(
+        logWarning(
           'AdvertisementsCubit ${pause ? 'pauseAd' : 'resumeAd'} failed: '
           '${failure.errMessage}',
         );
@@ -185,7 +181,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     final result = await advertisementsRepo.getMyAdsData();
     return result.fold(
       (failure) {
-        debugPrint(
+        logWarning(
           'AdvertisementsCubit fetchMyAds failed: ${failure.errMessage}',
         );
         emit(GetAllMyAdsDataErrorState(failure.errMessage));

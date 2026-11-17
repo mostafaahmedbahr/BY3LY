@@ -32,18 +32,16 @@ class RegisterButtons extends StatelessWidget {
           final email = state.registerModel.data?.resolvedEmail ?? "";
           final baseMsg = state.registerModel.message ?? "";
           Toast.showSuccessToast(
-              duration: const Duration(seconds: 10),
-              msg: otp != null && otp.isNotEmpty
-                  ? "$baseMsg\nOTP : $otp"
-                  : baseMsg,
-              context: context);
+            duration: const Duration(seconds: 10),
+            msg: otp != null && otp.isNotEmpty
+                ? "$baseMsg\nOTP : $otp"
+                : baseMsg,
+            context: context,
+          );
           // Close the keyboard BEFORE navigating so the focus manager
           // doesn't try to highlight widgets that are about to deactivate.
           FocusScope.of(context).unfocus();
-          context.pushNamed(
-            Routes.otpView,
-            arguments: email,
-          );
+          context.pushNamed(Routes.otpView, arguments: email);
           context.read<RegisterCubit>().clearData();
         } else if (state is SignUpError) {
           Toast.showErrorToast(msg: state.message, context: context);
@@ -68,18 +66,14 @@ class RegisterButtons extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [
-                          AppColors.mainColor,
-                          AppColors.secondColor,
-                        ],
+                        colors: [AppColors.mainColor, AppColors.secondColor],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              AppColors.mainColor.withValues(alpha: 0.35),
+                          color: AppColors.mainColor.withValues(alpha: 0.35),
                           blurRadius: 14,
                           offset: const Offset(0, 6),
                         ),

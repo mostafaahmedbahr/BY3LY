@@ -21,8 +21,7 @@ class HomeAdsStrip extends StatelessWidget {
   static List<String> urlsOf(Ads ad) {
     final urls = <String>[
       for (final img in (ad.images ?? []))
-        if ((img?.image?.trim().isNotEmpty ?? false))
-          img!.image!.trim(),
+        if ((img?.image?.trim().isNotEmpty ?? false)) img!.image!.trim(),
     ];
     if (urls.isEmpty) {
       final single = ad.image?.trim() ?? '';
@@ -33,8 +32,7 @@ class HomeAdsStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final withImages =
-        ads.where((ad) => urlsOf(ad).isNotEmpty).toList();
+    final withImages = ads.where((ad) => urlsOf(ad).isNotEmpty).toList();
     if (withImages.isEmpty) return const SizedBox.shrink();
     // First 5 available only.
     final visible = withImages.take(5).toList();
@@ -66,53 +64,58 @@ class HomeAdsStrip extends StatelessWidget {
                 return SizedBox(
                   width: 250.w,
                   child: ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        CustomNetWorkImage(
-                          raduis: 14,
-                          width: 250.w,
-                          fit: BoxFit.cover,
-                          imageUrl: urlsOf(ad).first,
-                        ),
-                        if (name != null && name.isNotEmpty)
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.fromLTRB(10, 18, 10, 8),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.black.withValues(alpha: 0.65),
-                                  ],
+                    borderRadius: BorderRadius.circular(14),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          CustomNetWorkImage(
+                            raduis: 14,
+                            width: 250.w,
+                            fit: BoxFit.cover,
+                            imageUrl: urlsOf(ad).first,
+                          ),
+                          if (name != null && name.isNotEmpty)
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(
+                                  10,
+                                  18,
+                                  10,
+                                  8,
                                 ),
-                              ),
-                              child: Text(
-                                name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black.withValues(alpha: 0.65),
+                                    ],
+                                  ),
+                                ),
+                                child: Text(
+                                  name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                   ),
                 );
               },

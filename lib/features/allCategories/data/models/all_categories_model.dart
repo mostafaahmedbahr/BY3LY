@@ -58,9 +58,9 @@ class Data {
     categories = json["categories"] == null
         ? null
         : (json["categories"] as List)
-            .whereType<Map<String, dynamic>>()
-            .map((e) => Categories.fromJson(e))
-            .toList();
+              .whereType<Map<String, dynamic>>()
+              .map((e) => Categories.fromJson(e))
+              .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -87,9 +87,9 @@ class Categories {
     subCategories = json["subCategories"] == null
         ? null
         : (json["subCategories"] as List)
-            .whereType<Map<String, dynamic>>()
-            .map((e) => SubCategories.fromJson(e))
-            .toList();
+              .whereType<Map<String, dynamic>>()
+              .map((e) => SubCategories.fromJson(e))
+              .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -98,8 +98,9 @@ class Categories {
     jsonData["name"] = name;
     jsonData["image"] = image;
     if (subCategories != null) {
-      jsonData["subCategories"] =
-          subCategories?.map((e) => e.toJson()).toList();
+      jsonData["subCategories"] = subCategories
+          ?.map((e) => e.toJson())
+          .toList();
     }
     return jsonData;
   }

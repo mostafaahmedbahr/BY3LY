@@ -12,7 +12,7 @@ class RegisterView extends StatelessWidget {
         backgroundColor: AppColors.secondColor,
         elevation: 0,
         toolbarHeight: 0,
-          scrolledUnderElevation: 0,
+        scrolledUnderElevation: 0,
       ),
       body: const RegisterViewBody(),
     );

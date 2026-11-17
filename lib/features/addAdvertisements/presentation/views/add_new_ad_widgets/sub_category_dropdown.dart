@@ -26,13 +26,15 @@ class SubCategoryDropdown extends StatelessWidget {
             onChanged: null,
             decoration: dropdownDecoration(
               context.tr(LocaleKeys.subCategory),
-              prefix: const Icon(Icons.account_tree_outlined,
-                  color: AppColors.mainColor, size: 20),
+              prefix: const Icon(
+                Icons.account_tree_outlined,
+                color: AppColors.mainColor,
+                size: 20,
+              ),
             ),
           );
         }
-        return BlocBuilder<AllSubCategoriesCubit,
-            AllSubCategoriesStates>(
+        return BlocBuilder<AllSubCategoriesCubit, AllSubCategoriesStates>(
           builder: (context, state) {
             if (state is GetAllSubCategoriesLoading) {
               return const Center(
@@ -46,10 +48,10 @@ class SubCategoryDropdown extends StatelessWidget {
                 ),
               );
             }
-            final subs = AllSubCategoriesCubit.get(context)
-                    .allSubCategoriesModel
-                    ?.data
-                    ?.subCategories ??
+            final subs =
+                AllSubCategoriesCubit.get(
+                  context,
+                ).allSubCategoriesModel?.data?.subCategories ??
                 [];
             // Guard: a stale subCategoryId (e.g. category just changed
             // and the new list hasn't arrived) crashes the dropdown.
@@ -58,8 +60,7 @@ class SubCategoryDropdown extends StatelessWidget {
                 ? adCubit.subCategoryId
                 : null;
             return DropdownButtonFormField<int>(
-              key: ValueKey(
-                  'sub_${adCubit.categoryId}_$safeSub'),
+              key: ValueKey('sub_${adCubit.categoryId}_$safeSub'),
               initialValue: safeSub,
               items: subs.map((s) {
                 return DropdownMenuItem<int>(
@@ -70,8 +71,11 @@ class SubCategoryDropdown extends StatelessWidget {
               onChanged: adCubit.selectSubCategory,
               decoration: dropdownDecoration(
                 context.tr(LocaleKeys.subCategory),
-                prefix: const Icon(Icons.account_tree_outlined,
-                    color: AppColors.mainColor, size: 20),
+                prefix: const Icon(
+                  Icons.account_tree_outlined,
+                  color: AppColors.mainColor,
+                  size: 20,
+                ),
               ),
             );
           },

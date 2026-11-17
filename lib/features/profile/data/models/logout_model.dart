@@ -32,9 +32,8 @@ class LogoutModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    data['number'] =  number;
-    data['message'] =  message;
+    data['number'] = number;
+    data['message'] = message;
     return data;
   }
 }
-

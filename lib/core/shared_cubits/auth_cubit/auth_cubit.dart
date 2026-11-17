@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import '../../../main_importants.dart';
 import '../../utils/app_consts/storage_keys.dart';
 import 'auth_states.dart';
-
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -9,8 +10,9 @@ class AuthCubit extends Cubit<AuthState> {
   bool isGuest = false;
   String? userToken;
 
+  /// The secure, in-memory-backed token manager is the single source of truth.
   void checkAuthStatus() {
-    userToken = CacheHelper.getData(key: StorageKeys.userToken);
+    userToken = CacheTokenManger.userToken;
     isGuest = CacheHelper.getData(key: StorageKeys.isGuest) ?? false;
 
     if (isGuest) {
@@ -26,22 +28,23 @@ class AuthCubit extends Cubit<AuthState> {
     isGuest = true;
     userToken = null;
     CacheHelper.saveData(key: StorageKeys.isGuest, value: true);
-    CacheHelper.removeData(key: StorageKeys.userToken);
+    // The secure token is intentionally kept so an existing session survives.
     emit(AuthGuestState());
   }
 
+  /// [CacheTokenManger.saveUserToken] already persists the token securely
+  /// (login/OTP cubits), so only the local state flags are updated here.
   void loginWithToken(String userToken) {
     isGuest = false;
-    userToken = userToken;
+    this.userToken = userToken;
     CacheHelper.saveData(key: StorageKeys.isGuest, value: false);
-    CacheHelper.saveData(key: StorageKeys.userToken, value: userToken);
     emit(AuthLoggedInState());
   }
 
   void logout() {
     isGuest = false;
     userToken = null;
-    CacheHelper.removeData(key: StorageKeys.userToken);
+    unawaited(CacheTokenManger.clearUserToken());
     CacheHelper.removeData(key: StorageKeys.isGuest);
     emit(AuthLoggedOutState());
   }

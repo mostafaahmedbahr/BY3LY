@@ -25,61 +25,69 @@ class FakeHomeRepo implements HomeRepo {
   Future<Either<Failure, HomeModel>> getHomeData() async {
     if (homeFails) return Left(ServerFailure('offline'));
     if (homePayload != null) return homePayload!();
-    return Right(HomeModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'categories': [
-          {'id': 1, 'name': 'موبايلات', 'image': 'cat1.png'},
-          {'id': 2, 'name': 'سيارات', 'image': 'cat2.png'},
-        ],
-        'bestView': [
-          {'id': 11, 'name': 'iPhone 15', 'price': '25000', 'image': 'a.jpg'},
-        ],
-        'ads': [
-          {'id': 91, 'name': 'Sponsored', 'image': 'ad.jpg'},
-        ],
-      },
-    }));
+    return Right(
+      HomeModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'categories': [
+            {'id': 1, 'name': 'موبايلات', 'image': 'cat1.png'},
+            {'id': 2, 'name': 'سيارات', 'image': 'cat2.png'},
+          ],
+          'bestView': [
+            {'id': 11, 'name': 'iPhone 15', 'price': '25000', 'image': 'a.jpg'},
+          ],
+          'ads': [
+            {'id': 91, 'name': 'Sponsored', 'image': 'ad.jpg'},
+          ],
+        },
+      }),
+    );
   }
 
   @override
   Future<Either<Failure, BannersModel>> getBanners() async {
     if (bannersFails) return Left(ServerFailure('offline'));
     if (bannersPayload != null) return bannersPayload!();
-    return Right(BannersModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': [
-        {'id': 1, 'image': 'b1.jpg', 'title': 'عرض'},
-        {'id': 2, 'image': 'b2.jpg'},
-      ],
-    }));
+    return Right(
+      BannersModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': [
+          {'id': 1, 'image': 'b1.jpg', 'title': 'عرض'},
+          {'id': 2, 'image': 'b2.jpg'},
+        ],
+      }),
+    );
   }
 }
 
 Map<String, dynamic> _fullEnvelope() => {
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'categories': [
-          {'id': 1, 'name': 'سيارات', 'image': 'car.png'},
-          'junk', // malformed entry must be skipped, not crash
-        ],
-        'bestView': [
-          {'id': 11, 'name': 'iPhone', 'price': '25000'},
-        ],
-        'ads': [
-          {
-            'id': 91,
-            'name': 'Sponsored',
-            'price': '100',
-            'image': 'ad.jpg',
-            'images': ['ad1.jpg', {'id': 5, 'image': 'ad2.jpg'}, 123],
-          },
+  'status': true,
+  'message': 'ok',
+  'data': {
+    'categories': [
+      {'id': 1, 'name': 'سيارات', 'image': 'car.png'},
+      'junk', // malformed entry must be skipped, not crash
+    ],
+    'bestView': [
+      {'id': 11, 'name': 'iPhone', 'price': '25000'},
+    ],
+    'ads': [
+      {
+        'id': 91,
+        'name': 'Sponsored',
+        'price': '100',
+        'image': 'ad.jpg',
+        'images': [
+          'ad1.jpg',
+          {'id': 5, 'image': 'ad2.jpg'},
+          123,
         ],
       },
-    };
+    ],
+  },
+};
 
 void main() {
   group('HomeModel parsing', () {
@@ -155,8 +163,10 @@ void main() {
     });
 
     test('fully formed URLs stay untouched', () {
-      expect(BannerLink.normalizeUrl('https://by3ly.com/page'),
-          'https://by3ly.com/page');
+      expect(
+        BannerLink.normalizeUrl('https://by3ly.com/page'),
+        'https://by3ly.com/page',
+      );
       expect(BannerLink.normalizeUrl('http://by3ly.com'), 'http://by3ly.com');
     });
 
@@ -167,8 +177,10 @@ void main() {
     });
 
     test('whitespace around URL is trimmed', () {
-      expect(BannerLink.normalizeUrl('  https://by3ly.com/x  '),
-          'https://by3ly.com/x');
+      expect(
+        BannerLink.normalizeUrl('  https://by3ly.com/x  '),
+        'https://by3ly.com/x',
+      );
     });
   });
 
@@ -188,16 +200,20 @@ void main() {
     });
 
     test('getBanners fills banners and drops empty-image items', () async {
-      final cubit = HomeCubit(FakeHomeRepo(
-        bannersPayload: () => Right(BannersModel.fromJson({
-          'status': true,
-          'data': [
-            {'id': 1, 'image': 'b1.jpg'},
-            {'id': 2, 'image': ''}, // dropped by the slider getter
-            {'id': 3}, // dropped too — no image at all
-          ],
-        })),
-      ));
+      final cubit = HomeCubit(
+        FakeHomeRepo(
+          bannersPayload: () => Right(
+            BannersModel.fromJson({
+              'status': true,
+              'data': [
+                {'id': 1, 'image': 'b1.jpg'},
+                {'id': 2, 'image': ''}, // dropped by the slider getter
+                {'id': 3}, // dropped too — no image at all
+              ],
+            }),
+          ),
+        ),
+      );
       await cubit.getBanners();
       expect(cubit.banners.length, 1);
       expect(cubit.banners.single.image, 'b1.jpg');

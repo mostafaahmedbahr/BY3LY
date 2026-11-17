@@ -47,11 +47,10 @@ class ServerFailure extends Failure {
     String errorMessage = "Something went wrong. Please try again";
 
     if (response is Map<String, dynamic>) {
-
       // ✅ Validation Errors (422)
       if (statusCode == 422 && response["data"] is Map<String, dynamic>) {
         final Map<String, dynamic> errors =
-        response["data"] as Map<String, dynamic>;
+            response["data"] as Map<String, dynamic>;
 
         if (errors.isNotEmpty) {
           final String firstKey = errors.keys.first;
@@ -68,7 +67,7 @@ class ServerFailure extends Failure {
       // ✅ Validation Errors (422)
       if (statusCode == 404 && response["data"] is Map<String, dynamic>) {
         final Map<String, dynamic> errors =
-        response["data"] as Map<String, dynamic>;
+            response["data"] as Map<String, dynamic>;
 
         if (errors.isNotEmpty) {
           final String firstKey = errors.keys.first;

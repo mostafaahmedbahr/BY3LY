@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../../data/models/chat_models.dart';
 import 'action_sheet_item.dart';
 
-
 /// Bottom sheet with actions for a long-pressed message: copy / delete /
 /// cancel. The caller decides what to do with the chosen action via the
 /// provided callbacks.

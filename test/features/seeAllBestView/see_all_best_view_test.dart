@@ -58,30 +58,31 @@ class FakeSellAllBestViewRepo implements SellAllBestViewRepo {
   Future<Either<Failure, SellAllBestViewModel>> getAllBestViewProducts() async {
     calls++;
     if (shouldFail) return Left(ServerFailure('fetch failed'));
-    return Right(SellAllBestViewModel.fromJson(
-      Map<String, dynamic>.from(_fixture),
-    ));
+    return Right(
+      SellAllBestViewModel.fromJson(Map<String, dynamic>.from(_fixture)),
+    );
   }
 }
 
 class FakeFavRepos implements FavRepos {
   @override
-  Future<Either<Failure, FavDataModel>> getFavData() async =>
-      Right(FavDataModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {'favourites': const []},
-      }));
+  Future<Either<Failure, FavDataModel>> getFavData() async => Right(
+    FavDataModel.fromJson({
+      'status': true,
+      'message': 'ok',
+      'data': {'favourites': const []},
+    }),
+  );
 
   @override
-  Future<Either<Failure, GeneralModel>> addProductToFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true));
+  Future<Either<Failure, GeneralModel>> addProductToFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true));
 
   @override
-  Future<Either<Failure, GeneralModel>> removeProductFromFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true));
+  Future<Either<Failure, GeneralModel>> removeProductFromFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true));
 }
 
 Widget _harness({
@@ -152,8 +153,10 @@ void main() {
     });
 
     test('non-map data is dropped, not thrown', () {
-      final model =
-          SellAllBestViewModel.fromJson({'status': true, 'data': 'nope'});
+      final model = SellAllBestViewModel.fromJson({
+        'status': true,
+        'data': 'nope',
+      });
       expect(model.data, isNull);
     });
   });
@@ -165,8 +168,7 @@ void main() {
       cubit.close();
     });
 
-    test('success emits Loading then Success and fills the model',
-        () async {
+    test('success emits Loading then Success and fills the model', () async {
       final repo = FakeSellAllBestViewRepo();
       final cubit = SellAllBestViewCubit(repo);
       final events = <SellAllBestViewStates>[];
@@ -192,8 +194,10 @@ void main() {
       await cubit.getSellAllBestView();
       await Future<void>.delayed(Duration.zero);
 
-      expect((events.last as GetAllBestViewProductsErrorState).error,
-          'fetch failed');
+      expect(
+        (events.last as GetAllBestViewProductsErrorState).error,
+        'fetch failed',
+      );
       expect(cubit.sellAllBestViewModel, isNull);
       await sub.cancel();
       await cubit.close();
@@ -201,8 +205,9 @@ void main() {
   });
 
   group('Widgets', () {
-    testWidgets('grid shows products with the local search filter',
-        (tester) async {
+    testWidgets('grid shows products with the local search filter', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1600);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -222,16 +227,16 @@ void main() {
       expect(find.text('آيفون 15 برو'), findsOneWidget);
       expect(find.text('سامسونج S24'), findsOneWidget);
 
-      await tester.enterText(
-          find.byType(EditableText).first, 'سامسونج');
+      await tester.enterText(find.byType(EditableText).first, 'سامسونج');
       await _settle(tester);
 
       expect(find.text('سامسونج S24'), findsOneWidget);
       expect(find.text('آيفون 15 برو'), findsNothing);
     });
 
-    testWidgets('empty search shows the localized no-results hint',
-        (tester) async {
+    testWidgets('empty search shows the localized no-results hint', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1600);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -251,12 +256,15 @@ void main() {
       await tester.enterText(find.byType(EditableText).first, 'zzz');
       await _settle(tester);
 
-      expect(find.text('لا توجد نتائج، جرّب تغيير البحث أو الفلاتر'),
-          findsOneWidget);
+      expect(
+        find.text('لا توجد نتائج، جرّب تغيير البحث أو الفلاتر'),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('error state renders and retry re-triggers the fetch',
-        (tester) async {
+    testWidgets('error state renders and retry re-triggers the fetch', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1600);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {

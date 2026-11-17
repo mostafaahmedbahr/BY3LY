@@ -1,4 +1,5 @@
-  import 'package:by3ly/core/general_models/general_model.dart';
+﻿import 'package:by3ly/core/extensions/log.dart';
+import 'package:by3ly/core/general_models/general_model.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,13 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repos/fav_repos.dart';
 import 'fav_states.dart';
 
-
 class FavCubit extends Cubit<FavStates> {
   FavCubit(this.favRepos) : super(FavInitState());
 
   static FavCubit get(BuildContext context) =>
       BlocProvider.of<FavCubit>(context);
-
 
   final FavRepos favRepos;
   FavDataModel? favDataModel;
@@ -36,65 +35,71 @@ class FavCubit extends Cubit<FavStates> {
   Future<void> getFavData() async {
     emit(GetFavDataLoading());
     var result = await favRepos.getFavData();
-    return result.fold((failure) {
-      debugPrint('FavCubit getFavData failed: ${failure.errMessage}');
-      emit(GetFavDataError(failure.errMessage));
-    }, (data) {
-      if(data.status==true){
-        favDataModel = data;
-        _syncIds();
-        emit(GetFavDataSuccess(data));
-      }
-      else{
-        emit(GetFavDataError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning('FavCubit getFavData failed: ${failure.errMessage}');
+        emit(GetFavDataError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          favDataModel = data;
+          _syncIds();
+          emit(GetFavDataSuccess(data));
+        } else {
+          emit(GetFavDataError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 
   GeneralModel? removeProductFromFavModel;
-  Future<void> removeProductFromFav({
-    required int productId,
-}) async {
+  Future<void> removeProductFromFav({required int productId}) async {
     emit(RemoveProductFromFavLoading());
     var result = await favRepos.removeProductFromFav(productId: productId);
-    return result.fold((failure) {
-      debugPrint('FavCubit removeProductFromFav failed: ${failure.errMessage}');
-      emit(RemoveProductFromFavError(failure.errMessage));
-    }, (data) {
-      if(data.status==true){
-        removeProductFromFavModel = data;
-        favouriteIds.remove(productId);
-        favDataModel?.data?.favourites
-            ?.removeWhere((f) => f.id == productId);
-        emit(RemoveProductFromFavSuccess(data));
-        // Refresh silently so ids stay in sync without a loading flash.
-        getFavData();
-      }
-      else{
-        emit(RemoveProductFromFavError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning(
+          'FavCubit removeProductFromFav failed: ${failure.errMessage}',
+        );
+        emit(RemoveProductFromFavError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          removeProductFromFavModel = data;
+          favouriteIds.remove(productId);
+          favDataModel?.data?.favourites?.removeWhere((f) => f.id == productId);
+          emit(RemoveProductFromFavSuccess(data));
+          // Refresh silently so ids stay in sync without a loading flash.
+          getFavData();
+        } else {
+          emit(
+            RemoveProductFromFavError(data.message ?? 'Something went wrong'),
+          );
+        }
+      },
+    );
   }
 
   GeneralModel? addProductToFavModel;
-  Future<void> addProductToFav({
-    required int productId,
-  }) async {
+  Future<void> addProductToFav({required int productId}) async {
     emit(AddProductToFavLoading());
     var result = await favRepos.addProductToFav(productId: productId);
-    return result.fold((failure) {
-      debugPrint('FavCubit addProductToFav failed: ${failure.errMessage}');
-      emit(AddProductToFavError(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        addProductToFavModel = data;
-        favouriteIds.add(productId);
-        emit(AddProductToFavSuccess(data));
-        getFavData();
-      } else {
-        emit(AddProductToFavError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning('FavCubit addProductToFav failed: ${failure.errMessage}');
+        emit(AddProductToFavError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          addProductToFavModel = data;
+          favouriteIds.add(productId);
+          emit(AddProductToFavSuccess(data));
+          getFavData();
+        } else {
+          emit(AddProductToFavError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 
   /// Toggle from anywhere (home cards, details, search...).
@@ -113,34 +118,38 @@ class FavCubit extends Cubit<FavStates> {
         ? await favRepos.removeProductFromFav(productId: productId)
         : await favRepos.addProductToFav(productId: productId);
 
-    return result.fold((failure) {
-      debugPrint('FavCubit toggleFavourite failed: ${failure.errMessage}');
-      // Revert optimistic change.
-      if (wasFav) {
-        favouriteIds.add(productId);
-      } else {
-        favouriteIds.remove(productId);
-      }
-      emit(FavToggleError(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        if (!wasFav) {
-          addProductToFavModel = data;
-        } else {
-          removeProductFromFavModel = data;
-          favDataModel?.data?.favourites
-              ?.removeWhere((f) => f.id == productId);
-        }
-        emit(FavToggleSuccess(productId, !wasFav, data.message));
-        getFavData();
-      } else {
+    return result.fold(
+      (failure) {
+        logWarning('FavCubit toggleFavourite failed: ${failure.errMessage}');
+        // Revert optimistic change.
         if (wasFav) {
           favouriteIds.add(productId);
         } else {
           favouriteIds.remove(productId);
         }
-        emit(FavToggleError(data.message ?? 'Something went wrong'));
-      }
-    });
+        emit(FavToggleError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          if (!wasFav) {
+            addProductToFavModel = data;
+          } else {
+            removeProductFromFavModel = data;
+            favDataModel?.data?.favourites?.removeWhere(
+              (f) => f.id == productId,
+            );
+          }
+          emit(FavToggleSuccess(productId, !wasFav, data.message));
+          getFavData();
+        } else {
+          if (wasFav) {
+            favouriteIds.add(productId);
+          } else {
+            favouriteIds.remove(productId);
+          }
+          emit(FavToggleError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 }

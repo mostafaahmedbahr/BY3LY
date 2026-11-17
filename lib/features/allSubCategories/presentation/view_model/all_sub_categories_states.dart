@@ -1,7 +1,6 @@
-
 import '../../data/models/all_sub_categories_model.dart';
 
-abstract class AllSubCategoriesStates{}
+abstract class AllSubCategoriesStates {}
 
 class AllSubCategoriesInitState extends AllSubCategoriesStates {}
 

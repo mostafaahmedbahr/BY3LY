@@ -4,8 +4,10 @@ import 'package:by3ly/features/changePassword/presentation/view_model/change_pas
 import 'package:by3ly/features/changePassword/presentation/view_model/change_password_states.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/core/app_services/local_services/cache_helper.dart';
+import 'package:by3ly/core/app_services/local_services/cache_token.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,10 +43,25 @@ class FakeChangePasswordRepo implements ChangePasswordRepo {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  const secureChannel = MethodChannel(
+    'plugins.it_nomads.com/flutter_secure_storage',
+  );
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({'email': 'qa@example.com'});
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(secureChannel, (call) async => null);
     await CacheHelper.init();
+    // Reset shared statics so this suite never depends on test order.
+    CacheTokenManger.userToken = null;
+    LayoutCubit.pageIndex = 0;
+  });
+
+  tearDown(() async {
+    CacheTokenManger.userToken = null;
+    LayoutCubit.pageIndex = 0;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(secureChannel, null);
   });
 
   test('initial state is ChangePasswordInitState and fields default', () {
@@ -71,8 +88,7 @@ void main() {
     expect(repo.lastNewPasswordConfirmation, 'NewStrongPass2!');
     expect(cubit.state, isA<ChangePasswordSuccessState>());
     final success = cubit.state as ChangePasswordSuccessState;
-    expect(success.changePasswordModel.message,
-        'تم تغيير كلمة المرور بنجاح');
+    expect(success.changePasswordModel.message, 'تم تغيير كلمة المرور بنجاح');
     expect(cubit.changePasswordModel?.status, isTrue);
     await cubit.close();
   });
@@ -88,8 +104,10 @@ void main() {
 
     expect(repo.calls, 1);
     expect(cubit.state, isA<ChangePasswordErrorState>());
-    expect((cubit.state as ChangePasswordErrorState).error,
-        'كلمة المرور القديمة غير صحيحة');
+    expect(
+      (cubit.state as ChangePasswordErrorState).error,
+      'كلمة المرور القديمة غير صحيحة',
+    );
     await cubit.close();
   });
 
@@ -113,7 +131,7 @@ void main() {
     cubit.close();
   });
 
-  test('clearUserData wipes email and resets layout pageIndex', () {
+  test('clearUserData wipes email and resets layout pageIndex', () async {
     LayoutCubit.pageIndex = 4;
     final cubit = ChangePasswordCubit(FakeChangePasswordRepo());
 
@@ -121,6 +139,8 @@ void main() {
     expect(LayoutCubit.pageIndex, 4);
 
     cubit.clearUserData();
+    // clearUserData fires unawaited secure/prefs deletes — flush them.
+    await Future<void>.delayed(Duration.zero);
 
     expect(CacheHelper.getData(key: 'email'), isNull);
     expect(LayoutCubit.pageIndex, 0);

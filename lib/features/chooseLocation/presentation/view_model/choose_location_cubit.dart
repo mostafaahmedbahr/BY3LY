@@ -8,7 +8,7 @@ import 'choose_location_states.dart';
 
 class ChooseLocationCubit extends Cubit<ChooseLocationStates> {
   ChooseLocationCubit(this.chooseLocationRepos)
-      : super(ChooseLocationInitState());
+    : super(ChooseLocationInitState());
 
   static ChooseLocationCubit get(BuildContext context) =>
       BlocProvider.of<ChooseLocationCubit>(context);
@@ -81,9 +81,9 @@ class ChooseLocationCubit extends Cubit<ChooseLocationStates> {
           }
           emit(GetAllCitiesAndCentersSuccess(data));
         } else {
-          emit(GetAllCitiesAndCentersError(
-            data.message ?? 'حدث خطأ غير متوقع',
-          ));
+          emit(
+            GetAllCitiesAndCentersError(data.message ?? 'حدث خطأ غير متوقع'),
+          );
         }
       },
     );
@@ -114,9 +114,11 @@ class ChooseLocationCubit extends Cubit<ChooseLocationStates> {
           chooseLocationModel = data;
           emit(AddLocationCitiesAndCentersSuccess(data));
         } else {
-          emit(AddLocationCitiesAndCentersError(
-            data.message ?? 'حدث خطأ غير متوقع',
-          ));
+          emit(
+            AddLocationCitiesAndCentersError(
+              data.message ?? 'حدث خطأ غير متوقع',
+            ),
+          );
         }
       },
     );

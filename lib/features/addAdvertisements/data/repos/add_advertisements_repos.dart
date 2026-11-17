@@ -31,13 +31,11 @@ abstract class AddAdvertisementsRepos {
 
   /// Fixed publishing fee + transfer accounts
   /// (GET /api/ad-publishing-settings).
-  Future<Either<Failure, AdPublishingSettingsModel>>
-      getAdPublishingSettings();
+  Future<Either<Failure, AdPublishingSettingsModel>> getAdPublishingSettings();
 
   /// Active subscription (GET /api/subscriptions/current) — decides
   /// whether publishing is covered by the package or needs payment.
-  Future<Either<Failure, CurrentSubscriptionModel>>
-      getCurrentSubscription();
+  Future<Either<Failure, CurrentSubscriptionModel>> getCurrentSubscription();
 
   /// Edit an existing ad (same fields + ad_id, new image files only).
   Future<Either<Failure, GeneralModel>> editAd({

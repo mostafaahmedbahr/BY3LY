@@ -52,10 +52,11 @@ class PackageCard extends StatelessWidget {
                 if (package.durationLabel.isNotEmpty)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color:
-                          AppColors.mainColor.withValues(alpha: 0.1),
+                      color: AppColors.mainColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -93,8 +94,7 @@ class PackageCard extends StatelessWidget {
                   ),
                 ),
                 if (!isFree &&
-                    (package.currency?.trim().isNotEmpty ??
-                        false)) ...[
+                    (package.currency?.trim().isNotEmpty ?? false)) ...[
                   const SizedBox(width: 4),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
@@ -111,7 +111,9 @@ class PackageCard extends StatelessWidget {
                 if (package.adsLimit != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceVariant,
                       borderRadius: BorderRadius.circular(12),
@@ -199,8 +201,7 @@ class PackageCard extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              onPressed: () =>
-                  showPaymentMethodSheet(context, package),
+              onPressed: () => showPaymentMethodSheet(context, package),
             ),
           ],
         ),
@@ -246,10 +247,7 @@ class _InfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12.5,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
           ),
         ),
         Text(

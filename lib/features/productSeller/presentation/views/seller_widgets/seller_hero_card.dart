@@ -12,7 +12,11 @@ import '../../../../../features/profile/presentation/view_model/profile_cubit.da
 /// big logo-avatar with a gold verified badge, name, rating chip, and
 /// a gold-gradient "contact now" CTA (hidden when viewing own profile).
 class SellerHeroCard extends StatelessWidget {
-  const SellerHeroCard({super.key, required this.seller, required this.sellerId});
+  const SellerHeroCard({
+    super.key,
+    required this.seller,
+    required this.sellerId,
+  });
 
   final Seller seller;
   final int sellerId;
@@ -158,18 +162,14 @@ class SellerHeroCard extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [
-                        AppColors.yellowColor,
-                        Color(0xffE08B1B),
-                      ],
+                      colors: [AppColors.yellowColor, Color(0xffE08B1B)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.yellowColor
-                            .withValues(alpha: 0.40),
+                        color: AppColors.yellowColor.withValues(alpha: 0.40),
                         blurRadius: 12,
                         offset: const Offset(0, 5),
                       ),
@@ -191,8 +191,10 @@ class SellerHeroCard extends StatelessWidget {
                                 ),
                               )
                             : Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Row(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(
@@ -211,7 +213,7 @@ class SellerHeroCard extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                            ),
+                              ),
                       ),
                     ),
                   ),

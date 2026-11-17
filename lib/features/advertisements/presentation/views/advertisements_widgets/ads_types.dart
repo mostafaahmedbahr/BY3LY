@@ -48,8 +48,8 @@ class AdsTypes extends StatelessWidget {
                       advertisementsCubit.advertisementsTypeIndex == index;
                   final count = advertisementsCubit.countForTab(index);
                   return InkWell(
-                    onTap: () => advertisementsCubit
-                        .setAdvertisementsTypeIndex(index),
+                    onTap: () =>
+                        advertisementsCubit.setAdvertisementsTypeIndex(index),
                     borderRadius: BorderRadius.circular(20),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 220),
@@ -68,8 +68,9 @@ class AdsTypes extends StatelessWidget {
                         boxShadow: selected
                             ? [
                                 BoxShadow(
-                                  color: AppColors.mainColor
-                                      .withValues(alpha: 0.3),
+                                  color: AppColors.mainColor.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 8,
                                   offset: const Offset(0, 3),
                                 ),
@@ -92,7 +93,9 @@ class AdsTypes extends StatelessWidget {
                           const SizedBox(width: 6),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: selected
                                   ? Colors.white.withValues(alpha: 0.25)

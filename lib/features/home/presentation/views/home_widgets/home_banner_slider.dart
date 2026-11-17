@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
 import 'package:by3ly/core/shared_widgets/shimmer_loading.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
@@ -22,8 +23,7 @@ class HomeBannerSlider extends StatefulWidget {
 
 class _HomeBannerSliderState extends State<HomeBannerSlider> {
   int _activeIndex = 0;
-  final CarouselSliderController _controller =
-      CarouselSliderController();
+  final CarouselSliderController _controller = CarouselSliderController();
 
   Future<void> _openLink(String? link) async {
     final url = BannerLink.normalizeUrl(link);
@@ -34,7 +34,7 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      debugPrint('HomeBannerSlider: failed to open banner link — $e');
+      logWarning('HomeBannerSlider: failed to open banner link — $e');
     }
   }
 
@@ -68,20 +68,17 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                 itemCount: banners.length,
                 itemBuilder: (context, index, realIndex) {
                   final banner = banners[index];
-                  final hasLink = (banner.link?.trim().isNotEmpty ??
-                      false);
+                  final hasLink = (banner.link?.trim().isNotEmpty ?? false);
                   return InkWell(
                     onTap: () => _openLink(banner.link),
                     borderRadius: BorderRadius.circular(22),
                     child: Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 4),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.mainColor
-                                .withValues(alpha: 0.16),
+                            color: AppColors.mainColor.withValues(alpha: 0.16),
                             blurRadius: 18,
                             offset: const Offset(0, 8),
                           ),
@@ -106,45 +103,33 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                                   end: Alignment.bottomCenter,
                                   colors: [
                                     Colors.transparent,
-                                    Colors.black.withValues(
-                                        alpha: 0.65),
+                                    Colors.black.withValues(alpha: 0.65),
                                   ],
                                   stops: const [0.45, 1.0],
                                 ),
                               ),
                             ),
-                            if ((banner.title
-                                        ?.trim()
-                                        .isNotEmpty ??
-                                    false) ||
-                                (banner.description
-                                        ?.trim()
-                                        .isNotEmpty ??
+                            if ((banner.title?.trim().isNotEmpty ?? false) ||
+                                (banner.description?.trim().isNotEmpty ??
                                     false))
                               Positioned(
                                 left: 16,
                                 right: hasLink ? 64 : 16,
                                 bottom: 14,
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  mainAxisSize:
-                                      MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    if ((banner.title
-                                            ?.trim()
-                                            .isNotEmpty ??
+                                    if ((banner.title?.trim().isNotEmpty ??
                                         false))
                                       Text(
                                         banner.title!,
                                         maxLines: 1,
-                                        overflow:
-                                            TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 17,
-                                          fontWeight:
-                                              FontWeight.w800,
+                                          fontWeight: FontWeight.w800,
                                           height: 1.3,
                                         ),
                                       ),
@@ -155,12 +140,11 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                                       Text(
                                         banner.description!,
                                         maxLines: 1,
-                                        overflow:
-                                            TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Colors.white
-                                              .withValues(
-                                                  alpha: 0.85),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.85,
+                                          ),
                                           fontSize: 12.5,
                                         ),
                                       ),
@@ -179,8 +163,7 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
-                                    Icons
-                                        .arrow_forward_rounded,
+                                    Icons.arrow_forward_rounded,
                                     size: 20,
                                     color: Color(0xff1F2937),
                                   ),
@@ -197,8 +180,7 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                   viewportFraction: 0.9,
                   autoPlay: !single,
                   enableInfiniteScroll: !single,
-                  autoPlayInterval:
-                      const Duration(seconds: 4),
+                  autoPlayInterval: const Duration(seconds: 4),
                   enlargeCenterPage: true,
                   enlargeFactor: 0.12,
                   onPageChanged: (index, reason) {
@@ -209,8 +191,7 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
               if (!single) ...[
                 const SizedBox(height: 12),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28),
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
                   child: Row(
                     children: [
                       Expanded(
@@ -221,13 +202,13 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                             dotWidth: 8,
                             dotHeight: 8,
                             spacing: 6,
-                            activeDotColor:
-                                AppColors.mainColor,
-                            dotColor: AppColors.mainColor
-                                .withValues(alpha: 0.2),
+                            activeDotColor: AppColors.mainColor,
+                            dotColor: AppColors.mainColor.withValues(
+                              alpha: 0.2,
+                            ),
                           ),
-                          onDotClicked: (index) => _controller
-                              .animateToPage(index),
+                          onDotClicked: (index) =>
+                              _controller.animateToPage(index),
                         ),
                       ),
                       Text(

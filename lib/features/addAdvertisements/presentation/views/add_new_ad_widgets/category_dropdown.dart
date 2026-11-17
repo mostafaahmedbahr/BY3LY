@@ -35,7 +35,8 @@ class CategoryDropdown extends StatelessWidget {
                 ),
               );
             }
-            final categories = context
+            final categories =
+                context
                     .read<AllCategoriesCubit>()
                     .allCategoriesModel
                     ?.data
@@ -44,8 +45,9 @@ class CategoryDropdown extends StatelessWidget {
             // Guard: passing a value that is not in items crashes
             // DropdownButtonFormField (assertion). Fall back to null.
             final catIds = categories.map((c) => c.id).toSet();
-            final safeCat =
-                catIds.contains(adCubit.categoryId) ? adCubit.categoryId : null;
+            final safeCat = catIds.contains(adCubit.categoryId)
+                ? adCubit.categoryId
+                : null;
             return DropdownButtonFormField<int>(
               key: ValueKey('cat_$safeCat'),
               initialValue: safeCat,
@@ -58,13 +60,17 @@ class CategoryDropdown extends StatelessWidget {
               onChanged: (value) {
                 if (value == null) return;
                 adCubit.selectCategory(value);
-                AllSubCategoriesCubit.get(context)
-                    .getAllSubCategories(categoryId: value);
+                AllSubCategoriesCubit.get(
+                  context,
+                ).getAllSubCategories(categoryId: value);
               },
               decoration: dropdownDecoration(
                 context.tr(LocaleKeys.category),
-                prefix: const Icon(Icons.grid_view_rounded,
-                    color: AppColors.mainColor, size: 20),
+                prefix: const Icon(
+                  Icons.grid_view_rounded,
+                  color: AppColors.mainColor,
+                  size: 20,
+                ),
               ),
             );
           },

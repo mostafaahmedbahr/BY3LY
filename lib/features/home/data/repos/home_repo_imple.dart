@@ -1,32 +1,27 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:by3ly/features/home/data/models/banners_model.dart';
 import 'package:by3ly/features/home/data/models/home_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import 'home_repo.dart';
-
 
 class HomeRepoImpl implements HomeRepo {
   final ApiService? apiService;
 
   HomeRepoImpl(this.apiService);
 
-
   @override
-  Future<Either<Failure, HomeModel>> getHomeData()async {
+  Future<Either<Failure, HomeModel>> getHomeData() async {
     try {
-      var response = await apiService!.getData(
-        endPoint: EndPoints.home,
-        
-      );
+      var response = await apiService!.getData(endPoint: EndPoints.home);
       HomeModel result = HomeModel.fromJson(response.data);
       return right(result);
     } catch (e, s) {
-      debugPrint('HomeRepoImpl getHomeData parse/network error: $e');
-      debugPrint(s.toString());
+      logWarning('HomeRepoImpl getHomeData parse/network error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -38,15 +33,15 @@ class HomeRepoImpl implements HomeRepo {
   @override
   Future<Either<Failure, BannersModel>> getBanners() async {
     try {
-      var response = await apiService!.getData(
-        endPoint: EndPoints.getBanners,
-      );
+      var response = await apiService!.getData(endPoint: EndPoints.getBanners);
       BannersModel result = BannersModel.fromJson(response.data);
-      debugPrint('HomeRepoImpl getBanners: ${result.banners?.length ?? 0} banners');
+      logWarning(
+        'HomeRepoImpl getBanners: ${result.banners?.length ?? 0} banners',
+      );
       return right(result);
     } catch (e, s) {
-      debugPrint('HomeRepoImpl getBanners error: $e');
-      debugPrint(s.toString());
+      logWarning('HomeRepoImpl getBanners error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

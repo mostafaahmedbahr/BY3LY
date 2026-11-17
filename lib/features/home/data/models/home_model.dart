@@ -58,7 +58,9 @@ class HomeModel {
     status = _asBool(json["status"]);
     message = _asString(json["message"]);
     final rawData = json["data"];
-    data = rawData is Map ? HomeDataModel.fromJson(Map<String, dynamic>.from(rawData)) : null;
+    data = rawData is Map
+        ? HomeDataModel.fromJson(Map<String, dynamic>.from(rawData))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -531,7 +533,9 @@ class BestView {
     images = json["images"] is List ? (json["images"] as List) : const [];
     rate = _asString(json["rate"]);
     countCommenets = _asInt(json["countCommenets"]);
-    commenets = json["commenets"] is List ? (json["commenets"] as List) : const [];
+    commenets = json["commenets"] is List
+        ? (json["commenets"] as List)
+        : const [];
     reviews = json["reviews"] is List ? (json["reviews"] as List) : const [];
     reviewsCount = _asInt(json["reviews_count"]);
     isFavourite = _asBool(json["isFavourite"]);

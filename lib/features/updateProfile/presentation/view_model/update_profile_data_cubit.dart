@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -12,7 +13,7 @@ import 'package:by3ly/features/updateProfile/presentation/view_model/update_prof
 
 class UpdateProfileDataCubit extends Cubit<UpdateProfileDataStates> {
   UpdateProfileDataCubit(this.updateProfileDataRepos)
-      : super(UpdateProfileDataInitState());
+    : super(UpdateProfileDataInitState());
 
   static UpdateProfileDataCubit get(BuildContext context) =>
       BlocProvider.of<UpdateProfileDataCubit>(context);
@@ -37,8 +38,10 @@ class UpdateProfileDataCubit extends Cubit<UpdateProfileDataStates> {
     emit(UpdateProfileDataLoadingState());
     Map<String, dynamic> formMap = {
       if (image != null)
-        "image": await MultipartFile.fromFile(image.path,
-            filename: image.path.split('/').last),
+        "image": await MultipartFile.fromFile(
+          image.path,
+          filename: image.path.split('/').last,
+        ),
       if (fullName != null && fullName.isNotEmpty) "name": fullName,
       if (email != null && email.isNotEmpty) "email": email,
       if (phoneNumber != null && phoneNumber.isNotEmpty) "phone": phoneNumber,
@@ -76,7 +79,7 @@ class UpdateProfileDataCubit extends Cubit<UpdateProfileDataStates> {
         emit(UploadImageSuccessState());
       }
     } catch (e) {
-      debugPrint("Error picking image: $e");
+      logWarning("Error picking image: $e");
       emit(UploadImageErrorState());
     }
   }

@@ -23,19 +23,14 @@ class FullScreenGallery extends StatefulWidget {
     required List<String> images,
     int initialIndex = 0,
   }) {
-    final urls =
-        images.where((u) => u.trim().isNotEmpty).toList();
+    final urls = images.where((u) => u.trim().isNotEmpty).toList();
     if (urls.isEmpty) return Future.value();
-    final safeIndex =
-        initialIndex.clamp(0, urls.length - 1);
+    final safeIndex = initialIndex.clamp(0, urls.length - 1);
     return Navigator.push(
       context,
       PageTransition(
         type: PageTransitionType.fade,
-        child: FullScreenGallery(
-          images: urls,
-          initialIndex: safeIndex,
-        ),
+        child: FullScreenGallery(images: urls, initialIndex: safeIndex),
       ),
     );
   }
@@ -100,14 +95,11 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  for (int i = 0;
-                      i < widget.images.length;
-                      i++)
+                  for (int i = 0; i < widget.images.length; i++)
                     Container(
                       width: _index == i ? 20 : 7,
                       height: 7,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 3),
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
                       decoration: BoxDecoration(
                         color: _index == i
                             ? Colors.white

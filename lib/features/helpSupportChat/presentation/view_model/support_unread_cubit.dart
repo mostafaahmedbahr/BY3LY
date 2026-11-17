@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,7 +53,9 @@ class SupportUnreadCubit extends Cubit<SupportUnreadStates>
       if (isClosed) return;
       result.fold(
         (failure) {
-          debugPrint('SupportUnreadCubit refresh failed: ${failure.errMessage}');
+          logWarning(
+            'SupportUnreadCubit refresh failed: ${failure.errMessage}',
+          );
         },
         (data) {
           if (data.status == true) {

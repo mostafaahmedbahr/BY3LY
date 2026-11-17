@@ -29,12 +29,8 @@ class BannerToLogin extends StatelessWidget {
   Widget _buildBackground(BuildContext context) {
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: 105.h,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColors.mainColor,
-      ),
+      constraints: BoxConstraints(minHeight: 105.h),
+      decoration: const BoxDecoration(color: AppColors.mainColor),
       // clip عشان الزخارف متخرجش بره على أي مقاس
       clipBehavior: Clip.hardEdge,
       child: Stack(
@@ -51,19 +47,17 @@ class BannerToLogin extends StatelessWidget {
                 final bool isVeryNarrow = maxW < 300;
                 final bool isNarrow = maxW < 360;
 
-                final double imgSize =
-                    (maxW * 0.105).clamp(26.0, 52.0);
+                final double imgSize = (maxW * 0.105).clamp(26.0, 52.0);
                 final double gap = (maxW * 0.02).clamp(4.0, 10.0);
 
-                final double titleFont =
-                    (maxW * 0.034).clamp(11.0, 15.0);
-                final double btnFont =
-                    (maxW * 0.028).clamp(9.0, 12.0);
+                final double titleFont = (maxW * 0.034).clamp(11.0, 15.0);
+                final double btnFont = (maxW * 0.028).clamp(9.0, 12.0);
 
-                final double btnW =
-                    (maxW * 0.28).clamp(80.0, 130.0);
-                final double btnH =
-                    (isVeryNarrow ? 24.0 : 28.0).clamp(23.0, 34.0);
+                final double btnW = (maxW * 0.28).clamp(80.0, 130.0);
+                final double btnH = (isVeryNarrow ? 24.0 : 28.0).clamp(
+                  23.0,
+                  34.0,
+                );
 
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,12 +82,7 @@ class BannerToLogin extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                           SizedBox(height: 8.h),
-                          _buildButton(
-                            context,
-                            btnW,
-                            btnH,
-                            btnFont,
-                          ),
+                          _buildButton(context, btnW, btnH, btnFont),
                         ],
                       ),
                     ),
@@ -228,10 +217,7 @@ class BannerToLogin extends StatelessWidget {
             _img("home3.png", size),
             SizedBox(width: gap),
             _img("home4.png", size),
-            if (!hideExtra) ...[
-              SizedBox(width: gap),
-              _img("home5.png", size),
-            ],
+            if (!hideExtra) ...[SizedBox(width: gap), _img("home5.png", size)],
           ],
         ),
       ],

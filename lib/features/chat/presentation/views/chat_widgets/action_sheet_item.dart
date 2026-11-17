@@ -20,8 +20,8 @@ class ActionSheetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIconColor = iconColor ??
-        (isDestructive ? AppColors.redColor : AppColors.accent);
+    final effectiveIconColor =
+        iconColor ?? (isDestructive ? AppColors.redColor : AppColors.accent);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -31,11 +31,7 @@ class ActionSheetItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 22,
-                color: effectiveIconColor,
-              ),
+              Icon(icon, size: 22, color: effectiveIconColor),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
@@ -43,9 +39,7 @@ class ActionSheetItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: isDestructive
-                        ? AppColors.redColor
-                        : AppColors.text,
+                    color: isDestructive ? AppColors.redColor : AppColors.text,
                   ),
                 ),
               ),

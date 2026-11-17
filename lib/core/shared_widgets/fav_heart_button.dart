@@ -49,8 +49,7 @@ class _FavHeartButtonState extends State<FavHeartButton> {
     // Guests always see a plain (non-favourited) heart.
     if (GuestGuard.isGuest) return false;
     return _localFav ??
-        cubit.isFavourite(widget.productId) ||
-            widget.initialIsFavourite;
+        cubit.isFavourite(widget.productId) || widget.initialIsFavourite;
   }
 
   void _onTap() async {
@@ -71,8 +70,8 @@ class _FavHeartButtonState extends State<FavHeartButton> {
     final msg = (serverMessage?.trim().isNotEmpty ?? false)
         ? serverMessage!
         : (isNowFavourite
-            ? context.tr(LocaleKeys.addedToFav)
-            : context.tr(LocaleKeys.removedFromFav));
+              ? context.tr(LocaleKeys.addedToFav)
+              : context.tr(LocaleKeys.removedFromFav));
     CherryToast.success(
       title: Text(msg, style: const TextStyle(color: AppColors.mainColor)),
     ).show(context);
@@ -84,8 +83,7 @@ class _FavHeartButtonState extends State<FavHeartButton> {
     return BlocConsumer<FavCubit, FavStates>(
       listener: (context, state) {
         if (!_waiting) return;
-        if (state is FavToggleSuccess &&
-            state.productId == widget.productId) {
+        if (state is FavToggleSuccess && state.productId == widget.productId) {
           _waiting = false;
           _showToast(state.message, state.isNowFavourite);
         } else if (state is FavToggleError) {
@@ -93,9 +91,9 @@ class _FavHeartButtonState extends State<FavHeartButton> {
           _waiting = false;
           _localFav = null;
           if (mounted) setState(() {});
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
       builder: (context, state) {
@@ -104,12 +102,12 @@ class _FavHeartButtonState extends State<FavHeartButton> {
           duration: const Duration(milliseconds: 250),
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
-                child: Icon(
-                  key: ValueKey(isFav),
-                  isFav ? Icons.favorite : Icons.favorite_border,
-                  color: isFav ? widget.favIconColor : AppColors.textSecondary,
-                  size: widget.iconSize,
-                ),
+          child: Icon(
+            key: ValueKey(isFav),
+            isFav ? Icons.favorite : Icons.favorite_border,
+            color: isFav ? widget.favIconColor : AppColors.textSecondary,
+            size: widget.iconSize,
+          ),
         );
         if (!widget.withBackground) {
           return InkWell(onTap: _onTap, child: icon);
@@ -118,7 +116,7 @@ class _FavHeartButtonState extends State<FavHeartButton> {
           height: widget.size,
           width: widget.size,
           decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
             shape: BoxShape.circle,
           ),
           child: InkWell(

@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 bool? _asBool(dynamic v) {
@@ -31,7 +30,7 @@ class OtpModel {
     final Map<String, dynamic> result = <String, dynamic>{};
     result["status"] = status;
     result["message"] = message;
-    if(data != null) {
+    if (data != null) {
       result["data"] = data?.toJson();
     }
     return result;
@@ -69,7 +68,10 @@ class Data {
     code = _asString(json["code"] ?? json["otp"]);
     email = _asString(json["email"]) ?? user?.email;
     // token can be top-level in data OR inside user
-    token = _asString(json["token"]) ?? _asString(json["access_token"]) ?? user?.token;
+    token =
+        _asString(json["token"]) ??
+        _asString(json["access_token"]) ??
+        user?.token;
     requiresOtp = _asBool(json["requires_otp"]);
     otp = _asString(json["otp"]);
     nextStep = _asString(json["next_step"]);
@@ -83,7 +85,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if(user != null) {
+    if (user != null) {
       data["user"] = user?.toJson();
     }
     data["isActive"] = isActive;
@@ -110,7 +112,19 @@ class User {
   String? centerName;
   String? createdAt;
 
-  User({this.id, this.name, this.email, this.phone, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.image,
+    this.token,
+    this.centerId,
+    this.cityId,
+    this.cityName,
+    this.centerName,
+    this.createdAt,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json["id"] is num

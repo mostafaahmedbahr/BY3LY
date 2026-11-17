@@ -65,10 +65,7 @@ class PaymentOptionTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   gradient: LinearGradient(
                     colors: enabled
-                        ? [
-                            AppColors.mainColor,
-                            AppColors.secondColor,
-                          ]
+                        ? [AppColors.mainColor, AppColors.secondColor]
                         : [
                             AppColors.textSecondary.withValues(alpha: 0.4),
                             AppColors.textSecondary.withValues(alpha: 0.2),
@@ -77,8 +74,7 @@ class PaymentOptionTile extends StatelessWidget {
                   boxShadow: enabled
                       ? [
                           BoxShadow(
-                            color: AppColors.mainColor
-                                .withValues(alpha: 0.35),
+                            color: AppColors.mainColor.withValues(alpha: 0.35),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),

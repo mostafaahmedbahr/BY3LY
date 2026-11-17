@@ -167,11 +167,7 @@ class SupportConversationResponse {
   String? message;
   int? conversationId;
 
-  SupportConversationResponse({
-    this.status,
-    this.message,
-    this.conversationId,
-  });
+  SupportConversationResponse({this.status, this.message, this.conversationId});
 
   SupportConversationResponse.fromJson(Map<String, dynamic> json) {
     status = _toBool(json['status']);

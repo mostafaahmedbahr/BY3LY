@@ -55,6 +55,5 @@ class AppColors {
   static Color get accent => isDark ? const Color(0xff34D399) : mainColor;
 
   /// Shadow color that stays visible on both themes.
-  static Color get shadow =>
-      isDark ? Colors.white10 : const Color(0x330E8565);
+  static Color get shadow => isDark ? Colors.white10 : const Color(0x330E8565);
 }

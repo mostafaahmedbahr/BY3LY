@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/features/legalContent/data/models/legal_content_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,16 +19,21 @@ class LegalContentCubit extends Cubit<LegalContentStates> {
   Future<void> getLegalContent(LegalContentType type) async {
     emit(GetLegalContentLoadingState());
     var result = await legalContentRepos.getLegalContent(type);
-    return result.fold((failure) {
-      debugPrint('LegalContentCubit failed: ${failure.errMessage}');
-      emit(GetLegalContentErrorState(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        legalContentModel = data;
-        emit(GetLegalContentSuccessState(data));
-      } else {
-        emit(GetLegalContentErrorState(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning('LegalContentCubit failed: ${failure.errMessage}');
+        emit(GetLegalContentErrorState(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          legalContentModel = data;
+          emit(GetLegalContentSuccessState(data));
+        } else {
+          emit(
+            GetLegalContentErrorState(data.message ?? 'Something went wrong'),
+          );
+        }
+      },
+    );
   }
 }

@@ -44,11 +44,7 @@ class BrandLogo extends StatelessWidget {
           color: fallbackColor.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(size * 0.28),
         ),
-        child: Icon(
-          fallbackIcon,
-          size: size * 0.5,
-          color: fallbackColor,
-        ),
+        child: Icon(fallbackIcon, size: size * 0.5, color: fallbackColor),
       );
     }
     // Full-bleed image clipped to the badge shape, so dark logos
@@ -70,10 +66,7 @@ class BrandLogo extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(size * 0.28 - 1),
-        child: Image.asset(
-          asset,
-          fit: BoxFit.contain,
-        ),
+        child: Image.asset(asset, fit: BoxFit.contain),
       ),
     );
   }

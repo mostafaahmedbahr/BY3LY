@@ -20,8 +20,7 @@ class AdDeleteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementsCubit, AdvertisementsStates>(
       builder: (context, state) {
-        final deleting =
-            state is DeleteAdLoadingState && state.adId == ad.id;
+        final deleting = state is DeleteAdLoadingState && state.adId == ad.id;
         return ElevatedButton.icon(
           onPressed: deleting
               ? null
@@ -35,8 +34,7 @@ class AdDeleteButton extends StatelessWidget {
                     icon: Icons.delete_outline_rounded,
                   );
                   if (confirmed && context.mounted) {
-                    AdvertisementsCubit.get(context)
-                        .deleteAd(adId: ad.id!);
+                    AdvertisementsCubit.get(context).deleteAd(adId: ad.id!);
                   }
                 },
           icon: deleting
@@ -62,8 +60,7 @@ class AdDeleteButton extends StatelessWidget {
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.redColor,
-            disabledBackgroundColor:
-                AppColors.redColor.withValues(alpha: 0.6),
+            disabledBackgroundColor: AppColors.redColor.withValues(alpha: 0.6),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -100,9 +97,7 @@ class AdOptionsButton extends StatelessWidget {
       ),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.mainColor),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 11),
       ),
     );
@@ -144,9 +139,7 @@ class AdEditButton extends StatelessWidget {
       ),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: AppColors.mainColor),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 12),
       ),
     );

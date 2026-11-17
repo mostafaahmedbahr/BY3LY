@@ -9,17 +9,17 @@ import '../models/otp_model.dart';
 import '../models/resend_otp_model.dart';
 import 'otp_repos.dart';
 
-
 class OtpReposImpl implements OtpRepos {
   final ApiService? apiService;
 
   OtpReposImpl(this.apiService);
 
-
   @override
   Future<Either<Failure, OtpModel>> verifyOtp({
-    required String otp, required String email, required String deviceToken,
-}) async{
+    required String otp,
+    required String email,
+    required String deviceToken,
+  }) async {
     try {
       var data = json.encode({
         "email": email,
@@ -37,17 +37,14 @@ class OtpReposImpl implements OtpRepos {
     }
   }
 
-
   @override
   Future<Either<Failure, ResendOtpModel>> resendOtp({
     required String email,
-  }) async{
+  }) async {
     try {
       var response = await apiService!.postData(
         endPoint: EndPoints.resendCode,
-        data: {
-          "email" : email,
-        },
+        data: {"email": email},
       );
       ResendOtpModel result = ResendOtpModel.fromJson(response.data);
       return right(result);

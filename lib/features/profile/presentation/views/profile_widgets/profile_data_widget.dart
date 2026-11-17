@@ -64,7 +64,8 @@ class ProfileDataWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
-                      child: profileCubit.file != null &&
+                      child:
+                          profileCubit.file != null &&
                               profileCubit.file!.path != ""
                           ? Image.file(
                               profileCubit.file!,

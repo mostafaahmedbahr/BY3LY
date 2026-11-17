@@ -58,14 +58,16 @@ class FakeReportProductsRepos implements ReportProductsRepos {
 
   @override
   Future<Either<Failure, ReportProductComplaintsTypesModel>>
-      getComplaintsTypes() async {
+  getComplaintsTypes() async {
     getComplaintsTypesCalls++;
     if (complaintsShouldFail) {
       return Left(ServerFailure('fetch failed'));
     }
-    return Right(ReportProductComplaintsTypesModel.fromJson(
-      Map<String, dynamic>.from(_complaintsJson),
-    ));
+    return Right(
+      ReportProductComplaintsTypesModel.fromJson(
+        Map<String, dynamic>.from(_complaintsJson),
+      ),
+    );
   }
 
   @override
@@ -80,11 +82,13 @@ class FakeReportProductsRepos implements ReportProductsRepos {
     if (addComplaintShouldFail) {
       return Left(ServerFailure('submit failed'));
     }
-    return Right(AddComplaintModel.fromJson({
-      'status': true,
-      'number': 1,
-      'message': 'تم استلام البلاغ',
-    }));
+    return Right(
+      AddComplaintModel.fromJson({
+        'status': true,
+        'number': 1,
+        'message': 'تم استلام البلاغ',
+      }),
+    );
   }
 
   @override
@@ -93,9 +97,7 @@ class FakeReportProductsRepos implements ReportProductsRepos {
     if (reasonsShouldFail) {
       return Left(ServerFailure('reasons failed'));
     }
-    return Right(ReportModel.fromJson(
-      Map<String, dynamic>.from(_reasonsJson),
-    ));
+    return Right(ReportModel.fromJson(Map<String, dynamic>.from(_reasonsJson)));
   }
 
   @override
@@ -193,8 +195,11 @@ void main() {
     });
 
     test('add-complaint envelope coerces scalars', () {
-      final model = AddComplaintModel.fromJson(
-          {'status': '1', 'number': '9', 'message': 'ok'});
+      final model = AddComplaintModel.fromJson({
+        'status': '1',
+        'number': '9',
+        'message': 'ok',
+      });
       expect(model.status, isTrue);
       expect(model.number, 9);
       expect(model.message, 'ok');
@@ -209,8 +214,7 @@ void main() {
       cubit.close();
     });
 
-    test('getAllComplaintsTypesData success populates the list once',
-        () async {
+    test('getAllComplaintsTypesData success populates the list once', () async {
       final repo = FakeReportProductsRepos();
       final cubit = ReportProductCubit(repo);
       final events = <ReportProductStates>[];
@@ -240,8 +244,7 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(events.first, isA<GetComplaintsTypesLoading>());
-      expect((events.last as GetComplaintsTypesError).message,
-          'fetch failed');
+      expect((events.last as GetComplaintsTypesError).message, 'fetch failed');
       expect(cubit.allComplaintsTypesList, isEmpty);
       await sub.cancel();
       await cubit.close();
@@ -281,8 +284,7 @@ void main() {
       await sub.cancel();
       await cubit.close();
 
-      final failRepo = FakeReportProductsRepos()
-        ..addComplaintShouldFail = true;
+      final failRepo = FakeReportProductsRepos()..addComplaintShouldFail = true;
       final failCubit = ReportProductCubit(failRepo);
       final failEvents = <ReportProductStates>[];
       final failSub = failCubit.stream.listen(failEvents.add);
@@ -307,22 +309,24 @@ void main() {
       await cubit.close();
     });
 
-    test('submitReportAd without a selection emits selectReason and skips the repo',
-        () async {
-      final repo = FakeReportProductsRepos();
-      final cubit = ReportProductCubit(repo);
-      final events = <ReportProductStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'submitReportAd without a selection emits selectReason and skips the repo',
+      () async {
+        final repo = FakeReportProductsRepos();
+        final cubit = ReportProductCubit(repo);
+        final events = <ReportProductStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      await cubit.submitReportAd(sellerId: 7, productId: 11);
-      await Future<void>.delayed(Duration.zero);
+        await cubit.submitReportAd(sellerId: 7, productId: 11);
+        await Future<void>.delayed(Duration.zero);
 
-      expect(events.single, isA<ReportAdError>());
-      expect((events.single as ReportAdError).message, 'selectReason');
-      expect(repo.reportAdCalls, 0);
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(events.single, isA<ReportAdError>());
+        expect((events.single as ReportAdError).message, 'selectReason');
+        expect(repo.reportAdCalls, 0);
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
     test('submitReportAd success resets the selection afterwards', () async {
       final repo = FakeReportProductsRepos();
@@ -347,8 +351,9 @@ void main() {
   });
 
   group('Report widgets', () {
-    testWidgets('complaint body renders reasons and submits the selection',
-        (tester) async {
+    testWidgets('complaint body renders reasons and submits the selection', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1400);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -387,8 +392,9 @@ void main() {
       expect(repo.lastComplaintId, 2);
     });
 
-    testWidgets('ad body loads reasons, selects one and submits',
-        (tester) async {
+    testWidgets('ad body loads reasons, selects one and submits', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1500);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {

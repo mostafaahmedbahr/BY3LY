@@ -55,15 +55,19 @@ class ChangePasswordForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   CustomTextFormField(
-                    onFieldSubmitted: (_) => FocusScope.of(context)
-                        .requestFocus(cubit.newPasswordFocusNode),
+                    onFieldSubmitted: (_) => FocusScope.of(
+                      context,
+                    ).requestFocus(cubit.newPasswordFocusNode),
                     controller: cubit.oldPasswordCon,
                     keyboardType: TextInputType.visiblePassword,
                     hintText: context.tr(LocaleKeys.currentPasswordHint),
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(10.0),
-                      child: Icon(Icons.lock_outline_rounded,
-                          color: AppColors.mainColor, size: 22),
+                      child: Icon(
+                        Icons.lock_outline_rounded,
+                        color: AppColors.mainColor,
+                        size: 22,
+                      ),
                     ),
                     validator: (String? value) =>
                         MyValidators.passwordValidator(value),
@@ -83,16 +87,20 @@ class ChangePasswordForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   CustomTextFormField(
-                    onFieldSubmitted: (_) => FocusScope.of(context)
-                        .requestFocus(cubit.confirmNewPasswordFocusNode),
+                    onFieldSubmitted: (_) => FocusScope.of(
+                      context,
+                    ).requestFocus(cubit.confirmNewPasswordFocusNode),
                     focusNode: cubit.newPasswordFocusNode,
                     controller: cubit.newPasswordCon,
                     keyboardType: TextInputType.visiblePassword,
                     hintText: context.tr(LocaleKeys.newPassword),
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(10.0),
-                      child: Icon(Icons.vpn_key_outlined,
-                          color: AppColors.mainColor, size: 22),
+                      child: Icon(
+                        Icons.vpn_key_outlined,
+                        color: AppColors.mainColor,
+                        size: 22,
+                      ),
                     ),
                     validator: (String? value) =>
                         MyValidators.passwordValidator(value),
@@ -118,14 +126,17 @@ class ChangePasswordForm extends StatelessWidget {
                     hintText: context.tr(LocaleKeys.confirmPassword),
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(10.0),
-                      child: Icon(Icons.shield_outlined,
-                          color: AppColors.mainColor, size: 22),
+                      child: Icon(
+                        Icons.shield_outlined,
+                        color: AppColors.mainColor,
+                        size: 22,
+                      ),
                     ),
                     validator: (String? value) =>
                         MyValidators.repeatPasswordValidator(
-                      value: value,
-                      password: cubit.newPasswordCon.text,
-                    ),
+                          value: value,
+                          password: cubit.newPasswordCon.text,
+                        ),
                     suffixIcon: IconButton(
                       color: AppColors.textSecondary,
                       icon: cubit.isConfirmNewPasswordVisible

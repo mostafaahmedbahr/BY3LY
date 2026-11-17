@@ -3,14 +3,12 @@ import 'package:by3ly/lang/locale_keys.dart';
 import 'package:by3ly/features/helpSupport/presentation/view-model/help_support_config.dart';
 import 'package:by3ly/features/helpSupport/presentation/view-model/help_support_cubit.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/views/help_support_chat_view.dart';
-import 'package:by3ly/features/reportProduct/presentation/views/report_the_product_view.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'common_questions_widget.dart';
 import 'help_support_list_item_widget.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
@@ -52,20 +50,10 @@ class HelpSupportViewBody extends StatelessWidget {
     });
   }
 
-  void _openReport(BuildContext context) {
-    Navigator.push(
-      context,
-      PageTransition(
-        type: PageTransitionType.rightToLeft,
-        child: const ReportTheProductView(),
-      ),
-    );
-  }
-
   Future<void> _openEmail(BuildContext context) async {
-    final ok = await HelpSupportCubit.get(context).sendEmail(
-      subject: context.tr(LocaleKeys.helpAndSupport),
-    );
+    final ok = await HelpSupportCubit.get(
+      context,
+    ).sendEmail(subject: context.tr(LocaleKeys.helpAndSupport));
     if (!ok && context.mounted) {
       await _copyAndNotify(context, HelpSupportConfig.email);
     }

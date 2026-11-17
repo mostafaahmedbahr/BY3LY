@@ -43,8 +43,7 @@ class _PrivacyViewBodyState extends State<PrivacyViewBody> {
     }
     for (final method
         in PrivacyCubit.get(context).settings?.contactMethods ?? const []) {
-      if (method.value == value &&
-          (method.label?.trim().isNotEmpty ?? false)) {
+      if (method.value == value && (method.label?.trim().isNotEmpty ?? false)) {
         return method.label!;
       }
     }
@@ -141,8 +140,10 @@ class _PrivacyViewBodyState extends State<PrivacyViewBody> {
                   ],
                 ),
                 child: SwitchListTile.adaptive(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 4,
+                  ),
                   title: Text(
                     context.tr(LocaleKeys.notifyNewProducts),
                     style: const TextStyle(

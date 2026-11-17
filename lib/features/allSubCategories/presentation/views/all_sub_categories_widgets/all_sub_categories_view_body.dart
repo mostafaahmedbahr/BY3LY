@@ -25,9 +25,9 @@ class AllSubCategoriesViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AllSubCategoriesCubit(
-        getIt.get<AllSubCategoriesRepoImpl>(),
-      )..getAllSubCategories(categoryId: mainCategoryId),
+      create: (context) =>
+          AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>())
+            ..getAllSubCategories(categoryId: mainCategoryId),
       child: BlocBuilder<AllSubCategoriesCubit, AllSubCategoriesStates>(
         builder: (context, state) {
           final cubit = context.read<AllSubCategoriesCubit>();

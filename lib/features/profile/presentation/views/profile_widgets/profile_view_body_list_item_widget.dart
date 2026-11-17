@@ -1,10 +1,6 @@
-
 import '../../../../../main_importants.dart';
 
-enum ProfileItemStyle {
-  premium,
-  classic,
-}
+enum ProfileItemStyle { premium, classic }
 
 class ProfileViewBodyListItemWidget extends StatelessWidget {
   final String title;
@@ -65,12 +61,7 @@ class ProfileViewBodyListItemWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Row(
               children: [
-                _buildLeading(
-                  context,
-                  width: 82.w,
-                  height: 78.h,
-                  radius: 15.r,
-                ),
+                _buildLeading(context, width: 82.w, height: 78.h, radius: 15.r),
 
                 SizedBox(width: 16.w),
 
@@ -98,9 +89,7 @@ class ProfileViewBodyListItemWidget extends StatelessWidget {
                             vertical: 5.h,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.mainColor.withValues(
-                              alpha: 0.09,
-                            ),
+                            color: AppColors.mainColor.withValues(alpha: 0.09),
                             borderRadius: BorderRadius.circular(30.r),
                           ),
                           child: Row(
@@ -212,11 +201,11 @@ class ProfileViewBodyListItemWidget extends StatelessWidget {
   // ================= IMAGE OR ICON =================
 
   Widget _buildLeading(
-      BuildContext context, {
-        required double width,
-        required double height,
-        required double radius,
-      }) {
+    BuildContext context, {
+    required double width,
+    required double height,
+    required double radius,
+  }) {
     final hasImage = image != null && image!.isNotEmpty;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -227,26 +216,24 @@ class ProfileViewBodyListItemWidget extends StatelessWidget {
         height: height,
         child: hasImage
             ? Hero(
-          tag: 'category_$image',
-          child: CustomNetWorkImage(
-            imageUrl: image!,
-            height: height,
-            width: width,
-            raduis: radius,
-            fit: BoxFit.cover,
-          ),
-        )
+                tag: 'category_$image',
+                child: CustomNetWorkImage(
+                  imageUrl: image!,
+                  height: height,
+                  width: width,
+                  raduis: radius,
+                  fit: BoxFit.cover,
+                ),
+              )
             : Container(
-          color: AppColors.mainColor.withValues(alpha: 0.09),
-          alignment: Alignment.center,
-          child: Icon(
-            icon ?? Icons.category_rounded,
-            size: style == ProfileItemStyle.premium
-                ? 34.sp
-                : 22.sp,
-            color: isDark ? AppColors.whiteColor : AppColors.mainColor,
-          ),
-        ),
+                color: AppColors.mainColor.withValues(alpha: 0.09),
+                alignment: Alignment.center,
+                child: Icon(
+                  icon ?? Icons.category_rounded,
+                  size: style == ProfileItemStyle.premium ? 34.sp : 22.sp,
+                  color: isDark ? AppColors.whiteColor : AppColors.mainColor,
+                ),
+              ),
       ),
     );
   }

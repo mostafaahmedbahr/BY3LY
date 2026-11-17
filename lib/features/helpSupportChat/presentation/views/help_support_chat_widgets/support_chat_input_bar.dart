@@ -31,9 +31,7 @@ class SupportChatInputBar extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(
-              color: AppColors.border.withValues(alpha: 0.65),
-            ),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.65)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.07),
@@ -117,9 +115,7 @@ class _AttachButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.accent.withValues(alpha: 0.1),
             shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.accent.withValues(alpha: 0.14),
-            ),
+            border: Border.all(color: AppColors.accent.withValues(alpha: 0.14)),
           ),
           child: Center(
             child: isSendingImage
@@ -174,8 +170,8 @@ class _SendButton extends StatelessWidget {
             color: enabled || isSending
                 ? null
                 : AppColors.isDark
-                    ? AppColors.surfaceVariant
-                    : AppColors.grey2Color,
+                ? AppColors.surfaceVariant
+                : AppColors.grey2Color,
             boxShadow: enabled && !isSending
                 ? [
                     BoxShadow(

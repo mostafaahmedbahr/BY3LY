@@ -93,7 +93,20 @@ class User {
   String? centerName;
   String? createdAt;
 
-  User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.age,
+    this.image,
+    this.token,
+    this.centerId,
+    this.cityId,
+    this.cityName,
+    this.centerName,
+    this.createdAt,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);

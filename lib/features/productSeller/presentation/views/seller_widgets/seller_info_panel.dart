@@ -15,8 +15,9 @@ class SellerInfoPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductSellerCubit, ProductSellerStates>(
       builder: (context, state) {
-        final seller =
-            ProductSellerCubit.get(context).productSellerModel?.data?.seller;
+        final seller = ProductSellerCubit.get(
+          context,
+        ).productSellerModel?.data?.seller;
         if (seller == null) {
           return const SizedBox.shrink();
         }

@@ -35,59 +35,55 @@ class DurationTabs extends StatelessWidget {
       builder: (context, state) {
         final cubit = PackagesCubit.get(context);
         return Row(
-          children: List.generate(
-            PackagesCubit.durationMonths.length,
-            (index) {
-              final selected = cubit.selectedDurationIndex == index;
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(right: index == 0 ? 0 : 8),
-                  child: InkWell(
-                    onTap: () => cubit.changeDuration(index),
-                    borderRadius: BorderRadius.circular(14),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 220),
-                      height: 44,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
+          children: List.generate(PackagesCubit.durationMonths.length, (index) {
+            final selected = cubit.selectedDurationIndex == index;
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: index == 0 ? 0 : 8),
+                child: InkWell(
+                  onTap: () => cubit.changeDuration(index),
+                  borderRadius: BorderRadius.circular(14),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    height: 44,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: selected ? AppColors.mainColor : AppColors.surface,
+                      border: Border.all(
                         color: selected
                             ? AppColors.mainColor
-                            : AppColors.surface,
-                        border: Border.all(
-                          color: selected
-                              ? AppColors.mainColor
-                              : AppColors.border,
-                        ),
-                        boxShadow: selected
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.mainColor
-                                      .withValues(alpha: 0.30),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ]
-                            : null,
+                            : AppColors.border,
                       ),
-                      child: Text(
-                        _labelFor(index, context),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13,
-                          color: selected
-                              ? Colors.white
-                              : AppColors.textSecondary,
-                        ),
+                      boxShadow: selected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.mainColor.withValues(
+                                  alpha: 0.30,
+                                ),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Text(
+                      _labelFor(index, context),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                        color: selected
+                            ? Colors.white
+                            : AppColors.textSecondary,
                       ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }),
         );
       },
     );

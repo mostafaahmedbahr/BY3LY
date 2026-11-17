@@ -1,4 +1,4 @@
-
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/views/all_sub_categories_products_widgets/products_filter.dart';
 import 'package:by3ly/features/search/presentation/view_model/search_states.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ class SearchCubit extends Cubit<SearchStates> {
 
   static SearchCubit get(BuildContext context) =>
       BlocProvider.of<SearchCubit>(context);
-
 
   final SearchRepos searchRepos;
   AllProductsSearchModel? allProductsSearchModel;
@@ -57,44 +56,51 @@ class SearchCubit extends Cubit<SearchStates> {
       page: page,
       filter: searchFilter,
     );
-    return result.fold((failure) {
-      debugPrint('SearchCubit getAllProductsForSearch failed: ${failure.errMessage}');
-      isLoadingMore = false;
-      if (loadMore) {
-        emit(GetAllProductsForSearchPaginationError(failure.errMessage));
-      } else {
-        emit(GetAllProductsForSearchError(failure.errMessage));
-      }
-    }, (data) {
-     if(data.status==true){
-       allProductsSearchModel = data;
-       final newProducts = data.data?.products ?? [];
-       final pagination = data.data?.pagination;
-       if (pagination != null) {
-         currentPage = pagination.currentPage ?? page;
-         lastPage = pagination.lastPage ?? page;
-       } else {
-         // Backend sent no pagination info: treat as a single page.
-         currentPage = page;
-         lastPage = page;
-       }
-       if (loadMore) {
-         allProductsForSearchList = [...allProductsForSearchList, ...newProducts];
-       } else {
-         allProductsForSearchList = [...newProducts];
-       }
-       isLoadingMore = false;
-       emit(GetAllProductsForSearchSuccess(data));
-     }else{
-       isLoadingMore = false;
-       final msg = data.message ?? 'Something went wrong';
-       if (loadMore) {
-         emit(GetAllProductsForSearchPaginationError(msg));
-       } else {
-         emit(GetAllProductsForSearchError(msg));
-       }
-     }
-    });
+    return result.fold(
+      (failure) {
+        logWarning(
+          'SearchCubit getAllProductsForSearch failed: ${failure.errMessage}',
+        );
+        isLoadingMore = false;
+        if (loadMore) {
+          emit(GetAllProductsForSearchPaginationError(failure.errMessage));
+        } else {
+          emit(GetAllProductsForSearchError(failure.errMessage));
+        }
+      },
+      (data) {
+        if (data.status == true) {
+          allProductsSearchModel = data;
+          final newProducts = data.data?.products ?? [];
+          final pagination = data.data?.pagination;
+          if (pagination != null) {
+            currentPage = pagination.currentPage ?? page;
+            lastPage = pagination.lastPage ?? page;
+          } else {
+            // Backend sent no pagination info: treat as a single page.
+            currentPage = page;
+            lastPage = page;
+          }
+          if (loadMore) {
+            allProductsForSearchList = [
+              ...allProductsForSearchList,
+              ...newProducts,
+            ];
+          } else {
+            allProductsForSearchList = [...newProducts];
+          }
+          isLoadingMore = false;
+          emit(GetAllProductsForSearchSuccess(data));
+        } else {
+          isLoadingMore = false;
+          final msg = data.message ?? 'Something went wrong';
+          if (loadMore) {
+            emit(GetAllProductsForSearchPaginationError(msg));
+          } else {
+            emit(GetAllProductsForSearchError(msg));
+          }
+        }
+      },
+    );
   }
-
 }

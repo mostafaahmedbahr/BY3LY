@@ -97,7 +97,13 @@ void main() {
         'status': true,
         'data': {
           'products': [
-            {'id': 1, 'name': 'X', 'price': '1000', 'image': 'main.jpg', 'images': ['a.jpg', 'b.jpg']},
+            {
+              'id': 1,
+              'name': 'X',
+              'price': '1000',
+              'image': 'main.jpg',
+              'images': ['a.jpg', 'b.jpg'],
+            },
           ],
         },
       });

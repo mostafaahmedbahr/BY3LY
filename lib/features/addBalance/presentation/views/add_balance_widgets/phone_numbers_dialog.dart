@@ -25,9 +25,7 @@ class PhoneNumbersDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -106,9 +104,7 @@ class _SupportNumberTile extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: AppColors.border.withValues(alpha: 0.6),
-        ),
+        side: BorderSide(color: AppColors.border.withValues(alpha: 0.6)),
       ),
       color: AppColors.surfaceVariant,
       margin: const EdgeInsets.only(bottom: 8),
@@ -132,10 +128,7 @@ class _SupportNumberTile extends StatelessWidget {
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: number));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content:
-                        Text(context.tr(LocaleKeys.numberCopied)),
-                  ),
+                  SnackBar(content: Text(context.tr(LocaleKeys.numberCopied))),
                 );
               },
             ),
@@ -143,9 +136,9 @@ class _SupportNumberTile extends StatelessWidget {
               tooltip: 'اتصال',
               icon: const Icon(Icons.phone_rounded),
               color: AppColors.mainColor,
-              onPressed: () =>
-                  BlocProvider.of<AddBalanceCubit>(context)
-                      .makePhoneCall(number, context),
+              onPressed: () => BlocProvider.of<AddBalanceCubit>(
+                context,
+              ).makePhoneCall(number, context),
             ),
           ],
         ),

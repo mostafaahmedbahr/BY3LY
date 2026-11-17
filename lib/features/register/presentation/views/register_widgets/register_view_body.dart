@@ -22,9 +22,7 @@ class RegisterViewBody extends StatelessWidget {
                   Gap(20.h),
                   const RegisterForm(),
                   Gap(20.h),
-                  RegisterButtons(
-                    formKey: formKey,
-                  ),
+                  RegisterButtons(formKey: formKey),
                 ],
               ),
             ),

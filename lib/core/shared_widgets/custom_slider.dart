@@ -1,24 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../utils/app_colors/app_colors.dart';
 
 //ignore: must_be_immutable
 class CustomSlider extends StatelessWidget {
-    CustomSlider({Key? key,
- //   this.carouselController,
-      this.itemCount,
-      this.imageUrl,
-      this.activeIndex,
-      this.onPageChanged,
-      this.count,
-      this.height,
-    }) : super(key: key);
- // CarouselController? carouselController;
-    int? itemCount;
+  CustomSlider({
+    super.key,
+    //   this.carouselController,
+    this.itemCount,
+    this.imageUrl,
+    this.activeIndex,
+    this.onPageChanged,
+    this.count,
+    this.height,
+  });
+  // CarouselController? carouselController;
+  int? itemCount;
   String? imageUrl;
   dynamic Function(int, CarouselPageChangedReason)? onPageChanged;
   int? activeIndex;
@@ -26,25 +26,23 @@ class CustomSlider extends StatelessWidget {
   double? height;
   @override
   Widget build(BuildContext context) {
-    return   Stack(
+    return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         CarouselSlider.builder(
-         // carouselController: carouselController,
+          // carouselController: carouselController,
           itemCount: itemCount,
-          itemBuilder: (context,index,realIndex)
-          {
-            return   ClipRRect(
+          itemBuilder: (context, index, realIndex) {
+            return ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: CachedNetworkImage(
                 imageUrl: imageUrl!,
                 //imageUrl: imageUrl![index] ,
                 fit: BoxFit.cover,
                 width: double.infinity,
-                placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator(
-                  color: AppColors.whiteColor,
-                )),
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(color: AppColors.whiteColor),
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             );
@@ -65,12 +63,12 @@ class CustomSlider extends StatelessWidget {
           bottom: 20,
           child: AnimatedSmoothIndicator(
             activeIndex: activeIndex!,
-            count:count!,
+            count: count!,
             effect: SlideEffect(
               dotWidth: 10,
               dotHeight: 10,
               activeDotColor: AppColors.yellowColor,
-              dotColor: Colors.grey.withOpacity(0.4),
+              dotColor: Colors.grey.withValues(alpha: 0.4),
             ),
           ),
         ),

@@ -1,6 +1,6 @@
 import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart';
 
-abstract class AllCategoriesStates{}
+abstract class AllCategoriesStates {}
 
 class AllCategoriesInitState extends AllCategoriesStates {}
 

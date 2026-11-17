@@ -416,9 +416,7 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: AdDeleteButton(ad: widget.ad),
-              ),
+              Expanded(child: AdDeleteButton(ad: widget.ad)),
             ],
           ),
         ],
@@ -426,4 +424,3 @@ class _AdDetailsViewBodyState extends State<AdDetailsViewBody> {
     );
   }
 }
-

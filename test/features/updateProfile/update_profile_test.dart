@@ -45,11 +45,7 @@ final Map<String, dynamic> _updateJson = {
   'status': true,
   'message': 'تم حفظ التغييرات',
   'data': {
-    'user': {
-      'id': '7',
-      'name': 'أحمد محمود',
-      'email': 'ahmed@mail.com',
-    },
+    'user': {'id': '7', 'name': 'أحمد محمود', 'email': 'ahmed@mail.com'},
   },
 };
 
@@ -63,27 +59,25 @@ class FakeUpdateProfileDataRepos implements UpdateProfileDataRepos {
   }) async {
     calls++;
     if (shouldFail) return Left(ServerFailure('update failed'));
-    return Right(UpdateProfileDataModel.fromJson(
-      Map<String, dynamic>.from(_updateJson),
-    ));
+    return Right(
+      UpdateProfileDataModel.fromJson(Map<String, dynamic>.from(_updateJson)),
+    );
   }
 }
 
 class FakeProfileRepos implements ProfileRepos {
   @override
   Future<Either<Failure, ProfileModel>> getProfileData() async =>
-      Right(ProfileModel.fromJson(
-        Map<String, dynamic>.from(_profileJson),
-      ));
+      Right(ProfileModel.fromJson(Map<String, dynamic>.from(_profileJson)));
 
   @override
   Future<Either<Failure, LogoutModel>> logout() async =>
       Right(LogoutModel.fromJson({'status': true, 'message': 'ok'}));
 
   @override
-  Future<Either<Failure, DeleteAccountModel>> deleteAccount() async =>
-      Right(DeleteAccountModel.fromJson(
-          {'status': true, 'number': 1, 'message': 'ok'}));
+  Future<Either<Failure, DeleteAccountModel>> deleteAccount() async => Right(
+    DeleteAccountModel.fromJson({'status': true, 'number': 1, 'message': 'ok'}),
+  );
 }
 
 Widget _harness({
@@ -141,12 +135,7 @@ void main() {
       final model = UpdateProfileDataModel.fromJson({
         'status': '1',
         'data': {
-          'user': {
-            'id': '13',
-            'center_id': '2',
-            'city_id': '4',
-            'name': 'x',
-          },
+          'user': {'id': '13', 'center_id': '2', 'city_id': '4', 'name': 'x'},
         },
       });
       expect(model.status, isTrue);
@@ -217,32 +206,39 @@ void main() {
       );
       await Future<void>.delayed(Duration.zero);
 
-      expect((events.last as UpdateProfileDataErrorState).error,
-          'update failed');
-      await sub.cancel();
-      await cubit.close();
-    });
-
-    test('updateProfileData with nothing to change emits Error without hitting the repo', () async {
-      final repo = FakeUpdateProfileDataRepos();
-      final cubit = UpdateProfileDataCubit(repo);
-      final events = <UpdateProfileDataStates>[];
-      final sub = cubit.stream.listen(events.add);
-
-      await cubit.updateProfileData(
-        image: null,
-        fullName: null,
-        email: null,
-        phoneNumber: null,
+      expect(
+        (events.last as UpdateProfileDataErrorState).error,
+        'update failed',
       );
-      await Future<void>.delayed(Duration.zero);
-
-      expect(repo.calls, 0);
-      expect((events.last as UpdateProfileDataErrorState).error,
-          'nothingToSend');
       await sub.cancel();
       await cubit.close();
     });
+
+    test(
+      'updateProfileData with nothing to change emits Error without hitting the repo',
+      () async {
+        final repo = FakeUpdateProfileDataRepos();
+        final cubit = UpdateProfileDataCubit(repo);
+        final events = <UpdateProfileDataStates>[];
+        final sub = cubit.stream.listen(events.add);
+
+        await cubit.updateProfileData(
+          image: null,
+          fullName: null,
+          email: null,
+          phoneNumber: null,
+        );
+        await Future<void>.delayed(Duration.zero);
+
+        expect(repo.calls, 0);
+        expect(
+          (events.last as UpdateProfileDataErrorState).error,
+          'nothingToSend',
+        );
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
     test('clearProfileImage clears the picked image and emits', () async {
       final cubit = UpdateProfileDataCubit(FakeUpdateProfileDataRepos());
@@ -267,8 +263,9 @@ void main() {
       return cubit;
     }
 
-    testWidgets('screen renders the premium AppBar and gold Save CTA',
-        (tester) async {
+    testWidgets('screen renders the premium AppBar and gold Save CTA', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 900);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -279,25 +276,28 @@ void main() {
       final profileCubit = await seededProfile();
       final updateCubit = UpdateProfileDataCubit(FakeUpdateProfileDataRepos());
 
-      await tester.pumpWidget(_harness(
-        providers: [
-          BlocProvider<ProfileCubit>.value(value: profileCubit),
-          BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
-        ],
-        child: const UpdateProfileDataView(),
-      ));
+      await tester.pumpWidget(
+        _harness(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: profileCubit),
+            BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
+          ],
+          child: const UpdateProfileDataView(),
+        ),
+      );
       await _settle(tester);
 
       expect(find.text('تعديل بيانات الملف الشخصي'), findsOneWidget);
       expect(find.text('حفظ'), findsOneWidget);
-      expect(find.text('صورة الحساب').evaluate().isNotEmpty ||
-          find.text('الصورة الشخصية').evaluate().isNotEmpty ||
-          find.textContaining('صورة').evaluate().isNotEmpty,
-          isTrue);
+      expect(
+        find.text('صورة الحساب').evaluate().isNotEmpty ||
+            find.text('الصورة الشخصية').evaluate().isNotEmpty ||
+            find.textContaining('صورة').evaluate().isNotEmpty,
+        isTrue,
+      );
     });
 
-    testWidgets('form is pre-filled from the profile cache',
-        (tester) async {
+    testWidgets('form is pre-filled from the profile cache', (tester) async {
       tester.view.physicalSize = const Size(390, 1000);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -308,13 +308,15 @@ void main() {
       final profileCubit = await seededProfile();
       final updateCubit = UpdateProfileDataCubit(FakeUpdateProfileDataRepos());
 
-      await tester.pumpWidget(_harness(
-        providers: [
-          BlocProvider<ProfileCubit>.value(value: profileCubit),
-          BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
-        ],
-        child: const UpdateProfileDataView(),
-      ));
+      await tester.pumpWidget(
+        _harness(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: profileCubit),
+            BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
+          ],
+          child: const UpdateProfileDataView(),
+        ),
+      );
       await _settle(tester);
 
       expect(find.text('أحمد محمود'), findsOneWidget);
@@ -322,37 +324,41 @@ void main() {
       expect(find.text('01012345678'), findsOneWidget);
     });
 
-    testWidgets('tapping Save with an empty payload does nothing (no crash, no repo call)',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 1000);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'tapping Save with an empty payload does nothing (no crash, no repo call)',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 1000);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      final repo = FakeUpdateProfileDataRepos();
-      final updateCubit = UpdateProfileDataCubit(repo);
-      final profileCubit = await seededProfile();
+        final repo = FakeUpdateProfileDataRepos();
+        final updateCubit = UpdateProfileDataCubit(repo);
+        final profileCubit = await seededProfile();
 
-      await tester.pumpWidget(_harness(
-        providers: [
-          BlocProvider<ProfileCubit>.value(value: profileCubit),
-          BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
-        ],
-        child: const UpdateProfileDataView(),
-      ));
-      await _settle(tester);
+        await tester.pumpWidget(
+          _harness(
+            providers: [
+              BlocProvider<ProfileCubit>.value(value: profileCubit),
+              BlocProvider<UpdateProfileDataCubit>.value(value: updateCubit),
+            ],
+            child: const UpdateProfileDataView(),
+          ),
+        );
+        await _settle(tester);
 
-      // Clear pre-filled fields so the payload is empty.
-      updateCubit.nameCon.clear();
-      updateCubit.emailCon.clear();
-      updateCubit.phoneCon.clear();
+        // Clear pre-filled fields so the payload is empty.
+        updateCubit.nameCon.clear();
+        updateCubit.emailCon.clear();
+        updateCubit.phoneCon.clear();
 
-      await tester.tap(find.text('حفظ'));
-      await _settle(tester);
+        await tester.tap(find.text('حفظ'));
+        await _settle(tester);
 
-      expect(repo.calls, 0);
-    });
+        expect(repo.calls, 0);
+      },
+    );
   });
 }

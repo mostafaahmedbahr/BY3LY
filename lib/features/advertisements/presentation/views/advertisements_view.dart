@@ -1,4 +1,4 @@
-  import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
+import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,49 +18,49 @@ class AdvertisementsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AdvertisementsCubit(
-          getIt.get<AdvertisementsRepoImpl>())..fetchMyAds(),
-      child: SafeArea(child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        shadowColor: AppColors.mainColor,
-        surfaceTintColor:  AppColors.mainColor,
-        title: Text(
-          context.tr(LocaleKeys.adsAndPackages),
-          style: TextStyle(
-            color: AppColors.mainColor,
-            fontWeight: FontWeight.bold,
+      create: (context) =>
+          AdvertisementsCubit(getIt.get<AdvertisementsRepoImpl>())
+            ..fetchMyAds(),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppColors.surface,
+            shadowColor: AppColors.mainColor,
+            surfaceTintColor: AppColors.mainColor,
+            title: Text(
+              context.tr(LocaleKeys.adsAndPackages),
+              style: TextStyle(
+                color: AppColors.mainColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
+          floatingActionButton: Builder(
+            builder: (fabContext) {
+              return FloatingActionButton(
+                onPressed: () async {
+                  if (!await GuestGuard.requireLogin(fabContext)) return;
+                  if (!fabContext.mounted) return;
+                  final created = await Navigator.push(
+                    fabContext,
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      child: const AddNewAdView(),
+                    ),
+                  );
+                  // Refresh the list so the newly published ad appears.
+                  if (created == true && fabContext.mounted) {
+                    fabContext.read<AdvertisementsCubit>().fetchMyAds();
+                  }
+                },
+                backgroundColor: AppColors.mainColor,
+                child: const Icon(Icons.add, color: AppColors.whiteColor),
+              );
+            },
+          ),
+          body: const AdvertisementsViewBody(),
         ),
       ),
-      floatingActionButton: Builder(
-        builder: (fabContext) {
-          return FloatingActionButton(
-            onPressed: () async {
-              if (!await GuestGuard.requireLogin(fabContext)) return;
-              if (!fabContext.mounted) return;
-              final created = await Navigator.push(
-                fabContext,
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: const AddNewAdView(),
-                ),
-              );
-              // Refresh the list so the newly published ad appears.
-              if (created == true && fabContext.mounted) {
-                fabContext
-                    .read<AdvertisementsCubit>()
-                    .fetchMyAds();
-              }
-            },
-            backgroundColor: AppColors.mainColor,
-            child: const Icon(Icons.add,
-              color: AppColors.whiteColor,),
-          );
-        },
-      ),
-      body: const AdvertisementsViewBody(),
-      )),
     );
   }
 }

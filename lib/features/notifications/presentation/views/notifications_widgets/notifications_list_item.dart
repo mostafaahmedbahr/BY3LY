@@ -85,8 +85,9 @@ class NotificationsListItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 13.5,
-                            fontWeight:
-                                unread ? FontWeight.w800 : FontWeight.w600,
+                            fontWeight: unread
+                                ? FontWeight.w800
+                                : FontWeight.w600,
                             color: AppColors.text,
                           ),
                         ),

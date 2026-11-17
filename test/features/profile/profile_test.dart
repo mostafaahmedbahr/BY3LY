@@ -1,7 +1,8 @@
 import 'package:by3ly/core/app_services/local_services/cache_helper.dart';
 import 'package:by3ly/core/app_services/local_services/cache_token.dart';
 import 'package:by3ly/core/errors/failure.dart';
-import 'package:by3ly/features/deleteAccount/data/models/delete_account_model.dart' as delete_model;
+import 'package:by3ly/features/deleteAccount/data/models/delete_account_model.dart'
+    as delete_model;
 import 'package:by3ly/features/profile/data/models/logout_model.dart';
 import 'package:by3ly/features/profile/data/models/profile_data_model.dart';
 import 'package:by3ly/features/profile/data/repos/profile_repos.dart';
@@ -67,35 +68,39 @@ class FakeProfileRepos implements ProfileRepos {
   Future<Either<Failure, ProfileModel>> getProfileData() async {
     getProfileCalls++;
     if (shouldFail) return Left(ServerFailure('fetch failed'));
-    return Right(ProfileModel.fromJson(
-      Map<String, dynamic>.from(_profileJson),
-    ));
+    return Right(
+      ProfileModel.fromJson(Map<String, dynamic>.from(_profileJson)),
+    );
   }
 
   @override
   Future<Either<Failure, LogoutModel>> logout() async {
     logoutCalls++;
     if (shouldFail) return Left(ServerFailure('logout failed'));
-    return Right(LogoutModel.fromJson({
-      'status': true,
-      'number': 1,
-      'message': 'ok',
-    }));
+    return Right(
+      LogoutModel.fromJson({'status': true, 'number': 1, 'message': 'ok'}),
+    );
   }
 
   @override
-  Future<Either<Failure, delete_model.DeleteAccountModel>> deleteAccount() async {
+  Future<Either<Failure, delete_model.DeleteAccountModel>>
+  deleteAccount() async {
     deleteAccountCalls++;
     if (shouldFail) return Left(ServerFailure('delete failed'));
-    return Right(delete_model.DeleteAccountModel.fromJson({
-      'status': true,
-      'number': 2,
-      'message': 'ok',
-    }));
+    return Right(
+      delete_model.DeleteAccountModel.fromJson({
+        'status': true,
+        'number': 2,
+        'message': 'ok',
+      }),
+    );
   }
 }
 
-Widget _harness({required Widget child, List<BlocProvider> providers = const []}) {
+Widget _harness({
+  required Widget child,
+  List<BlocProvider> providers = const [],
+}) {
   return ThemeProvider(
     initTheme: AppThemes.light,
     duration: const Duration(milliseconds: 100),
@@ -140,8 +145,9 @@ void main() {
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
-    const secureChannel =
-        MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+    const secureChannel = MethodChannel(
+      'plugins.it_nomads.com/flutter_secure_storage',
+    );
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(secureChannel, (call) async => null);
   });
@@ -182,10 +188,7 @@ void main() {
       final model = ProfileModel.fromJson({
         'status': true,
         'message': 'ok',
-        'data': {
-          'user': 42,
-          'isActive': 'true',
-        },
+        'data': {'user': 42, 'isActive': 'true'},
       });
       expect(model.data, isNotNull);
       expect(model.data!.user, isNull);
@@ -210,17 +213,26 @@ void main() {
           },
         },
       });
-      expect(model.data!.user!.subscriptionPackage!.features,
-          ['1', 'raw', 'true']);
+      expect(model.data!.user!.subscriptionPackage!.features, [
+        '1',
+        'raw',
+        'true',
+      ]);
     });
 
     test('logout and delete-account envelopes coerce scalars', () {
-      final logout = LogoutModel.fromJson(
-          {'status': '1', 'number': '9', 'message': 'ok'});
+      final logout = LogoutModel.fromJson({
+        'status': '1',
+        'number': '9',
+        'message': 'ok',
+      });
       expect(logout.status, isTrue);
       expect(logout.number, 9);
-      final delete = delete_model.DeleteAccountModel.fromJson(
-          {'status': 1, 'number': '2', 'message': 'ok'});
+      final delete = delete_model.DeleteAccountModel.fromJson({
+        'status': 1,
+        'number': '2',
+        'message': 'ok',
+      });
       expect(delete.status, isTrue);
       expect(delete.number, 2);
     });
@@ -233,23 +245,25 @@ void main() {
       cubit.close();
     });
 
-    test('getProfile success emits Loading → Success and fills the model',
-        () async {
-      final repo = FakeProfileRepos();
-      final cubit = ProfileCubit(repo);
-      final events = <ProfileStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'getProfile success emits Loading → Success and fills the model',
+      () async {
+        final repo = FakeProfileRepos();
+        final cubit = ProfileCubit(repo);
+        final events = <ProfileStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      await cubit.getProfile();
-      await Future<void>.delayed(Duration.zero);
+        await cubit.getProfile();
+        await Future<void>.delayed(Duration.zero);
 
-      expect(repo.getProfileCalls, 1);
-      expect(events.first, isA<GetProfileDataLoadingState>());
-      expect(events.last, isA<GetProfileDataSuccessState>());
-      expect(cubit.profileModel?.data?.user?.name, 'أحمد محمود');
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(repo.getProfileCalls, 1);
+        expect(events.first, isA<GetProfileDataLoadingState>());
+        expect(events.last, isA<GetProfileDataSuccessState>());
+        expect(cubit.profileModel?.data?.user?.name, 'أحمد محمود');
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
     test('getProfile failure emits Loading → Error', () async {
       final repo = FakeProfileRepos()..shouldFail = true;
@@ -293,8 +307,7 @@ void main() {
       await cubit.close();
     });
 
-    test('logout success clears token and cache and emits Success',
-        () async {
+    test('logout success clears token and cache and emits Success', () async {
       await CacheHelper.saveData(key: 'email', value: 'ahmed@mail.com');
       CacheTokenManger.userToken = 'tok';
 
@@ -371,8 +384,7 @@ void main() {
       expect(find.text('01012345678'), findsOneWidget);
     });
 
-    testWidgets('quick actions row renders the four shortcuts',
-        (tester) async {
+    testWidgets('quick actions row renders the four shortcuts', (tester) async {
       await tester.pumpWidget(await bodyWithProfile());
       await _settle(tester);
 
@@ -382,8 +394,9 @@ void main() {
       expect(find.text('المقارنة'), findsOneWidget);
     });
 
-    testWidgets('logout CTA opens the confirm dialog and cancel closes it',
-        (tester) async {
+    testWidgets('logout CTA opens the confirm dialog and cancel closes it', (
+      tester,
+    ) async {
       // Taller surface so the Sign-out CTA fits on screen (the body is
       // a long settings ListView and tapping off-screen would be a miss).
       tester.view.physicalSize = const Size(390, 1400);

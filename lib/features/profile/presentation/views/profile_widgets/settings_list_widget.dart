@@ -94,8 +94,9 @@ class SettingsListWidget extends StatelessWidget {
                       activeTrackColor: AppColors.mainColor,
                       value: ProfileCubit.get(context).switchValue,
                       onChanged: (value) {
-                        ProfileCubit.get(context)
-                            .changeNotificationValue(value);
+                        ProfileCubit.get(
+                          context,
+                        ).changeNotificationValue(value);
                       },
                     ),
                   );
@@ -113,65 +114,68 @@ class SettingsListWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: ExpansionTile(
-                visualDensity: VisualDensity.compact,
-                tilePadding: const EdgeInsets.symmetric(horizontal: 12),
-                childrenPadding: const EdgeInsets.only(bottom: 4),
-                dense: true,
-                leading: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppColors.mainColor.withValues(alpha: 0.09),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    AppImages.bookOpen,
-                    width: 19,
-                    height: 19,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.mainColor,
-                      BlendMode.srcIn,
+                    visualDensity: VisualDensity.compact,
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 12),
+                    childrenPadding: const EdgeInsets.only(bottom: 4),
+                    dense: true,
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.mainColor.withValues(alpha: 0.09),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        AppImages.bookOpen,
+                        width: 19,
+                        height: 19,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.mainColor,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                title: Text(
-                  LocaleKeys.legalInfo.tr(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppStyles.textStyle14W500Black.copyWith(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                subtitle: Text(
-                  LocaleKeys.legalInfoMsg.tr(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppStyles.textStyle10W400Gray.copyWith(fontSize: 9.5),
-                ),
-                trailing: Icon(
-                  Icons.expand_more_rounded,
-                  size: 20,
-                  color: AppColors.textSecondary,
-                ),
-                children: [
-                  CompactSettingsTile(
-                    title: LocaleKeys.aboutApp.tr(),
-                    imagePath: AppImages.globe,
-                    onTap: () => context.pushNamed(Routes.aboutView),
-                  ),
-                  CompactSettingsTile(
-                    title: LocaleKeys.termsAndConditions.tr(),
-                    imagePath: AppImages.bookOpen,
-                    onTap: () => context.pushNamed(Routes.termsView),
-                  ),
-                  CompactSettingsTile(
-                    title: LocaleKeys.privacyPolicy.tr(),
-                    imagePath: AppImages.shield,
-                    onTap: () => context.pushNamed(Routes.privacyPolicyView),
-                  ),
-                ],
+                    title: Text(
+                      LocaleKeys.legalInfo.tr(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppStyles.textStyle14W500Black.copyWith(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      LocaleKeys.legalInfoMsg.tr(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppStyles.textStyle10W400Gray.copyWith(
+                        fontSize: 9.5,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.expand_more_rounded,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    children: [
+                      CompactSettingsTile(
+                        title: LocaleKeys.aboutApp.tr(),
+                        imagePath: AppImages.globe,
+                        onTap: () => context.pushNamed(Routes.aboutView),
+                      ),
+                      CompactSettingsTile(
+                        title: LocaleKeys.termsAndConditions.tr(),
+                        imagePath: AppImages.bookOpen,
+                        onTap: () => context.pushNamed(Routes.termsView),
+                      ),
+                      CompactSettingsTile(
+                        title: LocaleKeys.privacyPolicy.tr(),
+                        imagePath: AppImages.shield,
+                        onTap: () =>
+                            context.pushNamed(Routes.privacyPolicyView),
+                      ),
+                    ],
                   ),
                 ),
               ),

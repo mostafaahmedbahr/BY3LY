@@ -1,0 +1,14 @@
+﻿Analyzing by3ly...                                              
+
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\compare\data\models\compare_model.dart:211:15 - curly_braces_in_flow_control_structures
+warning - Unused import: 'package:by3ly/features/reportProduct/presentation/views/report_the_product_view.dart'. Try removing the import directive - lib\features\helpSupport\presentation\views\help_support_widgets\help_support_view_body.dart:6:8 - unused_import
+  error - Undefined class 'BuildContext'. Try changing the name to the name of an existing class, or creating a class with the name 'BuildContext' - lib\features\layout\presentation\view_model\layout_cubit.dart:16:26 - undefined_class
+  error - Undefined class 'BuildContext'. Try changing the name to the name of an existing class, or creating a class with the name 'BuildContext' - lib\features\layout\presentation\view_model\layout_cubit.dart:36:35 - undefined_class
+
+flutter : 4 issues found. (ran in 2.4s)
+At line:1 char:52
++ ... t lib test 2>&1 | Select-Object -Last 2; flutter analyze 2>&1 | Out-F ...
++                                              ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (4 issues found. (ran in 2.4s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

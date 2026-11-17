@@ -20,15 +20,13 @@ class CityDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChooseLocationCubit, ChooseLocationStates>(
       builder: (context, locState) {
-        final cities =
-            ChooseLocationCubit.get(context).allCitiesList;
+        final cities = ChooseLocationCubit.get(context).allCitiesList;
         return BlocBuilder<AddNewAdCubit, AddNewAdStates>(
           builder: (context, adState) {
             final adCubit = AddNewAdCubit.get(context);
 
             // Still loading → show a slim loading box, not a dead dropdown.
-            if (cities.isEmpty &&
-                locState is! GetAllCitiesAndCentersError) {
+            if (cities.isEmpty && locState is! GetAllCitiesAndCentersError) {
               return _StatusBox(
                 child: Row(
                   children: [
@@ -55,8 +53,11 @@ class CityDropdown extends StatelessWidget {
               return _StatusBox(
                 child: Row(
                   children: [
-                    const Icon(Icons.error_outline_rounded,
-                        size: 18, color: AppColors.redColor),
+                    const Icon(
+                      Icons.error_outline_rounded,
+                      size: 18,
+                      color: AppColors.redColor,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -68,8 +69,9 @@ class CityDropdown extends StatelessWidget {
                       ),
                     ),
                     TextButton.icon(
-                      onPressed: () => ChooseLocationCubit.get(context)
-                          .getAllCitiesAndCenters(),
+                      onPressed: () => ChooseLocationCubit.get(
+                        context,
+                      ).getAllCitiesAndCenters(),
                       icon: const Icon(Icons.refresh_rounded, size: 16),
                       label: const Text('إعادة المحاولة'),
                     ),
@@ -80,9 +82,7 @@ class CityDropdown extends StatelessWidget {
 
             return DropdownButtonFormField<int>(
               key: ValueKey('city_${adCubit.cityId}'),
-              initialValue: cities
-                      .map((c) => c.id)
-                      .contains(adCubit.cityId)
+              initialValue: cities.map((c) => c.id).contains(adCubit.cityId)
                   ? adCubit.cityId
                   : null,
               items: cities.map((city) {
@@ -97,8 +97,11 @@ class CityDropdown extends StatelessWidget {
               },
               decoration: dropdownDecoration(
                 context.tr(LocaleKeys.city),
-                prefix: const Icon(Icons.location_city_outlined,
-                    color: AppColors.mainColor, size: 20),
+                prefix: const Icon(
+                  Icons.location_city_outlined,
+                  color: AppColors.mainColor,
+                  size: 20,
+                ),
               ),
             );
           },
@@ -123,14 +126,9 @@ class _StatusBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.7),
-        ),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.7)),
       ),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: child,
-      ),
+      child: Align(alignment: AlignmentDirectional.centerStart, child: child),
     );
   }
 }

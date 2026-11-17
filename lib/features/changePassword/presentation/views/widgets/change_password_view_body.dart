@@ -34,10 +34,7 @@ class ChangePasswordViewBody extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
-                child: Form(
-                  key: formKey,
-                  child: const ChangePasswordForm(),
-                ),
+                child: Form(key: formKey, child: const ChangePasswordForm()),
               ),
             ),
             Padding(

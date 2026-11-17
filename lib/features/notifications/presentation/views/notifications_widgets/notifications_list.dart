@@ -40,13 +40,11 @@ class _NotificationsListState extends State<NotificationsList> {
     final max = _scrollController.position.maxScrollExtent;
     final current = _scrollController.position.pixels;
     if (max - current <= 300) {
-      NotificationsCubit.get(context)
-          .getNotificationsData(loadMore: true);
+      NotificationsCubit.get(context).getNotificationsData(loadMore: true);
     }
   }
 
-  Future<void> _confirmDeleteOne(
-      BuildContext context, Notifications n) async {
+  Future<void> _confirmDeleteOne(BuildContext context, Notifications n) async {
     if (n.id == null) return;
     final confirmed = await AppConfirmDialog.show(
       context,
@@ -76,26 +74,23 @@ class _NotificationsListState extends State<NotificationsList> {
           onRefresh: () => cubit.refresh(),
           child: ListView.separated(
             controller: _scrollController,
-            itemCount: items.length +
+            itemCount:
+                items.length +
                 ((cubit.isLoadingMore ||
-                        state
-                            is GetNotificationsDataPaginationError)
+                        state is GetNotificationsDataPaginationError)
                     ? 1
                     : 0),
             itemBuilder: (context, index) {
               if (index >= items.length) {
-                if (state
-                    is GetNotificationsDataPaginationError) {
+                if (state is GetNotificationsDataPaginationError) {
                   return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextButton(
-                      onPressed: () => cubit.getNotificationsData(
-                          loadMore: true),
+                      onPressed: () =>
+                          cubit.getNotificationsData(loadMore: true),
                       child: Text(
                         context.tr(LocaleKeys.retry),
-                        style: const TextStyle(
-                            color: AppColors.mainColor),
+                        style: const TextStyle(color: AppColors.mainColor),
                       ),
                     ),
                   );
@@ -106,21 +101,18 @@ class _NotificationsListState extends State<NotificationsList> {
                     child: SizedBox(
                       width: 28,
                       height: 28,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2.5),
+                      child: CircularProgressIndicator(strokeWidth: 2.5),
                     ),
                   ),
                 );
               }
               final n = items[index];
               return Dismissible(
-                key: ValueKey(
-                    'notif_${n.id ?? index}_${n.createdAt ?? ''}'),
+                key: ValueKey('notif_${n.id ?? index}_${n.createdAt ?? ''}'),
                 direction: DismissDirection.endToStart,
                 background: Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     color: AppColors.redColor,
                     borderRadius: BorderRadius.circular(12),

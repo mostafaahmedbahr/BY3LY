@@ -52,8 +52,7 @@ class HomeLoadingWidget extends StatelessWidget {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: 5,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(width: 25),
+                  separatorBuilder: (_, _) => const SizedBox(width: 25),
                   itemBuilder: (_, _) => const Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -96,8 +95,7 @@ class HomeLoadingWidget extends StatelessWidget {
               GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
@@ -130,9 +128,7 @@ class _ProductCardSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             child: SimmerLoading(height: 140, raduis: 0),
           ),
           Padding(

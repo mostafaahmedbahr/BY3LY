@@ -21,14 +21,12 @@ class FakeAllSubCategoriesProductsRepos
       AllSubCategoriesProductsModel.fromJson({
         'status': true,
         'message': 'ok',
-        'data': {
-          'products': _products.map((p) => p.toJson()).toList(),
-        },
+        'data': {'products': _products.map((p) => p.toJson()).toList()},
       });
 
   @override
   Future<Either<Failure, AllSubCategoriesProductsModel>>
-      getAllSubCategoriesProductsData({required int subCategoryId}) async {
+  getAllSubCategoriesProductsData({required int subCategoryId}) async {
     calls++;
     await Future<void>.delayed(const Duration(milliseconds: 40));
     if (shouldFail) {

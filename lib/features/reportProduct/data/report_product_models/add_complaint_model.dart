@@ -41,11 +41,8 @@ class AddComplaintModel {
     return jsonData;
   }
 
-  AddComplaintModel copyWith({
-    bool? status,
-    int? number,
-    String? message,
-  }) => AddComplaintModel(
+  AddComplaintModel copyWith({bool? status, int? number, String? message}) =>
+      AddComplaintModel(
         status: status ?? this.status,
         number: number ?? this.number,
         message: message ?? this.message,

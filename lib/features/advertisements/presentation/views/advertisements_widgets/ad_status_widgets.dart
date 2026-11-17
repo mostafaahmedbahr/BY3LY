@@ -18,16 +18,11 @@ class AdImageStatusOverlay extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(14),
-          ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(14)),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.transparent,
-              Colors.black54,
-            ],
+            colors: [Colors.transparent, Colors.black54],
           ),
         ),
         child: Row(
@@ -44,7 +39,9 @@ class AdImageStatusOverlay extends StatelessWidget {
             ),
             const SizedBox(width: 5),
             Text(
-              context.tr(isActive ? LocaleKeys.activeAd : LocaleKeys.inactiveAd),
+              context.tr(
+                isActive ? LocaleKeys.activeAd : LocaleKeys.inactiveAd,
+              ),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 11,

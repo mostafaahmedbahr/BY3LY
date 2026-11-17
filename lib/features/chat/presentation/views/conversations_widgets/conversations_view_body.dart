@@ -54,10 +54,7 @@ class _ConversationsViewBodyState extends State<ConversationsViewBody> {
             color: AppColors.accent,
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              children: const [
-                SizedBox(height: 60),
-                ConversationsEmpty(),
-              ],
+              children: const [SizedBox(height: 60), ConversationsEmpty()],
             ),
           );
         }

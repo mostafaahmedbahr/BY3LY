@@ -16,6 +16,7 @@ class ChatMessagesList extends StatelessWidget {
   });
 
   final ScrollController scrollController;
+
   /// Called when the user long-presses a message. The view is responsible
   /// for showing an action sheet (copy / delete / cancel).
   final ValueChanged<ChatMessageModel> onMessageLongPress;

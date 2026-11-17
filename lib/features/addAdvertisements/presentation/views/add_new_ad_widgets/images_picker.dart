@@ -22,11 +22,8 @@ class ImagesPicker extends StatelessWidget {
           height: 108,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: cubit.existingImages.length +
-                cubit.images.length +
-                1,
-            separatorBuilder: (context, _) =>
-                const SizedBox(width: 12),
+            itemCount: cubit.existingImages.length + cubit.images.length + 1,
+            separatorBuilder: (context, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final existingCount = cubit.existingImages.length;
               if (index < existingCount) {
@@ -71,8 +68,7 @@ class ImagesPicker extends StatelessWidget {
               return _AddTile(
                 current: cubit.totalImagesCount,
                 max: AddNewAdCubit.maxImages,
-                enabled:
-                    cubit.totalImagesCount < AddNewAdCubit.maxImages,
+                enabled: cubit.totalImagesCount < AddNewAdCubit.maxImages,
                 onTap: onAdd,
               );
             },
@@ -125,16 +121,10 @@ class _ImageTile extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      Color(0xffE53935),
-                      Color(0xffB71C1C),
-                    ],
+                    colors: [Color(0xffE53935), Color(0xffB71C1C)],
                   ),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 1.6,
-                  ),
+                  border: Border.all(color: Colors.white, width: 1.6),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.red.withValues(alpha: 0.45),
@@ -156,22 +146,15 @@ class _ImageTile extends StatelessWidget {
           bottom: 7,
           left: 7,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 3,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [
-                  Color(0xffFAB043),
-                  Color(0xffF5B301),
-                ],
+                colors: [Color(0xffFAB043), Color(0xffF5B301)],
               ),
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xffFAB043)
-                      .withValues(alpha: 0.5),
+                  color: const Color(0xffFAB043).withValues(alpha: 0.5),
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),

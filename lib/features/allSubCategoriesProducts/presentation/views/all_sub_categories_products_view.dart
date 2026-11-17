@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'all_sub_categories_products_widgets/all_sub_categories_products_view_body.dart';
 
 class AllSubCategoriesProductsView extends StatelessWidget {
-  const AllSubCategoriesProductsView(
-      {super.key, required this.subCategoryId, required this.subCategoryName});
+  const AllSubCategoriesProductsView({
+    super.key,
+    required this.subCategoryId,
+    required this.subCategoryName,
+  });
 
   final int subCategoryId;
   final String subCategoryName;
@@ -44,9 +47,7 @@ class AllSubCategoriesProductsView extends StatelessWidget {
           ),
         ),
       ),
-      body: AllSubCategoriesProductsViewBody(
-        subCategoryId: subCategoryId,
-      ),
+      body: AllSubCategoriesProductsViewBody(subCategoryId: subCategoryId),
     );
   }
 }

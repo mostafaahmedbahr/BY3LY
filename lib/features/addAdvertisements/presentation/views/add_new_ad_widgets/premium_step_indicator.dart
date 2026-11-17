@@ -35,9 +35,7 @@ class PremiumStepIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -53,14 +51,15 @@ class PremiumStepIndicator extends StatelessWidget {
           return Expanded(
             child: Row(
               children: [
-                Expanded(child: _StepDot(
-                  index: i,
-                  currentStep: currentStep,
-                  icon: _icons[i],
-                  label: labels[i],
-                )),
-                if (!isLast)
-                  _Connector(filled: i < currentStep),
+                Expanded(
+                  child: _StepDot(
+                    index: i,
+                    currentStep: currentStep,
+                    icon: _icons[i],
+                    label: labels[i],
+                  ),
+                ),
+                if (!isLast) _Connector(filled: i < currentStep),
               ],
             ),
           );
@@ -104,10 +103,7 @@ class _StepDot extends StatelessWidget {
                 ? const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.mainColor,
-                      AppColors.secondColor,
-                    ],
+                    colors: [AppColors.mainColor, AppColors.secondColor],
                   )
                 : null,
             color: highlighted ? null : AppColors.surfaceVariant,
@@ -119,8 +115,7 @@ class _StepDot extends StatelessWidget {
             boxShadow: current
                 ? [
                     BoxShadow(
-                      color: AppColors.mainColor
-                          .withValues(alpha: 0.45),
+                      color: AppColors.mainColor.withValues(alpha: 0.45),
                       blurRadius: 10,
                       spreadRadius: 1.5,
                     ),
@@ -131,8 +126,7 @@ class _StepDot extends StatelessWidget {
           child: Icon(
             done ? Icons.check_rounded : icon,
             size: 17,
-            color:
-                highlighted ? Colors.white : AppColors.textSecondary,
+            color: highlighted ? Colors.white : AppColors.textSecondary,
           ),
         ),
         const SizedBox(height: 5),
@@ -146,11 +140,8 @@ class _StepDot extends StatelessWidget {
             style: TextStyle(
               fontSize: 8.5,
               height: 1.1,
-              fontWeight:
-                  current ? FontWeight.w800 : FontWeight.w500,
-              color: current
-                  ? AppColors.accent
-                  : AppColors.textSecondary,
+              fontWeight: current ? FontWeight.w800 : FontWeight.w500,
+              color: current ? AppColors.accent : AppColors.textSecondary,
             ),
           ),
         ),
@@ -177,9 +168,7 @@ class _Connector extends StatelessWidget {
           height: 3,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
-            color: filled
-                ? AppColors.mainColor
-                : AppColors.surfaceVariant,
+            color: filled ? AppColors.mainColor : AppColors.surfaceVariant,
           ),
         ),
       ),

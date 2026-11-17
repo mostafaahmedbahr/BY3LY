@@ -1,16 +1,18 @@
-
 import '../../data/models/all_sub_categories_products_model.dart';
 
-abstract class AllSubCategoriesProductsStates{}
+abstract class AllSubCategoriesProductsStates {}
 
-class AllSubCategoriesProductsInitState extends AllSubCategoriesProductsStates {}
+class AllSubCategoriesProductsInitState
+    extends AllSubCategoriesProductsStates {}
 
-class GetAllSubCategoriesProductsLoading extends AllSubCategoriesProductsStates {
+class GetAllSubCategoriesProductsLoading
+    extends AllSubCategoriesProductsStates {
   @override
   String toString() => 'GetAllSubCategoriesProductsLoading';
 }
 
-class GetAllSubCategoriesProductsSuccess extends AllSubCategoriesProductsStates {
+class GetAllSubCategoriesProductsSuccess
+    extends AllSubCategoriesProductsStates {
   final AllSubCategoriesProductsModel allSubCategoriesProductsModel;
   GetAllSubCategoriesProductsSuccess(this.allSubCategoriesProductsModel);
 

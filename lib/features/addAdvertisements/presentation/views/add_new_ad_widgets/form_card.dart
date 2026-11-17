@@ -39,9 +39,7 @@ class FormCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.border.withValues(alpha: 0.6),
-          ),
+          border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,15 +55,11 @@ class FormCard extends StatelessWidget {
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.mainColor,
-                        AppColors.secondColor,
-                      ],
+                      colors: [AppColors.mainColor, AppColors.secondColor],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.4),
+                        color: AppColors.mainColor.withValues(alpha: 0.4),
                         blurRadius: 8,
                         offset: const Offset(0, 3),
                       ),

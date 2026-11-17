@@ -1,17 +1,16 @@
 import '../../data/models/notifications_model.dart';
 
-abstract class NotificationsStates{}
+abstract class NotificationsStates {}
 
-class NotificationsInitState extends NotificationsStates{
+class NotificationsInitState extends NotificationsStates {
   @override
   String toString() => 'NotificationsInitState';
 }
 
-class NotificationsButtonsToggleState extends NotificationsStates{
+class NotificationsButtonsToggleState extends NotificationsStates {
   @override
   String toString() => 'NotificationsButtonsToggleState';
 }
-
 
 class GetNotificationsDataLoading extends NotificationsStates {
   @override
@@ -44,8 +43,7 @@ class GetNotificationsDataPaginationError extends NotificationsStates {
   GetNotificationsDataPaginationError(this.message);
 
   @override
-  String toString() =>
-      'GetNotificationsDataPaginationError(message: $message)';
+  String toString() => 'GetNotificationsDataPaginationError(message: $message)';
 }
 
 class NotificationMarkedRead extends NotificationsStates {
@@ -53,8 +51,7 @@ class NotificationMarkedRead extends NotificationsStates {
   NotificationMarkedRead(this.notificationId);
 
   @override
-  String toString() =>
-      'NotificationMarkedRead(id: $notificationId)';
+  String toString() => 'NotificationMarkedRead(id: $notificationId)';
 }
 
 class AllNotificationsMarkedRead extends NotificationsStates {

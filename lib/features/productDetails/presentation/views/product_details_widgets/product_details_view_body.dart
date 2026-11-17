@@ -53,7 +53,9 @@ class ProductDetailsViewBody extends StatelessWidget {
         final seller = product?.seller;
 
         return ListView(
-          physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: const ClampingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           children: [
             ProductImage(
               imageUrl: mainImage,
@@ -80,74 +82,72 @@ class ProductDetailsViewBody extends StatelessWidget {
                     StartChatButton(
                       productId: product!.id,
                       sellerId: seller?.id,
-                      builder: (context, isLoading, onPressed) =>
-                          SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppColors.mainColor,
-                                    AppColors.secondColor,
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                      builder: (context, isLoading, onPressed) => SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.mainColor,
+                                AppColors.secondColor,
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.mainColor.withValues(
+                                  alpha: 0.35,
                                 ),
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.mainColor
-                                        .withValues(alpha: 0.35),
-                                    blurRadius: 14,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
+                                blurRadius: 14,
+                                offset: const Offset(0, 6),
                               ),
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: isLoading ? null : onPressed,
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Center(
-                                    child: isLoading
-                                        ? const SizedBox(
-                                            height: 22,
-                                            width: 22,
-                                            child:
-                                                CircularProgressIndicator(
-                                              strokeWidth: 2.2,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        : Row(
-                                            mainAxisSize:
-                                                MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.chat_bubble_rounded,
-                                                color: Colors.white,
-                                                size: 19,
-                                              ),
-                                              const SizedBox(width: 9),
-                                              Text(
-                                                context.tr(LocaleKeys
-                                                    .contactSeller),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.w800,
-                                                  letterSpacing: 0.2,
-                                                ),
-                                              ),
-                                            ],
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: isLoading ? null : onPressed,
+                              borderRadius: BorderRadius.circular(15),
+                              child: Center(
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 22,
+                                        width: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(
+                                            Icons.chat_bubble_rounded,
+                                            color: Colors.white,
+                                            size: 19,
                                           ),
-                                  ),
-                                ),
+                                          const SizedBox(width: 9),
+                                          Text(
+                                            context.tr(
+                                              LocaleKeys.contactSeller,
+                                            ),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w800,
+                                              letterSpacing: 0.2,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                               ),
                             ),
                           ),
+                        ),
+                      ),
                     ),
                   ],
                   const CustomSizedBox(height: 16),
@@ -204,9 +204,7 @@ class ProductDetailsViewBody extends StatelessWidget {
                     },
                   ),
                   const CustomSizedBox(height: 20),
-                  RelatedProductsWidget(
-                    relatedProducts: relatedProducts,
-                  ),
+                  RelatedProductsWidget(relatedProducts: relatedProducts),
                 ],
               ),
             ),

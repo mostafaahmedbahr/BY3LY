@@ -16,7 +16,6 @@ int? _asInt(dynamic value) {
   return int.tryParse(value.toString().trim());
 }
 
-
 class DeleteAccountModel {
   bool? status;
   int? number;

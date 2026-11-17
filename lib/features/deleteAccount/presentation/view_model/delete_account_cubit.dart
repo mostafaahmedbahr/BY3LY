@@ -31,11 +31,13 @@ class DeleteAccountCubit extends Cubit<DeleteAccountStates> {
           emit(DeleteAccountSuccess(data));
         } else {
           final serverMessage = data.message?.trim();
-          emit(DeleteAccountError(
-            (serverMessage == null || serverMessage.isEmpty)
-                ? null
-                : serverMessage,
-          ));
+          emit(
+            DeleteAccountError(
+              (serverMessage == null || serverMessage.isEmpty)
+                  ? null
+                  : serverMessage,
+            ),
+          );
         }
       },
     );

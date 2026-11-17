@@ -1,4 +1,3 @@
-
 class GeneralModel {
   bool? status;
   int? number;
@@ -7,13 +6,13 @@ class GeneralModel {
   GeneralModel({this.status, this.number, this.message});
 
   GeneralModel.fromJson(Map<String, dynamic> json) {
-    if(json["status"] is bool) {
+    if (json["status"] is bool) {
       status = json["status"];
     }
-    if(json["number"] is num) {
+    if (json["number"] is num) {
       number = (json["number"] as num).toInt();
     }
-    if(json["message"] is String) {
+    if (json["message"] is String) {
       message = json["message"];
     }
   }
@@ -23,20 +22,17 @@ class GeneralModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["status"] = status;
-    _data["number"] = number;
-    _data["message"] = message;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["status"] = status;
+    data["number"] = number;
+    data["message"] = message;
+    return data;
   }
 
-  GeneralModel copyWith({
-    bool? status,
-    int? number,
-    String? message,
-  }) => GeneralModel(
-    status: status ?? this.status,
-    number: number ?? this.number,
-    message: message ?? this.message,
-  );
+  GeneralModel copyWith({bool? status, int? number, String? message}) =>
+      GeneralModel(
+        status: status ?? this.status,
+        number: number ?? this.number,
+        message: message ?? this.message,
+      );
 }

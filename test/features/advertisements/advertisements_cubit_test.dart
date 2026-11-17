@@ -50,14 +50,10 @@ class FakeAdvertisementsRepo implements AdvertisementsRepo {
   ];
 
   MyAdsDataModel _model() => MyAdsDataModel(
-        status: true,
-        message: 'ok',
-        data: Data(
-          ads: _seedAds
-              .map((a) => Ads.fromJson(a.toJson()))
-              .toList(),
-        ),
-      );
+    status: true,
+    message: 'ok',
+    data: Data(ads: _seedAds.map((a) => Ads.fromJson(a.toJson())).toList()),
+  );
 
   @override
   Future<Either<Failure, MyAdsDataModel>> getMyAdsData() async {
@@ -78,7 +74,9 @@ class FakeAdvertisementsRepo implements AdvertisementsRepo {
   }
 
   @override
-  Future<Either<Failure, PauseResumeAdModel>> pauseAd({required int adId}) async {
+  Future<Either<Failure, PauseResumeAdModel>> pauseAd({
+    required int adId,
+  }) async {
     pauseCalls++;
     // Small delay so concurrent callers overlap in time.
     await Future<void>.delayed(const Duration(milliseconds: 60));
@@ -95,7 +93,9 @@ class FakeAdvertisementsRepo implements AdvertisementsRepo {
   }
 
   @override
-  Future<Either<Failure, PauseResumeAdModel>> resumeAd({required int adId}) async {
+  Future<Either<Failure, PauseResumeAdModel>> resumeAd({
+    required int adId,
+  }) async {
     resumeCalls++;
     return Right(
       PauseResumeAdModel(
@@ -159,23 +159,26 @@ void main() {
     await cubit.close();
   });
 
-  test('filteredAds searches name and description case-insensitively', () async {
-    final cubit = AdvertisementsCubit(FakeAdvertisementsRepo());
-    await cubit.fetchMyAds();
+  test(
+    'filteredAds searches name and description case-insensitively',
+    () async {
+      final cubit = AdvertisementsCubit(FakeAdvertisementsRepo());
+      await cubit.fetchMyAds();
 
-    cubit.setSearchQuery('سامسونج');
-    expect(cubit.filteredAds().map((a) => a.id), [2]);
+      cubit.setSearchQuery('سامسونج');
+      expect(cubit.filteredAds().map((a) => a.id), [2]);
 
-    cubit.setSearchQuery('IPHONE');
-    expect(cubit.filteredAds().map((a) => a.id), [3]);
+      cubit.setSearchQuery('IPHONE');
+      expect(cubit.filteredAds().map((a) => a.id), [3]);
 
-    cubit.setSearchQuery('آيفون');
-    expect(cubit.filteredAds().map((a) => a.id), [3]);
+      cubit.setSearchQuery('آيفون');
+      expect(cubit.filteredAds().map((a) => a.id), [3]);
 
-    cubit.setSearchQuery('   ');
-    expect(cubit.filteredAds().length, 3);
-    await cubit.close();
-  });
+      cubit.setSearchQuery('   ');
+      expect(cubit.filteredAds().length, 3);
+      await cubit.close();
+    },
+  );
 
   test('filteredAds combines tab and search', () async {
     final cubit = AdvertisementsCubit(FakeAdvertisementsRepo());
@@ -190,24 +193,23 @@ void main() {
     await cubit.close();
   });
 
-  test('pauseAd success flips the cached ad to paused and emits success',
-      () async {
-    final repo = FakeAdvertisementsRepo();
-    final cubit = AdvertisementsCubit(repo);
-    await cubit.fetchMyAds();
+  test(
+    'pauseAd success flips the cached ad to paused and emits success',
+    () async {
+      final repo = FakeAdvertisementsRepo();
+      final cubit = AdvertisementsCubit(repo);
+      await cubit.fetchMyAds();
 
-    await cubit.pauseAd(adId: 1);
+      await cubit.pauseAd(adId: 1);
 
-    expect(repo.pauseCalls, 1);
-    expect(cubit.state, isA<PauseResumeAdSuccessState>());
-    expect(
-      cubit.allMyAdsList.firstWhere((a) => a.id == 1).isPaused,
-      isTrue,
-    );
-    expect(cubit.activeAdsCount, 1);
-    expect(cubit.inactiveAdsCount, 2);
-    await cubit.close();
-  });
+      expect(repo.pauseCalls, 1);
+      expect(cubit.state, isA<PauseResumeAdSuccessState>());
+      expect(cubit.allMyAdsList.firstWhere((a) => a.id == 1).isPaused, isTrue);
+      expect(cubit.activeAdsCount, 1);
+      expect(cubit.inactiveAdsCount, 2);
+      await cubit.close();
+    },
+  );
 
   test('resumeAd success flips the cached ad to active', () async {
     final repo = FakeAdvertisementsRepo();
@@ -218,10 +220,7 @@ void main() {
 
     expect(repo.resumeCalls, 1);
     expect(cubit.state, isA<PauseResumeAdSuccessState>());
-    expect(
-      cubit.allMyAdsList.firstWhere((a) => a.id == 2).isPaused,
-      isFalse,
-    );
+    expect(cubit.allMyAdsList.firstWhere((a) => a.id == 2).isPaused, isFalse);
     await cubit.close();
   });
 
@@ -233,10 +232,7 @@ void main() {
     await cubit.pauseAd(adId: 1);
 
     expect(cubit.state, isA<PauseResumeAdErrorState>());
-    expect(
-      cubit.allMyAdsList.firstWhere((a) => a.id == 1).isPaused,
-      isFalse,
-    );
+    expect(cubit.allMyAdsList.firstWhere((a) => a.id == 1).isPaused, isFalse);
     await cubit.close();
   });
 
@@ -253,20 +249,22 @@ void main() {
     await cubit.close();
   });
 
-  test('deleteAd success removes the ad from the list and emits success',
-      () async {
-    final repo = FakeAdvertisementsRepo();
-    final cubit = AdvertisementsCubit(repo);
-    await cubit.fetchMyAds();
+  test(
+    'deleteAd success removes the ad from the list and emits success',
+    () async {
+      final repo = FakeAdvertisementsRepo();
+      final cubit = AdvertisementsCubit(repo);
+      await cubit.fetchMyAds();
 
-    await cubit.deleteAd(adId: 1);
+      await cubit.deleteAd(adId: 1);
 
-    expect(repo.deleteCalls, 1);
-    expect(cubit.state, isA<DeleteAdSuccessState>());
-    expect(cubit.allMyAdsList.map((a) => a.id), [2, 3]);
-    expect(cubit.allAdsCount, 2);
-    await cubit.close();
-  });
+      expect(repo.deleteCalls, 1);
+      expect(cubit.state, isA<DeleteAdSuccessState>());
+      expect(cubit.allMyAdsList.map((a) => a.id), [2, 3]);
+      expect(cubit.allAdsCount, 2);
+      await cubit.close();
+    },
+  );
 
   test('deleteAd failure keeps the ad and emits error', () async {
     final repo = FakeAdvertisementsRepo()..deleteShouldFail = true;

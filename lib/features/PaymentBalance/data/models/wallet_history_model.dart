@@ -40,20 +40,18 @@ class WalletHistoryModel {
     if (raw is List) {
       history = raw
           .whereType<Map>()
-          .map((e) => WalletHistoryItem.fromJson(
-              Map<String, dynamic>.from(e)))
+          .map((e) => WalletHistoryItem.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } else if (raw is Map) {
       final map = Map<String, dynamic>.from(raw);
-      final list = map['history'] ??
-          map['transactions'] ??
-          map['data'] ??
-          map['items'];
+      final list =
+          map['history'] ?? map['transactions'] ?? map['data'] ?? map['items'];
       if (list is List) {
         history = list
             .whereType<Map>()
-            .map((e) => WalletHistoryItem.fromJson(
-                Map<String, dynamic>.from(e)))
+            .map(
+              (e) => WalletHistoryItem.fromJson(Map<String, dynamic>.from(e)),
+            )
             .toList();
       }
     }
@@ -100,18 +98,17 @@ class WalletHistoryItem {
     typeLabel = (json['type_label'] ?? json['typeLabel'] ?? json['title'])
         ?.toString();
     status = json['status']?.toString();
-    statusLabel =
-        (json['status_label'] ?? json['statusLabel'])?.toString();
-    paymentMethod =
-        (json['payment_method'] ?? json['paymentMethod'])?.toString();
-    receiptUrl =
-        (json['receipt_url'] ?? json['receiptUrl'] ?? json['receipt'])
-            ?.toString();
-    createdAt = (json['created_at'] ??
-            json['createdAt'] ??
-            json['date'] ??
-            json['created'])
+    statusLabel = (json['status_label'] ?? json['statusLabel'])?.toString();
+    paymentMethod = (json['payment_method'] ?? json['paymentMethod'])
         ?.toString();
+    receiptUrl = (json['receipt_url'] ?? json['receiptUrl'] ?? json['receipt'])
+        ?.toString();
+    createdAt =
+        (json['created_at'] ??
+                json['createdAt'] ??
+                json['date'] ??
+                json['created'])
+            ?.toString();
   }
 
   Map<String, dynamic> toJson() {

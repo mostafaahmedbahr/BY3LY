@@ -2,10 +2,7 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Premium gradient AppBar shared by the add/edit ad scaffolds.
-AppBar premiumAppBar({
-  required String title,
-  required IconData icon,
-}) {
+AppBar premiumAppBar({required String title, required IconData icon}) {
   return AppBar(
     backgroundColor: Colors.transparent,
     elevation: 0,
@@ -33,9 +30,7 @@ AppBar premiumAppBar({
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.16),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.35),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
           ),
           child: Icon(icon, color: Colors.white, size: 18),
         ),

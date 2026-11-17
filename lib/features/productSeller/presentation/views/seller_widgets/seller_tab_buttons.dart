@@ -51,8 +51,9 @@ class SellerTabButtons extends StatelessWidget {
                       boxShadow: active == _tabs[i].$1
                           ? [
                               BoxShadow(
-                                color: AppColors.mainColor
-                                    .withValues(alpha: 0.3),
+                                color: AppColors.mainColor.withValues(
+                                  alpha: 0.3,
+                                ),
                                 blurRadius: 8,
                                 offset: const Offset(0, 3),
                               ),

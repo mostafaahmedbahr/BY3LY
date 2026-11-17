@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
@@ -47,33 +48,66 @@ void refreshAllData(BuildContext context) {
   final isGuest = GuestGuard.isGuest;
 
   // Home (always).
-  _safeRefresh(context, 'HomeCubit.getHome',
-      () => context.read<HomeCubit>().getHome());
-  _safeRefresh(context, 'HomeCubit.getBanners',
-      () => context.read<HomeCubit>().getBanners());
+  _safeRefresh(
+    context,
+    'HomeCubit.getHome',
+    () => context.read<HomeCubit>().getHome(),
+  );
+  _safeRefresh(
+    context,
+    'HomeCubit.getBanners',
+    () => context.read<HomeCubit>().getBanners(),
+  );
 
   // Shared lists (always).
-  _safeRefresh(context, 'SearchCubit.getAllProductsForSearch',
-      () => context.read<SearchCubit>().getAllProductsForSearch());
-  _safeRefresh(context, 'ChooseLocationCubit.getAllCitiesAndCenters',
-      () => context.read<ChooseLocationCubit>().getAllCitiesAndCenters());
-  _safeRefresh(context, 'ReportProductCubit.getAllComplaintsTypesData',
-      () => context.read<ReportProductCubit>().getAllComplaintsTypesData());
-  _safeRefresh(context, 'SellAllBestViewCubit.getSellAllBestView',
-      () => context.read<SellAllBestViewCubit>().getSellAllBestView());
+  _safeRefresh(
+    context,
+    'SearchCubit.getAllProductsForSearch',
+    () => context.read<SearchCubit>().getAllProductsForSearch(),
+  );
+  _safeRefresh(
+    context,
+    'ChooseLocationCubit.getAllCitiesAndCenters',
+    () => context.read<ChooseLocationCubit>().getAllCitiesAndCenters(),
+  );
+  _safeRefresh(
+    context,
+    'ReportProductCubit.getAllComplaintsTypesData',
+    () => context.read<ReportProductCubit>().getAllComplaintsTypesData(),
+  );
+  _safeRefresh(
+    context,
+    'SellAllBestViewCubit.getSellAllBestView',
+    () => context.read<SellAllBestViewCubit>().getSellAllBestView(),
+  );
 
   // Account-scoped data (skip for guests to avoid 401s).
   if (!isGuest) {
-    _safeRefresh(context, 'ProfileCubit.getProfile',
-        () => context.read<ProfileCubit>().getProfile());
-    _safeRefresh(context, 'PrivacyCubit.getSettings',
-        () => context.read<PrivacyCubit>().getSettings());
-    _safeRefresh(context, 'FavCubit.getFavData',
-        () => context.read<FavCubit>().getFavData());
-    _safeRefresh(context, 'NotificationsCubit.refresh',
-        () => context.read<NotificationsCubit>().refresh());
-    _safeRefresh(context, 'ChatUnreadCubit.refresh',
-        () => context.read<ChatUnreadCubit>().refresh());
+    _safeRefresh(
+      context,
+      'ProfileCubit.getProfile',
+      () => context.read<ProfileCubit>().getProfile(),
+    );
+    _safeRefresh(
+      context,
+      'PrivacyCubit.getSettings',
+      () => context.read<PrivacyCubit>().getSettings(),
+    );
+    _safeRefresh(
+      context,
+      'FavCubit.getFavData',
+      () => context.read<FavCubit>().getFavData(),
+    );
+    _safeRefresh(
+      context,
+      'NotificationsCubit.refresh',
+      () => context.read<NotificationsCubit>().refresh(),
+    );
+    _safeRefresh(
+      context,
+      'ChatUnreadCubit.refresh',
+      () => context.read<ChatUnreadCubit>().refresh(),
+    );
   }
 }
 
@@ -81,7 +115,7 @@ void _safeRefresh(BuildContext context, String label, VoidCallback action) {
   try {
     action();
   } catch (e, s) {
-    debugPrint('refreshAllData: $label failed: $e\n$s');
+    logWarning('refreshAllData: $label failed: $e\n$s');
   }
 }
 
@@ -111,9 +145,7 @@ class ChangeLangSheet extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height * 0.9,
         ),
         child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(28),
-          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           child: ColoredBox(
             color: AppColors.surface,
             child: SingleChildScrollView(
@@ -281,10 +313,7 @@ class _LanguageSheetHero extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      AppColors.surface,
-                    ],
+                    colors: [Colors.transparent, AppColors.surface],
                   ),
                 ),
               ),
@@ -309,10 +338,7 @@ class _GlobeBadge extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xffFAB043),
-            Color(0xffE8890C),
-          ],
+          colors: [Color(0xffFAB043), Color(0xffE8890C)],
         ),
         boxShadow: [
           BoxShadow(
@@ -526,8 +552,9 @@ class _LanguageOptionState extends State<_LanguageOption>
                       boxShadow: selected
                           ? [
                               BoxShadow(
-                                color: const Color(0xffFAB043)
-                                    .withValues(alpha: 0.5),
+                                color: const Color(
+                                  0xffFAB043,
+                                ).withValues(alpha: 0.5),
                                 blurRadius: 10,
                                 offset: const Offset(0, 3),
                               ),
@@ -564,17 +591,11 @@ class _SheetHint extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.info_outline_rounded,
-            size: 16,
-            color: AppColors.accent,
-          ),
+          Icon(Icons.info_outline_rounded, size: 16, color: AppColors.accent),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

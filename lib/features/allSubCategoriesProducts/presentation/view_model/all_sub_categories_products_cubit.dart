@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/data/repos/all_sub_categories_products_repos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ import 'all_sub_categories_products_states.dart';
 class AllSubCategoriesProductsCubit
     extends Cubit<AllSubCategoriesProductsStates> {
   AllSubCategoriesProductsCubit(this.allSubCategoriesProductsRepos)
-      : super(AllSubCategoriesProductsInitState());
+    : super(AllSubCategoriesProductsInitState());
 
   static AllSubCategoriesProductsCubit get(BuildContext context) =>
       BlocProvider.of<AllSubCategoriesProductsCubit>(context);
@@ -18,22 +19,23 @@ class AllSubCategoriesProductsCubit
 
   List<Products> allSubCategoriesProductsList = [];
 
-  Future<void> getAllSubCategoriesProducts({
-    required int subCategoryId,
-  }) async {
+  Future<void> getAllSubCategoriesProducts({required int subCategoryId}) async {
     emit(GetAllSubCategoriesProductsLoading());
     final result = await allSubCategoriesProductsRepos
         .getAllSubCategoriesProductsData(subCategoryId: subCategoryId);
-    return result.fold((failure) {
-      debugPrint(
-        'AllSubCategoriesProductsCubit getAllSubCategoriesProducts failed: ${failure.errMessage}',
-      );
-      emit(GetAllSubCategoriesProductsError(failure.errMessage));
-    }, (data) {
-      allSubCategoriesProductsModel = data;
-      // Replace (not append) so a refresh never duplicates items.
-      allSubCategoriesProductsList = [...?data.data?.products];
-      emit(GetAllSubCategoriesProductsSuccess(data));
-    });
+    return result.fold(
+      (failure) {
+        logWarning(
+          'AllSubCategoriesProductsCubit getAllSubCategoriesProducts failed: ${failure.errMessage}',
+        );
+        emit(GetAllSubCategoriesProductsError(failure.errMessage));
+      },
+      (data) {
+        allSubCategoriesProductsModel = data;
+        // Replace (not append) so a refresh never duplicates items.
+        allSubCategoriesProductsList = [...?data.data?.products];
+        emit(GetAllSubCategoriesProductsSuccess(data));
+      },
+    );
   }
 }

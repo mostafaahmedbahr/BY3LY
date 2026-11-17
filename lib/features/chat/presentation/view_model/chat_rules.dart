@@ -13,7 +13,12 @@ class ChatRules {
   static const int maxImageBytes = 5 * 1024 * 1024;
 
   /// Image extensions the backend accepts.
-  static const Set<String> allowedImageExtensions = {'jpg', 'jpeg', 'png', 'webp'};
+  static const Set<String> allowedImageExtensions = {
+    'jpg',
+    'jpeg',
+    'png',
+    'webp',
+  };
 
   /// Returns the lower-cased extension of [path], without the leading dot.
   /// Returns an empty string when there is no extension.
@@ -28,7 +33,8 @@ class ChatRules {
       allowedImageExtensions.contains(imageExtension(path));
 
   /// True when [bytes] fits the server's per-image limit.
-  static bool isAllowedImageSize(int bytes) => bytes >= 0 && bytes <= maxImageBytes;
+  static bool isAllowedImageSize(int bytes) =>
+      bytes >= 0 && bytes <= maxImageBytes;
 
   /// Sorts messages so the newest (highest id) is first.
   static List<ChatMessageModel> sortedMessagesDesc(
@@ -78,9 +84,9 @@ class ChatRules {
   static List<ChatMessageModel> markAllMessagesRead(
     List<ChatMessageModel> messages,
   ) => [
-        for (final m in messages)
-          if (m.isRead == true) m else m.copyWith(isRead: true),
-      ];
+    for (final m in messages)
+      if (m.isRead == true) m else m.copyWith(isRead: true),
+  ];
 
   /// Returns only the file when it exists and satisfies the size limit,
   /// or null otherwise; used by the image send flow.

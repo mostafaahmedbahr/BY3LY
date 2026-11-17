@@ -6,7 +6,7 @@ import 'change_password_states.dart';
 
 class ChangePasswordCubit extends Cubit<ChangePasswordStates> {
   ChangePasswordCubit(this.changePasswordRepo)
-      : super(ChangePasswordInitState());
+    : super(ChangePasswordInitState());
 
   static ChangePasswordCubit get(BuildContext context) =>
       BlocProvider.of<ChangePasswordCubit>(context);

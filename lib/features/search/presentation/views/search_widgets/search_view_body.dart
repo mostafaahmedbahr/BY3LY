@@ -103,20 +103,19 @@ class _SearchViewBodyState extends State<SearchViewBody> {
         if (filter.maxPrice != null && price > filter.maxPrice!) return false;
       }
       if (filter.cityId != null) {
-        final cityMatch = _matchesId(p.cityId, filter.cityId!) ||
+        final cityMatch =
+            _matchesId(p.cityId, filter.cityId!) ||
             (filter.cityName != null &&
-                (p.location?.toString() ?? '')
-                    .contains(filter.cityName!));
+                (p.location?.toString() ?? '').contains(filter.cityName!));
         if (!cityMatch) return false;
         if (filter.centerId != null) {
-          final centerOk = _matchesId(p.centerId, filter.centerId!) ||
+          final centerOk =
+              _matchesId(p.centerId, filter.centerId!) ||
               (filter.centerName != null &&
-                  (p.location?.toString() ?? '')
-                      .contains(filter.centerName!));
+                  (p.location?.toString() ?? '').contains(filter.centerName!));
           if (!centerOk) return false;
         } else if (filter.centerName != null &&
-            !(p.location?.toString() ?? '')
-                .contains(filter.centerName!)) {
+            !(p.location?.toString() ?? '').contains(filter.centerName!)) {
           return false;
         }
       }
@@ -200,7 +199,9 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                             boxShadow: [
                               BoxShadow(
                                 color: active
-                                    ? AppColors.mainColor.withValues(alpha: 0.30)
+                                    ? AppColors.mainColor.withValues(
+                                        alpha: 0.30,
+                                      )
                                     : Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
@@ -261,10 +262,10 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                 }
 
                 final filter = cubit.searchFilter;
-                final items =
-                    _filtered(cubit.allProductsForSearchList, filter);
-                final hasActiveSearch =
-                    _searchController.text.trim().isNotEmpty;
+                final items = _filtered(cubit.allProductsForSearchList, filter);
+                final hasActiveSearch = _searchController.text
+                    .trim()
+                    .isNotEmpty;
 
                 return Column(
                   children: [
@@ -278,7 +279,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                           children: [
                             if (filter.categoryId != null)
                               _ActiveFilterChip(
-                                label: filter.categoryName ??
+                                label:
+                                    filter.categoryName ??
                                     '${filter.categoryId}',
                                 onDeleted: () => cubit.applySearchFilter(
                                   filter.copyWith(
@@ -289,7 +291,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                               ),
                             if (filter.subCategoryId != null)
                               _ActiveFilterChip(
-                                label: filter.subCategoryName ??
+                                label:
+                                    filter.subCategoryName ??
                                     '${filter.subCategoryId}',
                                 onDeleted: () => cubit.applySearchFilter(
                                   filter.copyWith(clearSubCategory: true),
@@ -366,8 +369,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                     textAlign: TextAlign.center,
                                     style: AppStyles.textStyle14W500White
                                         .copyWith(
-                                      color: AppColors.textSecondary,
-                                    ),
+                                          color: AppColors.textSecondary,
+                                        ),
                                   ),
                                   const CustomSizedBox(height: 12),
                                   if (hasActiveSearch || !filter.isEmpty)
@@ -389,7 +392,8 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                             )
                           : ListView.separated(
                               controller: _scrollController,
-                              itemCount: items.length +
+                              itemCount:
+                                  items.length +
                                   ((cubit.isLoadingMore ||
                                           state
                                               is GetAllProductsForSearchPaginationError)
@@ -401,19 +405,22 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                       is GetAllProductsForSearchPaginationError) {
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
+                                        vertical: 16,
+                                      ),
                                       child: Column(
                                         children: [
                                           Text(
                                             state.message,
                                             textAlign: TextAlign.center,
                                             style: const TextStyle(
-                                                fontSize: 12),
+                                              fontSize: 12,
+                                            ),
                                           ),
                                           TextButton(
-                                            onPressed: () => cubit
-                                                .getAllProductsForSearch(
-                                                    loadMore: true),
+                                            onPressed: () =>
+                                                cubit.getAllProductsForSearch(
+                                                  loadMore: true,
+                                                ),
                                             child: Text(
                                               context.tr(LocaleKeys.search),
                                               style: TextStyle(
@@ -426,21 +433,19 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                     );
                                   }
                                   return const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 16),
+                                    padding: EdgeInsets.symmetric(vertical: 16),
                                     child: Center(
                                       child: SizedBox(
                                         width: 28,
                                         height: 28,
-                                        child:
-                                            CircularProgressIndicator(
-                                                strokeWidth: 2.5),
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                        ),
                                       ),
                                     ),
                                   );
                                 }
-                                return SearchItemWidget(
-                                    product: items[index]);
+                                return SearchItemWidget(product: items[index]);
                               },
                               separatorBuilder: (context, index) {
                                 return const CustomSizedBox(height: 20);
@@ -469,10 +474,7 @@ class _ActiveFilterChip extends StatelessWidget {
     return Chip(
       label: Text(
         label,
-        style: const TextStyle(
-          color: AppColors.whiteColor,
-          fontSize: 12,
-        ),
+        style: const TextStyle(color: AppColors.whiteColor, fontSize: 12),
       ),
       backgroundColor: AppColors.mainColor,
       deleteIcon: const Icon(
@@ -481,9 +483,7 @@ class _ActiveFilterChip extends StatelessWidget {
         color: AppColors.whiteColor,
       ),
       onDeleted: onDeleted,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       padding: EdgeInsets.zero,
     );
   }

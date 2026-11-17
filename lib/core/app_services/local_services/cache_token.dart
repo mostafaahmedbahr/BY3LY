@@ -7,8 +7,10 @@ class CacheTokenManger {
   // Method to save the token
   static Future<void> saveUserToken(String token) async {
     userToken = token; // Store token in the static variable
-    await SecureStorageService.instance
-        .writeData(key: 'userToken', value: token); // Store securely
+    await SecureStorageService.instance.writeData(
+      key: 'userToken',
+      value: token,
+    ); // Store securely
   }
 
   // Method to retrieve the token
@@ -18,8 +20,9 @@ class CacheTokenManger {
       return userToken;
     }
     // If token is not in the static variable, get it from secure storage
-    String? token =
-        await SecureStorageService.instance.readData(key: 'userToken');
+    String? token = await SecureStorageService.instance.readData(
+      key: 'userToken',
+    );
     userToken = token; // Store the token in the variable for future use
     return token;
   }
@@ -27,7 +30,8 @@ class CacheTokenManger {
   // Method to clear the stored token
   static Future<void> clearUserToken() async {
     userToken = null; // Clear the token from the static variable
-    await SecureStorageService.instance
-        .deleteData(key: 'userToken'); // Remove it from secure storage
+    await SecureStorageService.instance.deleteData(
+      key: 'userToken',
+    ); // Remove it from secure storage
   }
 }

@@ -16,11 +16,10 @@ class HowToMakePurchaseViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HowToMakePurchaseCubit(
-          getIt.get<HowToMakePurchaseRepoImpl>())
-        ..getHowToMakePurchaseData(),
-      child: BlocBuilder<HowToMakePurchaseCubit,
-          HowToMakePurchaseStates>(
+      create: (context) =>
+          HowToMakePurchaseCubit(getIt.get<HowToMakePurchaseRepoImpl>())
+            ..getHowToMakePurchaseData(),
+      child: BlocBuilder<HowToMakePurchaseCubit, HowToMakePurchaseStates>(
         builder: (context, state) {
           final cubit = HowToMakePurchaseCubit.get(context);
 

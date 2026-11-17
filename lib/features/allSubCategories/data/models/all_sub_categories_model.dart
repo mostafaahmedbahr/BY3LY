@@ -59,16 +59,17 @@ class Data {
     subCategories = json["subCategories"] == null
         ? null
         : (json["subCategories"] as List)
-            .whereType<Map<String, dynamic>>()
-            .map((e) => SubCategories.fromJson(e))
-            .toList();
+              .whereType<Map<String, dynamic>>()
+              .map((e) => SubCategories.fromJson(e))
+              .toList();
   }
 
   Map<String, dynamic> toJson() {
     final jsonData = <String, dynamic>{};
     if (subCategories != null) {
-      jsonData["subCategories"] =
-          subCategories?.map((e) => e.toJson()).toList();
+      jsonData["subCategories"] = subCategories
+          ?.map((e) => e.toJson())
+          .toList();
     }
     return jsonData;
   }

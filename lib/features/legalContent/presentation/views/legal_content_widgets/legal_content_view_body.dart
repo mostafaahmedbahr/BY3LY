@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/last_updated_label.dart';
@@ -22,9 +23,9 @@ class LegalContentViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LegalContentCubit(
-        getIt.get<LegalContentRepoImpl>(),
-      )..getLegalContent(type),
+      create: (context) =>
+          LegalContentCubit(getIt.get<LegalContentRepoImpl>())
+            ..getLegalContent(type),
       child: BlocBuilder<LegalContentCubit, LegalContentStates>(
         builder: (context, state) {
           final cubit = LegalContentCubit.get(context);
@@ -58,8 +59,9 @@ class LegalContentViewBody extends StatelessWidget {
           // The page title lives in the app bar and the HTML starts with its
           // own heading, so only the body is rendered here.
           return Directionality(
-            textDirection:
-                (data?.isRtl ?? true) ? TextDirection.rtl : TextDirection.ltr,
+            textDirection: (data?.isRtl ?? true)
+                ? TextDirection.rtl
+                : TextDirection.ltr,
             child: RefreshIndicator(
               color: AppColors.accent,
               backgroundColor: AppColors.surface,
@@ -95,7 +97,9 @@ class LegalContentViewBody extends StatelessWidget {
                             mode: LaunchMode.externalApplication,
                           );
                         } catch (e) {
-                          debugPrint('LegalContentViewBody: link tap failed — $e');
+                          logWarning(
+                            'LegalContentViewBody: link tap failed — $e',
+                          );
                         }
                       },
                       style: {
@@ -133,9 +137,7 @@ class LegalContentViewBody extends StatelessWidget {
                           color: AppColors.mainColor,
                           textDecoration: TextDecoration.underline,
                         ),
-                        'hr': Style(
-                          color: AppColors.border,
-                        ),
+                        'hr': Style(color: AppColors.border),
                         'li': Style(
                           fontSize: FontSize(14),
                           lineHeight: const LineHeight(1.8),

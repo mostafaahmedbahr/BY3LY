@@ -19,10 +19,7 @@ class InstapaySheet extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => const SafeArea(
-        top: false,
-        child: InstapaySheet(),
-      ),
+      builder: (_) => const SafeArea(top: false, child: InstapaySheet()),
     );
   }
 
@@ -139,9 +136,9 @@ class _InfoRow extends StatelessWidget {
             color: AppColors.mainColor,
             onPressed: () {
               Clipboard.setData(ClipboardData(text: copyLabel));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(copiedMessage)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(copiedMessage)));
             },
           ),
         ],

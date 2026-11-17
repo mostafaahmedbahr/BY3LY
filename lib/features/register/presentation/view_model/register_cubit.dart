@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:io';
 import 'package:by3ly/features/register/presentation/view_model/register_states.dart';
 import 'package:dio/dio.dart';
@@ -55,7 +56,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
         emit(UploadImageSuccessState());
       }
     } catch (e) {
-      debugPrint("Error picking image: $e");
+      logWarning("Error picking image: $e");
       emit(UploadImageErrorState());
     }
   }
@@ -85,21 +86,24 @@ class RegisterCubit extends Cubit<RegisterStates> {
         "password": password,
         "center_id": 1,
         "city_id": 1,
-        "age" : age
+        "age": age,
       }),
     );
-    return result.fold((failure) {
-      emit(SignUpError(failure.errMessage));
-    }, (data) async {
-      if (data.status == true) {
-        signUpModel = data;
-        final resolvedEmail = data.data?.resolvedEmail ?? email;
-        await CacheHelper.saveData(key: "email", value: resolvedEmail);
-        emit(SignUpSuccess(data));
-      } else {
-        emit(SignUpError(data.message.toString()));
-      }
-    });
+    return result.fold(
+      (failure) {
+        emit(SignUpError(failure.errMessage));
+      },
+      (data) async {
+        if (data.status == true) {
+          signUpModel = data;
+          final resolvedEmail = data.data?.resolvedEmail ?? email;
+          await CacheHelper.saveData(key: "email", value: resolvedEmail);
+          emit(SignUpSuccess(data));
+        } else {
+          emit(SignUpError(data.message.toString()));
+        }
+      },
+    );
   }
 
   void clearData() {

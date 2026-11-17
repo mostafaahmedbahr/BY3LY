@@ -39,20 +39,25 @@ class LoginButtonsWidget extends StatelessWidget {
           FocusScope.of(context).unfocus();
           context.pushNamedAndRemoveAll(Routes.layoutView);
           Toast.showSuccessToast(
-              msg: state.loginModel.message?.trim().isNotEmpty == true
-                  ? state.loginModel.message!
-                  : context.tr(LocaleKeys.loginSuccess),
-              context: context);
+            msg: state.loginModel.message?.trim().isNotEmpty == true
+                ? state.loginModel.message!
+                : context.tr(LocaleKeys.loginSuccess),
+            context: context,
+          );
         } else if (state is LoginSuccessWithNoActiveState) {
-          context.pushNamed(Routes.otpView,
-              arguments: CacheHelper.getData(key: "email"));
+          context.pushNamed(
+            Routes.otpView,
+            arguments: CacheHelper.getData(key: "email"),
+          );
           final codeSuffix = state.code == null
               ? ''
               : ' ${LocaleKeys.code.tr()} : ${state.code}';
           Toast.showSuccessToast(
-              duration: const Duration(seconds: 10),
-              msg: '${LocaleKeys.theActivationCodeHasBeenSentToYourEmailAddress.tr()}$codeSuffix',
-              context: context);
+            duration: const Duration(seconds: 10),
+            msg:
+                '${LocaleKeys.theActivationCodeHasBeenSentToYourEmailAddress.tr()}$codeSuffix',
+            context: context,
+          );
         } else if (state is LoginErrorState) {
           Toast.showErrorToast(msg: state.error, context: context);
         }
@@ -79,9 +84,8 @@ class LoginButtonsWidget extends StatelessWidget {
                         loginCubit.login(
                           phone: loginCubit.phoneCon.text,
                           password: loginCubit.passwordCon.text,
-                          deviceToken: CacheHelper.getData(
-                                key: StorageKeys.fcmToken,
-                              ) ??
+                          deviceToken:
+                              CacheHelper.getData(key: StorageKeys.fcmToken) ??
                               '',
                         );
                       }
@@ -98,7 +102,9 @@ class LoginButtonsWidget extends StatelessWidget {
               // "or" divider between the two CTAs blocks.
               Row(
                 children: [
-                  Expanded(child: Divider(color: AppColors.border, thickness: 1)),
+                  Expanded(
+                    child: Divider(color: AppColors.border, thickness: 1),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
@@ -111,7 +117,9 @@ class LoginButtonsWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(child: Divider(color: AppColors.border, thickness: 1)),
+                  Expanded(
+                    child: Divider(color: AppColors.border, thickness: 1),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -168,10 +176,7 @@ class _PrimaryCta extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.mainColor,
-              AppColors.secondColor,
-            ],
+            colors: [AppColors.mainColor, AppColors.secondColor],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),

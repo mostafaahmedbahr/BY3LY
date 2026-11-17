@@ -95,8 +95,7 @@ class PremiumHeroHeader extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               context.tr(LocaleKeys.addNewAd),
@@ -115,8 +114,7 @@ class PremiumHeroHeader extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color:
-                                    Colors.white.withValues(alpha: 0.85),
+                                color: Colors.white.withValues(alpha: 0.85),
                                 fontSize: 11,
                                 height: 1.3,
                               ),
@@ -154,8 +152,7 @@ class PremiumHeroHeader extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: pct,
                       minHeight: 7,
-                      backgroundColor:
-                          Colors.white.withValues(alpha: 0.22),
+                      backgroundColor: Colors.white.withValues(alpha: 0.22),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         AppColors.yellowColor,
                       ),

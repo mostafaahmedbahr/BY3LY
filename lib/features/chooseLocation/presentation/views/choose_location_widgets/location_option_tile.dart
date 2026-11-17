@@ -51,10 +51,7 @@ class LocationOptionTile extends StatelessWidget {
                   ? const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.mainColor,
-                        AppColors.secondColor,
-                      ],
+                      colors: [AppColors.mainColor, AppColors.secondColor],
                     )
                   : null,
               color: selected ? null : AppColors.surfaceVariant,
@@ -67,8 +64,7 @@ class LocationOptionTile extends StatelessWidget {
               boxShadow: selected
                   ? [
                       BoxShadow(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.35),
+                        color: AppColors.mainColor.withValues(alpha: 0.35),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -87,9 +83,7 @@ class LocationOptionTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: selected
-                          ? Colors.white
-                          : AppColors.text,
+                      color: selected ? Colors.white : AppColors.text,
                     ),
                   ),
                 ),

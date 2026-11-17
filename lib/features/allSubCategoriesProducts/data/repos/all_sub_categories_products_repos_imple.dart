@@ -1,38 +1,36 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/errors/failure.dart';
- import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 
 import '../models/all_sub_categories_products_model.dart';
 import 'all_sub_categories_products_repos.dart';
 
-
-class AllSubCategoriesProductsReposImpl implements AllSubCategoriesProductsRepos {
+class AllSubCategoriesProductsReposImpl
+    implements AllSubCategoriesProductsRepos {
   final ApiService apiService;
 
   AllSubCategoriesProductsReposImpl(this.apiService);
 
-
   @override
-  Future<Either<Failure, AllSubCategoriesProductsModel>> getAllSubCategoriesProductsData({
-    required int subCategoryId,
-}) async{
+  Future<Either<Failure, AllSubCategoriesProductsModel>>
+  getAllSubCategoriesProductsData({required int subCategoryId}) async {
     try {
       var response = await apiService.getData(
         endPoint: EndPoints.productBySubCategory,
-        
-        query: {
-          "sub_category_id" : subCategoryId,
-        },
+
+        query: {"sub_category_id": subCategoryId},
       );
-      AllSubCategoriesProductsModel result = AllSubCategoriesProductsModel.fromJson(response.data);
+      AllSubCategoriesProductsModel result =
+          AllSubCategoriesProductsModel.fromJson(response.data);
       return right(result);
     } catch (e, s) {
-      debugPrint(
-          'AllSubCategoriesProductsReposImpl getAllSubCategoriesProductsData error: $e');
-      debugPrint(s.toString());
+      logWarning(
+        'AllSubCategoriesProductsReposImpl getAllSubCategoriesProductsData error: $e',
+      );
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -40,7 +38,4 @@ class AllSubCategoriesProductsReposImpl implements AllSubCategoriesProductsRepos
       }
     }
   }
-
-
-
 }

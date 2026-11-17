@@ -15,11 +15,9 @@ class ChooseLocationReposImpl implements ChooseLocationRepos {
 
   @override
   Future<Either<Failure, AllCitiesAndCentersModel>>
-      getAllCitiesAndCentersData() async {
+  getAllCitiesAndCentersData() async {
     try {
-      final response = await apiService.getData(
-        endPoint: EndPoints.getCities,
-      );
+      final response = await apiService.getData(endPoint: EndPoints.getCities);
       final result = AllCitiesAndCentersModel.fromJson(response.data);
       return right(result);
     } catch (e) {
@@ -31,18 +29,14 @@ class ChooseLocationReposImpl implements ChooseLocationRepos {
   }
 
   @override
-  Future<Either<Failure, ChooseLocationModel>>
-      chooseLocationCityAndCenter({
+  Future<Either<Failure, ChooseLocationModel>> chooseLocationCityAndCenter({
     required int cityId,
     required int centerId,
   }) async {
     try {
       final response = await apiService.postData(
         endPoint: EndPoints.addLocation,
-        data: {
-          'city_id': cityId,
-          'center_id': centerId,
-        },
+        data: {'city_id': cityId, 'center_id': centerId},
       );
       final result = ChooseLocationModel.fromJson(response.data);
       return right(result);

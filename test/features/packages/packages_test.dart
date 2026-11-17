@@ -24,56 +24,68 @@ class FakePackagesRepos implements PackagesRepos {
   Future<Either<Failure, PackagesModel>> getPackages() async {
     getPackagesCalls++;
     if (failGetPackages) return Left(ServerFailure('offline'));
-    return Right(PackagesModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'packages': [
-          {
-            'id': 1,
-            'code': 'p1',
-            'name': 'باقة مميزة',
-            'description': 'الأفضل لك',
-            'price': 499,
-            'currency': 'EGP',
-            'duration_days': 30,
-            'ads_limit': 10,
-            'is_free': false,
-            'is_subscriped': false,
-            'features': ['ميزة أ', 'ميزة ب'],
-          },
-          {
-            'id': 2,
-            'code': 'p2',
-            'name': 'باقة سنوية',
-            'description': '',
-            'price': 5999,
-            'currency': 'EGP',
-            'duration_days': 360,
-            'ads_limit': 50,
-            'is_free': true,
-            'is_subscriped': true,
-            'ends_at': '2026-12-31',
-            'remaining_ads': 12,
-          },
-        ],
-      },
-    }));
+    return Right(
+      PackagesModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'packages': [
+            {
+              'id': 1,
+              'code': 'p1',
+              'name': 'باقة مميزة',
+              'description': 'الأفضل لك',
+              'price': 499,
+              'currency': 'EGP',
+              'duration_days': 30,
+              'ads_limit': 10,
+              'is_free': false,
+              'is_subscriped': false,
+              'features': ['ميزة أ', 'ميزة ب'],
+            },
+            {
+              'id': 2,
+              'code': 'p2',
+              'name': 'باقة سنوية',
+              'description': '',
+              'price': 5999,
+              'currency': 'EGP',
+              'duration_days': 360,
+              'ads_limit': 50,
+              'is_free': true,
+              'is_subscriped': true,
+              'ends_at': '2026-12-31',
+              'remaining_ads': 12,
+            },
+          ],
+        },
+      }),
+    );
   }
 
   @override
   Future<Either<Failure, PaymentMethodsModel>> getPaymentMethods() async {
     getPaymentMethodsCalls++;
-    return Right(PaymentMethodsModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'methods': [
-          {'code': 'vodafone_cash', 'name': 'فودافون كاش', 'account': '01000000000'},
-          {'code': 'instapay', 'name': 'انستاباي', 'account': 'instapay@by3ly'},
-        ],
-      },
-    }));
+    return Right(
+      PaymentMethodsModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'methods': [
+            {
+              'code': 'vodafone_cash',
+              'name': 'فودافون كاش',
+              'account': '01000000000',
+            },
+            {
+              'code': 'instapay',
+              'name': 'انستاباي',
+              'account': 'instapay@by3ly',
+            },
+          ],
+        },
+      }),
+    );
   }
 
   @override
@@ -87,11 +99,13 @@ class FakePackagesRepos implements PackagesRepos {
     lastCheckoutMethod = paymentMethod;
     lastCheckoutReceipt = receiptPath;
     if (failCheckout) return Left(ServerFailure('rejected'));
-    return Right(SubscribePackageModel.fromJson({
-      'status': true,
-      'message': 'تم الاشتراك بنجاح',
-      'data': {'subscription_id': 100, 'package_id': packageId},
-    }));
+    return Right(
+      SubscribePackageModel.fromJson({
+        'status': true,
+        'message': 'تم الاشتراك بنجاح',
+        'data': {'subscription_id': 100, 'package_id': packageId},
+      }),
+    );
   }
 }
 
@@ -130,7 +144,7 @@ void main() {
     });
 
     test('durationMonths maps 90→3, 180→6, 365→12', () {
-      final mk = (int d) => Packages.fromJson({'duration_days': d});
+      Packages mk(int d) => Packages.fromJson({'duration_days': d});
       expect(mk(30).durationMonths, 1);
       expect(mk(90).durationMonths, 3);
       expect(mk(180).durationMonths, 6);
@@ -147,7 +161,10 @@ void main() {
           42,
         ],
       });
-      expect(p.features!.length, 4); // non-strings are stringified by the tolerant parser
+      expect(
+        p.features!.length,
+        4,
+      ); // non-strings are stringified by the tolerant parser
       expect(p.features!.first, 'نقطة أولى');
     });
   });
@@ -239,19 +256,22 @@ void main() {
       expect(repo.checkoutCalls, 0);
     });
 
-    test('paymentMethods endpoints fetched once and selected automatically', () async {
-      PackagesCubit.cachedMethods = null;
-      final repo = FakePackagesRepos();
-      final cubit = PackagesCubit(repo);
+    test(
+      'paymentMethods endpoints fetched once and selected automatically',
+      () async {
+        PackagesCubit.cachedMethods = null;
+        final repo = FakePackagesRepos();
+        final cubit = PackagesCubit(repo);
 
-      await cubit.getPaymentMethods();
+        await cubit.getPaymentMethods();
 
-      expect(repo.getPaymentMethodsCalls, 1);
-      expect(cubit.paymentMethods.length, 2);
-      expect(cubit.selectedMethod?.code, 'vodafone_cash');
+        expect(repo.getPaymentMethodsCalls, 1);
+        expect(cubit.paymentMethods.length, 2);
+        expect(cubit.selectedMethod?.code, 'vodafone_cash');
 
-      PackagesCubit.cachedMethods = null;
-    });
+        PackagesCubit.cachedMethods = null;
+      },
+    );
 
     test('checkout failure emits error state with package id', () async {
       final repo = FakePackagesRepos()..failCheckout = true;

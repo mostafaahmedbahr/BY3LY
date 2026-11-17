@@ -94,7 +94,10 @@ class Settings {
 
   Settings.fromJson(Map<String, dynamic> json) {
     contactMethod = _asString(json["contact_method"]);
-    contactMethods = _parseList(json["contact_methods"], ContactMethods.fromJson);
+    contactMethods = _parseList(
+      json["contact_methods"],
+      ContactMethods.fromJson,
+    );
     canChat = _asBool(json["can_chat"]);
     canCall = _asBool(json["can_call"]);
     contactPhone = _asString(json["contact_phone"]);

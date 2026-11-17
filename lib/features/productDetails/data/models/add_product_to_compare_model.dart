@@ -1,4 +1,3 @@
-
 class AddProductToCompareModel {
   bool? status;
   String? message;
@@ -9,14 +8,16 @@ class AddProductToCompareModel {
   AddProductToCompareModel.fromJson(Map<String, dynamic> json) {
     status = json["status"];
     message = json["message"];
-    data = json["data"] == null ? null : (json["data"] as List).map((e) => Data.fromJson(e)).toList();
+    data = json["data"] == null
+        ? null
+        : (json["data"] as List).map((e) => Data.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["status"] = status;
     jsonData["message"] = message;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data?.map((e) => e.toJson()).toList();
     }
     return jsonData;
@@ -52,7 +53,35 @@ class Data {
   String? address;
   String? createdAt;
 
-  Data({this.id, this.uniqueNumber, this.name, this.desc, this.price, this.image, this.images, this.rate, this.sellerRate, this.countCommenets, this.commenets, this.isFavourite, this.model, this.marka, this.type, this.view, this.sellerId, this.sellerName, this.sellerImage, this.sellerPhone, this.lat, this.long, this.status, this.negotiable, this.communication, this.address, this.createdAt});
+  Data({
+    this.id,
+    this.uniqueNumber,
+    this.name,
+    this.desc,
+    this.price,
+    this.image,
+    this.images,
+    this.rate,
+    this.sellerRate,
+    this.countCommenets,
+    this.commenets,
+    this.isFavourite,
+    this.model,
+    this.marka,
+    this.type,
+    this.view,
+    this.sellerId,
+    this.sellerName,
+    this.sellerImage,
+    this.sellerPhone,
+    this.lat,
+    this.long,
+    this.status,
+    this.negotiable,
+    this.communication,
+    this.address,
+    this.createdAt,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = (json["id"] as num).toInt();
@@ -61,7 +90,9 @@ class Data {
     desc = json["desc"];
     price = json["price"];
     image = json["image"];
-    images = json["images"] == null ? null : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
     rate = (json["rate"] as num).toInt();
     sellerRate = (json["seller_rate"] as num).toInt();
     countCommenets = (json["countCommenets"] as num).toInt();
@@ -92,13 +123,13 @@ class Data {
     jsonData["desc"] = desc;
     jsonData["price"] = price;
     jsonData["image"] = image;
-    if(images != null) {
+    if (images != null) {
       jsonData["images"] = images?.map((e) => e.toJson()).toList();
     }
     jsonData["rate"] = rate;
     jsonData["seller_rate"] = sellerRate;
     jsonData["countCommenets"] = countCommenets;
-    if(commenets != null) {
+    if (commenets != null) {
       jsonData["commenets"] = commenets;
     }
     jsonData["isFavourite"] = isFavourite;

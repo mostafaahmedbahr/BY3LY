@@ -41,23 +41,29 @@ class FakeLoginRepo extends LoginRepoImpl {
     required String deviceToken,
   }) async {
     calls++;
-    lastPayload = {'phone': phone, 'password': password, 'deviceToken': deviceToken};
+    lastPayload = {
+      'phone': phone,
+      'password': password,
+      'deviceToken': deviceToken,
+    };
     if (shouldFail) return Left(ServerFailure('offline'));
-    return Right(LoginModel.fromJson({
-      'status': status,
-      'message': message,
-      'data': {
-        'isActive': isActive,
-        'requires_otp': requiresOtp,
-        'user': {
-          'id': 5,
-          'name': 'Ahmed',
-          'email': 'a@b.com',
-          'phone': phone,
-          'token': 'tok-1',
+    return Right(
+      LoginModel.fromJson({
+        'status': status,
+        'message': message,
+        'data': {
+          'isActive': isActive,
+          'requires_otp': requiresOtp,
+          'user': {
+            'id': 5,
+            'name': 'Ahmed',
+            'email': 'a@b.com',
+            'phone': phone,
+            'token': 'tok-1',
+          },
         },
-      },
-    }));
+      }),
+    );
   }
 }
 
@@ -92,8 +98,9 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     await CacheHelper.init();
     await EasyLocalization.ensureInitialized();
-    const secureChannel =
-        MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+    const secureChannel = MethodChannel(
+      'plugins.it_nomads.com/flutter_secure_storage',
+    );
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(secureChannel, (call) async => null);
   });
@@ -156,7 +163,11 @@ void main() {
       final repo = FakeLoginRepo();
       final cubit = LoginCubit(repo);
 
-      await cubit.login(phone: '01000000000', password: '12345678', deviceToken: 'dev-token');
+      await cubit.login(
+        phone: '01000000000',
+        password: '12345678',
+        deviceToken: 'dev-token',
+      );
 
       expect(cubit.state, isA<LoginSuccessState>());
       expect(repo.calls, 1);
@@ -168,7 +179,11 @@ void main() {
       final repo = FakeLoginRepo(isActive: false);
       final cubit = LoginCubit(repo);
 
-      await cubit.login(phone: '01000000000', password: '12345678', deviceToken: 'dev-token');
+      await cubit.login(
+        phone: '01000000000',
+        password: '12345678',
+        deviceToken: 'dev-token',
+      );
 
       expect(cubit.state, isA<LoginSuccessWithNoActiveState>());
       expect(CacheHelper.getData(key: 'email'), 'a@b.com');
@@ -176,10 +191,17 @@ void main() {
     });
 
     test('status false surfaces server message', () async {
-      final repo = FakeLoginRepo(status: false, message: 'بيانات الدخول غير صحيحة');
+      final repo = FakeLoginRepo(
+        status: false,
+        message: 'بيانات الدخول غير صحيحة',
+      );
       final cubit = LoginCubit(repo);
 
-      await cubit.login(phone: '01000000000', password: 'xxx', deviceToken: 'dev-token');
+      await cubit.login(
+        phone: '01000000000',
+        password: 'xxx',
+        deviceToken: 'dev-token',
+      );
 
       expect(cubit.state, isA<LoginErrorState>());
       expect((cubit.state as LoginErrorState).error, 'بيانات الدخول غير صحيحة');
@@ -189,7 +211,11 @@ void main() {
       final repo = FakeLoginRepo(shouldFail: true);
       final cubit = LoginCubit(repo);
 
-      await cubit.login(phone: '01000000000', password: 'xxx', deviceToken: 'dev-token');
+      await cubit.login(
+        phone: '01000000000',
+        password: 'xxx',
+        deviceToken: 'dev-token',
+      );
 
       expect(cubit.state, isA<LoginErrorState>());
       expect((cubit.state as LoginErrorState).error, 'offline');
@@ -207,8 +233,7 @@ void main() {
   });
 
   group('LoginView', () {
-    testWidgets('renders titles, CTA buttons and legal footer',
-        (tester) async {
+    testWidgets('renders titles, CTA buttons and legal footer', (tester) async {
       final repo = FakeLoginRepo();
       if (getIt.isRegistered<LoginRepoImpl>()) {
         await getIt.unregister<LoginRepoImpl>();
@@ -221,8 +246,7 @@ void main() {
       expect(find.text('تسجيل الدخول'), findsOneWidget);
       expect(find.text('إنشاء حساب جديد'), findsOneWidget);
       expect(find.text('الدخول كزائر'), findsOneWidget);
-      expect(find.text('هتبيع وتشترى بكل سهولة وسرعة وأمان'),
-          findsOneWidget);
+      expect(find.text('هتبيع وتشترى بكل سهولة وسرعة وأمان'), findsOneWidget);
     });
   });
 }

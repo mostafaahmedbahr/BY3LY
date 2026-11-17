@@ -1,3 +1,3 @@
-abstract class AddBalanceStates{}
+abstract class AddBalanceStates {}
 
-class AddBalanceInitState extends AddBalanceStates{}
+class AddBalanceInitState extends AddBalanceStates {}

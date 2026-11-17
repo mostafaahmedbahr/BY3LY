@@ -60,10 +60,7 @@ class SellerProductsList extends StatelessWidget {
                   onTap: () {
                     context.pushNamed(
                       Routes.productDetailsView,
-                      arguments: {
-                        'type': 'home',
-                        'productId': item.id ?? 0,
-                      },
+                      arguments: {'type': 'home', 'productId': item.id ?? 0},
                     );
                   },
                 ),

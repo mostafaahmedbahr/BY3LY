@@ -1,0 +1,57 @@
+﻿Analyzing by3ly...                                              
+
+   info - Missing type annotation. Try adding a type annotation - lib\core\app_services\local_services\cache_helper.dart:6:10 - strict_top_level_inference
+   info - Angle brackets will be interpreted as HTML. Try using backticks around the content with angle brackets, or try replacing `<` with `&lt;` and `>` with `&gt;` - lib\core\app_services\remote_services\end_points.dart:58:43 - unintended_html_in_doc_comment
+   info - Missing type annotation. Try adding a type annotation - lib\core\extensions\navigate.dart:24:20 - strict_top_level_inference
+   info - The local variable '_data' starts with an underscore. Try renaming the variable to not start with an underscore - lib\core\general_models\general_model.dart:26:32 - no_leading_underscores_for_local_identifiers
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_button.dart:6:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_divider.dart:5:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_drop_down.dart:17:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_loading.dart:6:9 - use_super_parameters
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_sized_box.dart:3:9 - use_super_parameters
+   info - The import of 'package:carousel_slider/carousel_options.dart' is unnecessary because all of the used elements are also provided by the import of 'package:carousel_slider/carousel_slider.dart'. Try removing the import directive - lib\core\shared_widgets\custom_slider.dart:2:8 - unnecessary_import
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_slider.dart:11:5 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement - lib\core\shared_widgets\custom_slider.dart:73:37 - deprecated_member_use
+   info - The import of 'package:flutter/material.dart' is unnecessary because all of the used elements are also provided by the import of 'package:by3ly/main_importants.dart'. Try removing the import directive - lib\core\shared_widgets\custom_text_form_filed.dart:2:8 - unnecessary_import
+   info - The import of '../utils/app_colors/app_colors.dart' is unnecessary because all of the used elements are also provided by the import of 'package:by3ly/main_importants.dart'. Try removing the import directive - lib\core\shared_widgets\custom_text_form_filed.dart:3:8 - unnecessary_import
+   info - Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter - lib\core\shared_widgets\custom_text_form_filed.dart:28:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement - lib\core\shared_widgets\fav_heart_button.dart:121:32 - deprecated_member_use
+   info - The type parameter name 'Type' matches a visible type name. Try changing the type parameter name to not match an existing type - lib\core\use_cases\use_case_with_no_param.dart:6:35 - avoid_types_as_parameter_names
+   info - The type parameter name 'Type' matches a visible type name. Try changing the type parameter name to not match an existing type - lib\core\use_cases\use_case_with_param.dart:6:33 - avoid_types_as_parameter_names
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\app_nav.dart:4:10 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\app_nav.dart:5:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\app_nav.dart:5:15 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\app_nav.dart:6:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\app_nav.dart:6:15 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\new_app_nav.dart:5:10 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\new_app_nav.dart:6:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\new_app_nav.dart:6:15 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\new_app_nav.dart:7:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\new_app_nav.dart:7:15 - strict_top_level_inference
+   info - Don't invoke 'print' in production code. Try using a logging framework - lib\core\utils\bloc_observer.dart:33:5 - avoid_print
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\new_toast\toast.dart:10:11 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\new_toast\toast.dart:22:11 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\confirmPayment\presentation\view_model\confirm_payment_cubit.dart:15:34 - strict_top_level_inference
+warning - Unused import: 'common_questions_widget.dart'. Try removing the import directive - lib\features\helpSupport\presentation\views\help_support_widgets\help_support_view_body.dart:13:8 - unused_import
+warning - The declaration '_openReport' isn't referenced. Try removing the declaration of '_openReport' - lib\features\helpSupport\presentation\views\help_support_widgets\help_support_view_body.dart:55:8 - unused_element
+warning - The value of the local variable 'ads' isn't used. Try removing the variable or using it - lib\features\home\presentation\views\home_widgets\home_view_body.dart:37:13 - unused_local_variable
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:17:26 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:40:3 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:40:19 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:40:26 - strict_top_level_inference
+   info - 'onPopInvoked' is deprecated and shouldn't be used. Use onPopInvokedWithResult instead. This feature was deprecated after v3.22.0-12.0.pre. Try replacing the use of the deprecated member with the replacement - lib\features\layout\presentation\views\layout_view.dart:58:11 - deprecated_member_use
+warning - Unused import: 'package:by3ly/lang/locale_keys.dart'. Try removing the import directive - lib\features\splash\presentation\views\splash_view.dart:6:8 - unused_import
+warning - Unused import: 'package:easy_localization/easy_localization.dart'. Try removing the import directive - lib\features\splash\presentation\views\splash_view.dart:8:8 - unused_import
+warning - Unused import: 'package:by3ly/lang/locale_keys.dart'. Try removing the import directive - test\features\legalContent\legal_content_test.dart:9:8 - unused_import
+   info - The local variable '_app' starts with an underscore. Try renaming the variable to not start with an underscore - test\features\notifications\notifications_test.dart:255:12 - no_leading_underscores_for_local_identifiers
+warning - Unused import: 'package:by3ly/features/login/presentation/views/login_view.dart'. Try removing the import directive - test\features\onBoarding\onboarding_test.dart:2:8 - unused_import
+   info - Use a function declaration rather than a variable assignment to bind a function to a name. Try rewriting the closure assignment as a function declaration - test\features\packages\packages_test.dart:133:13 - prefer_function_declarations_over_variables
+warning - Unused import: 'package:by3ly/core/utils/app_colors/app_colors.dart'. Try removing the import directive - test\features\statistics\statistics_test.dart:2:8 - unused_import
+
+flutter : 47 issues found. (ran in 2.3s)
+At line:1 char:1
++ flutter analyze 2>&1 | Out-File -FilePath "E:\projects\by3ly\analyze_ ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (47 issues found. (ran in 2.3s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

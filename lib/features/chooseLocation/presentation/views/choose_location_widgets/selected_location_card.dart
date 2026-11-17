@@ -33,9 +33,7 @@ class SelectedLocationCard extends StatelessWidget {
             AppColors.secondColor.withValues(alpha: 0.18),
           ],
         ),
-        border: Border.all(
-          color: AppColors.mainColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.mainColor.withValues(alpha: 0.25)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,11 +41,7 @@ class SelectedLocationCard extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                SvgPicture.asset(
-                  AppImages.mapLocation,
-                  width: 34,
-                  height: 34,
-                ),
+                SvgPicture.asset(AppImages.mapLocation, width: 34, height: 34),
                 const SizedBox(width: 10),
                 Flexible(
                   child: Text(
@@ -78,8 +72,11 @@ class SelectedLocationCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  Icon(Icons.edit_outlined,
-                      color: AppColors.textSecondary, size: 17),
+                  Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.textSecondary,
+                    size: 17,
+                  ),
                 ],
               ),
             ),

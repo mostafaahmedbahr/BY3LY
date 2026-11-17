@@ -62,10 +62,7 @@ class OnBoardingSlide extends StatelessWidget {
                         ],
                       ),
                       padding: const EdgeInsets.all(20),
-                      child: Image.asset(
-                        slide.image,
-                        fit: BoxFit.contain,
-                      ),
+                      child: Image.asset(slide.image, fit: BoxFit.contain),
                     ),
                   ],
                 ),

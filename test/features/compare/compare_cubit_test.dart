@@ -6,7 +6,8 @@ import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dar
 import 'package:by3ly/features/compare/presentation/view_model/compare_states.dart';
 import 'package:by3ly/features/productDetails/data/models/add_product_to_compare_model.dart';
 import 'package:by3ly/features/productDetails/data/models/pause_resume_ad_model.dart';
-import 'package:by3ly/features/productDetails/data/models/product_details_model.dart' as details;
+import 'package:by3ly/features/productDetails/data/models/product_details_model.dart'
+    as details;
 import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,16 +25,28 @@ class FakeCompareRepos implements CompareRepos {
     calls++;
     payloads.add(productIds);
     if (shouldFail) return Left(ServerFailure('offline'));
-    return Right(CompareModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'products': [
-          {'id': productIds[0], 'name': 'Product A', 'price': '1000', 'image': 'img_a.jpg'},
-          {'id': productIds[1], 'name': 'Product B', 'price': '2000', 'image': 'img_b.jpg'},
-        ],
-      },
-    }));
+    return Right(
+      CompareModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'products': [
+            {
+              'id': productIds[0],
+              'name': 'Product A',
+              'price': '1000',
+              'image': 'img_a.jpg',
+            },
+            {
+              'id': productIds[1],
+              'name': 'Product B',
+              'price': '2000',
+              'image': 'img_b.jpg',
+            },
+          ],
+        },
+      }),
+    );
   }
 }
 
@@ -46,51 +59,47 @@ class FakeProductDetailsRepo implements ProductDetailsRepo {
     required String type,
   }) async {
     calls++;
-    return Right(details.ProductDetailsModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'product': {
-          'id': productId,
-          'name': 'Fallback Product $productId',
-          'desc': 'Description of product $productId',
-          'price': productId == 11 ? '1000' : '2000',
-          'image': 'fallback_$productId.jpg',
-          'rate': 4,
-          'reviews_count': 12,
-          'type': 'home',
-          'model': 'X$productId',
-          'marka': 'BrandX',
-          'location': 'Cairo',
+    return Right(
+      details.ProductDetailsModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'product': {
+            'id': productId,
+            'name': 'Fallback Product $productId',
+            'desc': 'Description of product $productId',
+            'price': productId == 11 ? '1000' : '2000',
+            'image': 'fallback_$productId.jpg',
+            'rate': 4,
+            'reviews_count': 12,
+            'type': 'home',
+            'model': 'X$productId',
+            'marka': 'BrandX',
+            'location': 'Cairo',
+          },
         },
-      },
-    }));
+      }),
+    );
   }
 
   @override
   Future<Either<Failure, AddProductToCompareModel>> addProductToCompare({
     required int productId,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<Either<Failure, GeneralModel>> rateProduct({
     required int productId,
     required int rate,
     required String commenet,
-  }) =>
+  }) => throw UnimplementedError();
+
+  @override
+  Future<Either<Failure, PauseAdResumeAdModel>> pauseAd({required int adId}) =>
       throw UnimplementedError();
 
   @override
-  Future<Either<Failure, PauseAdResumeAdModel>> pauseAd({
-    required int adId,
-  }) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Either<Failure, PauseAdResumeAdModel>> resumeAd({
-    required int adId,
-  }) =>
+  Future<Either<Failure, PauseAdResumeAdModel>> resumeAd({required int adId}) =>
       throw UnimplementedError();
 }
 
@@ -160,7 +169,9 @@ void main() {
       await cubit.fetchComparison();
 
       expect(repo.calls, 1);
-      expect(repo.payloads, [[1, 2]]);
+      expect(repo.payloads, [
+        [1, 2],
+      ]);
       expect(cubit.state, isA<CompareProductsSuccess>());
       final success = cubit.state as CompareProductsSuccess;
       expect(success.compareModel.data!.products!.length, 2);

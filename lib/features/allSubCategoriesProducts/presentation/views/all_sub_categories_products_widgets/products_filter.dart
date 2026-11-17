@@ -38,19 +38,19 @@ class ProductsFilter {
   });
 
   const ProductsFilter.empty()
-      : type = null,
-        minPrice = null,
-        maxPrice = null,
-        cityId = null,
-        cityName = null,
-        centerId = null,
-        centerName = null,
-        categoryId = null,
-        categoryName = null,
-        subCategoryId = null,
-        subCategoryName = null,
-        shippingType = null,
-        condition = null;
+    : type = null,
+      minPrice = null,
+      maxPrice = null,
+      cityId = null,
+      cityName = null,
+      centerId = null,
+      centerName = null,
+      categoryId = null,
+      categoryName = null,
+      subCategoryId = null,
+      subCategoryName = null,
+      shippingType = null,
+      condition = null;
 
   bool get isEmpty =>
       type == null &&
@@ -97,8 +97,7 @@ class ProductsFilter {
     return map;
   }
 
-  static dynamic _cleanNum(double v) =>
-      v == v.roundToDouble() ? v.toInt() : v;
+  static dynamic _cleanNum(double v) => v == v.roundToDouble() ? v.toInt() : v;
 
   ProductsFilter copyWith({
     String? type,
@@ -132,14 +131,14 @@ class ProductsFilter {
       centerName: clearPlace ? null : (centerName ?? this.centerName),
       categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
       categoryName: clearCategory ? null : (categoryName ?? this.categoryName),
-      subCategoryId:
-          clearSubCategory ? null : (subCategoryId ?? this.subCategoryId),
-      subCategoryName:
-          clearSubCategory ? null : (subCategoryName ?? this.subCategoryName),
+      subCategoryId: clearSubCategory
+          ? null
+          : (subCategoryId ?? this.subCategoryId),
+      subCategoryName: clearSubCategory
+          ? null
+          : (subCategoryName ?? this.subCategoryName),
       shippingType: clearShipping ? null : (shippingType ?? this.shippingType),
       condition: clearCondition ? null : (condition ?? this.condition),
     );
   }
 }
-
-

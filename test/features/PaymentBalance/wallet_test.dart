@@ -21,30 +21,32 @@ class FakeWalletRepos implements WalletRepos {
   Future<Either<Failure, WalletHistoryModel>> getHistory() async {
     getHistoryCalls++;
     if (failGetHistory) return Left(ServerFailure('offline'));
-    return Right(WalletHistoryModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': [
-        {
-          'id': 1,
-          'amount': 1500,
-          'type': 'credit',
-          'type_label': 'إيداع',
-          'status': 'pending',
-          'created_at': '2026-11-01 10:00:00',
-          'payment_method': 'vodafone_cash',
-        },
-        {
-          'id': 2,
-          'amount': 500,
-          'type': 'debit',
-          'type_label': 'خصم',
-          'status': 'approved',
-          'created_at': '2026-10-25 09:00:00',
-          'payment_method': 'wallet',
-        },
-      ],
-    }));
+    return Right(
+      WalletHistoryModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': [
+          {
+            'id': 1,
+            'amount': 1500,
+            'type': 'credit',
+            'type_label': 'إيداع',
+            'status': 'pending',
+            'created_at': '2026-11-01 10:00:00',
+            'payment_method': 'vodafone_cash',
+          },
+          {
+            'id': 2,
+            'amount': 500,
+            'type': 'debit',
+            'type_label': 'خصم',
+            'status': 'approved',
+            'created_at': '2026-10-25 09:00:00',
+            'payment_method': 'wallet',
+          },
+        ],
+      }),
+    );
   }
 
   @override
@@ -100,7 +102,10 @@ void main() {
 
     test('isCredit classification handles debit/credit/arabic keywords', () {
       expect(WalletHistoryItem.fromJson({'type': 'debit'}).isCredit, isFalse);
-      expect(WalletHistoryItem.fromJson({'type': 'withdraw'}).isCredit, isFalse);
+      expect(
+        WalletHistoryItem.fromJson({'type': 'withdraw'}).isCredit,
+        isFalse,
+      );
       expect(WalletHistoryItem.fromJson({'type': 'خصم'}).isCredit, isFalse);
       expect(WalletHistoryItem.fromJson({'type': 'credit'}).isCredit, isTrue);
       expect(WalletHistoryItem.fromJson({'type': 'topup'}).isCredit, isTrue);

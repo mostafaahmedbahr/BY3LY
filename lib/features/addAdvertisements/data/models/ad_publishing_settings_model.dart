@@ -53,9 +53,9 @@ class AdPublishingSettingsModel {
         currency: raw['currency']?.toString(),
         paymentMethods: methods is List
             ? methods
-                .whereType<Map<String, dynamic>>()
-                .map(AdPublishingPaymentMethod.fromJson)
-                .toList()
+                  .whereType<Map<String, dynamic>>()
+                  .map(AdPublishingPaymentMethod.fromJson)
+                  .toList()
             : const [],
       );
     }

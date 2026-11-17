@@ -22,9 +22,7 @@ class PrivacyStoreCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.mainColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.mainColor.withValues(alpha: 0.25)),
         boxShadow: [
           BoxShadow(
             color: AppColors.mainColor.withValues(alpha: 0.06),

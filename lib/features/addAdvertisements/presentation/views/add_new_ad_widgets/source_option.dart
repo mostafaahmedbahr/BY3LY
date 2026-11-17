@@ -35,11 +35,7 @@ class SourceOption extends StatelessWidget {
                 color: AppColors.mainColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: AppColors.mainColor,
-                size: 26,
-              ),
+              child: Icon(icon, color: AppColors.mainColor, size: 26),
             ),
             const SizedBox(height: 8),
             Text(

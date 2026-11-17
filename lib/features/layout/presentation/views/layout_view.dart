@@ -44,8 +44,6 @@ class LayoutViewState extends State<LayoutView> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(CacheTokenManger.userToken);
-    debugPrint("LayoutView");
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final inactiveNavColor = isDarkMode
         ? AppColors.textSecondary
@@ -55,7 +53,7 @@ class LayoutViewState extends State<LayoutView> {
         var layoutCubit = LayoutCubit.get(context);
         return PopScope(
           canPop: false,
-          onPopInvoked: _onPopInvoked, // Pass the method as the callback
+          onPopInvokedWithResult: (didPop, _) => _onPopInvoked(didPop),
           child: Scaffold(
             body: layoutCubit.screens[LayoutCubit.pageIndex],
             bottomNavigationBar: FlashyTabBar(

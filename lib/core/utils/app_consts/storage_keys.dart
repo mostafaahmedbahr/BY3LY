@@ -1,5 +1,8 @@
 class StorageKeys {
   static const String language = 'language';
+
+  /// Legacy plaintext token key. Kept only for one-time migration cleanup;
+  /// the live token lives exclusively in FlutterSecureStorage.
   static const String userToken = 'userToken';
   static const String refreshToken = 'refreshToken';
   static const String isGuest = 'isGuest';

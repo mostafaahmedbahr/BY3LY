@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../lang/locale_keys.dart';
 import '../../data/models/packages_model.dart';
 import '../../data/models/payment_methods_model.dart';
 import '../../data/repos/packages_repos.dart';
@@ -74,6 +76,17 @@ class PackagesCubit extends Cubit<PackagesStates> {
         emit(SubscribePackageErrorState(failure.errMessage));
       },
       (data) {
+        // Never report a successful purchase on a 2xx response with status:false.
+        if (data.status == false) {
+          emit(
+            SubscribePackageErrorState(
+              data.message?.trim().isNotEmpty ?? false
+                  ? data.message!.trim()
+                  : LocaleKeys.subscriptionRejected.tr(),
+            ),
+          );
+          return;
+        }
         emit(SubscribePackageSuccessState(data));
       },
     );
@@ -157,6 +170,17 @@ class PackagesCubit extends Cubit<PackagesStates> {
         emit(SubscribePackageErrorState(failure.errMessage));
       },
       (data) {
+        // Never report a successful purchase on a 2xx response with status:false.
+        if (data.status == false) {
+          emit(
+            SubscribePackageErrorState(
+              data.message?.trim().isNotEmpty ?? false
+                  ? data.message!.trim()
+                  : LocaleKeys.subscriptionRejected.tr(),
+            ),
+          );
+          return;
+        }
         emit(SubscribePackageSuccessState(data));
       },
     );

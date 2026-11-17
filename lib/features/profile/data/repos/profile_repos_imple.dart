@@ -9,15 +9,13 @@ import '../../../../core/app_services/remote_services/end_points.dart';
 import '../../../deleteAccount/data/models/delete_account_model.dart';
 import '../models/profile_data_model.dart';
 
-
 class ProfileRepoImpl implements ProfileRepos {
   final ApiService? apiService;
 
   ProfileRepoImpl(this.apiService);
 
-
   @override
-  Future<Either<Failure, ProfileModel>> getProfileData() async{
+  Future<Either<Failure, ProfileModel>> getProfileData() async {
     try {
       var response = await apiService!.getData(
         endPoint: EndPoints.getProfileData,
@@ -34,11 +32,9 @@ class ProfileRepoImpl implements ProfileRepos {
   }
 
   @override
-  Future<Either<Failure, LogoutModel>> logout() async{
+  Future<Either<Failure, LogoutModel>> logout() async {
     try {
-      var response = await apiService!.postData(
-          endPoint: EndPoints.logout,
-      );
+      var response = await apiService!.postData(endPoint: EndPoints.logout);
       LogoutModel result = LogoutModel.fromJson(response.data);
       return right(result);
     } catch (e) {
@@ -51,11 +47,10 @@ class ProfileRepoImpl implements ProfileRepos {
   }
 
   @override
-  Future<Either<Failure, DeleteAccountModel>> deleteAccount() async{
+  Future<Either<Failure, DeleteAccountModel>> deleteAccount() async {
     try {
       var response = await apiService!.postData(
-          endPoint: EndPoints.deleteAccount,
-          
+        endPoint: EndPoints.deleteAccount,
       );
       DeleteAccountModel result = DeleteAccountModel.fromJson(response.data);
       return right(result);
@@ -68,5 +63,3 @@ class ProfileRepoImpl implements ProfileRepos {
     }
   }
 }
-
-

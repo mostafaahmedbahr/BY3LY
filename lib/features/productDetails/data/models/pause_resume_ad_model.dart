@@ -1,4 +1,3 @@
-
 class PauseAdResumeAdModel {
   bool? status;
   String? message;
@@ -16,7 +15,7 @@ class PauseAdResumeAdModel {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["status"] = status;
     jsonData["message"] = message;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data?.toJson();
     }
     return jsonData;

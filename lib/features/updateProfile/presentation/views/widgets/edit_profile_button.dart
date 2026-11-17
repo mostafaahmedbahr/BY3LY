@@ -56,10 +56,7 @@ class EditProfileButton extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [
-                  AppColors.yellowColor,
-                  Color(0xffE08B1B),
-                ],
+                colors: [AppColors.yellowColor, Color(0xffE08B1B)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -68,8 +65,7 @@ class EditProfileButton extends StatelessWidget {
                   ? null
                   : [
                       BoxShadow(
-                        color: AppColors.yellowColor
-                            .withValues(alpha: 0.40),
+                        color: AppColors.yellowColor.withValues(alpha: 0.40),
                         blurRadius: 14,
                         offset: const Offset(0, 6),
                       ),
@@ -83,8 +79,7 @@ class EditProfileButton extends StatelessWidget {
                 onTap: busy
                     ? null
                     : () {
-                        if (
-                            formKey.currentState != null &&
+                        if (formKey.currentState != null &&
                             !formKey.currentState!.validate()) {
                           return;
                         }
@@ -97,12 +92,12 @@ class EditProfileButton extends StatelessWidget {
                               : null,
                           fullName:
                               updateProfileDataCubit.nameCon.text.isNotEmpty
-                                  ? updateProfileDataCubit.nameCon.text
-                                  : null,
+                              ? updateProfileDataCubit.nameCon.text
+                              : null,
                           phoneNumber:
                               updateProfileDataCubit.phoneCon.text.isNotEmpty
-                                  ? updateProfileDataCubit.phoneCon.text
-                                  : null,
+                              ? updateProfileDataCubit.phoneCon.text
+                              : null,
                         );
                       },
                 child: Center(

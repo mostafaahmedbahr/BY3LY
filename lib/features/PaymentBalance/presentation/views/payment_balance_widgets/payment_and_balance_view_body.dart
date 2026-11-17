@@ -26,8 +26,7 @@ class PaymentAndBalanceViewBody extends StatefulWidget {
       _PaymentAndBalanceViewBodyState();
 }
 
-class _PaymentAndBalanceViewBodyState
-    extends State<PaymentAndBalanceViewBody> {
+class _PaymentAndBalanceViewBodyState extends State<PaymentAndBalanceViewBody> {
   @override
   void initState() {
     super.initState();
@@ -58,8 +57,7 @@ class _PaymentAndBalanceViewBodyState
           providers: [
             BlocProvider.value(value: WalletCubit.get(context)),
             BlocProvider(
-              create: (_) =>
-                  PackagesCubit(getIt.get<PackagesRepoImpl>()),
+              create: (_) => PackagesCubit(getIt.get<PackagesRepoImpl>()),
             ),
           ],
           child: const TransferView(topUpMode: true),
@@ -84,7 +82,8 @@ class _PaymentAndBalanceViewBodyState
               child: BlocBuilder<WalletCubit, WalletStates>(
                 builder: (context, state) {
                   final cubit = WalletCubit.get(context);
-                  final loading = state is GetWalletHistoryLoadingState ||
+                  final loading =
+                      state is GetWalletHistoryLoadingState ||
                       state is WalletInitState;
                   return ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -141,8 +140,7 @@ class _PaymentAndBalanceViewBodyState
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.35),
+                        color: AppColors.mainColor.withValues(alpha: 0.35),
                         blurRadius: 14,
                         offset: const Offset(0, 6),
                       ),

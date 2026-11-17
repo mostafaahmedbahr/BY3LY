@@ -78,9 +78,9 @@ class SupportChatRules {
   static List<SupportMessageModel> markAllMessagesRead(
     List<SupportMessageModel> messages,
   ) => [
-        for (final m in messages)
-          if (m.isRead == true) m else m.copyWith(isRead: true),
-      ];
+    for (final m in messages)
+      if (m.isRead == true) m else m.copyWith(isRead: true),
+  ];
 
   /// True when the file exists and satisfies the size limit.
   static Future<bool> validateImageFile(String path) async {

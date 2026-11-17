@@ -84,17 +84,15 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
   void initState() {
     super.initState();
     final cubit = AddNewAdCubit.get(context);
-    final user =
-        ProfileCubit.get(context).profileModel?.data?.user;
+    final user = ProfileCubit.get(context).profileModel?.data?.user;
     final ad = widget.adToEdit;
     if (ad != null) {
       cubit.fillForEdit(
         adId: ad.id ?? 0,
         name: ad.name?.toString(),
-        description:
-            (ad.desc?.toString().trim().isNotEmpty ?? false)
-                ? ad.desc?.toString()
-                : ad.description?.toString(),
+        description: (ad.desc?.toString().trim().isNotEmpty ?? false)
+            ? ad.desc?.toString()
+            : ad.description?.toString(),
         price: ad.price?.toString(),
         discount: ad.discount?.toString(),
         negotiable: ad.isNegotiable == true ? 1 : 0,
@@ -107,8 +105,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
         centerIdValue: asIntOrNull(ad.centerId),
         imageUrls: [
           for (final img in (ad.images ?? []))
-            if ((img?.image?.trim().isNotEmpty ?? false))
-              img!.image!.trim(),
+            if ((img?.image?.trim().isNotEmpty ?? false)) img!.image!.trim(),
         ],
         profileCityId: asIntOrNull(user?.cityId),
         profileCenterId: asIntOrNull(user?.centerId),
@@ -116,8 +113,9 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
       // Load sub-categories of the ad's category for the dropdown.
       final catId = asIntOrNull(ad.categoryId);
       if (catId != null) {
-        AllSubCategoriesCubit.get(context)
-            .getAllSubCategories(categoryId: catId);
+        AllSubCategoriesCubit.get(
+          context,
+        ).getAllSubCategories(categoryId: catId);
       }
     } else {
       // Default city/center = the user's own data (changeable below).
@@ -178,9 +176,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
     final error = _stepErrorKey();
     if (error != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text(addNewAdValidationMessage(context, error))),
+        SnackBar(content: Text(addNewAdValidationMessage(context, error))),
       );
       return;
     }
@@ -199,8 +195,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
               (state.message?.trim().isNotEmpty ?? false)
                   ? state.message!
                   : context.tr(LocaleKeys.publishAd),
-              style:
-                  const TextStyle(color: AppColors.mainColor),
+              style: const TextStyle(color: AppColors.mainColor),
             ),
           ).show(context);
           if (_paymentSheetOpen) {
@@ -214,17 +209,17 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
           // Package/free ads exhausted → the server demands payment:
           // force the payment step instead of publishing directly.
           if (!_paymentSheetOpen) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
             _openPaymentSheet();
           }
         } else if (state is AddNewAdError) {
           // When the sheet is open it toasts the error itself.
           if (!_paymentSheetOpen) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         }
       },
@@ -275,8 +270,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                     },
                     child: SingleChildScrollView(
                       key: ValueKey('step_$_currentStep'),
-                      padding: const EdgeInsets.fromLTRB(
-                          16, 12, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                       child: _buildStep(context, cubit),
                     ),
                   ),
@@ -331,8 +325,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                 onChanged: (_) => cubit.notifyFormChanged(),
                 prefixIcon: const Padding(
                   padding: EdgeInsets.all(12),
-                  child: Icon(Icons.title_rounded,
-                      color: AppColors.mainColor, size: 20),
+                  child: Icon(
+                    Icons.title_rounded,
+                    color: AppColors.mainColor,
+                    size: 20,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -344,8 +341,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                 onChanged: (_) => cubit.notifyFormChanged(),
                 prefixIcon: const Padding(
                   padding: EdgeInsets.all(12),
-                  child: Icon(Icons.description_outlined,
-                      color: AppColors.mainColor, size: 20),
+                  child: Icon(
+                    Icons.description_outlined,
+                    color: AppColors.mainColor,
+                    size: 20,
+                  ),
                 ),
               ),
             ],
@@ -368,9 +368,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                       labelText: context.tr(LocaleKeys.adPrice),
                       prefixIcon: const Padding(
                         padding: EdgeInsets.all(12),
-                        child: Icon(Icons.payments_outlined,
-                            color: AppColors.mainColor,
-                            size: 20),
+                        child: Icon(
+                          Icons.payments_outlined,
+                          color: AppColors.mainColor,
+                          size: 20,
+                        ),
                       ),
                       suffixIcon: cubit.discountPercentage != null
                           ? Padding(
@@ -393,12 +395,14 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                     child: CustomTextFormField(
                       controller: cubit.discountCon,
                       keyboardType: TextInputType.number,
-                      labelText:
-                          context.tr(LocaleKeys.discount),
+                      labelText: context.tr(LocaleKeys.discount),
                       prefixIcon: const Padding(
                         padding: EdgeInsets.all(12),
-                        child: Icon(Icons.attach_money,
-                            color: AppColors.mainColor, size: 20),
+                        child: Icon(
+                          Icons.attach_money,
+                          color: AppColors.mainColor,
+                          size: 20,
+                        ),
                       ),
                       onChanged: (_) => cubit.notifyFormChanged(),
                     ),
@@ -431,14 +435,15 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ImagesPicker(
-                onAdd: () => showImageSourceSheet(context, cubit),
-              ),
+              ImagesPicker(onAdd: () => showImageSourceSheet(context, cubit)),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.info_outline_rounded,
-                      size: 16, color: AppColors.textSecondary),
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 16,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -467,13 +472,13 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
               ChipsRow(
                 options: [
                   ChipOption(
-                      value: 'free',
-                      label:
-                          context.tr(LocaleKeys.freeShipping)),
+                    value: 'free',
+                    label: context.tr(LocaleKeys.freeShipping),
+                  ),
                   ChipOption(
-                      value: 'paid',
-                      label:
-                          context.tr(LocaleKeys.paidShipping)),
+                    value: 'paid',
+                    label: context.tr(LocaleKeys.paidShipping),
+                  ),
                 ],
                 selected: cubit.shippingType,
                 onSelected: cubit.selectShipping,
@@ -491,13 +496,13 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
               ChipsRow(
                 options: [
                   ChipOption(
-                      value: 'new',
-                      label:
-                          context.tr(LocaleKeys.conditionNew)),
+                    value: 'new',
+                    label: context.tr(LocaleKeys.conditionNew),
+                  ),
                   ChipOption(
-                      value: 'used',
-                      label: context
-                          .tr(LocaleKeys.conditionUsed)),
+                    value: 'used',
+                    label: context.tr(LocaleKeys.conditionUsed),
+                  ),
                 ],
                 selected: cubit.condition,
                 onSelected: cubit.selectCondition,
@@ -533,9 +538,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
     final error = cubit.validate();
     if (error != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text(addNewAdValidationMessage(context, error))),
+        SnackBar(content: Text(addNewAdValidationMessage(context, error))),
       );
       return;
     }
@@ -563,9 +566,8 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
         await profileCubit.getProfile();
       } catch (_) {}
       if (!mounted) return;
-      covered = profileCubit.profileModel?.data?.user
-              ?.subscriptionPackage !=
-          null;
+      covered =
+          profileCubit.profileModel?.data?.user?.subscriptionPackage != null;
     }
     if (!mounted) return;
     setState(() => _checkingPackage = false);
@@ -602,16 +604,14 @@ class _BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ctaLabel = isLastStep
         ? (isEditMode
-            ? context.tr(LocaleKeys.editAd)
-            : context.tr(LocaleKeys.publishAd))
+              ? context.tr(LocaleKeys.editAd)
+              : context.tr(LocaleKeys.publishAd))
         : context.tr(LocaleKeys.next);
     final ctaIcon = isLastStep
-        ? (isEditMode
-            ? Icons.edit_rounded
-            : Icons.rocket_launch_rounded)
+        ? (isEditMode ? Icons.edit_rounded : Icons.rocket_launch_rounded)
         : (isRtl
-            ? Icons.arrow_back_ios_new_rounded
-            : Icons.arrow_forward_ios_rounded);
+              ? Icons.arrow_back_ios_new_rounded
+              : Icons.arrow_forward_ios_rounded);
     return Container(
       padding: EdgeInsets.fromLTRB(
         16,
@@ -622,9 +622,7 @@ class _BottomBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border(
-          top: BorderSide(
-            color: AppColors.border.withValues(alpha: 0.6),
-          ),
+          top: BorderSide(color: AppColors.border.withValues(alpha: 0.6)),
         ),
         boxShadow: [
           BoxShadow(

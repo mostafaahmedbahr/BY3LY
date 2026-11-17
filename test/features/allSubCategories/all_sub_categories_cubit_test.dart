@@ -18,16 +18,15 @@ class FakeAllSubCategoriesRepo implements AllSubCategoriesRepos {
   ];
 
   AllSubCategoriesModel _build() => AllSubCategoriesModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {
-          'subCategories': _sample.map((e) => e.toJson()).toList(),
-        },
-      });
+    'status': true,
+    'message': 'ok',
+    'data': {'subCategories': _sample.map((e) => e.toJson()).toList()},
+  });
 
   @override
-  Future<Either<Failure, AllSubCategoriesModel>>
-      getAllSubCategoriesData({required int categoryId}) async {
+  Future<Either<Failure, AllSubCategoriesModel>> getAllSubCategoriesData({
+    required int categoryId,
+  }) async {
     calls++;
     await Future<void>.delayed(const Duration(milliseconds: 40));
     if (shouldFail) {
@@ -50,8 +49,7 @@ void main() {
     cubit.close();
   });
 
-  test('fetch success populates the list, caches and emits Success',
-      () async {
+  test('fetch success populates the list, caches and emits Success', () async {
     final repo = FakeAllSubCategoriesRepo();
     final cubit = AllSubCategoriesCubit(repo);
 
@@ -60,16 +58,11 @@ void main() {
     expect(repo.calls, 1);
     expect(cubit.state, isA<GetAllSubCategoriesSuccess>());
     expect(cubit.allSubCategoriesList.length, 2);
-    expect(
-      AllSubCategoriesCubit.cachedFor(1),
-      isNotNull,
-    );
+    expect(AllSubCategoriesCubit.cachedFor(1), isNotNull);
     await cubit.close();
   });
 
-  test(
-      'second fetch on the same category is served from cache',
-      () async {
+  test('second fetch on the same category is served from cache', () async {
     final repo = FakeAllSubCategoriesRepo();
     final first = AllSubCategoriesCubit(repo);
     await first.getAllSubCategories(categoryId: 1);
@@ -84,17 +77,19 @@ void main() {
     await second.close();
   });
 
-  test('cache is per-category — a different category triggers a fetch',
-      () async {
-    final repo = FakeAllSubCategoriesRepo();
-    final cubit = AllSubCategoriesCubit(repo);
+  test(
+    'cache is per-category — a different category triggers a fetch',
+    () async {
+      final repo = FakeAllSubCategoriesRepo();
+      final cubit = AllSubCategoriesCubit(repo);
 
-    await cubit.getAllSubCategories(categoryId: 1);
-    await cubit.getAllSubCategories(categoryId: 2);
+      await cubit.getAllSubCategories(categoryId: 1);
+      await cubit.getAllSubCategories(categoryId: 2);
 
-    expect(repo.calls, 2);
-    await cubit.close();
-  });
+      expect(repo.calls, 2);
+      await cubit.close();
+    },
+  );
 
   test('forceRefresh bypasses the cache', () async {
     final repo = FakeAllSubCategoriesRepo();
@@ -109,8 +104,7 @@ void main() {
     await second.close();
   });
 
-  test('failure emits GetAllSubCategoriesError and keeps list empty',
-      () async {
+  test('failure emits GetAllSubCategoriesError and keeps list empty', () async {
     final repo = FakeAllSubCategoriesRepo()..shouldFail = true;
     final cubit = AllSubCategoriesCubit(repo);
 

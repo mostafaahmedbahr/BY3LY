@@ -33,9 +33,7 @@ class PaymentMethodTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.border.withValues(alpha: 0.6),
-            ),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.04),

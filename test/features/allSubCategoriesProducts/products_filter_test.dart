@@ -45,8 +45,13 @@ void main() {
     test('placeLabel falls back gracefully', () {
       expect(const ProductsFilter().placeLabel, '');
       expect(const ProductsFilter(cityName: 'القاهرة').placeLabel, 'القاهرة');
-      expect(const ProductsFilter(cityName: 'القاهرة', centerName: 'مدينة نصر').placeLabel,
-          'القاهرة - مدينة نصر');
+      expect(
+        const ProductsFilter(
+          cityName: 'القاهرة',
+          centerName: 'مدينة نصر',
+        ).placeLabel,
+        'القاهرة - مدينة نصر',
+      );
     });
   });
 
@@ -142,8 +147,7 @@ void main() {
     });
 
     test('clearCategory + clearSubCategory together clear the branch', () {
-      final copy =
-          base.copyWith(clearCategory: true, clearSubCategory: true);
+      final copy = base.copyWith(clearCategory: true, clearSubCategory: true);
       expect(copy.categoryId, isNull);
       expect(copy.subCategoryId, isNull);
       expect(copy.subCategoryName, isNull);

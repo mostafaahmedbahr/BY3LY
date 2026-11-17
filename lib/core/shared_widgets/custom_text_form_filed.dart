@@ -1,6 +1,6 @@
 import 'package:by3ly/main_importants.dart';
-import 'package:flutter/material.dart';
-import '../utils/app_colors/app_colors.dart'; // Import for color consistency
+
+// Import for color consistency
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
@@ -26,7 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.controller,
     this.obscureText,
     this.icon,
@@ -48,16 +48,16 @@ class CustomTextFormField extends StatelessWidget {
     this.radius = 10.0,
     this.onFieldSubmitted,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final effectiveFillColor = fillColor ?? AppColors.surface;
     final textColor =
         ThemeData.estimateBrightnessForColor(effectiveFillColor) ==
-                Brightness.dark
-            ? AppColors.whiteColor
-            : AppColors.blackColor;
+            Brightness.dark
+        ? AppColors.whiteColor
+        : AppColors.blackColor;
     return TextFormField(
       maxLength: maxLength,
       style: TextStyle(color: textColor),
@@ -73,12 +73,14 @@ class CustomTextFormField extends StatelessWidget {
       onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: AppColors.accent), // Consistent label style
-        contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        prefixIcon: Padding(
-          padding:   EdgeInsets.all(8.0.r),
-          child: prefixIcon,
+        labelStyle: TextStyle(
+          color: AppColors.accent,
+        ), // Consistent label style
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 15,
         ),
+        prefixIcon: Padding(padding: EdgeInsets.all(8.0.r), child: prefixIcon),
         prefix: prefix,
         icon: icon,
         suffixIcon: suffixIcon,
@@ -87,21 +89,15 @@ class CustomTextFormField extends StatelessWidget {
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius ?? 10),
-          borderSide: BorderSide(
-            color: borderColor ?? AppColors.border,
-          ),
+          borderSide: BorderSide(color: borderColor ?? AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius ?? 10),
-          borderSide: BorderSide(
-            color: borderColor ?? AppColors.border,
-          ),
+          borderSide: BorderSide(color: borderColor ?? AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radius ?? 10),
-          borderSide: BorderSide(
-            color: borderColor ?? AppColors.accent,
-          ),
+          borderSide: BorderSide(color: borderColor ?? AppColors.accent),
         ),
         hintText: hintText,
 

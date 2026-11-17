@@ -7,7 +7,6 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
 
-
 class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
   AllCategoriesCubit(this.allCategoriesRepo) : super(AllCategoriesInitState());
 
@@ -17,7 +16,7 @@ class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
   final AllCategoriesRepo allCategoriesRepo;
   AllCategoriesModel? allCategoriesModel;
 
-  List<Categories> allCategoriesList=[];
+  List<Categories> allCategoriesList = [];
 
   /// Session-wide cache: categories are fetched once, later screens
   /// reuse them instead of calling the API on every open.
@@ -41,13 +40,16 @@ class AllCategoriesCubit extends Cubit<AllCategoriesStates> {
     _inFlight ??= allCategoriesRepo.getAllCategories();
     final result = await _inFlight!;
     _inFlight = null;
-    return result.fold((failure) {
-      emit(GetAllCategoriesError(failure.errMessage));
-    }, (data) {
-      allCategoriesModel = data;
-      cachedModel = data;
-      allCategoriesList = [...?data.data?.categories];
-      emit(GetAllCategoriesSuccess(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(GetAllCategoriesError(failure.errMessage));
+      },
+      (data) {
+        allCategoriesModel = data;
+        cachedModel = data;
+        allCategoriesList = [...?data.data?.categories];
+        emit(GetAllCategoriesSuccess(data));
+      },
+    );
   }
 }

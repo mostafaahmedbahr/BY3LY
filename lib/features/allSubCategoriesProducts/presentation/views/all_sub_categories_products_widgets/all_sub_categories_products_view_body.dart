@@ -9,8 +9,10 @@ import 'all_sub_categories_products_loading.dart';
 import 'all_sub_categories_products_list.dart';
 
 class AllSubCategoriesProductsViewBody extends StatelessWidget {
-  const AllSubCategoriesProductsViewBody(
-      {super.key, required this.subCategoryId});
+  const AllSubCategoriesProductsViewBody({
+    super.key,
+    required this.subCategoryId,
+  });
 
   final int subCategoryId;
 
@@ -18,30 +20,35 @@ class AllSubCategoriesProductsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AllSubCategoriesProductsCubit(
-          getIt.get<AllSubCategoriesProductsReposImpl>())
-        ..getAllSubCategoriesProducts(subCategoryId: subCategoryId),
-      child: BlocBuilder<AllSubCategoriesProductsCubit,
-          AllSubCategoriesProductsStates>(
-        builder: (context, state) {
-          var sellAllBestViewCubit =
-              context.read<AllSubCategoriesProductsCubit>();
-          if (state is GetAllSubCategoriesProductsLoading) {
-            return const AllSubCategoriesProductsLoading();
-          }
-          if (state is GetAllSubCategoriesProductsError) {
-            return CustomErrorWidget(
-                error: state.message.toString(),
-                onTap: () => context
-                    .read<AllSubCategoriesProductsCubit>()
-                    .getAllSubCategoriesProducts(
-                        subCategoryId: subCategoryId));
-          }
-          return AllSubCategoriesProductsList(
-            allSubCategoriesProductsList:
-                sellAllBestViewCubit.allSubCategoriesProductsList,
-          );
-        },
-      ),
+        getIt.get<AllSubCategoriesProductsReposImpl>(),
+      )..getAllSubCategoriesProducts(subCategoryId: subCategoryId),
+      child:
+          BlocBuilder<
+            AllSubCategoriesProductsCubit,
+            AllSubCategoriesProductsStates
+          >(
+            builder: (context, state) {
+              var sellAllBestViewCubit = context
+                  .read<AllSubCategoriesProductsCubit>();
+              if (state is GetAllSubCategoriesProductsLoading) {
+                return const AllSubCategoriesProductsLoading();
+              }
+              if (state is GetAllSubCategoriesProductsError) {
+                return CustomErrorWidget(
+                  error: state.message.toString(),
+                  onTap: () => context
+                      .read<AllSubCategoriesProductsCubit>()
+                      .getAllSubCategoriesProducts(
+                        subCategoryId: subCategoryId,
+                      ),
+                );
+              }
+              return AllSubCategoriesProductsList(
+                allSubCategoriesProductsList:
+                    sellAllBestViewCubit.allSubCategoriesProductsList,
+              );
+            },
+          ),
     );
   }
 }

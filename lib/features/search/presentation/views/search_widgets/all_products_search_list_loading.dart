@@ -18,16 +18,12 @@ class AllProductsSearchListLoading extends StatelessWidget {
             duration: const Duration(milliseconds: 375),
             child: const SlideAnimation(
               verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: SimmerLoading(
-                  height: 120,
-                ),
-              ),
+              child: FadeInAnimation(child: SimmerLoading(height: 120)),
             ),
           );
         },
         separatorBuilder: (context, index) {
-          return const CustomSizedBox(height: 10,);
+          return const CustomSizedBox(height: 10);
         },
       ),
     );

@@ -51,7 +51,11 @@ class SpecCard extends StatelessWidget {
                             style: _cellStyle(rows[i]),
                           ),
                         ),
-                        Container(width: 1, height: 20, color: AppColors.border),
+                        Container(
+                          width: 1,
+                          height: 20,
+                          color: AppColors.border,
+                        ),
                         Expanded(
                           child: Text(
                             rows[i].second,
@@ -78,8 +82,9 @@ class SpecCard extends StatelessWidget {
         fontSize: 15,
         fontWeight: FontWeight.w800,
         color: AppColors.mainColor,
-        decoration:
-            row.strikethrough ? TextDecoration.lineThrough : TextDecoration.none,
+        decoration: row.strikethrough
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
       );
     }
     if (row.strikethrough) {

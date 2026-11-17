@@ -36,8 +36,12 @@ class CompareModel {
     message = _asString(json['message']);
     final raw = json['data'];
     if (raw is List) {
-      data = CompareData(products:
-          raw.whereType<Map<String, dynamic>>().map(CompareProduct.fromJson).toList());
+      data = CompareData(
+        products: raw
+            .whereType<Map<String, dynamic>>()
+            .map(CompareProduct.fromJson)
+            .toList(),
+      );
     } else if (raw is Map<String, dynamic>) {
       data = CompareData.fromJson(raw);
     } else {
@@ -66,7 +70,10 @@ class CompareData {
   CompareData.fromJson(Map<String, dynamic> json) {
     final raw = json['products'] ?? json['data'];
     if (raw is List) {
-      products = raw.whereType<Map<String, dynamic>>().map(CompareProduct.fromJson).toList();
+      products = raw
+          .whereType<Map<String, dynamic>>()
+          .map(CompareProduct.fromJson)
+          .toList();
     } else if (raw is Map<String, dynamic>) {
       products = (raw['products'] as List? ?? const [])
           .whereType<Map<String, dynamic>>()
@@ -79,8 +86,9 @@ class CompareData {
 
   Map<String, dynamic> toJson() {
     final jsonData = <String, dynamic>{};
-    jsonData['products'] =
-        products == null ? const <Map<String, dynamic>>[] : products!.map((e) => e.toJson()).toList();
+    jsonData['products'] = products == null
+        ? const <Map<String, dynamic>>[]
+        : products!.map((e) => e.toJson()).toList();
     return jsonData;
   }
 }
@@ -185,7 +193,8 @@ class CompareProduct {
     currency = _asString(json['currency']);
     listingType = _asString(json['listing_type']);
     listingTypeLabel =
-        _asString(json['listing_type_label']) ?? _asString(json['listing_type']);
+        _asString(json['listing_type_label']) ??
+        _asString(json['listing_type']);
     furnishing = json['furnishing'];
     furnishingLabel = json['furnishing_label'];
     seller = json['seller'] is Map<String, dynamic>
@@ -198,7 +207,9 @@ class CompareProduct {
       imageUrls = rawImages
           .map((e) {
             if (e is String) return e.trim();
-            if (e is Map<String, dynamic>) return _asString(e['image'])?.trim() ?? '';
+            if (e is Map<String, dynamic>) {
+              return _asString(e['image'])?.trim() ?? '';
+            }
             return '';
           })
           .where((e) => e.isNotEmpty)
@@ -213,7 +224,8 @@ class CompareProduct {
     reviewsCount = _asInt(json['reviews_count']);
     isFavourite = _asBool(json['isFavourite']);
     views = _asInt(json['views']);
-    type = _asString(json['type']) ??
+    type =
+        _asString(json['type']) ??
         _asString(json['listing_type_label']) ??
         _asString(json['listing_type']);
     model = _asString(json['model']);
@@ -280,7 +292,14 @@ class Seller {
   int? rating;
   int? reviewsCount;
 
-  Seller({this.id, this.name, this.image, this.phone, this.rating, this.reviewsCount});
+  Seller({
+    this.id,
+    this.name,
+    this.image,
+    this.phone,
+    this.rating,
+    this.reviewsCount,
+  });
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = _asInt(json['id']);

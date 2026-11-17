@@ -1,7 +1,6 @@
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
-import 
-'../../view_model/confirm_payment_states.dart';
+import '../../view_model/confirm_payment_states.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -32,15 +31,14 @@ class ConfirmPaymentViewBody extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              ConfirmPaymentCubit.get(context)
-                                  .showPicker(context);
+                              ConfirmPaymentCubit.get(
+                                context,
+                              ).showPicker(context);
                             },
                             child: SvgPicture.asset(AppImages.camera),
                           ),
-                          const CustomSizedBox(
-                            height: 10,
-                          ),
-                            Text(
+                          const CustomSizedBox(height: 10),
+                          Text(
                             context.tr(LocaleKeys.sendReceiptPicture),
                             style: AppStyles.textStyle16W500Black,
                           ),
@@ -52,8 +50,11 @@ class ConfirmPaymentViewBody extends StatelessWidget {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.mainColor, width: 2)),
+                            border: Border.all(
+                              color: AppColors.mainColor,
+                              width: 2,
+                            ),
+                          ),
                           child: Image.file(
                             ConfirmPaymentCubit.get(context).image!,
                             fit: BoxFit.cover,
@@ -61,14 +62,13 @@ class ConfirmPaymentViewBody extends StatelessWidget {
                         ),
                       ),
               ),
-              const CustomSizedBox(
-                height: 10,
-              ),
+              const CustomSizedBox(height: 10),
               CustomButton(
                 btnText: Text(
                   LocaleKeys.send.tr(),
-                  style: AppStyles.textStyle16W600Black
-                      .copyWith(color: Colors.white),
+                  style: AppStyles.textStyle16W600Black.copyWith(
+                    color: Colors.white,
+                  ),
                 ),
                 onPressed: () {},
               ),

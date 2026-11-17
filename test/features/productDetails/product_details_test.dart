@@ -65,33 +65,32 @@ class FakeProductDetailsRepo implements ProductDetailsRepo {
     if (shouldFail) {
       return Left(ServerFailure('fetch failed'));
     }
-    return Right(ProductDetailsModel.fromJson(
-      Map<String, dynamic>.from(_fixture),
-    ));
+    return Right(
+      ProductDetailsModel.fromJson(Map<String, dynamic>.from(_fixture)),
+    );
   }
 
   @override
-  Future<Either<Failure, AddProductToCompareModel>> addProductToCompare(
-          {required int productId}) async =>
-      throw UnimplementedError();
+  Future<Either<Failure, AddProductToCompareModel>> addProductToCompare({
+    required int productId,
+  }) async => throw UnimplementedError();
 
   @override
   Future<Either<Failure, GeneralModel>> rateProduct({
     required int productId,
     required int rate,
     required String commenet,
-  }) async =>
-      throw UnimplementedError();
+  }) async => throw UnimplementedError();
 
   @override
-  Future<Either<Failure, PauseAdResumeAdModel>> pauseAd(
-          {required int adId}) async =>
-      throw UnimplementedError();
+  Future<Either<Failure, PauseAdResumeAdModel>> pauseAd({
+    required int adId,
+  }) async => throw UnimplementedError();
 
   @override
-  Future<Either<Failure, PauseAdResumeAdModel>> resumeAd(
-          {required int adId}) async =>
-      throw UnimplementedError();
+  Future<Either<Failure, PauseAdResumeAdModel>> resumeAd({
+    required int adId,
+  }) async => throw UnimplementedError();
 }
 
 void main() {
@@ -125,15 +124,18 @@ void main() {
 
     test('garbage images entry is skipped rather than crashing', () {
       final json = Map<String, dynamic>.from(_fixture);
-      final product =
-          Map<String, dynamic>.from((json['data'] as Map)['product'] as Map);
+      final product = Map<String, dynamic>.from(
+        (json['data'] as Map)['product'] as Map,
+      );
       product['images'] = [
         'garbage',
         {'id': '3', 'image': 'ok.jpg'},
       ];
       (json['data'] as Map)['product'] = product;
-      expect(ProductDetailsModel.fromJson(json).data!.product!.images,
-          hasLength(1));
+      expect(
+        ProductDetailsModel.fromJson(json).data!.product!.images,
+        hasLength(1),
+      );
     });
   });
 
@@ -154,8 +156,7 @@ void main() {
       await cubit.close();
     });
 
-    test('success emits Loading then Success and fills the model',
-        () async {
+    test('success emits Loading then Success and fills the model', () async {
       final repo = FakeProductDetailsRepo();
       final cubit = ProductDetailsCubit(repo);
       final events = <ProductDetailsStates>[];

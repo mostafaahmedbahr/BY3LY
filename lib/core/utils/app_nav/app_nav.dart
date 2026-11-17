@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-class AppNav
-{
-  static customNavigator({
-    @required context,
-    @required screen,
+
+class AppNav {
+  static void customNavigator({
+    required BuildContext context,
+    required Widget screen,
     required bool finish,
-  })
-  {
-    finish?
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context)=>screen,
-      ),
-          (route) => false,
-    ): Navigator.push(context,MaterialPageRoute(
-        builder:(context)=>screen),
-    );
+  }) {
+    finish
+        ? Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+            (route) => false,
+          )
+        : Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+          );
   }
 }

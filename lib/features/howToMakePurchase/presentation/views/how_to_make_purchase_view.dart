@@ -39,9 +39,7 @@ class HowToMakePurchaseView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
               ),
               child: const Icon(
                 Icons.shopping_bag_rounded,

@@ -24,10 +24,7 @@ class PaymentSettingsError extends StatelessWidget {
           Text(
             'تعذر تحميل إعدادات النشر. حاول مرة أخرى.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 12),
           CustomButton(

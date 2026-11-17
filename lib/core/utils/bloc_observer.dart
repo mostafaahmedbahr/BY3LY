@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    debugPrint(event.toString());
+    logWarning(event.toString());
   }
 
   @override
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
-    debugPrint(
+    logWarning(
       '${bloc.runtimeType} Change { currentState: ${change.currentState}, nextState: ${change.nextState} }',
     );
   }
@@ -19,18 +20,18 @@ class SimpleBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    debugPrint(bloc.toString());
+    logWarning(bloc.toString());
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    debugPrint(transition.toString());
+    logWarning(transition.toString());
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print(error);
+    logError(error.toString());
     super.onError(bloc, error, stackTrace);
   }
 }

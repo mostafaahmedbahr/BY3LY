@@ -31,10 +31,7 @@ class PremiumCtaButton extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [
-              AppColors.mainColor,
-              AppColors.secondColor,
-            ],
+            colors: [AppColors.mainColor, AppColors.secondColor],
           ),
           boxShadow: [
             BoxShadow(

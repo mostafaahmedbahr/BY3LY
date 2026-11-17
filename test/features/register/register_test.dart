@@ -42,17 +42,21 @@ class FakeRegisterRepo implements RegisterRepo {
   Map<String, dynamic>? recordedPayload;
 
   @override
-  Future<Either<Failure, RegisterModel>> register(
-      {required dynamic data}) async {
+  Future<Either<Failure, RegisterModel>> register({
+    required dynamic data,
+  }) async {
     calls++;
     if (shouldFail) return Left(ServerFailure('fetch failed'));
-    return Right(RegisterModel.fromJson(
-      Map<String, dynamic>.from(_successJson),
-    ));
+    return Right(
+      RegisterModel.fromJson(Map<String, dynamic>.from(_successJson)),
+    );
   }
 }
 
-Widget _harness({required Widget child, List<BlocProvider> providers = const []}) {
+Widget _harness({
+  required Widget child,
+  List<BlocProvider> providers = const [],
+}) {
   return ThemeProvider(
     initTheme: AppThemes.light,
     duration: const Duration(milliseconds: 100),
@@ -176,31 +180,33 @@ void main() {
       await cubit.close();
     });
 
-    test('signUp success emits Loading then Success and caches the email',
-        () async {
-      final repo = FakeRegisterRepo();
-      final cubit = RegisterCubit(repo);
-      final events = <RegisterStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'signUp success emits Loading then Success and caches the email',
+      () async {
+        final repo = FakeRegisterRepo();
+        final cubit = RegisterCubit(repo);
+        final events = <RegisterStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      await cubit.signUp(
-        image: null,
-        phoneNumber: '01012345678',
-        name: 'أحمد محمود',
-        email: 'ahmed@mail.com',
-        password: 'Aa1!abcd',
-        age: '28',
-      );
-      await Future<void>.delayed(Duration.zero);
+        await cubit.signUp(
+          image: null,
+          phoneNumber: '01012345678',
+          name: 'أحمد محمود',
+          email: 'ahmed@mail.com',
+          password: 'Aa1!abcd',
+          age: '28',
+        );
+        await Future<void>.delayed(Duration.zero);
 
-      expect(repo.calls, 1);
-      expect(events.first, isA<SignUpLoading>());
-      expect(events.last, isA<SignUpSuccess>());
-      expect(CacheHelper.getData(key: 'email'), 'resolved@mail.com');
-      expect((events.last as SignUpSuccess).registerModel.data?.otp, '5678');
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(repo.calls, 1);
+        expect(events.first, isA<SignUpLoading>());
+        expect(events.last, isA<SignUpSuccess>());
+        expect(CacheHelper.getData(key: 'email'), 'resolved@mail.com');
+        expect((events.last as SignUpSuccess).registerModel.data?.otp, '5678');
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
     test('signUp failure emits Loading then Error', () async {
       final repo = FakeRegisterRepo()..shouldFail = true;
@@ -224,54 +230,58 @@ void main() {
       await cubit.close();
     });
 
-    test('signUp with status false emits Error with the server message',
-        () async {
-      // Fake repo that returns the failure-envelope shape.
-      final cubit = RegisterCubit(_StatusFalseRepo());
-      final events = <RegisterStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'signUp with status false emits Error with the server message',
+      () async {
+        // Fake repo that returns the failure-envelope shape.
+        final cubit = RegisterCubit(_StatusFalseRepo());
+        final events = <RegisterStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      await cubit.signUp(
-        image: null,
-        phoneNumber: '01012345678',
-        name: 'أحمد محمود',
-        email: 'ahmed@mail.com',
-        password: 'Aa1!abcd',
-        age: '28',
-      );
-      await Future<void>.delayed(Duration.zero);
+        await cubit.signUp(
+          image: null,
+          phoneNumber: '01012345678',
+          name: 'أحمد محمود',
+          email: 'ahmed@mail.com',
+          password: 'Aa1!abcd',
+          age: '28',
+        );
+        await Future<void>.delayed(Duration.zero);
 
-      expect(events.last, isA<SignUpError>());
-      expect((events.last as SignUpError).message, 'البريد مستخدم');
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(events.last, isA<SignUpError>());
+        expect((events.last as SignUpError).message, 'البريد مستخدم');
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
-    test('clearData empties every controller and emits ClearDataSuccess',
-        () async {
-      final cubit = RegisterCubit(FakeRegisterRepo());
-      cubit.nameCon.text = 'x';
-      cubit.mobileCon.text = 'x';
-      cubit.emailCon.text = 'x';
-      cubit.passCon.text = 'x';
-      cubit.confirmPassCon.text = 'x';
-      cubit.ageCon.text = 'x';
+    test(
+      'clearData empties every controller and emits ClearDataSuccess',
+      () async {
+        final cubit = RegisterCubit(FakeRegisterRepo());
+        cubit.nameCon.text = 'x';
+        cubit.mobileCon.text = 'x';
+        cubit.emailCon.text = 'x';
+        cubit.passCon.text = 'x';
+        cubit.confirmPassCon.text = 'x';
+        cubit.ageCon.text = 'x';
 
-      final events = <RegisterStates>[];
-      final sub = cubit.stream.listen(events.add);
-      cubit.clearData();
-      await Future<void>.delayed(Duration.zero);
+        final events = <RegisterStates>[];
+        final sub = cubit.stream.listen(events.add);
+        cubit.clearData();
+        await Future<void>.delayed(Duration.zero);
 
-      expect(cubit.nameCon.text, isEmpty);
-      expect(cubit.mobileCon.text, isEmpty);
-      expect(cubit.emailCon.text, isEmpty);
-      expect(cubit.passCon.text, isEmpty);
-      expect(cubit.confirmPassCon.text, isEmpty);
-      expect(cubit.ageCon.text, isEmpty);
-      expect(events.single, isA<ClearDataSuccess>());
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(cubit.nameCon.text, isEmpty);
+        expect(cubit.mobileCon.text, isEmpty);
+        expect(cubit.emailCon.text, isEmpty);
+        expect(cubit.passCon.text, isEmpty);
+        expect(cubit.confirmPassCon.text, isEmpty);
+        expect(cubit.ageCon.text, isEmpty);
+        expect(events.single, isA<ClearDataSuccess>());
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
   });
 
   group('Register widgets', () {
@@ -388,11 +398,11 @@ void main() {
 /// Repo stub: the server responds with `{status: false, message: ...}`.
 class _StatusFalseRepo implements RegisterRepo {
   @override
-  Future<Either<Failure, RegisterModel>> register(
-      {required dynamic data}) async {
-    return Right(RegisterModel.fromJson({
-      'status': false,
-      'message': 'البريد مستخدم',
-    }));
+  Future<Either<Failure, RegisterModel>> register({
+    required dynamic data,
+  }) async {
+    return Right(
+      RegisterModel.fromJson({'status': false, 'message': 'البريد مستخدم'}),
+    );
   }
 }

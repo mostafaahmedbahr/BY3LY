@@ -20,10 +20,7 @@ class LanguageCubit extends Cubit<Locale> {
   /// Persists the choice first so the next request (Dio interceptor)
   /// sends the new language, then updates the active locale.
   void changeLanguage(BuildContext context, Locale locale) {
-    CacheHelper.saveData(
-      key: StorageKeys.language,
-      value: locale.languageCode,
-    );
+    CacheHelper.saveData(key: StorageKeys.language, value: locale.languageCode);
     EasyLocalization.of(context)?.setLocale(locale);
     emit(locale);
   }

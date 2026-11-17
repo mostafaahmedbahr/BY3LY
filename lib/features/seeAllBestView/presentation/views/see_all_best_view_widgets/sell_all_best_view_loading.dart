@@ -8,7 +8,7 @@ class SellAllBestViewLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child:  GridView.builder(
+      child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -19,10 +19,7 @@ class SellAllBestViewLoading extends StatelessWidget {
         ),
         itemCount: 20,
         itemBuilder: (context, index) {
-          return const SimmerLoading(
-            height: 120,
-            raduis: 10,
-          );
+          return const SimmerLoading(height: 120, raduis: 10);
         },
       ),
     );

@@ -58,9 +58,7 @@ class SwitchRow extends StatelessWidget {
             child: Icon(
               icon,
               size: 19,
-              color: value
-                  ? AppColors.mainColor
-                  : AppColors.textSecondary,
+              color: value ? AppColors.mainColor : AppColors.textSecondary,
             ),
           ),
           const SizedBox(width: 10),
@@ -79,8 +77,7 @@ class SwitchRow extends StatelessWidget {
             child: Switch(
               value: value,
               activeThumbColor: AppColors.mainColor,
-              activeTrackColor:
-                  AppColors.mainColor.withValues(alpha: 0.35),
+              activeTrackColor: AppColors.mainColor.withValues(alpha: 0.35),
               onChanged: onChanged,
             ),
           ),

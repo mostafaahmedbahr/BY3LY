@@ -80,11 +80,9 @@ class PackagesViewBody extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     itemCount: packages.length,
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) => PackageCard(
-                      package: packages[index],
-                    ),
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) =>
+                        PackageCard(package: packages[index]),
                   ),
                 ),
             ],

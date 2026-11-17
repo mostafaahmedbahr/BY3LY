@@ -1,7 +1,7 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
@@ -20,10 +20,12 @@ class DeleteAccountReposImple implements DeleteAccountRepos {
         endPoint: EndPoints.deleteAccount,
       );
       final result = DeleteAccountModel.fromJson(response.data);
-      debugPrint('DeleteAccountReposImple deleteAccount: status=${result.status}');
+      logWarning(
+        'DeleteAccountReposImple deleteAccount: status=${result.status}',
+      );
       return right(result);
     } catch (e) {
-      debugPrint('DeleteAccountReposImple deleteAccount error: $e');
+      logWarning('DeleteAccountReposImple deleteAccount error: $e');
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

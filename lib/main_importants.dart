@@ -1,4 +1,4 @@
-export'package:by3ly/core/utils/app_colors/app_colors.dart';
+export 'package:by3ly/core/utils/app_colors/app_colors.dart';
 export 'package:flutter/material.dart';
 export 'package:by3ly/lang/locale_keys.dart';
 export 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
@@ -12,9 +12,9 @@ export 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 export 'package:cherry_toast/cherry_toast.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:by3ly/core/utils/app_validator/app_validator.dart';
- export 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
- export 'package:by3ly/core/shared_widgets/custom_drop_down.dart';
- export 'package:by3ly/core/errors/failure.dart';
+export 'package:by3ly/core/shared_widgets/custom_cached_network_image.dart';
+export 'package:by3ly/core/shared_widgets/custom_drop_down.dart';
+export 'package:by3ly/core/errors/failure.dart';
 export 'package:by3ly/core/extensions/log.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:by3ly/core/extensions/navigate.dart';
@@ -31,7 +31,3 @@ export 'package:gap/gap.dart';
 export 'package:by3ly/core/utils/new_toast/toast.dart';
 export 'package:by3ly/core/errors/error_handler.dart';
 export 'package:by3ly/core/utils/app_theme/app_theme_extension.dart';
-
-
-
-

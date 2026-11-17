@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -44,7 +43,7 @@ class HowToMakePurchaseModel {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["status"] = status;
     jsonData["message"] = message;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data?.toJson();
     }
     return jsonData;
@@ -59,7 +58,14 @@ class Data {
   String? direction;
   String? updatedAt;
 
-  Data({this.id, this.title, this.html, this.language, this.direction, this.updatedAt});
+  Data({
+    this.id,
+    this.title,
+    this.html,
+    this.language,
+    this.direction,
+    this.updatedAt,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);

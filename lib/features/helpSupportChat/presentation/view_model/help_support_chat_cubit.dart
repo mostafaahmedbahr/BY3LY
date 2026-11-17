@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
@@ -67,11 +68,11 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
     final conversation = await _repository.getConversation();
     if (isClosed) return;
     conversation.fold(
-      (failure) => debugPrint(
+      (failure) => logWarning(
         'HelpSupportChatCubit conversation failed: ${failure.errMessage}',
       ),
       (data) {
-        debugPrint(
+        logWarning(
           'HelpSupportChatCubit conversation ready: id=${data.conversationId}',
         );
       },
@@ -125,9 +126,7 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
         if (!silent && messages.isEmpty) {
           emit(SupportChatMessagesError(failure.errMessage));
         } else {
-          debugPrint(
-            'HelpSupportChatCubit load failed: ${failure.errMessage}',
-          );
+          logWarning('HelpSupportChatCubit load failed: ${failure.errMessage}');
         }
       },
       (data) {
@@ -147,7 +146,8 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
           ..addAll(loaded);
         _updateHasMore(data.pagination?.total);
 
-        final shouldEmit = !silent || changed || state is SupportChatMessagesError;
+        final shouldEmit =
+            !silent || changed || state is SupportChatMessagesError;
         if (shouldEmit) emit(SupportChatMessagesSuccess());
         // Opening the chat marks staff replies as read; on silent polls only
         // do it when something new actually arrived.
@@ -177,7 +177,9 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
       (data) {
         if (data.status != true) {
           emit(
-            SupportChatOlderMessagesError(data.message ?? 'Something went wrong'),
+            SupportChatOlderMessagesError(
+              data.message ?? 'Something went wrong',
+            ),
           );
           return;
         }
@@ -230,7 +232,7 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
 
     result.fold(
       (failure) =>
-          debugPrint('HelpSupportChatCubit poll failed: ${failure.errMessage}'),
+          logWarning('HelpSupportChatCubit poll failed: ${failure.errMessage}'),
       (data) {
         if (data.status != true) return;
         final incoming = SupportChatRules.filterNewMessages(
@@ -256,7 +258,7 @@ class HelpSupportChatCubit extends Cubit<HelpSupportChatStates>
       final result = await _repository.markRead();
       if (isClosed) return;
       result.fold(
-        (failure) => debugPrint(
+        (failure) => logWarning(
           'HelpSupportChatCubit markRead failed: ${failure.errMessage}',
         ),
         (data) {

@@ -65,10 +65,10 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
   void resendCode() {
     context.read<OtpCubit>().resendOtp(
-          email: widget.email.isEmpty
-              ? (CacheHelper.getData(key: 'email') ?? '').toString()
-              : widget.email,
-        );
+      email: widget.email.isEmpty
+          ? (CacheHelper.getData(key: 'email') ?? '').toString()
+          : widget.email,
+    );
     startTimer();
   }
 

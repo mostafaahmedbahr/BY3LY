@@ -72,11 +72,7 @@ class NameAndLocationAndPriceAndDesOfProduct extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset(
-                  AppImages.location,
-                  width: 14,
-                  height: 14,
-                ),
+                SvgPicture.asset(AppImages.location, width: 14, height: 14),
                 const CustomSizedBox(width: 6),
                 Text(
                   location,

@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:io';
 
 import 'package:by3ly/features/profile/data/models/profile_data_model.dart';
@@ -41,7 +42,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
         emit(UploadImageInProfileSuccessState());
       }
     } catch (e) {
-      debugPrint('Picking profile image failed: $e');
+      logWarning('Picking profile image failed: $e');
     }
   }
 
@@ -115,7 +116,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
     file = null;
     CacheTokenManger.userToken = null;
     await CacheTokenManger.clearUserToken();
-    await CacheHelper.removeData(key: StorageKeys.userToken);
     await CacheHelper.removeData(key: StorageKeys.isGuest);
     await CacheHelper.removeData(key: 'email');
   }

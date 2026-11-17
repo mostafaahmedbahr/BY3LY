@@ -27,8 +27,8 @@ class AddNewAdView extends StatelessWidget {
                 ..getAllCategories(),
         ),
         BlocProvider(
-          create: (context) => AllSubCategoriesCubit(
-              getIt.get<AllSubCategoriesRepoImpl>()),
+          create: (context) =>
+              AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>()),
         ),
       ],
       child: Scaffold(

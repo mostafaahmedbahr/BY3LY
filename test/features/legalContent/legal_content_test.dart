@@ -6,7 +6,6 @@ import 'package:by3ly/features/legalContent/presentation/view_model/legal_conten
 import 'package:by3ly/features/legalContent/presentation/view_model/legal_content_states.dart';
 import 'package:by3ly/features/legalContent/presentation/views/legal_content_view.dart';
 import 'package:by3ly/lang/codegen_loader.g.dart';
-import 'package:by3ly/lang/locale_keys.dart';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,17 +27,19 @@ class FakeLegalContentRepo extends LegalContentRepoImpl {
     calls++;
     lastType = type;
     if (!succeed) return Left(ServerFailure('offline'));
-    return Right(LegalContentModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'title': 'العنوان',
-        'content': '<p>محتوى اختباري</p><ul><li>بند أولى</li></ul>',
-        'language': 'ar',
-        'direction': 'rtl',
-        'updated_at': '2026-11-01 10:00:00',
-      },
-    }));
+    return Right(
+      LegalContentModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'title': 'العنوان',
+          'content': '<p>محتوى اختباري</p><ul><li>بند أولى</li></ul>',
+          'language': 'ar',
+          'direction': 'rtl',
+          'updated_at': '2026-11-01 10:00:00',
+        },
+      }),
+    );
   }
 }
 
@@ -104,8 +105,10 @@ void main() {
       expect(LegalContentModel.fromJson({'status': 1}).status, isTrue);
       expect(LegalContentModel.fromJson({'status': 'true'}).status, isTrue);
       expect(LegalContentModel.fromJson({'status': 0}).status, isFalse);
-      expect(LegalContentModel.fromJson({'status': true, 'data': []}).data,
-          isNull);
+      expect(
+        LegalContentModel.fromJson({'status': true, 'data': []}).data,
+        isNull,
+      );
     });
   });
 
@@ -126,8 +129,9 @@ void main() {
   });
 
   group('LegalContentView', () {
-    testWidgets('renders HTML and per-type premium app bar title',
-        (tester) async {
+    testWidgets('renders HTML and per-type premium app bar title', (
+      tester,
+    ) async {
       final repo = FakeLegalContentRepo();
       if (getIt.isRegistered<LegalContentRepoImpl>()) {
         await getIt.unregister<LegalContentRepoImpl>();

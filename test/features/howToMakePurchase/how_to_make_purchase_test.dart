@@ -14,10 +14,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakeHowToMakePurchaseRepo extends HowToMakePurchaseRepoImpl {
-  FakeHowToMakePurchaseRepo({
-    this.succeed = true,
-    this.message = 'ok',
-  }) : super(null);
+  FakeHowToMakePurchaseRepo({this.succeed = true, this.message = 'ok'})
+    : super(null);
 
   final bool succeed;
   final String message;
@@ -25,22 +23,24 @@ class FakeHowToMakePurchaseRepo extends HowToMakePurchaseRepoImpl {
   int calls = 0;
 
   @override
-  Future<Either<Failure, HowToMakePurchaseModel>> getHowToMakePurchaseData()
-      async {
+  Future<Either<Failure, HowToMakePurchaseModel>>
+  getHowToMakePurchaseData() async {
     calls++;
     if (!succeed) return Left(ServerFailure('offline'));
-    return Right(HowToMakePurchaseModel.fromJson({
-      'status': true,
-      'message': message,
-      'data': {
-        'id': 1,
-        'title': 'تعليمات الشراء',
-        'html': '<p>خطوة بخطوة</p><ul><li>تواصل مع البائع</li></ul>',
-        'language': 'ar',
-        'direction': 'rtl',
-        'updated_at': '2026-11-06 10:00:00',
-      },
-    }));
+    return Right(
+      HowToMakePurchaseModel.fromJson({
+        'status': true,
+        'message': message,
+        'data': {
+          'id': 1,
+          'title': 'تعليمات الشراء',
+          'html': '<p>خطوة بخطوة</p><ul><li>تواصل مع البائع</li></ul>',
+          'language': 'ar',
+          'direction': 'rtl',
+          'updated_at': '2026-11-06 10:00:00',
+        },
+      }),
+    );
   }
 }
 
@@ -96,8 +96,10 @@ void main() {
 
     test('status 1 / "true" parse as true, status 0 as false', () {
       expect(HowToMakePurchaseModel.fromJson({'status': 1}).status, isTrue);
-      expect(HowToMakePurchaseModel.fromJson({'status': 'true'}).status,
-          isTrue);
+      expect(
+        HowToMakePurchaseModel.fromJson({'status': 'true'}).status,
+        isTrue,
+      );
       expect(HowToMakePurchaseModel.fromJson({'status': 0}).status, isFalse);
     });
 
@@ -120,18 +122,20 @@ void main() {
     });
 
     test('failure emits Error with the failure message', () async {
-      final cubit =
-          HowToMakePurchaseCubit(FakeHowToMakePurchaseRepo(succeed: false));
+      final cubit = HowToMakePurchaseCubit(
+        FakeHowToMakePurchaseRepo(succeed: false),
+      );
       await cubit.getHowToMakePurchaseData();
       expect(cubit.state, isA<GetHowToMakePurchaseDataErrorState>());
-      expect((cubit.state as GetHowToMakePurchaseDataErrorState).error,
-          'offline');
+      expect(
+        (cubit.state as GetHowToMakePurchaseDataErrorState).error,
+        'offline',
+      );
     });
   });
 
   group('HowToMakePurchaseView', () {
-    testWidgets('renders instructions from the server payload',
-        (tester) async {
+    testWidgets('renders instructions from the server payload', (tester) async {
       final repo = FakeHowToMakePurchaseRepo();
       if (getIt.isRegistered<HowToMakePurchaseRepoImpl>()) {
         await getIt.unregister<HowToMakePurchaseRepoImpl>();
@@ -149,8 +153,9 @@ void main() {
       expect(repo.calls, greaterThanOrEqualTo(1));
     });
 
-    testWidgets('error payload shows the error widget with a retry',
-        (tester) async {
+    testWidgets('error payload shows the error widget with a retry', (
+      tester,
+    ) async {
       final repo = FakeHowToMakePurchaseRepo(succeed: false);
       if (getIt.isRegistered<HowToMakePurchaseRepoImpl>()) {
         await getIt.unregister<HowToMakePurchaseRepoImpl>();

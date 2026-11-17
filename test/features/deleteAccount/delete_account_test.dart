@@ -58,19 +58,21 @@ void main() {
       await cubit.deleteAccount();
 
       expect(cubit.state, isA<DeleteAccountError>());
-      expect((cubit.state as DeleteAccountError).message,
-          'لا يمكن حذف الحساب');
+      expect((cubit.state as DeleteAccountError).message, 'لا يمكن حذف الحساب');
     });
 
-    test('status false without message emits Error(null) for localized fallback', () async {
-      final repo = FakeDeleteAccountRepos()..response = {'status': false};
-      final cubit = DeleteAccountCubit(repo);
+    test(
+      'status false without message emits Error(null) for localized fallback',
+      () async {
+        final repo = FakeDeleteAccountRepos()..response = {'status': false};
+        final cubit = DeleteAccountCubit(repo);
 
-      await cubit.deleteAccount();
+        await cubit.deleteAccount();
 
-      expect(cubit.state, isA<DeleteAccountError>());
-      expect((cubit.state as DeleteAccountError).message, isNull);
-    });
+        expect(cubit.state, isA<DeleteAccountError>());
+        expect((cubit.state as DeleteAccountError).message, isNull);
+      },
+    );
 
     test('double tap during a request issues a single API call', () async {
       final repo = FakeDeleteAccountRepos()..gate = Completer<void>();

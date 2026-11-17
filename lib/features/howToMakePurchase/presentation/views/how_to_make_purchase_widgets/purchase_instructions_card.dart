@@ -81,9 +81,7 @@ class PurchaseInstructionsCard extends StatelessWidget {
                 color: AppColors.mainColor,
                 textDecoration: TextDecoration.underline,
               ),
-              'hr': Style(
-                color: AppColors.border,
-              ),
+              'hr': Style(color: AppColors.border),
             },
           ),
         ],

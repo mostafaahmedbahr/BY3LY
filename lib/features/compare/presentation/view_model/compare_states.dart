@@ -26,8 +26,7 @@ class CompareProductsSuccess extends CompareStates {
   CompareProductsSuccess(this.compareModel);
 
   @override
-  String toString() =>
-      'CompareProductsSuccess(status: ${compareModel.status})';
+  String toString() => 'CompareProductsSuccess(status: ${compareModel.status})';
 }
 
 class CompareProductsError extends CompareStates {

@@ -3,9 +3,7 @@ import 'package:by3ly/core/utils/app_images/app_images.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/layout/presentation/views/layout_view.dart';
 import 'package:by3ly/features/onBoarding/presentation/views/on_boarding_view.dart';
-import 'package:by3ly/lang/locale_keys.dart';
 import 'package:by3ly/core/app_services/local_services/cache_token.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Premium splash — brand gradient background, the transparent بيعلي
@@ -37,13 +35,13 @@ class _SplashViewState extends State<SplashView>
       parent: _controller,
       curve: const Interval(0.0, 0.75, curve: Curves.easeOutCubic),
     );
-    _slide = Tween<Offset>(
-      begin: const Offset(0, 0.10),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.0, 0.80, curve: Curves.easeOutCubic),
-    ));
+    _slide = Tween<Offset>(begin: const Offset(0, 0.10), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.80, curve: Curves.easeOutCubic),
+          ),
+        );
     _scale = Tween<double>(begin: 0.90, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -54,8 +52,8 @@ class _SplashViewState extends State<SplashView>
 
   void _goNext() {
     if (!mounted) return;
-    final Widget next = (CacheTokenManger.userToken != null ||
-            GuestGuard.isGuest)
+    final Widget next =
+        (CacheTokenManger.userToken != null || GuestGuard.isGuest)
         ? const LayoutView()
         : const OnBoardingView();
     Navigator.of(context).pushReplacement(
@@ -145,11 +143,9 @@ class _SplashViewState extends State<SplashView>
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                AppColors.yellowColor
-                                    .withValues(alpha: 0.0),
+                                AppColors.yellowColor.withValues(alpha: 0.0),
                                 AppColors.yellowColor,
-                                AppColors.yellowColor
-                                    .withValues(alpha: 0.0),
+                                AppColors.yellowColor.withValues(alpha: 0.0),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(2),

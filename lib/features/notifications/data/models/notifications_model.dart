@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -44,16 +43,14 @@ class NotificationsModel {
     status = _asBool(json["status"]);
     message = _asString(json["message"]);
     final raw = json["data"];
-    data = raw is Map
-        ? Data.fromJson(Map<String, dynamic>.from(raw))
-        : null;
+    data = raw is Map ? Data.fromJson(Map<String, dynamic>.from(raw)) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["status"] = status;
     jsonData["message"] = message;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data?.toJson();
     }
     return jsonData;
@@ -78,10 +75,12 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
-    if(notifications != null) {
-      jsonData["notifications"] = notifications?.map((e) => e.toJson()).toList();
+    if (notifications != null) {
+      jsonData["notifications"] = notifications
+          ?.map((e) => e.toJson())
+          .toList();
     }
-    if(pagination != null) {
+    if (pagination != null) {
       jsonData["pagination"] = pagination?.toJson();
     }
     jsonData["unread_count"] = unreadCount;
@@ -124,7 +123,16 @@ class Notifications {
   dynamic readAt;
   String? createdAt;
 
-  Notifications({this.id, this.type, this.title, this.body, this.data, this.isRead, this.readAt, this.createdAt});
+  Notifications({
+    this.id,
+    this.type,
+    this.title,
+    this.body,
+    this.data,
+    this.isRead,
+    this.readAt,
+    this.createdAt,
+  });
 
   Notifications.fromJson(Map<String, dynamic> json) {
     id = _asString(json["id"]);
@@ -144,7 +152,7 @@ class Notifications {
     jsonData["type"] = type;
     jsonData["title"] = title;
     jsonData["body"] = body;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data;
     }
     jsonData["is_read"] = isRead;

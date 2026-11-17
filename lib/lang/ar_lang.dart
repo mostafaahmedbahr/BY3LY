@@ -42,6 +42,9 @@ class ArLang {
     "copyCompanyName": "تم نسخ اسم الشركه",
     "instaPay": "انستاباي",
     "confirmPayment": "تاكيد الدفع",
+    "legacyTopUpNotice":
+        "يتم شحن الرصيد من صفحة الدفع والرصيد، حيث ترفق صورة التحويل ويتم التحقق منها على السيرفر.",
+    "openWalletTopUp": "فتح شحن الرصيد",
     "type": "النوع",
     "removerFromFav": "ازالة من المفضله",
     "all": "جميع المبيعات",
@@ -468,6 +471,10 @@ class ArLang {
     "confirmTopUp": "تأكيد الشحن",
     "confirmSubscription": "تأكيد الاشتراك",
     "enterValidAmount": "من فضلك أدخل المبلغ",
+    "topUpRejected":
+        "لم يتم تأكيد الشحن من السيرفر، برجاء مراجعة الإيصال والمحاولة مرة أخرى",
+    "subscriptionRejected":
+        "لم يتم تأكيد الاشتراك من السيرفر، برجاء مراجعة الإيصال والمحاولة مرة أخرى",
     "noPaymentMethodsAvailable": "لا يوجد طرق تحويل متاحة",
     "packageSubscribed": "تاريخ الانتهاء",
     "remainingAds": "الإعلانات المتبقية",

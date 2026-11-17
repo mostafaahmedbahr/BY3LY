@@ -1,4 +1,3 @@
-
 class AllCitiesAndCentersModel {
   bool? status;
   String? message;
@@ -16,7 +15,7 @@ class AllCitiesAndCentersModel {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["status"] = status;
     jsonData["message"] = message;
-    if(data != null) {
+    if (data != null) {
       jsonData["data"] = data?.toJson();
     }
     return jsonData;
@@ -29,12 +28,14 @@ class Data {
   Data({this.cities});
 
   Data.fromJson(Map<String, dynamic> json) {
-    cities = json["cities"] == null ? null : (json["cities"] as List).map((e) => Cities.fromJson(e)).toList();
+    cities = json["cities"] == null
+        ? null
+        : (json["cities"] as List).map((e) => Cities.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
-    if(cities != null) {
+    if (cities != null) {
       jsonData["cities"] = cities?.map((e) => e.toJson()).toList();
     }
     return jsonData;
@@ -51,14 +52,16 @@ class Cities {
   Cities.fromJson(Map<String, dynamic> json) {
     id = (json["id"] as num).toInt();
     name = json["name"];
-    centers = json["centers"] == null ? null : (json["centers"] as List).map((e) => Centers.fromJson(e)).toList();
+    centers = json["centers"] == null
+        ? null
+        : (json["centers"] as List).map((e) => Centers.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> jsonData = <String, dynamic>{};
     jsonData["id"] = id;
     jsonData["name"] = name;
-    if(centers != null) {
+    if (centers != null) {
       jsonData["centers"] = centers?.map((e) => e.toJson()).toList();
     }
     return jsonData;

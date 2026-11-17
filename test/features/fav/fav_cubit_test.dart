@@ -28,25 +28,28 @@ class FakeFavRepos implements FavRepos {
     getCalls++;
     if (failNext) return Left(ServerFailure('offline'));
     if (statusFalse) {
-      return Right(FavDataModel.fromJson({
-        'status': false,
-        'message': 'rejected',
-      }));
+      return Right(
+        FavDataModel.fromJson({'status': false, 'message': 'rejected'}),
+      );
     }
     final favs = serverFavs
-        .map((id) => {
-              'id': id,
-              'name': 'Product $id',
-              'price': '1000',
-              'image': 'img$id.jpg',
-              'isFavourite': true,
-            })
+        .map(
+          (id) => {
+            'id': id,
+            'name': 'Product $id',
+            'price': '1000',
+            'image': 'img$id.jpg',
+            'isFavourite': true,
+          },
+        )
         .toList();
-    return Right(FavDataModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {'favourites': favs},
-    }));
+    return Right(
+      FavDataModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {'favourites': favs},
+      }),
+    );
   }
 
   @override
@@ -258,7 +261,10 @@ void main() {
             {
               'id': 1,
               'name': 'P',
-              'images': ['a.jpg', {'id': 1, 'image': 'b.jpg'}],
+              'images': [
+                'a.jpg',
+                {'id': 1, 'image': 'b.jpg'},
+              ],
             },
           ],
         },

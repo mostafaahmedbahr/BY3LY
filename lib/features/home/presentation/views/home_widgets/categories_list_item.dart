@@ -22,11 +22,14 @@ class CategoriesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(Routes.allSubCategoriesView, arguments: {
-          'mainCategoryId': id,
-          'mainCategoryName': name,
-          'mainCategoryImage': image,
-        });
+        context.pushNamed(
+          Routes.allSubCategoriesView,
+          arguments: {
+            'mainCategoryId': id,
+            'mainCategoryName': name,
+            'mainCategoryImage': image,
+          },
+        );
       },
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(

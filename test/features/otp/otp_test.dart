@@ -26,14 +26,16 @@ class FakeOtpRepos implements OtpRepos {
     required String deviceToken,
   }) async {
     verifyCalls++;
-    return Right(OtpModel.fromJson({
-      'status': verifyStatus,
-      'message': verifyStatus ? 'تم التفعيل' : 'كود غير صحيح',
-      'data': {
-        'user': {'id': 7, 'name': 'Ahmed', 'token': 'tok-7'},
-        'isActive': true,
-      },
-    }));
+    return Right(
+      OtpModel.fromJson({
+        'status': verifyStatus,
+        'message': verifyStatus ? 'تم التفعيل' : 'كود غير صحيح',
+        'data': {
+          'user': {'id': 7, 'name': 'Ahmed', 'token': 'tok-7'},
+          'isActive': true,
+        },
+      }),
+    );
   }
 
   @override
@@ -41,11 +43,13 @@ class FakeOtpRepos implements OtpRepos {
     required String email,
   }) async {
     resendCalls++;
-    return Right(ResendOtpModel.fromJson({
-      'status': resendStatus,
-      'message': resendStatus ? 'تم إعادة الإرسال' : 'فشل',
-      'data': {'phone': '01000000000', 'code': 123456},
-    }));
+    return Right(
+      ResendOtpModel.fromJson({
+        'status': resendStatus,
+        'message': resendStatus ? 'تم إعادة الإرسال' : 'فشل',
+        'data': {'phone': '01000000000', 'code': 123456},
+      }),
+    );
   }
 }
 

@@ -16,11 +16,7 @@ import 'seller_tab_buttons.dart';
 /// Seller profile body — branded hero, three premium pill tabs, content
 /// sections (profile summary / live ads / previous sales).
 class ProductSellerViewBody extends StatelessWidget {
-  const ProductSellerViewBody({
-    super.key,
-    required this.sellerId,
-    this.repo,
-  });
+  const ProductSellerViewBody({super.key, required this.sellerId, this.repo});
 
   final int sellerId;
 
@@ -42,8 +38,7 @@ class ProductSellerViewBody extends StatelessWidget {
           if (state is GetProductSellerDataErrorState && seller == null) {
             return CustomErrorWidget(
               error: state.error,
-              onTap: () =>
-                  cubit.getProductSellerData(sellerId: sellerId),
+              onTap: () => cubit.getProductSellerData(sellerId: sellerId),
             );
           }
           if (seller == null) {

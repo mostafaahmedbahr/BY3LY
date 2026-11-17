@@ -16,25 +16,26 @@ class AdDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Local provider: pushed routes can't see AdvertisementsView's cubit.
     return BlocProvider(
-      create: (context) => AdvertisementsCubit(
-          getIt.get<AdvertisementsRepoImpl>()),
+      create: (context) =>
+          AdvertisementsCubit(getIt.get<AdvertisementsRepoImpl>()),
       child: Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        shadowColor: AppColors.mainColor,
-        surfaceTintColor: AppColors.mainColor,
-        title: Text(
-          ad.name ?? '',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: AppColors.text,
-            fontWeight: FontWeight.bold,
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          backgroundColor: AppColors.surface,
+          shadowColor: AppColors.mainColor,
+          surfaceTintColor: AppColors.mainColor,
+          title: Text(
+            ad.name ?? '',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppColors.text,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
+        body: AdDetailsViewBody(ad: ad),
       ),
-      body: AdDetailsViewBody(ad: ad),
-    ));
+    );
   }
 }

@@ -59,46 +59,48 @@ class ResendOtpButton extends StatelessWidget {
                   ),
                 )
               : canResend
-                  ? TextButton.icon(
-                      onPressed: onPressed,
-                      icon: const Icon(
-                        Icons.refresh_rounded,
-                        size: 18,
-                        color: AppColors.mainColor,
-                      ),
-                      label: Text(
-                        context.tr(LocaleKeys.resendCode),
-                        style: const TextStyle(
-                          color: AppColors.mainColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.1,
-                        ),
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.timer_outlined,
-                          size: 15,
-                          color: AppColors.textSecondary.withValues(alpha: 0.85),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          context.tr(LocaleKeys.resendCodeIn).replaceAll(
-                              '{seconds}',
-                              '${(secondsRemaining ?? 0)}',
-                            ),
-                          style: TextStyle(
-                            color: AppColors.textSecondary.withValues(alpha: 0.85),
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
-                      ],
+              ? TextButton.icon(
+                  onPressed: onPressed,
+                  icon: const Icon(
+                    Icons.refresh_rounded,
+                    size: 18,
+                    color: AppColors.mainColor,
+                  ),
+                  label: Text(
+                    context.tr(LocaleKeys.resendCode),
+                    style: const TextStyle(
+                      color: AppColors.mainColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.1,
                     ),
+                  ),
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.timer_outlined,
+                      size: 15,
+                      color: AppColors.textSecondary.withValues(alpha: 0.85),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      context
+                          .tr(LocaleKeys.resendCodeIn)
+                          .replaceAll(
+                            '{seconds}',
+                            '${(secondsRemaining ?? 0)}',
+                          ),
+                      style: TextStyle(
+                        color: AppColors.textSecondary.withValues(alpha: 0.85),
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
         );
       },
     );

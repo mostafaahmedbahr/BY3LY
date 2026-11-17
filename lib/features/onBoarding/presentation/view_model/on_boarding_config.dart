@@ -16,19 +16,19 @@ class OnBoardingConfig {
 }
 
 List<OnBoardingConfig> onBoardingSlides() => [
-      OnBoardingConfig(
-        image: AppImages.onBoarding1,
-        title: () => LocaleKeys.youWillSellAndFindEverything.tr(),
-        body: () => LocaleKeys.enjoySafeAndReliableShoppingExperience.tr(),
-      ),
-      OnBoardingConfig(
-        image: AppImages.onBoarding2,
-        title: () => LocaleKeys.easyAndFastPurchaseProcess.tr(),
-        body: () => LocaleKeys.compareProductsBeforeBuying.tr(),
-      ),
-      OnBoardingConfig(
-        image: AppImages.onBoarding3,
-        title: () => LocaleKeys.startYourBusinessNow.tr(),
-        body: () => LocaleKeys.easiestWayToStartOnlineBusiness.tr(),
-      ),
-    ];
+  OnBoardingConfig(
+    image: AppImages.onBoarding1,
+    title: () => LocaleKeys.youWillSellAndFindEverything.tr(),
+    body: () => LocaleKeys.enjoySafeAndReliableShoppingExperience.tr(),
+  ),
+  OnBoardingConfig(
+    image: AppImages.onBoarding2,
+    title: () => LocaleKeys.easyAndFastPurchaseProcess.tr(),
+    body: () => LocaleKeys.compareProductsBeforeBuying.tr(),
+  ),
+  OnBoardingConfig(
+    image: AppImages.onBoarding3,
+    title: () => LocaleKeys.startYourBusinessNow.tr(),
+    body: () => LocaleKeys.easiestWayToStartOnlineBusiness.tr(),
+  ),
+];

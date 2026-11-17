@@ -18,8 +18,7 @@ class SeeAllBestViewBodyList extends StatefulWidget {
   const SeeAllBestViewBodyList({super.key});
 
   @override
-  State<SeeAllBestViewBodyList> createState() =>
-      _SeeAllBestViewBodyListState();
+  State<SeeAllBestViewBodyList> createState() => _SeeAllBestViewBodyListState();
 }
 
 class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
@@ -106,13 +105,13 @@ class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
                       padding: const EdgeInsets.only(bottom: 12),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        // Fixed height instead of ratio — avoids vertical
-                        // overflows on narrow screens.
-                        mainAxisExtent: 235,
-                      ),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            // Fixed height instead of ratio — avoids vertical
+                            // overflows on narrow screens.
+                            mainAxisExtent: 235,
+                          ),
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         return SeeAllBestViewBodyListItem(

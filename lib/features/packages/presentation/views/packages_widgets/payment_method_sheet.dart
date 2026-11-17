@@ -13,8 +13,7 @@ import '../transfer_view.dart';
 
 /// Bottom sheet shown when tapping "اشترك الآن":
 /// wallet (with balance) or transfer.
-Future<void> showPaymentMethodSheet(
-    BuildContext context, Packages package) {
+Future<void> showPaymentMethodSheet(BuildContext context, Packages package) {
   // The sheet is a new route above the page's BlocProvider, so the
   // cubit is passed explicitly to keep it visible inside the sheet.
   final packagesCubit = PackagesCubit.get(context);
@@ -120,8 +119,8 @@ class PaymentMethodSheet extends StatelessWidget {
                   onTap: paying || package.id == null
                       ? null
                       : () => packagesCubit.checkoutWithWallet(
-                            packageId: package.id!,
-                          ),
+                          packageId: package.id!,
+                        ),
                 ),
                 const SizedBox(height: 12),
                 // Transfer option.
@@ -144,8 +143,7 @@ class PaymentMethodSheet extends StatelessWidget {
                               type: PageTransitionType.fade,
                               child: BlocProvider.value(
                                 value: packagesCubit,
-                                child:
-                                    TransferView(package: package),
+                                child: TransferView(package: package),
                               ),
                             ),
                           );
@@ -195,10 +193,7 @@ class _OptionTile extends StatelessWidget {
                 color: AppColors.mainColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.mainColor,
-              ),
+              child: Icon(icon, color: AppColors.mainColor),
             ),
             const SizedBox(width: 12),
             Expanded(

@@ -1,6 +1,6 @@
 import '../../data/models/home_model.dart';
 
-abstract class HomeStates{}
+abstract class HomeStates {}
 
 class HomeInitState extends HomeStates {}
 

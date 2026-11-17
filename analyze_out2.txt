@@ -1,0 +1,31 @@
+﻿Analyzing by3ly...                                              
+
+   info - Angle brackets will be interpreted as HTML. Try using backticks around the content with angle brackets, or try replacing `<` with `&lt;` and `>` with `&gt;` - lib\core\app_services\remote_services\end_points.dart:58:43 - unintended_html_in_doc_comment
+   info - Missing type annotation. Try adding a type annotation - lib\core\extensions\navigate.dart:24:20 - strict_top_level_inference
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement - lib\core\shared_widgets\fav_heart_button.dart:121:32 - deprecated_member_use
+   info - The type parameter name 'Type' matches a visible type name. Try changing the type parameter name to not match an existing type - lib\core\use_cases\use_case_with_no_param.dart:6:35 - avoid_types_as_parameter_names
+   info - The type parameter name 'Type' matches a visible type name. Try changing the type parameter name to not match an existing type - lib\core\use_cases\use_case_with_param.dart:6:33 - avoid_types_as_parameter_names
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\app_nav.dart:5:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\app_nav.dart:5:15 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\app_nav.dart:6:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\app_nav.dart:6:15 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\new_app_nav.dart:6:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\new_app_nav.dart:6:15 - strict_top_level_inference
+   info - 'required' is deprecated and shouldn't be used. In Dart 2.12 and later, use the built-in `required` keyword to mark a named parameter as required. Try replacing the use of the deprecated member with the replacement - lib\core\utils\app_nav\new_app_nav.dart:7:6 - deprecated_member_use
+   info - Missing type annotation. Try adding a type annotation - lib\core\utils\app_nav\new_app_nav.dart:7:15 - strict_top_level_inference
+   info - Don't invoke 'print' in production code. Try using a logging framework - lib\core\utils\bloc_observer.dart:33:5 - avoid_print
+   info - Missing type annotation. Try adding a type annotation - lib\features\confirmPayment\presentation\view_model\confirm_payment_cubit.dart:15:34 - strict_top_level_inference
+warning - The declaration '_openReport' isn't referenced. Try removing the declaration of '_openReport' - lib\features\helpSupport\presentation\views\help_support_widgets\help_support_view_body.dart:54:8 - unused_element
+warning - The value of the local variable 'ads' isn't used. Try removing the variable or using it - lib\features\home\presentation\views\home_widgets\home_view_body.dart:37:13 - unused_local_variable
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:17:26 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:40:24 - strict_top_level_inference
+   info - Missing type annotation. Try adding a type annotation - lib\features\layout\presentation\view_model\layout_cubit.dart:40:31 - strict_top_level_inference
+   info - 'onPopInvoked' is deprecated and shouldn't be used. Use onPopInvokedWithResult instead. This feature was deprecated after v3.22.0-12.0.pre. Try replacing the use of the deprecated member with the replacement - lib\features\layout\presentation\views\layout_view.dart:58:11 - deprecated_member_use
+
+flutter : 21 issues found. (ran in 2.3s)
+At line:1 char:1
++ flutter analyze 2>&1 | Out-File -FilePath "E:\projects\by3ly\analyze_ ...
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (21 issues found. (ran in 2.3s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

@@ -1,9 +1,16 @@
-
-
 import '../../main_importants.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({Key? key,   this.height,   this.width,     this.btnColor, required this.btnText,required this.onPressed,   this.borderColor, this.radius}) : super(key: key);
+  const CustomButton({
+    super.key,
+    this.height,
+    this.width,
+    this.btnColor,
+    required this.btnText,
+    required this.onPressed,
+    this.borderColor,
+    this.radius,
+  });
   final double? height;
   final double? width;
 
@@ -15,23 +22,23 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return    SizedBox(
+    return SizedBox(
       height: height ?? 48,
       width: width ?? double.infinity,
-      child:  ElevatedButton(
+      child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           textStyle: AppStyles.textStyle14W500White,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius ?? 10),
-              side:   BorderSide(
-                width: 1.0,
-                color:borderColor ?? AppColors.mainColor,
-              )
+            side: BorderSide(
+              width: 1.0,
+              color: borderColor ?? AppColors.mainColor,
+            ),
           ),
           backgroundColor: btnColor ?? AppColors.mainColor,
         ),
-        child:  btnText,
+        child: btnText,
       ),
     );
   }

@@ -38,18 +38,12 @@ class ChipsRow extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 220),
               curve: Curves.easeInOut,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 9,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: isSelected
                     ? const LinearGradient(
-                        colors: [
-                          AppColors.mainColor,
-                          AppColors.secondColor,
-                        ],
+                        colors: [AppColors.mainColor, AppColors.secondColor],
                       )
                     : null,
                 color: isSelected ? null : AppColors.surfaceVariant,
@@ -61,8 +55,7 @@ class ChipsRow extends StatelessWidget {
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: AppColors.mainColor
-                              .withValues(alpha: 0.35),
+                          color: AppColors.mainColor.withValues(alpha: 0.35),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -83,9 +76,7 @@ class ChipsRow extends StatelessWidget {
                   Text(
                     o.label,
                     style: TextStyle(
-                      color: isSelected
-                          ? Colors.white
-                          : AppColors.text,
+                      color: isSelected ? Colors.white : AppColors.text,
                       fontSize: 12.5,
                       fontWeight: FontWeight.w600,
                     ),

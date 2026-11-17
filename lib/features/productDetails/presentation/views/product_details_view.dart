@@ -63,7 +63,7 @@ class ProductDetailsView extends StatelessWidget {
         final product = productDetailsCubit.productDetailsModel?.data?.product;
         final relatedProducts =
             productDetailsCubit.productDetailsModel?.data?.relatedProducts ??
-                [];
+            [];
         if (product == null) {
           return Scaffold(
             backgroundColor: AppColors.background,
@@ -208,8 +208,7 @@ class ProductDetailsView extends StatelessWidget {
   }
 
   Future<void> _shareProduct(BuildContext context, String? name) async {
-    final text =
-        '${context.tr(LocaleKeys.shareProductText)}\n${name ?? ''}';
+    final text = '${context.tr(LocaleKeys.shareProductText)}\n${name ?? ''}';
     try {
       await SharePlus.instance.share(ShareParams(text: text));
     } catch (_) {
@@ -230,8 +229,9 @@ class ProductDetailsView extends StatelessWidget {
     final confirmed = await AppConfirmDialog.show(
       context,
       title: actionLabel,
-      message: (isPaused ? LocaleKeys.resumeAdConfirm : LocaleKeys.pauseAdConfirm)
-          .tr(),
+      message:
+          (isPaused ? LocaleKeys.resumeAdConfirm : LocaleKeys.pauseAdConfirm)
+              .tr(),
       confirmText: actionLabel,
       icon: isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded,
       accentColor: isPaused ? AppColors.mainColor : AppColors.yellowColor,

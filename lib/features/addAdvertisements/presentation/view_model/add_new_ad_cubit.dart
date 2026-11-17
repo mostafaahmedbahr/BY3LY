@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:io';
 
 import 'package:by3ly/core/errors/failure.dart';
@@ -20,7 +21,8 @@ import 'add_new_ad_states.dart';
 class AddNewAdCubit extends Cubit<AddNewAdStates> {
   AddNewAdCubit(this.addAdvertisementsRepos) : super(AddNewAdInit());
 
-  static AddNewAdCubit get(BuildContext context) => BlocProvider.of<AddNewAdCubit>(context);
+  static AddNewAdCubit get(BuildContext context) =>
+      BlocProvider.of<AddNewAdCubit>(context);
 
   AddAdvertisementsRepos? addAdvertisementsRepos;
 
@@ -94,9 +96,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   Future<void> pickFromCamera(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     if (totalImagesCount >= maxImages) {
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Max 5 images')),
-      );
+      messenger.showSnackBar(const SnackBar(content: Text('Max 5 images')));
       return;
     }
     final x = await picker.pickImage(source: ImageSource.camera);
@@ -108,8 +108,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
 
   Future<void> pickImages(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
-    const warning =
-        SnackBar(content: Text('Max 5 images'));
+    const warning = SnackBar(content: Text('Max 5 images'));
     final selected = await picker.pickMultiImage();
     if (selected.isEmpty) return;
     final room = maxImages - totalImagesCount;
@@ -118,10 +117,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       emit(AddNewAdImagesChanged());
       return;
     }
-    images = [
-      ...images,
-      ...selected.take(room).map((x) => File(x.path)),
-    ];
+    images = [...images, ...selected.take(room).map((x) => File(x.path))];
     if (selected.length > room) {
       messenger.showSnackBar(warning);
     }
@@ -244,11 +240,13 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     String? transferReference,
   }) async {
     emit(AddNewAdLoading());
-    final result = await addAdvertisementsRepos!.addNewAd(      name: nameCon.text.trim(),
+    final result = await addAdvertisementsRepos!.addNewAd(
+      name: nameCon.text.trim(),
       description: descCon.text.trim(),
       price: priceCon.text.trim(),
-      discount:
-          discountCon.text.trim().isEmpty ? null : discountCon.text.trim(),
+      discount: discountCon.text.trim().isEmpty
+          ? null
+          : discountCon.text.trim(),
       isNegotiable: isNegotiable,
       isUrgent: isUrgent,
       categoryId: categoryId!,
@@ -262,27 +260,30 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       receiptPath: receiptPath,
       transferReference: transferReference,
     );
-    return result.fold((failure) {
-      debugPrint('AddNewAdCubit submit failed: ${failure.errMessage}');
-      // The package/free ads ran out mid-flow → reopen the payment step.
-      if (failure is ServerFailure &&
-          failure.fieldErrors != null &&
-          const [
-            'payment_method',
-            'receipt',
-            'transfer_reference',
-          ].any(failure.fieldErrors!.containsKey)) {
-        emit(AddNewAdPaymentRequired(failure.errMessage));
-        return;
-      }
-      emit(AddNewAdError(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        emit(AddNewAdSuccess(data.message));
-      } else {
-        emit(AddNewAdError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning('AddNewAdCubit submit failed: ${failure.errMessage}');
+        // The package/free ads ran out mid-flow → reopen the payment step.
+        if (failure is ServerFailure &&
+            failure.fieldErrors != null &&
+            const [
+              'payment_method',
+              'receipt',
+              'transfer_reference',
+            ].any(failure.fieldErrors!.containsKey)) {
+          emit(AddNewAdPaymentRequired(failure.errMessage));
+          return;
+        }
+        emit(AddNewAdError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          emit(AddNewAdSuccess(data.message));
+        } else {
+          emit(AddNewAdError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 
   /// Whether publishing is still covered by the subscription package
@@ -296,8 +297,7 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   }
 
   /// Fixed publishing fee shown in the payment step.
-  Future<Either<Failure, AdPublishingSettingsModel>>
-      loadPublishingSettings() {
+  Future<Either<Failure, AdPublishingSettingsModel>> loadPublishingSettings() {
     return addAdvertisementsRepos!.getAdPublishingSettings();
   }
 
@@ -313,8 +313,9 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       name: nameCon.text.trim(),
       description: descCon.text.trim(),
       price: priceCon.text.trim(),
-      discount:
-          discountCon.text.trim().isEmpty ? null : discountCon.text.trim(),
+      discount: discountCon.text.trim().isEmpty
+          ? null
+          : discountCon.text.trim(),
       isNegotiable: isNegotiable,
       isUrgent: isUrgent,
       categoryId: categoryId!,
@@ -325,15 +326,18 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       centerId: centerId!,
       images: images,
     );
-    return result.fold((failure) {
-      debugPrint('AddNewAdCubit submitEdit failed: ${failure.errMessage}');
-      emit(AddNewAdError(failure.errMessage));
-    }, (data) {
-      if (data.status == true) {
-        emit(AddNewAdSuccess(data.message));
-      } else {
-        emit(AddNewAdError(data.message ?? 'Something went wrong'));
-      }
-    });
+    return result.fold(
+      (failure) {
+        logWarning('AddNewAdCubit submitEdit failed: ${failure.errMessage}');
+        emit(AddNewAdError(failure.errMessage));
+      },
+      (data) {
+        if (data.status == true) {
+          emit(AddNewAdSuccess(data.message));
+        } else {
+          emit(AddNewAdError(data.message ?? 'Something went wrong'));
+        }
+      },
+    );
   }
 }

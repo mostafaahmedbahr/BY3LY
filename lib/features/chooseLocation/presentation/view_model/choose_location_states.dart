@@ -2,11 +2,11 @@ import 'package:by3ly/features/chooseLocation/data/models/choose_location_model.
 
 import '../../data/models/cities_centers_model.dart';
 
-abstract class ChooseLocationStates{}
+abstract class ChooseLocationStates {}
 
-class ChooseLocationInitState extends ChooseLocationStates{}
+class ChooseLocationInitState extends ChooseLocationStates {}
 
-class ChooseLocationUpdateState extends ChooseLocationStates{}
+class ChooseLocationUpdateState extends ChooseLocationStates {}
 
 class GetAllCitiesAndCentersLoading extends ChooseLocationStates {}
 
@@ -20,7 +20,7 @@ class GetAllCitiesAndCentersError extends ChooseLocationStates {
   GetAllCitiesAndCentersError(this.message);
 }
 
-class CentersFilteredSuccessState extends ChooseLocationStates{}
+class CentersFilteredSuccessState extends ChooseLocationStates {}
 
 class AddLocationCitiesAndCentersLoading extends ChooseLocationStates {}
 

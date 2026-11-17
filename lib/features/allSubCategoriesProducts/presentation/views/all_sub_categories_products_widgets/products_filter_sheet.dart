@@ -1,5 +1,7 @@
-import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart' as cats;
-import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart' as subs;
+import 'package:by3ly/features/allCategories/data/models/all_categories_model.dart'
+    as cats;
+import 'package:by3ly/features/allSubCategories/data/models/all_sub_categories_model.dart'
+    as subs;
 import 'package:by3ly/features/allCategories/data/repos/all_categories_repo_imple.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
@@ -45,21 +47,18 @@ Future<ProductsFilter?> showProductsFilterSheet({
     builder: (sheetContext) {
       // Fixed sheet height (80% of the screen) so it never jumps
       // while dropdowns load; content is compacted to fit it.
-      final sheetHeight =
-          MediaQuery.of(sheetContext).size.height * 0.8;
+      final sheetHeight = MediaQuery.of(sheetContext).size.height * 0.8;
       return MultiBlocProvider(
         providers: [
           // No auto-fetch here: _loadCategories() in initState drives the
           // single fetch (avoids two parallel network calls on open).
           BlocProvider(
-            create: (_) => AllCategoriesCubit(
-              getIt.get<AllCategoriesRepoImpl>(),
-            ),
+            create: (_) =>
+                AllCategoriesCubit(getIt.get<AllCategoriesRepoImpl>()),
           ),
           BlocProvider(
-            create: (_) => AllSubCategoriesCubit(
-              getIt.get<AllSubCategoriesRepoImpl>(),
-            ),
+            create: (_) =>
+                AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>()),
           ),
         ],
         child: SizedBox(
@@ -135,8 +134,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     // Only when the incoming filter has no place selected.
     if (_cityId == null) {
       try {
-        final user =
-            context.read<ProfileCubit>().profileModel?.data?.user;
+        final user = context.read<ProfileCubit>().profileModel?.data?.user;
         final profileCityId = _asInt(user?.cityId);
         if (profileCityId != null) {
           _cityId = profileCityId;
@@ -163,8 +161,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
   Future<void> _loadCategories() async {
     // Session cache first: no network call on reopen.
-    final cachedCats =
-        AllCategoriesCubit.cachedModel?.data?.categories ?? [];
+    final cachedCats = AllCategoriesCubit.cachedModel?.data?.categories ?? [];
     if (cachedCats.isNotEmpty) {
       if (!mounted) return;
       setState(() {
@@ -198,8 +195,9 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     setState(() {
       _loadingCats = false;
       _categories = list;
-      _catsError =
-          list.isEmpty && state is GetAllCategoriesError ? state.message : null;
+      _catsError = list.isEmpty && state is GetAllCategoriesError
+          ? state.message
+          : null;
     });
     // Load sub-categories if a category was pre-selected.
     if (_categoryId != null && list.any((c) => c.id == _categoryId)) {
@@ -209,10 +207,8 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
 
   Future<void> _loadSubCategories(int categoryId) async {
     // Session cache first: no network call on reopen.
-    final cachedSubs = AllSubCategoriesCubit.cachedFor(categoryId)
-            ?.data
-            ?.subCategories ??
-        [];
+    final cachedSubs =
+        AllSubCategoriesCubit.cachedFor(categoryId)?.data?.subCategories ?? [];
     if (cachedSubs.isNotEmpty) {
       if (!mounted || _categoryId != categoryId) return;
       setState(() {
@@ -227,9 +223,9 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     });
     // Goes through the cubit so the result fills the session cache.
     try {
-      await context
-          .read<AllSubCategoriesCubit>()
-          .getAllSubCategories(categoryId: categoryId);
+      await context.read<AllSubCategoriesCubit>().getAllSubCategories(
+        categoryId: categoryId,
+      );
     } catch (_) {
       if (!mounted || _categoryId != categoryId) return;
       setState(() => _loadingSubs = false);
@@ -240,8 +236,9 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
     if (!mounted || _categoryId != categoryId) return;
     setState(() {
       _loadingSubs = false;
-      _subCategories =
-          context.read<AllSubCategoriesCubit>().allSubCategoriesList;
+      _subCategories = context
+          .read<AllSubCategoriesCubit>()
+          .allSubCategoriesList;
     });
   }
 
@@ -290,9 +287,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       (_shippingType != null ? 1 : 0) +
       (_condition != null ? 1 : 0);
 
-  bool get _hasSelection =>
-      _activeCount > 0 ||
-      _centerId != null;
+  bool get _hasSelection => _activeCount > 0 || _centerId != null;
 
   Widget _categoryField() {
     if (_loadingCats) {
@@ -332,10 +327,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       items: _categories.map((c) {
         return DropdownMenuItem<int>(
           value: c.id,
-          child: Text(
-            c.name ?? '',
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(c.name ?? '', overflow: TextOverflow.ellipsis),
         );
       }).toList(),
       onChanged: _onCategoryChanged,
@@ -367,10 +359,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       );
     }
     if (_subCategories.isEmpty) {
-      return Text(
-        '-',
-        style: TextStyle(color: AppColors.textSecondary),
-      );
+      return Text('-', style: TextStyle(color: AppColors.textSecondary));
     }
     final ids = _subCategories.map((s) => s.id).toSet();
     final safeSub = ids.contains(_subCategoryId) ? _subCategoryId : null;
@@ -381,10 +370,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       items: _subCategories.map((s) {
         return DropdownMenuItem<int>(
           value: s.id,
-          child: Text(
-            s.name ?? '',
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(s.name ?? '', overflow: TextOverflow.ellipsis),
         );
       }).toList(),
       onChanged: (value) {
@@ -471,8 +457,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
       prefixIcon: prefix,
       labelText: label,
       labelStyle: TextStyle(color: AppColors.accent, fontSize: 12),
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide.none,
@@ -560,8 +545,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     label: Text(context.tr(LocaleKeys.clearAll)),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.redColor,
-                      disabledForegroundColor:
-                          AppColors.textSecondary,
+                      disabledForegroundColor: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -607,8 +591,7 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                     ],
                   ),
                 ),
-              if (widget.availableTypes.isNotEmpty)
-                const SizedBox(height: 8),
+              if (widget.availableTypes.isNotEmpty) const SizedBox(height: 8),
 
               /// Price range
               FilterSectionCard(
@@ -655,131 +638,136 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 icon: Icons.location_on_outlined,
                 title: context.tr(LocaleKeys.place),
                 child: BlocBuilder<ChooseLocationCubit, ChooseLocationStates>(
-                builder: (context, state) {
-                  final cities =
-                      ChooseLocationCubit.get(context).allCitiesList;
-                  if (cities.isEmpty) {
-                    if (state is GetAllCitiesAndCentersLoading) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        ),
-                      );
-                    }
-                    if (state is GetAllCitiesAndCentersError) {
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              state.message,
-                              style: TextStyle(color: AppColors.textSecondary),
+                  builder: (context, state) {
+                    final cities = ChooseLocationCubit.get(
+                      context,
+                    ).allCitiesList;
+                    if (cities.isEmpty) {
+                      if (state is GetAllCitiesAndCentersLoading) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             ),
                           ),
-                          TextButton(
-                            onPressed: () => ChooseLocationCubit.get(context)
-                                .getAllCitiesAndCenters(),
-                            child: Text(context.tr(LocaleKeys.apply)),
-                          ),
-                        ],
-                      );
-                    }
-                    return Text(
-                      '-',
-                      style: TextStyle(color: AppColors.textSecondary),
-                    );
-                  }
-                  final centers = _centersForCity(cities, _cityId);
-                  final cityIds = cities.map((c) => c.id).toSet();
-                  final safeCity =
-                      cityIds.contains(_cityId) ? _cityId : null;
-                  final centerIds = centers.map((c) => c.id).toSet();
-                  final safeCenter =
-                      centerIds.contains(_centerId) ? _centerId : null;
-                  // City + center side by side (related fields).
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: DropdownButtonFormField<int>(
-                          key: ValueKey('city_$safeCity'),
-                          initialValue: safeCity,
-                          isExpanded: true,
-                          items: cities.map((city) {
-                            return DropdownMenuItem<int>(
-                              value: city.id,
+                        );
+                      }
+                      if (state is GetAllCitiesAndCentersError) {
+                        return Row(
+                          children: [
+                            Expanded(
                               child: Text(
-                                city.name ?? '',
-                                overflow: TextOverflow.ellipsis,
+                                state.message,
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _cityId = value;
-                              // Reset center when the city changes.
-                              _centerId = null;
-                            });
-                          },
-                          decoration: _dropdownDecoration(
-                            context.tr(LocaleKeys.chooseGovernment),
-                            prefix: const Icon(
-                              Icons.location_city_outlined,
-                              color: AppColors.mainColor,
-                              size: 20,
+                            ),
+                            TextButton(
+                              onPressed: () => ChooseLocationCubit.get(
+                                context,
+                              ).getAllCitiesAndCenters(),
+                              child: Text(context.tr(LocaleKeys.apply)),
+                            ),
+                          ],
+                        );
+                      }
+                      return Text(
+                        '-',
+                        style: TextStyle(color: AppColors.textSecondary),
+                      );
+                    }
+                    final centers = _centersForCity(cities, _cityId);
+                    final cityIds = cities.map((c) => c.id).toSet();
+                    final safeCity = cityIds.contains(_cityId) ? _cityId : null;
+                    final centerIds = centers.map((c) => c.id).toSet();
+                    final safeCenter = centerIds.contains(_centerId)
+                        ? _centerId
+                        : null;
+                    // City + center side by side (related fields).
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<int>(
+                            key: ValueKey('city_$safeCity'),
+                            initialValue: safeCity,
+                            isExpanded: true,
+                            items: cities.map((city) {
+                              return DropdownMenuItem<int>(
+                                value: city.id,
+                                child: Text(
+                                  city.name ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _cityId = value;
+                                // Reset center when the city changes.
+                                _centerId = null;
+                              });
+                            },
+                            decoration: _dropdownDecoration(
+                              context.tr(LocaleKeys.chooseGovernment),
+                              prefix: const Icon(
+                                Icons.location_city_outlined,
+                                color: AppColors.mainColor,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: (safeCity == null || centers.isEmpty)
-                            ? DropdownButtonFormField<int>(
-                                items: const [],
-                                onChanged: null,
-                                decoration: _dropdownDecoration(
-                                  context.tr(LocaleKeys.chooseCenter),
-                                  prefix: const Icon(
-                                    Icons.my_location_outlined,
-                                    color: AppColors.mainColor,
-                                    size: 20,
-                                  ),
-                                ),
-                              )
-                            : DropdownButtonFormField<int>(
-                                key: ValueKey(
-                                    'center_${safeCity}_$safeCenter'),
-                                initialValue: safeCenter,
-                                isExpanded: true,
-                                items: centers.map((center) {
-                                  return DropdownMenuItem<int>(
-                                    value: center.id,
-                                    child: Text(
-                                      center.name ?? '',
-                                      overflow: TextOverflow.ellipsis,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: (safeCity == null || centers.isEmpty)
+                              ? DropdownButtonFormField<int>(
+                                  items: const [],
+                                  onChanged: null,
+                                  decoration: _dropdownDecoration(
+                                    context.tr(LocaleKeys.chooseCenter),
+                                    prefix: const Icon(
+                                      Icons.my_location_outlined,
+                                      color: AppColors.mainColor,
+                                      size: 20,
                                     ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() => _centerId = value);
-                                },
-                                decoration: _dropdownDecoration(
-                                  context.tr(LocaleKeys.chooseCenter),
-                                  prefix: const Icon(
-                                    Icons.my_location_outlined,
-                                    color: AppColors.mainColor,
-                                    size: 20,
+                                  ),
+                                )
+                              : DropdownButtonFormField<int>(
+                                  key: ValueKey(
+                                    'center_${safeCity}_$safeCenter',
+                                  ),
+                                  initialValue: safeCenter,
+                                  isExpanded: true,
+                                  items: centers.map((center) {
+                                    return DropdownMenuItem<int>(
+                                      value: center.id,
+                                      child: Text(
+                                        center.name ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() => _centerId = value);
+                                  },
+                                  decoration: _dropdownDecoration(
+                                    context.tr(LocaleKeys.chooseCenter),
+                                    prefix: const Icon(
+                                      Icons.my_location_outlined,
+                                      color: AppColors.mainColor,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
-                              ),
-                      ),
-                    ],
-                  );
-                },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 8),
@@ -789,28 +777,28 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 icon: Icons.local_shipping_outlined,
                 title: context.tr(LocaleKeys.chooseShippingType),
                 child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  FilterOptionChip(
-                    icon: Icons.apps_rounded,
-                    label: context.tr(LocaleKeys.all),
-                    selected: _shippingType == null,
-                    onSelected: () => setState(() => _shippingType = null),
-                  ),
-                  FilterOptionChip(
-                    icon: Icons.local_shipping_outlined,
-                    label: context.tr(LocaleKeys.freeShipping),
-                    selected: _shippingType == 'free',
-                    onSelected: () => setState(() => _shippingType = 'free'),
-                  ),
-                  FilterOptionChip(
-                    icon: Icons.payments_outlined,
-                    label: context.tr(LocaleKeys.paidShipping),
-                    selected: _shippingType == 'paid',
-                    onSelected: () => setState(() => _shippingType = 'paid'),
-                  ),
-                ],
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    FilterOptionChip(
+                      icon: Icons.apps_rounded,
+                      label: context.tr(LocaleKeys.all),
+                      selected: _shippingType == null,
+                      onSelected: () => setState(() => _shippingType = null),
+                    ),
+                    FilterOptionChip(
+                      icon: Icons.local_shipping_outlined,
+                      label: context.tr(LocaleKeys.freeShipping),
+                      selected: _shippingType == 'free',
+                      onSelected: () => setState(() => _shippingType = 'free'),
+                    ),
+                    FilterOptionChip(
+                      icon: Icons.payments_outlined,
+                      label: context.tr(LocaleKeys.paidShipping),
+                      selected: _shippingType == 'paid',
+                      onSelected: () => setState(() => _shippingType = 'paid'),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 8),
@@ -820,28 +808,28 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 icon: Icons.verified_outlined,
                 title: context.tr(LocaleKeys.chooseProductStatus),
                 child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  FilterOptionChip(
-                    icon: Icons.apps_rounded,
-                    label: context.tr(LocaleKeys.all),
-                    selected: _condition == null,
-                    onSelected: () => setState(() => _condition = null),
-                  ),
-                  FilterOptionChip(
-                    icon: Icons.fiber_new_rounded,
-                    label: context.tr(LocaleKeys.conditionNew),
-                    selected: _condition == 'new',
-                    onSelected: () => setState(() => _condition = 'new'),
-                  ),
-                  FilterOptionChip(
-                    icon: Icons.history_rounded,
-                    label: context.tr(LocaleKeys.conditionUsed),
-                    selected: _condition == 'used',
-                    onSelected: () => setState(() => _condition = 'used'),
-                  ),
-                ],
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    FilterOptionChip(
+                      icon: Icons.apps_rounded,
+                      label: context.tr(LocaleKeys.all),
+                      selected: _condition == null,
+                      onSelected: () => setState(() => _condition = null),
+                    ),
+                    FilterOptionChip(
+                      icon: Icons.fiber_new_rounded,
+                      label: context.tr(LocaleKeys.conditionNew),
+                      selected: _condition == 'new',
+                      onSelected: () => setState(() => _condition = 'new'),
+                    ),
+                    FilterOptionChip(
+                      icon: Icons.history_rounded,
+                      label: context.tr(LocaleKeys.conditionUsed),
+                      selected: _condition == 'used',
+                      onSelected: () => setState(() => _condition = 'used'),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
@@ -869,11 +857,10 @@ class _ProductsFilterSheetState extends State<ProductsFilterSheet> {
                 onPressed: _apply,
               ),
               const SizedBox(height: 8),
-              ],
+            ],
           ),
         ),
       ),
     );
   }
 }
-

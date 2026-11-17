@@ -386,7 +386,6 @@ String _formatNumber(int? value) {
   return number < 0 ? '-$buffer' : buffer.toString();
 }
 
-
 /// Branded shimmer skeleton for the statistics page — month selector bar,
 /// summary tiles grid, period card and timeline placeholder.
 class _StatisticsShimmer extends StatelessWidget {

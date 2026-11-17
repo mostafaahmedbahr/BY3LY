@@ -18,8 +18,7 @@ class GuestGuard {
   const GuestGuard._();
 
   /// True when the app is running in guest (visitor) mode.
-  static bool get isGuest =>
-      CacheHelper.getData(key: 'isGuest') == true;
+  static bool get isGuest => CacheHelper.getData(key: 'isGuest') == true;
 
   /// Enter guest mode and go to the home layout.
   static void enterAsGuest(BuildContext context) {

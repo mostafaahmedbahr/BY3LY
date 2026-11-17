@@ -1,5 +1,4 @@
 import 'package:by3ly/core/errors/failure.dart';
-import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/statistics/data/models/statistics_model.dart';
 import 'package:by3ly/features/statistics/data/repos/statistics_repos.dart';
 import 'package:by3ly/features/statistics/presentation/view_model/statistics_cubit.dart';
@@ -19,7 +18,8 @@ String _currentMonth() {
   return '${now.year}-${now.month.toString().padLeft(2, '0')}';
 }
 
-String _today() => '${_currentMonth()}-${DateTime.now().day.toString().padLeft(2, '0')}';
+String _today() =>
+    '${_currentMonth()}-${DateTime.now().day.toString().padLeft(2, '0')}';
 
 final Map<String, dynamic> _fixture = {
   'status': true,
@@ -77,9 +77,7 @@ class FakeStatisticsRepos implements StatisticsRepos {
     lastMonth = month;
     lastDate = date;
     if (shouldFail) return Left(ServerFailure('fetch failed'));
-    return Right(StatisticsModel.fromJson(
-      Map<String, dynamic>.from(_fixture),
-    ));
+    return Right(StatisticsModel.fromJson(Map<String, dynamic>.from(_fixture)));
   }
 }
 
@@ -143,10 +141,7 @@ void main() {
     });
 
     test('non-map data is dropped, not thrown', () {
-      final model = StatisticsModel.fromJson({
-        'status': '1',
-        'data': 'nope',
-      });
+      final model = StatisticsModel.fromJson({'status': '1', 'data': 'nope'});
       expect(model.status, isTrue);
       expect(model.data, isNull);
 
@@ -169,8 +164,7 @@ void main() {
       cubit.close();
     });
 
-    test('success emits Loading then Success and fills the model',
-        () async {
+    test('success emits Loading then Success and fills the model', () async {
       final repo = FakeStatisticsRepos();
       final cubit = StatisticsCubit(repo);
       final events = <StatisticsStates>[];
@@ -204,8 +198,7 @@ void main() {
       await cubit.close();
     });
 
-    test('selectDate picks a day locally and refresh uses the date',
-        () async {
+    test('selectDate picks a day locally and refresh uses the date', () async {
       final repo = FakeStatisticsRepos();
       final cubit = StatisticsCubit(repo);
       await cubit.getStatistics(month: _currentMonth());
@@ -226,19 +219,27 @@ void main() {
 
       cubit.previousMonth();
       await Future<void>.delayed(Duration.zero);
-      final expectedPrev =
-          DateTime(DateTime.now().year, DateTime.now().month - 1);
-      expect(repo.lastMonth,
-          '${expectedPrev.year}-${expectedPrev.month.toString().padLeft(2, '0')}');
+      final expectedPrev = DateTime(
+        DateTime.now().year,
+        DateTime.now().month - 1,
+      );
+      expect(
+        repo.lastMonth,
+        '${expectedPrev.year}-${expectedPrev.month.toString().padLeft(2, '0')}',
+      );
 
       // The fixture always resets displayedMonth to the current month;
       // next month therefore moves one month past "now".
       cubit.nextMonth();
       await Future<void>.delayed(Duration.zero);
-      final expectedCurrent =
-          DateTime(DateTime.now().year, DateTime.now().month + 1);
-      expect(repo.lastMonth,
-          '${expectedCurrent.year}-${expectedCurrent.month.toString().padLeft(2, '0')}');
+      final expectedCurrent = DateTime(
+        DateTime.now().year,
+        DateTime.now().month + 1,
+      );
+      expect(
+        repo.lastMonth,
+        '${expectedCurrent.year}-${expectedCurrent.month.toString().padLeft(2, '0')}',
+      );
       await cubit.close();
     });
   });
@@ -258,8 +259,9 @@ void main() {
       expect(find.text('جميع المبيعات'), findsNothing);
     });
 
-    testWidgets('success renders the six summary cards and period card',
-        (tester) async {
+    testWidgets('success renders the six summary cards and period card', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1600);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -288,8 +290,9 @@ void main() {
       expect(find.text('إجمالي الفترة'), findsOneWidget);
     });
 
-    testWidgets('error state shows retry and re-fetches on tap',
-        (tester) async {
+    testWidgets('error state shows retry and re-fetches on tap', (
+      tester,
+    ) async {
       final repo = FakeStatisticsRepos()..shouldFail = true;
       final cubit = StatisticsCubit(repo);
       await cubit.getStatistics(month: _currentMonth());

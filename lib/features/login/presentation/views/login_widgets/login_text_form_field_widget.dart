@@ -51,8 +51,7 @@ class LoginTextFormFieldWidget extends StatelessWidget {
                 fillColor: AppColors.surfaceVariant,
                 radius: 14,
                 hintText: context.tr(LocaleKeys.password),
-                obscureText:
-                    context.read<LoginCubit>().isPasswordVisible,
+                obscureText: context.read<LoginCubit>().isPasswordVisible,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: SvgPicture.asset(AppImages.lock),

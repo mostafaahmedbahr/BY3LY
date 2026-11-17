@@ -1,26 +1,29 @@
 import 'package:by3ly/features/updateProfile/data/models/update_profile_data_model.dart';
 
-abstract class UpdateProfileDataStates{}
+abstract class UpdateProfileDataStates {}
 
-class UpdateProfileDataInitState extends UpdateProfileDataStates{
+class UpdateProfileDataInitState extends UpdateProfileDataStates {
   @override
   String toString() => 'UpdateProfileDataInitState';
 }
 
-class UpdateProfileDataLoadingState extends UpdateProfileDataStates{
+class UpdateProfileDataLoadingState extends UpdateProfileDataStates {
   @override
   String toString() => 'UpdateProfileDataLoadingState';
 }
-class UpdateProfileDataSuccessState extends UpdateProfileDataStates{
+
+class UpdateProfileDataSuccessState extends UpdateProfileDataStates {
   final UpdateProfileDataModel updateProfileDataModel;
   UpdateProfileDataSuccessState(this.updateProfileDataModel);
 }
-class UpdateProfileDataErrorState extends UpdateProfileDataStates{
+
+class UpdateProfileDataErrorState extends UpdateProfileDataStates {
   final String error;
   UpdateProfileDataErrorState(this.error);
-
 }
 
-class UploadImageSuccessState extends UpdateProfileDataStates{}
-class UploadImageErrorState extends UpdateProfileDataStates{}
-class ClearImageSuccessState extends UpdateProfileDataStates{}
+class UploadImageSuccessState extends UpdateProfileDataStates {}
+
+class UploadImageErrorState extends UpdateProfileDataStates {}
+
+class ClearImageSuccessState extends UpdateProfileDataStates {}

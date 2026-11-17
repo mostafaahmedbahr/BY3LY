@@ -9,7 +9,7 @@ import 'all_sub_categories_states.dart';
 
 class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
   AllSubCategoriesCubit(this.allSubCategoriesRepos)
-      : super(AllSubCategoriesInitState());
+    : super(AllSubCategoriesInitState());
 
   static AllSubCategoriesCubit get(BuildContext context) =>
       BlocProvider.of<AllSubCategoriesCubit>(context);
@@ -24,12 +24,11 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
   static final Map<int, AllSubCategoriesModel> _cache = {};
 
   /// In-flight requests shared by all instances (one per category).
-  static final Map<int,
-      Future<Either<Failure, AllSubCategoriesModel>>> _inFlight = {};
+  static final Map<int, Future<Either<Failure, AllSubCategoriesModel>>>
+  _inFlight = {};
 
   /// Cached sub-categories for [categoryId], if already fetched.
-  static AllSubCategoriesModel? cachedFor(int categoryId) =>
-      _cache[categoryId];
+  static AllSubCategoriesModel? cachedFor(int categoryId) => _cache[categoryId];
 
   /// Test-only helper: resets the static cache between tests.
   @visibleForTesting
@@ -59,13 +58,16 @@ class AllSubCategoriesCubit extends Cubit<AllSubCategoriesStates> {
     );
     final result = await _inFlight[categoryId]!;
     _inFlight.remove(categoryId);
-    return result.fold((failure) {
-      emit(GetAllSubCategoriesError(failure.errMessage));
-    }, (data) {
-      allSubCategoriesModel = data;
-      _cache[categoryId] = data;
-      allSubCategoriesList = [...?data.data?.subCategories];
-      emit(GetAllSubCategoriesSuccess(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(GetAllSubCategoriesError(failure.errMessage));
+      },
+      (data) {
+        allSubCategoriesModel = data;
+        _cache[categoryId] = data;
+        allSubCategoriesList = [...?data.data?.subCategories];
+        emit(GetAllSubCategoriesSuccess(data));
+      },
+    );
   }
 }

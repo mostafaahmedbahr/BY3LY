@@ -47,7 +47,10 @@ class OtpButton extends StatelessWidget {
               ? state.otpModel.message!
               : context.tr(LocaleKeys.loginSuccess);
           CherryToast.success(
-            title: Text(msg, style: const TextStyle(color: AppColors.mainColor)),
+            title: Text(
+              msg,
+              style: const TextStyle(color: AppColors.mainColor),
+            ),
           ).show(context);
           FocusScope.of(context).unfocus();
           context.pushNamedAndRemoveAll(Routes.chooseLocationView);
@@ -73,10 +76,7 @@ class OtpButton extends StatelessWidget {
                         AppColors.mainColor.withValues(alpha: 0.55),
                         AppColors.secondColor.withValues(alpha: 0.55),
                       ]
-                    : const [
-                        AppColors.mainColor,
-                        AppColors.secondColor,
-                      ],
+                    : const [AppColors.mainColor, AppColors.secondColor],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -99,15 +99,15 @@ class OtpButton extends StatelessWidget {
                     : () {
                         if (formKey.currentState?.validate() ?? false) {
                           context.read<OtpCubit>().verifyOtp(
-                                otp: controller.text,
-                                email: email.isEmpty
-                                    ? (CacheHelper.getData(key: 'email') ?? '')
-                                    : email,
-                                deviceToken:
-                                    CacheHelper.getData(key: StorageKeys.fcmToken)
-                                            as String? ??
-                                        '',
-                              );
+                            otp: controller.text,
+                            email: email.isEmpty
+                                ? (CacheHelper.getData(key: 'email') ?? '')
+                                : email,
+                            deviceToken:
+                                CacheHelper.getData(key: StorageKeys.fcmToken)
+                                    as String? ??
+                                '',
+                          );
                         }
                       },
                 borderRadius: BorderRadius.circular(15),

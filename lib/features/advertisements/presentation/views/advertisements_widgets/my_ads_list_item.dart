@@ -132,8 +132,7 @@ class MyAdsListItem extends StatelessWidget {
                       const CustomSizedBox(height: 4),
                       Text(
                         [adsProduct.type, adsProduct.model]
-                            .where((e) =>
-                                (e?.trim().isNotEmpty ?? false))
+                            .where((e) => (e?.trim().isNotEmpty ?? false))
                             .join('  •  '),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -195,9 +194,7 @@ class MyAdsListItem extends StatelessWidget {
                 } else if (state is PauseResumeAdSuccessState &&
                     state.adId == adsProduct.id) {
                   final fallback = context.tr(
-                    state.isPaused
-                        ? LocaleKeys.pauseAd
-                        : LocaleKeys.resumeAd,
+                    state.isPaused ? LocaleKeys.pauseAd : LocaleKeys.resumeAd,
                   );
                   CherryToast.success(
                     title: Text(
@@ -215,9 +212,11 @@ class MyAdsListItem extends StatelessWidget {
                 }
               },
               builder: (context, state) {
-                final deleting = state is DeleteAdLoadingState &&
+                final deleting =
+                    state is DeleteAdLoadingState &&
                     state.adId == adsProduct.id;
-                final pausing = state is PauseResumeAdLoadingState &&
+                final pausing =
+                    state is PauseResumeAdLoadingState &&
                     state.adId == adsProduct.id;
                 final busy = deleting || pausing;
                 return Row(
@@ -230,9 +229,7 @@ class MyAdsListItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: AdDeleteButton(ad: adsProduct),
-                    ),
+                    Expanded(child: AdDeleteButton(ad: adsProduct)),
                   ],
                 );
               },

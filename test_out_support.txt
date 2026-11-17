@@ -1,0 +1,85 @@
+﻿00:00 +0: loading E:/projects/by3ly/test/features/helpSupportChat/support_chat_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: SupportChatRules image validation accepts jpg/png/webp and rejects gif/pdf
+00:00 +1: SupportChatRules message helpers sort, dedupe and mark read without mutating
+00:00 +2: Support models tolerant parsing for ids, booleans and response shapes
+00:00 +3: HelpSupportChatCubit integration init loads conversation, history and marks messages read
+HelpSupportChatCubit conversation ready: id=1
+00:00 +3 -1: HelpSupportChatCubit integration init loads conversation, history and marks messages read [E]
+  Expected: <Instance of 'SupportChatMarkedRead'>
+    Actual: <Instance of 'SupportChatMessagesSuccess'>
+     Which: is not an instance of 'SupportChatMarkedRead'
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 271:7  main.<fn>.<fn>
+  
+00:00 +3 -1: HelpSupportChatCubit integration conversation failure does not block history loading
+HelpSupportChatCubit conversation failed: offline
+00:00 +4 -1: HelpSupportChatCubit integration load failure emits error and retry recovers
+00:00 +4 -2: HelpSupportChatCubit integration load failure emits error and retry recovers [E]
+  Expected: <Instance of 'SupportChatMarkedRead'>
+    Actual: <Instance of 'SupportChatMessagesSuccess'>
+     Which: is not an instance of 'SupportChatMarkedRead'
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 307:7  main.<fn>.<fn>
+  
+00:00 +4 -2: HelpSupportChatCubit integration sendText trims, dedupes and blocks double taps
+00:00 +4 -3: HelpSupportChatCubit integration sendText trims, dedupes and blocks double taps [E]
+  Expected: <1>
+    Actual: <2>
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 324:7  main.<fn>.<fn>
+  
+00:00 +4 -3: HelpSupportChatCubit integration sendText failure emits an error state
+00:00 +5 -3: HelpSupportChatCubit integration poll inserts new support replies and marks them read
+HelpSupportChatCubit conversation ready: id=1
+00:00 +5 -4: HelpSupportChatCubit integration poll inserts new support replies and marks them read [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 368:7  main.<fn>.<fn>
+  
+00:00 +5 -4: HelpSupportChatCubit integration loadOlderMessages uses before_id and appends history
+HelpSupportChatCubit conversation ready: id=1
+00:00 +5 -5: HelpSupportChatCubit integration loadOlderMessages uses before_id and appends history [E]
+  Expected: <5>
+    Actual: <null>
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 382:7  main.<fn>.<fn>
+  
+00:00 +5 -5: HelpSupportChatCubit integration older messages failure emits a retryable error
+HelpSupportChatCubit conversation ready: id=1
+00:00 +5 -6: HelpSupportChatCubit integration older messages failure emits a retryable error [E]
+  Expected: <Instance of 'SupportChatOlderMessagesError'>
+    Actual: <Instance of 'SupportChatMarkedRead'>
+     Which: is not an instance of 'SupportChatOlderMessagesError'
+  
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\helpSupportChat\support_chat_test.dart 396:7  main.<fn>.<fn>
+  
+00:00 +5 -6: HelpSupportChatCubit integration sendImage accepts a real jpg file and inserts the image message
+00:00 +6 -6: HelpSupportChatCubit integration sendImage rejects bad extension and missing files without a request
+00:00 +7 -6: HelpSupportChatCubit integration sendImage failure emits an error state
+00:00 +8 -6: SupportUnreadCubit success sets count and failures are silent
+SupportUnreadCubit refresh failed: offline
+00:00 +9 -6: SupportUnreadCubit negative counts are clamped to zero
+00:00 +10 -6: SupportUnreadCubit guest mode never calls the backend
+00:00 +11 -6: (tearDownAll)
+00:00 +11 -6: Some tests failed.
+
+Failing tests:
+  E:/projects/by3ly/test/features/helpSupportChat/support_chat_test.dart: HelpSupportChatCubit integration init loads conversation, history and marks messages read
+  E:/projects/by3ly/test/features/helpSupportChat/support_chat_test.dart: HelpSupportChatCubit integration load failure emits error and retry recovers
+  E:/projects/by3ly/test/features/helpSupportChat/support_chat_test.dart: HelpSupportChatCubit integration loadOlderMessages uses before_id and appends history
+  E:/projects/by3ly/test/features/helpSupportChat/support_chat_test.dart: HelpSupportChatCubit integration older messages failure emits a retryable error
+  ... and 2 more

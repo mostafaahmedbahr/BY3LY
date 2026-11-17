@@ -10,16 +10,18 @@ import 'brand_logo.dart';
 
 /// Brand identity per payment method (matched by code/name).
 class PaymentMethodBrand {
-  const PaymentMethodBrand(this.color, this.icon,
-      [this.kind = BrandLogoKind.generic]);
+  const PaymentMethodBrand(
+    this.color,
+    this.icon, [
+    this.kind = BrandLogoKind.generic,
+  ]);
   final Color color;
   final IconData icon;
   final BrandLogoKind kind;
 }
 
 PaymentMethodBrand brandForPaymentMethod(PaymentMethod method) {
-  final text =
-      '${method.code ?? ''} ${method.name ?? ''}'.toLowerCase();
+  final text = '${method.code ?? ''} ${method.name ?? ''}'.toLowerCase();
   if (text.contains('vodafone') || text.contains('فودافون')) {
     return const PaymentMethodBrand(
       Color(0xffE60000),
@@ -31,7 +33,9 @@ PaymentMethodBrand brandForPaymentMethod(PaymentMethod method) {
       text.contains('اورنج') ||
       text.contains('أورانج')) {
     return const PaymentMethodBrand(
-        Color(0xffFF7900), Icons.smartphone_rounded);
+      Color(0xffFF7900),
+      Icons.smartphone_rounded,
+    );
   }
   if (text.contains('etisalat') ||
       text.contains('اتصالات') ||
@@ -54,25 +58,32 @@ PaymentMethodBrand brandForPaymentMethod(PaymentMethod method) {
   }
   if (text.contains('fawry') || text.contains('فوري')) {
     return const PaymentMethodBrand(
-        Color(0xffB8860B), Icons.storefront_rounded);
+      Color(0xffB8860B),
+      Icons.storefront_rounded,
+    );
   }
   if (text.contains('bank') ||
       text.contains('بنك') ||
       text.contains('iban') ||
       text.contains('حساب بنكي')) {
     return const PaymentMethodBrand(
-        Color(0xff1B3A6B), Icons.account_balance_rounded);
+      Color(0xff1B3A6B),
+      Icons.account_balance_rounded,
+    );
   }
   if (text.contains('wallet') || text.contains('محفظ')) {
     return const PaymentMethodBrand(
-        AppColors.mainColor, Icons.account_balance_wallet_rounded);
+      AppColors.mainColor,
+      Icons.account_balance_wallet_rounded,
+    );
   }
   if (text.contains('cash') || text.contains('كاش')) {
-    return const PaymentMethodBrand(
-        Color(0xff2E7D32), Icons.payments_rounded);
+    return const PaymentMethodBrand(Color(0xff2E7D32), Icons.payments_rounded);
   }
   return const PaymentMethodBrand(
-      AppColors.mainColor, Icons.swap_horiz_rounded);
+    AppColors.mainColor,
+    Icons.swap_horiz_rounded,
+  );
 }
 
 /// Selectable payment-method card with the official company logo,
@@ -190,19 +201,13 @@ class TransferMethodCard extends StatelessWidget {
               IconButton(
                 tooltip: context.tr(LocaleKeys.copyNumber),
                 onPressed: () {
-                  Clipboard.setData(
-                    ClipboardData(text: method.account!),
-                  );
+                  Clipboard.setData(ClipboardData(text: method.account!));
                   Toast.showSuccessToast(
                     msg: context.tr(LocaleKeys.numberCopied),
                     context: context,
                   );
                 },
-                icon: Icon(
-                  Icons.copy_rounded,
-                  size: 18,
-                  color: brandColor,
-                ),
+                icon: Icon(Icons.copy_rounded, size: 18, color: brandColor),
               ),
           ],
         ),

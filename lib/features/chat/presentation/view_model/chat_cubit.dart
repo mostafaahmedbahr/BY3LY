@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
@@ -91,7 +92,7 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
         if (!silent && messages.isEmpty) {
           emit(ChatMessagesError(failure.errMessage));
         } else {
-          debugPrint('ChatCubit load failed: ${failure.errMessage}');
+          logWarning('ChatCubit load failed: ${failure.errMessage}');
         }
       },
       (data) {
@@ -102,9 +103,13 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
           }
           return;
         }
-        final loaded = ChatRules.sortedMessagesDesc(data.data!.messages ?? const []);
+        final loaded = ChatRules.sortedMessagesDesc(
+          data.data!.messages ?? const [],
+        );
         for (var m in loaded) {
-          debugPrint('📥 LOADED MESSAGE: id=${m.id} type=${m.type} body=${m.body} image=${m.image} isMine=${m.isMine}');
+          logWarning(
+            '📥 LOADED MESSAGE: id=${m.id} type=${m.type} body=${m.body} image=${m.image} isMine=${m.isMine}',
+          );
         }
         final changed = !ChatRules.sameMessageIds(messages, loaded);
         messages
@@ -146,7 +151,9 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
         emit(ChatOlderMessagesError(data.message ?? 'Something went wrong'));
         return;
       }
-      final older = ChatRules.sortedMessagesDesc(data.data!.messages ?? const []);
+      final older = ChatRules.sortedMessagesDesc(
+        data.data!.messages ?? const [],
+      );
       if (older.isEmpty) {
         _hasMoreOlder = false;
         emit(ChatMessagesSuccess(messages));
@@ -193,7 +200,7 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
     _isPollingRequest = false;
 
     result.fold(
-      (failure) => debugPrint('ChatCubit poll failed: ${failure.errMessage}'),
+      (failure) => logWarning('ChatCubit poll failed: ${failure.errMessage}'),
       (data) {
         if (data.status != true || data.data == null) return;
         final incoming = ChatRules.filterNewMessages(
@@ -226,7 +233,7 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       if (isClosed) return;
       result.fold(
         (failure) =>
-            debugPrint('ChatCubit markRead failed: ${failure.errMessage}'),
+            logWarning('ChatCubit markRead failed: ${failure.errMessage}'),
         (data) {
           final updated = ChatRules.markAllMessagesRead(messages);
           messages
@@ -264,8 +271,12 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       },
       (data) {
         final message = data.chatMessage;
-        debugPrint('💬 SEND RESPONSE: status=${data.status} message=${data.message}');
-        debugPrint('💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}');
+        logWarning(
+          '💬 SEND RESPONSE: status=${data.status} message=${data.message}',
+        );
+        logWarning(
+          '💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}',
+        );
         if (data.status != true || message == null) {
           emit(ChatMessageSendError(data.message ?? 'Something went wrong'));
           return false;
@@ -307,8 +318,12 @@ class ChatCubit extends Cubit<ChatStates> with WidgetsBindingObserver {
       },
       (data) {
         final message = data.chatMessage;
-        debugPrint('💬 SEND RESPONSE: status=${data.status} message=${data.message}');
-        debugPrint('💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}');
+        logWarning(
+          '💬 SEND RESPONSE: status=${data.status} message=${data.message}',
+        );
+        logWarning(
+          '💬 PARSED MESSAGE: id=${message?.id} type=${message?.type} body=${message?.body} image=${message?.image} isMine=${message?.isMine}',
+        );
         if (data.status != true || message == null) {
           emit(ChatMessageSendError(data.message ?? 'Something went wrong'));
           return false;

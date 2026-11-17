@@ -1,4 +1,3 @@
-
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
 import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_states.dart';
@@ -26,24 +25,19 @@ class AllCategoriesViewBody extends StatelessWidget {
           return CustomErrorWidget(
             error: state.message.toString(),
             onTap: () => context.read<AllCategoriesCubit>().getAllCategories(
-                  forceRefresh: true,
-                ),
+              forceRefresh: true,
+            ),
           );
         }
 
         final categories = cubit.allCategoriesList;
 
         if (categories.isEmpty) {
-          return Center(
-            child: Text(context.tr(LocaleKeys.noCategoriesYet)),
-          );
+          return Center(child: Text(context.tr(LocaleKeys.noCategoriesYet)));
         }
 
         return Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 12.h,
-            horizontal: 18.w,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 18.w),
           child: AnimationLimiter(
             child: ListView.separated(
               physics: const BouncingScrollPhysics(),

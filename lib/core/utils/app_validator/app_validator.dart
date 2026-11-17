@@ -11,7 +11,8 @@ class MyValidators {
     final trimmed = displayName.trim();
 
     if (trimmed.length < 2) {
-      return LocaleKeys.nameTooShort.tr(); // "Name must be at least 2 characters"
+      return LocaleKeys.nameTooShort
+          .tr(); // "Name must be at least 2 characters"
     }
 
     if (trimmed.length > 50) {
@@ -23,12 +24,12 @@ class MyValidators {
     }
 
     if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(trimmed)) {
-      return LocaleKeys.nameNoSpecialChars.tr(); // "Name cannot contain special characters"
+      return LocaleKeys.nameNoSpecialChars
+          .tr(); // "Name cannot contain special characters"
     }
 
     return null;
   }
-
 
   static String? displayMessageValidator(String? message) {
     if (message == null || message.isEmpty) {
@@ -36,11 +37,13 @@ class MyValidators {
     }
 
     if (message.length < 10) {
-      return LocaleKeys.messageTooShort.tr(); // "Message must be at least 10 characters"
+      return LocaleKeys.messageTooShort
+          .tr(); // "Message must be at least 10 characters"
     }
 
     if (message.length > 500) {
-      return LocaleKeys.messageTooLong.tr(); // "Message cannot exceed 500 characters"
+      return LocaleKeys.messageTooLong
+          .tr(); // "Message cannot exceed 500 characters"
     }
 
     return null;
@@ -52,7 +55,7 @@ class MyValidators {
     }
 
     final emailRegex = RegExp(
-        r'^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+      r'^[a-zA-Z0-9.!#$%&*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
     );
 
     if (!emailRegex.hasMatch(value)) {
@@ -65,11 +68,13 @@ class MyValidators {
     }
 
     if (value.startsWith('.') || value.endsWith('.')) {
-      return LocaleKeys.emailInvalidDots.tr(); // "Email cannot start or end with a dot"
+      return LocaleKeys.emailInvalidDots
+          .tr(); // "Email cannot start or end with a dot"
     }
 
     if ('@.'.allMatches(value).length > 1) {
-      return LocaleKeys.emailMultipleAt.tr(); // "Email can only contain one @ symbol"
+      return LocaleKeys.emailMultipleAt
+          .tr(); // "Email can only contain one @ symbol"
     }
 
     return null;
@@ -84,19 +89,27 @@ class MyValidators {
     final requirements = <String>[];
 
     if (value.length < 8) {
-      requirements.add(LocaleKeys.passwordMinLength.tr()); // "8 characters minimum"
+      requirements.add(
+        LocaleKeys.passwordMinLength.tr(),
+      ); // "8 characters minimum"
     }
 
     if (value.length > 30) {
-      requirements.add(LocaleKeys.passwordMaxLength.tr()); // "30 characters maximum"
+      requirements.add(
+        LocaleKeys.passwordMaxLength.tr(),
+      ); // "30 characters maximum"
     }
 
     if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      requirements.add(LocaleKeys.passwordRequireUppercase.tr()); // "1 uppercase letter"
+      requirements.add(
+        LocaleKeys.passwordRequireUppercase.tr(),
+      ); // "1 uppercase letter"
     }
 
     if (!RegExp(r'[a-z]').hasMatch(value)) {
-      requirements.add(LocaleKeys.passwordRequireLowercase.tr()); // "1 lowercase letter"
+      requirements.add(
+        LocaleKeys.passwordRequireLowercase.tr(),
+      ); // "1 lowercase letter"
     }
 
     if (!RegExp(r'\d').hasMatch(value)) {
@@ -104,7 +117,9 @@ class MyValidators {
     }
 
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      requirements.add(LocaleKeys.passwordRequireSpecial.tr()); // "1 special character"
+      requirements.add(
+        LocaleKeys.passwordRequireSpecial.tr(),
+      ); // "1 special character"
     }
 
     if (requirements.isNotEmpty) {
@@ -124,10 +139,10 @@ class MyValidators {
     }
 
     final urlRegex = RegExp(
-        r'^(https?://)?' // http:// or https://
-        r'([\w-]+\.)+[\w-]+' // Domain
-        r'(:\d+)?' // Port
-        r'(/[\w-./?%&=]*)?$' // Path and query
+      r'^(https?://)?' // http:// or https://
+      r'([\w-]+\.)+[\w-]+' // Domain
+      r'(:\d+)?' // Port
+      r'(/[\w-./?%&=]*)?$', // Path and query
     );
 
     if (!urlRegex.hasMatch(value)) {
@@ -135,7 +150,8 @@ class MyValidators {
     }
 
     if (!value.startsWith('http://') && !value.startsWith('https://')) {
-      return LocaleKeys.urlMissingProtocol.tr(); // "URL must start with http:// or https://"
+      return LocaleKeys.urlMissingProtocol
+          .tr(); // "URL must start with http:// or https://"
     }
 
     return null;
@@ -143,11 +159,13 @@ class MyValidators {
 
   static String? repeatPasswordValidator({String? value, String? password}) {
     if (value == null || value.isEmpty) {
-      return LocaleKeys.repeatPasswordRequired.tr(); // "Please repeat your password"
+      return LocaleKeys.repeatPasswordRequired
+          .tr(); // "Please repeat your password"
     }
 
     if (password == null || password.isEmpty) {
-      return LocaleKeys.enterPasswordFirst.tr(); // "Please enter your password first"
+      return LocaleKeys.enterPasswordFirst
+          .tr(); // "Please enter your password first"
     }
 
     if (value != password) {
@@ -166,7 +184,8 @@ class MyValidators {
 
     // تحقق من الرقم المصري فقط
     if (!RegExp(r'^01[0-9]{9}$').hasMatch(numericValue)) {
-      return LocaleKeys.phoneEgyptInvalid.tr(); // "يجب أن يتكون الرقم المصري من 11 رقمًا ويبدأ بـ 01"
+      return LocaleKeys.phoneEgyptInvalid
+          .tr(); // "يجب أن يتكون الرقم المصري من 11 رقمًا ويبدأ بـ 01"
     }
 
     return null; // valid
@@ -193,5 +212,4 @@ class MyValidators {
 
     return null;
   }
-
 }

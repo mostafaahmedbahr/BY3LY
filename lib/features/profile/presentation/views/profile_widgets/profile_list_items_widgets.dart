@@ -18,9 +18,7 @@ class ProfileListItemsWidgets extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.mainColor.withValues(alpha: 0.08),
-        ),
+        border: Border.all(color: AppColors.mainColor.withValues(alpha: 0.08)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),

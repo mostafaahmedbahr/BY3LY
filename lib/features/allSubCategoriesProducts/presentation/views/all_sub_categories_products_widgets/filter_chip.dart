@@ -28,9 +28,7 @@ class FilterOptionChip extends StatelessWidget {
               Icon(
                 icon,
                 size: 16,
-                color: selected
-                    ? Colors.white
-                    : AppColors.mainColor,
+                color: selected ? Colors.white : AppColors.mainColor,
               ),
               const SizedBox(width: 6),
               Text(label),

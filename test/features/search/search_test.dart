@@ -95,32 +95,32 @@ class FakeSearchRepos implements SearchRepos {
     if (shouldFail || pageFailed[page] == true) {
       return Left(ServerFailure('fetch failed'));
     }
-    final fixture =
-        page == 1 ? _searchJsonPage1 : _searchJsonPage2;
-    return Right(AllProductsSearchModel.fromJson(
-      Map<String, dynamic>.from(fixture),
-    ));
+    final fixture = page == 1 ? _searchJsonPage1 : _searchJsonPage2;
+    return Right(
+      AllProductsSearchModel.fromJson(Map<String, dynamic>.from(fixture)),
+    );
   }
 }
 
 class FakeFavRepos implements FavRepos {
   @override
-  Future<Either<Failure, FavDataModel>> getFavData() async =>
-      Right(FavDataModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {'favourites': const []},
-      }));
+  Future<Either<Failure, FavDataModel>> getFavData() async => Right(
+    FavDataModel.fromJson({
+      'status': true,
+      'message': 'ok',
+      'data': {'favourites': const []},
+    }),
+  );
 
   @override
-  Future<Either<Failure, GeneralModel>> addProductToFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true));
+  Future<Either<Failure, GeneralModel>> addProductToFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true));
 
   @override
-  Future<Either<Failure, GeneralModel>> removeProductFromFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true));
+  Future<Either<Failure, GeneralModel>> removeProductFromFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true));
 }
 
 Widget _harness({
@@ -205,8 +205,10 @@ void main() {
       expect(model.data!.products, hasLength(1));
       expect(model.data!.pagination, isNull);
 
-      final broken = AllProductsSearchModel.fromJson(
-          {'status': true, 'data': 'nope'});
+      final broken = AllProductsSearchModel.fromJson({
+        'status': true,
+        'data': 'nope',
+      });
       expect(broken.data, isNull);
     });
   });
@@ -263,50 +265,56 @@ void main() {
       await cubit.getAllProductsForSearch();
       await Future<void>.delayed(Duration.zero);
 
-      expect((events.last as GetAllProductsForSearchError).message,
-          'fetch failed');
+      expect(
+        (events.last as GetAllProductsForSearchError).message,
+        'fetch failed',
+      );
       expect(cubit.allProductsForSearchList, isEmpty);
       await sub.cancel();
       await cubit.close();
     });
 
-    test('loadMore failure keeps the loaded page and signals pagination error',
-        () async {
-      final repo = FakeSearchRepos()
-        ..pageFailed[2] = true;
-      final cubit = SearchCubit(repo);
-      final events = <SearchStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'loadMore failure keeps the loaded page and signals pagination error',
+      () async {
+        final repo = FakeSearchRepos()..pageFailed[2] = true;
+        final cubit = SearchCubit(repo);
+        final events = <SearchStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      await cubit.getAllProductsForSearch();
-      await cubit.getAllProductsForSearch(loadMore: true);
-      await Future<void>.delayed(Duration.zero);
+        await cubit.getAllProductsForSearch();
+        await cubit.getAllProductsForSearch(loadMore: true);
+        await Future<void>.delayed(Duration.zero);
 
-      expect(cubit.allProductsForSearchList.length, 2);
-      expect(events.last, isA<GetAllProductsForSearchPaginationError>());
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(cubit.allProductsForSearchList.length, 2);
+        expect(events.last, isA<GetAllProductsForSearchPaginationError>());
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
 
-    test('applySearchFilter refetches with filter; clearSearchFilter resets', () async {
-      final repo = FakeSearchRepos();
-      final cubit = SearchCubit(repo);
+    test(
+      'applySearchFilter refetches with filter; clearSearchFilter resets',
+      () async {
+        final repo = FakeSearchRepos();
+        final cubit = SearchCubit(repo);
 
-      cubit.applySearchFilter(const ProductsFilter(type: 'هاتف'));
-      await Future<void>.delayed(Duration.zero);
+        cubit.applySearchFilter(const ProductsFilter(type: 'هاتف'));
+        await Future<void>.delayed(Duration.zero);
 
-      expect(repo.calls, 1);
-      expect(repo.lastFilter?.type, 'هاتف');
-      expect(cubit.searchFilter.isEmpty, isFalse);
+        expect(repo.calls, 1);
+        expect(repo.lastFilter?.type, 'هاتف');
+        expect(cubit.searchFilter.isEmpty, isFalse);
 
-      cubit.clearSearchFilter();
-      await Future<void>.delayed(Duration.zero);
+        cubit.clearSearchFilter();
+        await Future<void>.delayed(Duration.zero);
 
-      expect(repo.calls, 2);
-      expect(repo.lastFilter?.type, isNull);
-      expect(cubit.searchFilter.isEmpty, isTrue);
-      await cubit.close();
-    });
+        expect(repo.calls, 2);
+        expect(repo.lastFilter?.type, isNull);
+        expect(cubit.searchFilter.isEmpty, isTrue);
+        await cubit.close();
+      },
+    );
   });
 
   group('Search widgets', () {
@@ -339,8 +347,9 @@ void main() {
       expect(find.textContaining('المنتجات المعروضه'), findsOneWidget);
     });
 
-    testWidgets('typing a query filters the visible products locally',
-        (tester) async {
+    testWidgets('typing a query filters the visible products locally', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1500);
       tester.view.devicePixelRatio = 1;
       addTearDown(() {
@@ -384,39 +393,43 @@ void main() {
       await tester.enterText(find.byType(EditableText).first, 'zzz');
       await _settle(tester);
 
-      expect(find.text('لا توجد نتائج، جرّب تغيير البحث أو الفلاتر'),
-          findsOneWidget);
-    });
-
-    testWidgets('active filter renders a removable chip that clears the filter',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 1500);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
-
-      final repo = FakeSearchRepos();
-      final cubit = SearchCubit(repo);
-      cubit.applySearchFilter(const ProductsFilter(type: 'هاتف'));
-      await _settle(tester);
-
-      await tester.pumpWidget(
-        _harness(
-          providers: [BlocProvider<SearchCubit>.value(value: cubit)],
-          child: const SearchViewBody(),
-        ),
+      expect(
+        find.text('لا توجد نتائج، جرّب تغيير البحث أو الفلاتر'),
+        findsOneWidget,
       );
-      await _settle(tester);
-
-      expect(find.text('هاتف'), findsWidgets);
-      expect(cubit.searchFilter.type, 'هاتف');
-
-      // The chip's delete icon clears the filter.
-      await tester.tap(find.byIcon(Icons.close).first);
-      await _settle(tester);
-      expect(cubit.searchFilter.isEmpty, isTrue);
     });
+
+    testWidgets(
+      'active filter renders a removable chip that clears the filter',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 1500);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        final repo = FakeSearchRepos();
+        final cubit = SearchCubit(repo);
+        cubit.applySearchFilter(const ProductsFilter(type: 'هاتف'));
+        await _settle(tester);
+
+        await tester.pumpWidget(
+          _harness(
+            providers: [BlocProvider<SearchCubit>.value(value: cubit)],
+            child: const SearchViewBody(),
+          ),
+        );
+        await _settle(tester);
+
+        expect(find.text('هاتف'), findsWidgets);
+        expect(cubit.searchFilter.type, 'هاتف');
+
+        // The chip's delete icon clears the filter.
+        await tester.tap(find.byIcon(Icons.close).first);
+        await _settle(tester);
+        expect(cubit.searchFilter.isEmpty, isTrue);
+      },
+    );
   });
 }

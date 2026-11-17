@@ -7,6 +7,7 @@ import '../../main_importants.dart';
 import '../utils/bloc_observer.dart';
 import '../../firebase_options.dart';
 import 'get_device_token.dart';
+import 'token_migration.dart';
 
 class AppInitializer {
   static Future<void> init() async {
@@ -17,9 +18,15 @@ class AppInitializer {
     );
 
     // 🔹 Firebase Crashlytics
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+      !kDebugMode,
+    );
     // 🔹 Init Cache
     await CacheHelper.init();
+
+    // 🔹 One-time migration: move any legacy plaintext token into secure
+    // storage before the first-run cleanup can erase it.
+    await TokenMigration.migrateLegacyToken();
 
     // 🔹 First Run Check (قبل أي حاجة)
     bool isFirstRun = await CacheHelper.getData(key: "firstRun") ?? true;

@@ -118,10 +118,7 @@ class ReportTheProductViewBody extends StatelessWidget {
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [
-                            AppColors.yellowColor,
-                            Color(0xffE08B1B),
-                          ],
+                          colors: [AppColors.yellowColor, Color(0xffE08B1B)],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                         ),
@@ -130,8 +127,9 @@ class ReportTheProductViewBody extends StatelessWidget {
                             ? null
                             : [
                                 BoxShadow(
-                                  color: AppColors.yellowColor
-                                      .withValues(alpha: 0.40),
+                                  color: AppColors.yellowColor.withValues(
+                                    alpha: 0.40,
+                                  ),
                                   blurRadius: 14,
                                   offset: const Offset(0, 6),
                                 ),

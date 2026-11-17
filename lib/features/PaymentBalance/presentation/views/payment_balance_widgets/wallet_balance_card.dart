@@ -94,11 +94,7 @@ class WalletBalanceCard extends StatelessWidget {
               if (balance == null) {
                 return const Padding(
                   padding: EdgeInsets.only(top: 2),
-                  child: SimmerLoading(
-                    height: 30,
-                    width: 130,
-                    raduis: 8,
-                  ),
+                  child: SimmerLoading(height: 30, width: 130, raduis: 8),
                 );
               }
               final wholeNumber = balance == balance.roundToDouble();

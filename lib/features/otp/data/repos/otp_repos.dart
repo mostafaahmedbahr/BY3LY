@@ -4,11 +4,11 @@ import '../models/otp_model.dart';
 import '../models/resend_otp_model.dart';
 
 abstract class OtpRepos {
+  Future<Either<Failure, OtpModel>> verifyOtp({
+    required String otp,
+    required String email,
+    required String deviceToken,
+  });
 
-  Future<Either<Failure, OtpModel>> verifyOtp(
-      {required String otp, required String email, required String deviceToken});
-
-  Future<Either<Failure, ResendOtpModel>> resendOtp(
-      {required String email});
-
+  Future<Either<Failure, ResendOtpModel>> resendOtp({required String email});
 }

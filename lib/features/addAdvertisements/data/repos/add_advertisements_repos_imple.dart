@@ -1,10 +1,10 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:by3ly/core/general_models/general_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/ad_publishing_settings_model.dart';
 import 'package:by3ly/features/addAdvertisements/data/models/current_subscription_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 import 'add_advertisements_repos.dart';
@@ -71,8 +71,7 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         if (paymentMethod != null && paymentMethod.trim().isNotEmpty)
           'payment_method': paymentMethod,
         // Transfer reference number (optional, transfer methods only).
-        if (transferReference != null &&
-            transferReference.trim().isNotEmpty)
+        if (transferReference != null && transferReference.trim().isNotEmpty)
           'transfer_reference': transferReference.trim(),
       });
       formData.files.addAll(await _imageEntries(images));
@@ -93,11 +92,13 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         data: formData,
       );
       GeneralModel result = GeneralModel.fromJson(response.data);
-      debugPrint('AddAdvertisementsRepoImpl addNewAd: status=${result.status} msg=${result.message}');
+      logWarning(
+        'AddAdvertisementsRepoImpl addNewAd: status=${result.status} msg=${result.message}',
+      );
       return right(result);
     } catch (e, s) {
-      debugPrint('AddAdvertisementsRepoImpl addNewAd error: $e');
-      debugPrint(s.toString());
+      logWarning('AddAdvertisementsRepoImpl addNewAd error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -108,15 +109,15 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
 
   @override
   Future<Either<Failure, AdPublishingSettingsModel>>
-      getAdPublishingSettings() async {
+  getAdPublishingSettings() async {
     try {
       final response = await apiService!.getData(
         endPoint: EndPoints.adPublishingSettings,
       );
       return right(AdPublishingSettingsModel.fromJson(response.data));
     } catch (e, s) {
-      debugPrint('AddAdvertisementsRepoImpl getAdPublishingSettings error: $e');
-      debugPrint(s.toString());
+      logWarning('AddAdvertisementsRepoImpl getAdPublishingSettings error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -127,7 +128,7 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
 
   @override
   Future<Either<Failure, CurrentSubscriptionModel>>
-      getCurrentSubscription() async {
+  getCurrentSubscription() async {
     try {
       final response = await apiService!.getData(
         endPoint: EndPoints.subscriptionsCurrent,
@@ -139,8 +140,8 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
       }
       return right(CurrentSubscriptionModel.fromJson(data));
     } catch (e, s) {
-      debugPrint('AddAdvertisementsRepoImpl getCurrentSubscription error: $e');
-      debugPrint(s.toString());
+      logWarning('AddAdvertisementsRepoImpl getCurrentSubscription error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -190,11 +191,13 @@ class AddAdvertisementsRepoImpl implements AddAdvertisementsRepos {
         data: formData,
       );
       GeneralModel result = GeneralModel.fromJson(response.data);
-      debugPrint('AddAdvertisementsRepoImpl editAd: status=${result.status} msg=${result.message}');
+      logWarning(
+        'AddAdvertisementsRepoImpl editAd: status=${result.status} msg=${result.message}',
+      );
       return right(result);
     } catch (e, s) {
-      debugPrint('AddAdvertisementsRepoImpl editAd error: $e');
-      debugPrint(s.toString());
+      logWarning('AddAdvertisementsRepoImpl editAd error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

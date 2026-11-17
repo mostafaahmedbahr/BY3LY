@@ -1,11 +1,11 @@
 import 'package:by3ly/features/reportProduct/data/report_product_models/add_complaint_model.dart';
 import 'package:by3ly/features/reportProduct/data/report_product_models/report_product_model.dart';
 
-abstract class ReportProductStates{}
+abstract class ReportProductStates {}
 
-class ReportProductInitState extends ReportProductStates{}
+class ReportProductInitState extends ReportProductStates {}
 
-class ReportProductChooseReasonState extends ReportProductStates{}
+class ReportProductChooseReasonState extends ReportProductStates {}
 
 class GetComplaintsTypesLoading extends ReportProductStates {}
 
@@ -19,7 +19,6 @@ class GetComplaintsTypesError extends ReportProductStates {
   GetComplaintsTypesError(this.message);
 }
 
-
 class AddComplaintLoading extends ReportProductStates {}
 
 class AddComplaintSuccess extends ReportProductStates {
@@ -32,7 +31,7 @@ class AddComplaintError extends ReportProductStates {
   AddComplaintError(this.message);
 }
 
-class ResetValuesState extends ReportProductStates{
+class ResetValuesState extends ReportProductStates {
   @override
   String toString() => 'ResetValuesState';
 }

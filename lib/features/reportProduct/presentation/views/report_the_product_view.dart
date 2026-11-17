@@ -46,9 +46,7 @@ class ReportTheProductView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
               ),
               child: const Icon(
                 Icons.flag_rounded,
@@ -74,15 +72,9 @@ class ReportTheProductView extends StatelessWidget {
       ),
       body: (sellerId != null && productId != null)
           // Report a specific ad: reasons + reportAd endpoint.
-          ? ReportAdViewBody(
-              sellerId: sellerId!,
-              productId: productId!,
-            )
+          ? ReportAdViewBody(sellerId: sellerId!, productId: productId!)
           // General complaint (e.g. from help & support).
-          : ReportTheProductViewBody(
-              sellerId: sellerId,
-              productId: productId,
-            ),
+          : ReportTheProductViewBody(sellerId: sellerId, productId: productId),
     );
   }
 }

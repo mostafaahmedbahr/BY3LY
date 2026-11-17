@@ -19,7 +19,6 @@ int? _asInt(dynamic value) {
 
 String? _asString(dynamic value) => value?.toString();
 
-
 class ProfileModel {
   bool? status;
   String? message;
@@ -32,14 +31,13 @@ class ProfileModel {
     message = _asString(json["message"]);
     final raw = json["data"];
     data = raw is Map ? Data.fromJson(Map<String, dynamic>.from(raw)) : null;
-
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> result = <String, dynamic>{};
     result["status"] = status;
     result["message"] = message;
-    if(data != null) {
+    if (data != null) {
       result["data"] = data?.toJson();
     }
     return result;
@@ -64,7 +62,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if(user != null) {
+    if (user != null) {
       data["user"] = user?.toJson();
     }
     data["isActive"] = isActive;
@@ -90,7 +88,23 @@ class User {
   String? centerName;
   String? createdAt;
 
-  User({this.id, this.name, this.email, this.phone, this.age, this.image, this.token, this.walletBalance, this.walletCurrency, this.subscriptionPackage, this.centerId, this.cityId, this.cityName, this.centerName, this.createdAt});
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.phone,
+    this.age,
+    this.image,
+    this.token,
+    this.walletBalance,
+    this.walletCurrency,
+    this.subscriptionPackage,
+    this.centerId,
+    this.cityId,
+    this.cityName,
+    this.centerName,
+    this.createdAt,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -124,7 +138,7 @@ class User {
     data["token"] = token;
     data["wallet_balance"] = walletBalance;
     data["wallet_currency"] = walletCurrency;
-    if(subscriptionPackage != null) {
+    if (subscriptionPackage != null) {
       data["subscription_package"] = subscriptionPackage?.toJson();
     }
     data["center_id"] = centerId;
@@ -147,7 +161,17 @@ class SubscriptionPackage {
   int? adsLimit;
   List<String>? features;
 
-  SubscriptionPackage({this.id, this.code, this.name, this.description, this.price, this.currency, this.durationDays, this.adsLimit, this.features});
+  SubscriptionPackage({
+    this.id,
+    this.code,
+    this.name,
+    this.description,
+    this.price,
+    this.currency,
+    this.durationDays,
+    this.adsLimit,
+    this.features,
+  });
 
   SubscriptionPackage.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -174,7 +198,7 @@ class SubscriptionPackage {
     data["currency"] = currency;
     data["duration_days"] = durationDays;
     data["ads_limit"] = adsLimit;
-    if(features != null) {
+    if (features != null) {
       data["features"] = features;
     }
     return data;

@@ -22,14 +22,9 @@ class PaymentFeeCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0x142E8B6F),
-            Color(0x0FFFFFFF),
-          ],
+          colors: [Color(0x142E8B6F), Color(0x0FFFFFFF)],
         ),
-        border: Border.all(
-          color: AppColors.mainColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.mainColor.withValues(alpha: 0.25)),
       ),
       child: Column(
         children: [

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CacheHelper {
   static late SharedPreferences sharedPreferences;
 
-  static init() async {
+  static Future<void> init() async {
     sharedPreferences = await SharedPreferences.getInstance();
   }
 
@@ -35,5 +35,7 @@ class CacheHelper {
     await removeData(key: "userEmail");
     await removeData(key: "userId");
     await removeData(key: "userPhone");
+    // Legacy plaintext token copy — removed on every session cleanup.
+    await removeData(key: "userToken");
   }
 }

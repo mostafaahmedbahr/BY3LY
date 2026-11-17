@@ -1,22 +1,22 @@
-
-
 import 'package:by3ly/features/productSeller/data/models/product_seller_model.dart';
 
-abstract class ProductSellerStates{}
+abstract class ProductSellerStates {}
 
-class ProductSellerInitState extends ProductSellerStates{
+class ProductSellerInitState extends ProductSellerStates {
   @override
   String toString() => 'ProductSellerInitState';
 }
 
-class GetProductSellerDataLoadingState extends ProductSellerStates{}
-class GetProductSellerDataSuccessState extends ProductSellerStates{
+class GetProductSellerDataLoadingState extends ProductSellerStates {}
+
+class GetProductSellerDataSuccessState extends ProductSellerStates {
   final ProductSellerModel productSellerModel;
   GetProductSellerDataSuccessState(this.productSellerModel);
 }
-class GetProductSellerDataErrorState extends ProductSellerStates{
+
+class GetProductSellerDataErrorState extends ProductSellerStates {
   final String error;
   GetProductSellerDataErrorState(this.error);
 }
 
-class SellerDataIndexState extends ProductSellerStates{}
+class SellerDataIndexState extends ProductSellerStates {}

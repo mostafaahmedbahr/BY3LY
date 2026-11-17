@@ -28,10 +28,7 @@ bool? _toBool(dynamic value) {
   return null;
 }
 
-List<T>? _parseList<T>(
-  dynamic raw,
-  T Function(Map<String, dynamic>) fromJson,
-) {
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) {
   if (raw is! List) return null;
   final out = <T>[];
   for (final e in raw) {

@@ -54,9 +54,7 @@ class AppConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -69,11 +67,7 @@ class AppConfirmDialog extends StatelessWidget {
                 color: accentColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 30,
-                color: accentColor,
-              ),
+              child: Icon(icon, size: 30, color: accentColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -102,13 +96,11 @@ class AppConfirmDialog extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context, false),
                     style: OutlinedButton.styleFrom(
-                      side:
-                          BorderSide(color: AppColors.border),
+                      side: BorderSide(color: AppColors.border),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: Text(
                       context.tr(LocaleKeys.cancel),
@@ -128,8 +120,7 @@ class AppConfirmDialog extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       elevation: 0,
                     ),
                     child: Text(

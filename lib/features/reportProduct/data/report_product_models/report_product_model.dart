@@ -19,10 +19,7 @@ int? _asInt(dynamic value) {
 
 String? _asString(dynamic value) => value?.toString();
 
-List<T>? _parseList<T>(
-  dynamic raw,
-  T Function(Map<String, dynamic>) fromJson,
-) {
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) {
   if (raw is! List) return null;
   final out = <T>[];
   for (final e in raw) {
@@ -46,7 +43,8 @@ class ReportProductComplaintsTypesModel {
   }
 
   static List<ReportProductComplaintsTypesModel> fromList(
-      List<Map<String, dynamic>> list) {
+    List<Map<String, dynamic>> list,
+  ) {
     return list.map(ReportProductComplaintsTypesModel.fromJson).toList();
   }
 
@@ -65,10 +63,10 @@ class ReportProductComplaintsTypesModel {
     String? message,
     Data? data,
   }) => ReportProductComplaintsTypesModel(
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 }
 
 class Data {
@@ -92,11 +90,8 @@ class Data {
     return jsonData;
   }
 
-  Data copyWith({
-    List<Complaints>? complaints,
-  }) => Data(
-        complaints: complaints ?? this.complaints,
-      );
+  Data copyWith({List<Complaints>? complaints}) =>
+      Data(complaints: complaints ?? this.complaints);
 }
 
 class Complaints {
@@ -121,11 +116,6 @@ class Complaints {
     return jsonData;
   }
 
-  Complaints copyWith({
-    int? id,
-    String? text,
-  }) => Complaints(
-        id: id ?? this.id,
-        text: text ?? this.text,
-      );
+  Complaints copyWith({int? id, String? text}) =>
+      Complaints(id: id ?? this.id, text: text ?? this.text);
 }

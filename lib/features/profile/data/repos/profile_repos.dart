@@ -5,11 +5,8 @@ import 'package:dartz/dartz.dart';
 
 import '../../../deleteAccount/data/models/delete_account_model.dart';
 
-abstract class ProfileRepos{
-
-
-  Future<Either<Failure , ProfileModel>> getProfileData();
-  Future<Either<Failure , LogoutModel>> logout();
-  Future<Either<Failure , DeleteAccountModel>> deleteAccount();
-
+abstract class ProfileRepos {
+  Future<Either<Failure, ProfileModel>> getProfileData();
+  Future<Either<Failure, LogoutModel>> logout();
+  Future<Either<Failure, DeleteAccountModel>> deleteAccount();
 }

@@ -29,10 +29,7 @@ class CommonQuestionsWidget extends StatelessWidget {
           ),
         ),
         for (final (question, answer) in _faqs)
-          _FaqTile(
-            question: context.tr(question),
-            answer: context.tr(answer),
-          ),
+          _FaqTile(question: context.tr(question), answer: context.tr(answer)),
       ],
     );
   }

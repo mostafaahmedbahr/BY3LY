@@ -23,9 +23,7 @@ class DeleteWarningHero extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.redColor.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.redColor.withValues(alpha: 0.25)),
       ),
       child: Column(
         children: [

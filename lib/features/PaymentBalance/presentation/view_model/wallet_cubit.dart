@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../lang/locale_keys.dart';
 import '../../data/models/wallet_history_model.dart';
 import '../../data/repos/wallet_repos.dart';
 import 'wallet_states.dart';
@@ -8,8 +10,7 @@ import 'wallet_states.dart';
 class WalletCubit extends Cubit<WalletStates> {
   WalletCubit(this.walletRepos) : super(WalletInitState());
 
-  static WalletCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static WalletCubit get(BuildContext context) => BlocProvider.of(context);
 
   final WalletRepos walletRepos;
   WalletHistoryModel? historyModel;
@@ -19,12 +20,15 @@ class WalletCubit extends Cubit<WalletStates> {
   Future<void> getHistory() async {
     emit(GetWalletHistoryLoadingState());
     var result = await walletRepos.getHistory();
-    return result.fold((failure) {
-      emit(GetWalletHistoryErrorState(failure.errMessage));
-    }, (data) {
-      historyModel = data;
-      emit(GetWalletHistorySuccessState(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(GetWalletHistoryErrorState(failure.errMessage));
+      },
+      (data) {
+        historyModel = data;
+        emit(GetWalletHistorySuccessState(data));
+      },
+    );
   }
 
   Future<void> topUp({
@@ -40,10 +44,24 @@ class WalletCubit extends Cubit<WalletStates> {
       receiptPath: receiptPath,
       transferReference: transferReference,
     );
-    return result.fold((failure) {
-      emit(TopUpErrorState(failure.errMessage));
-    }, (data) {
-      emit(TopUpSuccessState(data.message ?? ''));
-    });
+    return result.fold(
+      (failure) {
+        emit(TopUpErrorState(failure.errMessage));
+      },
+      (data) {
+        // A 2xx response with status:false is not a confirmed deposit.
+        if (data.status == false) {
+          emit(
+            TopUpErrorState(
+              data.message?.trim().isNotEmpty ?? false
+                  ? data.message!.trim()
+                  : LocaleKeys.topUpRejected.tr(),
+            ),
+          );
+          return;
+        }
+        emit(TopUpSuccessState(data.message ?? ''));
+      },
+    );
   }
 }

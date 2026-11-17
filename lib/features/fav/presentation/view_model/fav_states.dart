@@ -1,9 +1,8 @@
-
 import 'package:by3ly/core/general_models/general_model.dart';
 
 import '../../data/models/fav_model.dart';
 
-abstract class FavStates{}
+abstract class FavStates {}
 
 class FavInitState extends FavStates {
   @override
@@ -20,8 +19,7 @@ class GetFavDataSuccess extends FavStates {
   GetFavDataSuccess(this.favDataModel);
 
   @override
-  String toString() =>
-      'GetFavDataSuccess(status: ${favDataModel.status})';
+  String toString() => 'GetFavDataSuccess(status: ${favDataModel.status})';
 }
 
 class GetFavDataError extends FavStates {

@@ -102,48 +102,50 @@ class FakeProductSellerRepo implements ProductSellerRepo {
       return Left(ServerFailure('fetch failed'));
     }
     // Fresh copy every call — repos must not leak fixtures between tests.
-    return Right(ProductSellerModel.fromJson(
-      Map<String, dynamic>.from(_sellerJson),
-    ));
+    return Right(
+      ProductSellerModel.fromJson(Map<String, dynamic>.from(_sellerJson)),
+    );
   }
 }
 
 class FakeFavRepos implements FavRepos {
   @override
-  Future<Either<Failure, FavDataModel>> getFavData() async =>
-      Right(FavDataModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {'favourites': const []},
-      }));
+  Future<Either<Failure, FavDataModel>> getFavData() async => Right(
+    FavDataModel.fromJson({
+      'status': true,
+      'message': 'ok',
+      'data': {'favourites': const []},
+    }),
+  );
 
   @override
-  Future<Either<Failure, GeneralModel>> addProductToFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true, message: 'added'));
+  Future<Either<Failure, GeneralModel>> addProductToFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true, message: 'added'));
 
   @override
-  Future<Either<Failure, GeneralModel>> removeProductFromFav(
-          {required int productId}) async =>
-      Right(GeneralModel(status: true, message: 'removed'));
+  Future<Either<Failure, GeneralModel>> removeProductFromFav({
+    required int productId,
+  }) async => Right(GeneralModel(status: true, message: 'removed'));
 }
 
 class FakeProfileRepos implements ProfileRepos {
   @override
-  Future<Either<Failure, ProfileModel>> getProfileData() async =>
-      Right(ProfileModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {
-          'user': {
-            'id': 999,
-            'name': 'Me',
-            'wallet_balance': 0,
-            'center_id': 1,
-            'city_id': 1,
-          },
+  Future<Either<Failure, ProfileModel>> getProfileData() async => Right(
+    ProfileModel.fromJson({
+      'status': true,
+      'message': 'ok',
+      'data': {
+        'user': {
+          'id': 999,
+          'name': 'Me',
+          'wallet_balance': 0,
+          'center_id': 1,
+          'city_id': 1,
         },
-      }));
+      },
+    }),
+  );
 
   @override
   Future<Either<Failure, LogoutModel>> logout() async =>
@@ -181,16 +183,13 @@ Widget _harness({
             locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
-            home: Scaffold(
-              body: child,
-            ),
+            home: Scaffold(body: child),
           ),
         ),
       ),
     ),
   );
 }
-
 
 Future<void> _settle(WidgetTester tester) async {
   // Shimmer placeholders loop forever — pump fixed frames instead of
@@ -287,8 +286,7 @@ void main() {
       cubit.close();
     });
 
-    test('success emits Loading then Success and fills the model',
-        () async {
+    test('success emits Loading then Success and fills the model', () async {
       final repo = FakeProductSellerRepo();
       final cubit = ProductSellerCubit(repo);
       final events = <ProductSellerStates>[];
@@ -307,8 +305,7 @@ void main() {
       await cubit.close();
     });
 
-    test('failure emits Loading then Error with the failure message',
-        () async {
+    test('failure emits Loading then Error with the failure message', () async {
       final repo = FakeProductSellerRepo()..shouldFail = true;
       final cubit = ProductSellerCubit(repo);
       final events = <ProductSellerStates>[];
@@ -319,27 +316,31 @@ void main() {
 
       expect(events.first, isA<GetProductSellerDataLoadingState>());
       expect(events.last, isA<GetProductSellerDataErrorState>());
-      expect((events.last as GetProductSellerDataErrorState).error,
-          'fetch failed');
+      expect(
+        (events.last as GetProductSellerDataErrorState).error,
+        'fetch failed',
+      );
       expect(cubit.productSellerModel, isNull);
       await sub.cancel();
       await cubit.close();
     });
 
-    test('changeSellerDataIndex updates the index and emits SellerDataIndexState',
-        () async {
-      final cubit = ProductSellerCubit(FakeProductSellerRepo());
-      final events = <ProductSellerStates>[];
-      final sub = cubit.stream.listen(events.add);
+    test(
+      'changeSellerDataIndex updates the index and emits SellerDataIndexState',
+      () async {
+        final cubit = ProductSellerCubit(FakeProductSellerRepo());
+        final events = <ProductSellerStates>[];
+        final sub = cubit.stream.listen(events.add);
 
-      cubit.changeSellerDataIndex(2);
-      await Future<void>.delayed(Duration.zero);
+        cubit.changeSellerDataIndex(2);
+        await Future<void>.delayed(Duration.zero);
 
-      expect(cubit.sellerDataIndex, 2);
-      expect(events.single, isA<SellerDataIndexState>());
-      await sub.cancel();
-      await cubit.close();
-    });
+        expect(cubit.sellerDataIndex, 2);
+        expect(events.single, isA<SellerDataIndexState>());
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
   });
 
   group('Seller widgets', () {
@@ -349,14 +350,13 @@ void main() {
       expect(find.byType(SellerShimmer), findsOneWidget);
     });
 
-    testWidgets('tabs show the three pills and switch the active tab',
-        (tester) async {
+    testWidgets('tabs show the three pills and switch the active tab', (
+      tester,
+    ) async {
       final cubit = ProductSellerCubit(FakeProductSellerRepo());
       await tester.pumpWidget(
         _harness(
-          providers: [
-            BlocProvider<ProductSellerCubit>.value(value: cubit),
-          ],
+          providers: [BlocProvider<ProductSellerCubit>.value(value: cubit)],
           child: const SellerTabButtons(),
         ),
       );
@@ -378,8 +378,9 @@ void main() {
       await cubit.close();
     });
 
-    testWidgets('products list renders items and an empty state',
-        (tester) async {
+    testWidgets('products list renders items and an empty state', (
+      tester,
+    ) async {
       final model = ProductSellerModel.fromJson(_sellerJson);
 
       await tester.pumpWidget(
@@ -402,17 +403,13 @@ void main() {
       expect(find.byIcon(Icons.inventory_2_outlined), findsOneWidget);
     });
 
-    testWidgets('info panel shows seller identity and store',
-        (tester) async {
+    testWidgets('info panel shows seller identity and store', (tester) async {
       final cubit = ProductSellerCubit(FakeProductSellerRepo());
-      cubit.productSellerModel =
-          ProductSellerModel.fromJson(_sellerJson);
+      cubit.productSellerModel = ProductSellerModel.fromJson(_sellerJson);
 
       await tester.pumpWidget(
         _harness(
-          providers: [
-            BlocProvider<ProductSellerCubit>.value(value: cubit),
-          ],
+          providers: [BlocProvider<ProductSellerCubit>.value(value: cubit)],
           child: const SellerInfoPanel(),
         ),
       );
@@ -439,14 +436,11 @@ void main() {
           },
         },
       });
-      final seller =
-          ProductSellerModel.fromJson(_sellerJson).data!.seller!;
+      final seller = ProductSellerModel.fromJson(_sellerJson).data!.seller!;
 
       await tester.pumpWidget(
         _harness(
-          providers: [
-            BlocProvider<ProfileCubit>.value(value: profileCubit),
-          ],
+          providers: [BlocProvider<ProfileCubit>.value(value: profileCubit)],
           child: SellerHeroCard(seller: seller, sellerId: 7),
         ),
       );
@@ -456,18 +450,14 @@ void main() {
       await profileCubit.close();
     });
 
-    testWidgets('contact CTA is shown for a foreign seller',
-        (tester) async {
+    testWidgets('contact CTA is shown for a foreign seller', (tester) async {
       final profileCubit = ProfileCubit(FakeProfileRepos());
       profileCubit.profileModel = null; // signed-out / unknown
-      final seller =
-          ProductSellerModel.fromJson(_sellerJson).data!.seller!;
+      final seller = ProductSellerModel.fromJson(_sellerJson).data!.seller!;
 
       await tester.pumpWidget(
         _harness(
-          providers: [
-            BlocProvider<ProfileCubit>.value(value: profileCubit),
-          ],
+          providers: [BlocProvider<ProfileCubit>.value(value: profileCubit)],
           child: SellerHeroCard(seller: seller, sellerId: 7),
         ),
       );
@@ -497,13 +487,10 @@ void main() {
       await _settle(tester);
     });
 
-    testWidgets('body shows error state and retry on failure',
-        (tester) async {
+    testWidgets('body shows error state and retry on failure', (tester) async {
       final repo = FakeProductSellerRepo()..shouldFail = true;
       await tester.pumpWidget(
-        _harness(
-          child: ProductSellerViewBody(sellerId: 7, repo: repo),
-        ),
+        _harness(child: ProductSellerViewBody(sellerId: 7, repo: repo)),
       );
       await _settle(tester);
 
@@ -515,5 +502,4 @@ void main() {
       expect(repo.calls, 2);
     });
   });
-
 }

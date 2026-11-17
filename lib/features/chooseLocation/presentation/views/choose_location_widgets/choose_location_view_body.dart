@@ -111,6 +111,7 @@ class ChooseLocationViewBody extends StatelessWidget {
     );
   }
 }
+
 /// Brand logo header — white logo inside a soft gradient container with a
 /// small glow so it reads as part of a premium onboarding-like screen.
 class BrandLogoHeader extends StatelessWidget {
@@ -143,10 +144,7 @@ class BrandLogoHeader extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Image.asset(
-          AppImages.logo2,
-          fit: BoxFit.cover,
-        ),
+        child: Image.asset(AppImages.logo2, fit: BoxFit.cover),
       ),
     );
   }

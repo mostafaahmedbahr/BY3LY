@@ -59,9 +59,7 @@ class ComparisonTable extends StatelessWidget {
     if (v == null) return null;
     if (v is num) {
       final d = v.toDouble();
-      return d == d.truncateToDouble()
-          ? d.toInt().toString()
-          : d.toString();
+      return d == d.truncateToDouble() ? d.toInt().toString() : d.toString();
     }
     return _str(v.toString());
   }
@@ -123,8 +121,11 @@ class ComparisonTable extends StatelessWidget {
       );
     }
 
-    String? moneyOf(CompareProduct p, String? raw, bool Function(CompareProduct) include) =>
-        include(p) ? _money(p, raw) : null;
+    String? moneyOf(
+      CompareProduct p,
+      String? raw,
+      bool Function(CompareProduct) include,
+    ) => include(p) ? _money(p, raw) : null;
 
     add(
       context.tr(LocaleKeys.price),
@@ -135,25 +136,15 @@ class ComparisonTable extends StatelessWidget {
     add(
       context.tr(LocaleKeys.oldPrice),
       _money(first, _strNum(first.oldPrice)),
-      second == null
-          ? null
-          : _money(second, _strNum(second.oldPrice)),
+      second == null ? null : _money(second, _strNum(second.oldPrice)),
       strikethrough: true,
     );
     add(
       context.tr(LocaleKeys.finalPriceLabel),
-      moneyOf(
-        first,
-        _strNum(first.finalPrice),
-        _finalDiffersFromPrice,
-      ),
+      moneyOf(first, _strNum(first.finalPrice), _finalDiffersFromPrice),
       second == null
           ? null
-          : moneyOf(
-              second,
-              _strNum(second.finalPrice),
-              _finalDiffersFromPrice,
-            ),
+          : moneyOf(second, _strNum(second.finalPrice), _finalDiffersFromPrice),
     );
     add(
       context.tr(LocaleKeys.discountLabel),
@@ -163,8 +154,8 @@ class ComparisonTable extends StatelessWidget {
       second == null
           ? null
           : (second.discount != null && second.discount! > 0
-              ? '${second.discount}%'
-              : null),
+                ? '${second.discount}%'
+                : null),
     );
     add(
       context.tr(LocaleKeys.type),
@@ -197,7 +188,7 @@ class ComparisonTable extends StatelessWidget {
       second == null
           ? null
           : _str(second.furnishingLabel?.toString()) ??
-              _strNum(second.furnishing),
+                _strNum(second.furnishing),
     );
     add(
       context.tr(LocaleKeys.rating),
@@ -214,15 +205,15 @@ class ComparisonTable extends StatelessWidget {
       first.seller?.rating == null
           ? null
           : (first.seller?.reviewsCount == null
-              ? '${first.seller!.rating}'
-              : '${first.seller!.rating} (${first.seller!.reviewsCount})'),
+                ? '${first.seller!.rating}'
+                : '${first.seller!.rating} (${first.seller!.reviewsCount})'),
       second == null
           ? null
           : (second.seller?.rating == null
-              ? null
-              : (second.seller?.reviewsCount == null
-                  ? '${second.seller!.rating}'
-                  : '${second.seller!.rating} (${second.seller!.reviewsCount})')),
+                ? null
+                : (second.seller?.reviewsCount == null
+                      ? '${second.seller!.rating}'
+                      : '${second.seller!.rating} (${second.seller!.reviewsCount})')),
     );
     add(
       context.tr(LocaleKeys.views),
@@ -237,8 +228,8 @@ class ComparisonTable extends StatelessWidget {
       second == null
           ? null
           : ((second.countCommenets ?? 0) > 0
-              ? '${second.countCommenets}'
-              : null),
+                ? '${second.countCommenets}'
+                : null),
     );
     add(
       context.tr(LocaleKeys.isNegotiableLabel),
@@ -253,9 +244,7 @@ class ComparisonTable extends StatelessWidget {
     add(
       context.tr(LocaleKeys.dateAdded),
       _str(first.date ?? first.createdAt),
-      second == null
-          ? null
-          : _str(second.date ?? second.createdAt),
+      second == null ? null : _str(second.date ?? second.createdAt),
     );
 
     return entries;
@@ -278,8 +267,8 @@ class ComparisonTable extends StatelessWidget {
         )
         .toList();
 
-    final hasDescription = _has(first.desc) ||
-        (second != null && _has(second.desc));
+    final hasDescription =
+        _has(first.desc) || (second != null && _has(second.desc));
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -332,10 +321,7 @@ class ComparisonTable extends StatelessWidget {
             child: Text(
               context.tr(LocaleKeys.noCompareValues),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: AppColors.textSecondary,
-              ),
+              style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
             ),
           ),
         ],

@@ -11,10 +11,9 @@ class OtpTexts extends StatelessWidget {
 
   final String email;
 
-  String get _resolvedEmail =>
-      email.trim().isNotEmpty
-          ? email
-          : (CacheHelper.getData(key: 'email')?.toString() ?? '');
+  String get _resolvedEmail => email.trim().isNotEmpty
+      ? email
+      : (CacheHelper.getData(key: 'email')?.toString() ?? '');
 
   @override
   Widget build(BuildContext context) {

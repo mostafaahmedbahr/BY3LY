@@ -9,12 +9,12 @@ import 'package:by3ly/features/compare/presentation/view_model/compare_cubit.dar
 import 'package:flutter/material.dart';
 
 List<BoxShadow> get _cardShadow => [
-      BoxShadow(
-        color: Colors.black.withValues(alpha: 0.04),
-        blurRadius: 10,
-        offset: const Offset(0, 4),
-      ),
-    ];
+  BoxShadow(
+    color: Colors.black.withValues(alpha: 0.04),
+    blurRadius: 10,
+    offset: const Offset(0, 4),
+  ),
+];
 
 /// Product header for the compare table — the exact same visual language
 /// as [ProductGridCard] (image bleed, urgent/featured badges, minimal white
@@ -87,8 +87,9 @@ class ProductHeader extends StatelessWidget {
                   top: 8,
                   right: 48,
                   child: _RemoveButton(
-                    onTap: () => CompareCubit.get(context)
-                        .removeFromBasket(product.id ?? -1),
+                    onTap: () => CompareCubit.get(
+                      context,
+                    ).removeFromBasket(product.id ?? -1),
                   ),
                 ),
                 // Favourite heart — same minimal white circle as product cards.
@@ -132,9 +133,10 @@ class ProductHeader extends StatelessWidget {
                   // type • model — same one-liner as the product cards.
                   if (_hasValue(product.type) || _hasValue(product.model)) ...[
                     Text(
-                      [product.type, product.model]
-                          .where(_hasValue)
-                          .join('  •  '),
+                      [
+                        product.type,
+                        product.model,
+                      ].where(_hasValue).join('  •  '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -180,7 +182,8 @@ class ProductHeader extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if (viewsCount > 0) ProductViewsLabel(views: viewsCount),
+                        if (viewsCount > 0)
+                          ProductViewsLabel(views: viewsCount),
                       ],
                     ),
                   ],
@@ -205,9 +208,7 @@ class _RemoveButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.surface,
-      shape: CircleBorder(
-        side: BorderSide(color: AppColors.border),
-      ),
+      shape: CircleBorder(side: BorderSide(color: AppColors.border)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -216,7 +217,11 @@ class _RemoveButton extends StatelessWidget {
           height: 32,
           width: 32,
           child: Center(
-            child: Icon(Icons.close_rounded, size: 16, color: AppColors.redColor),
+            child: Icon(
+              Icons.close_rounded,
+              size: 16,
+              color: AppColors.redColor,
+            ),
           ),
         ),
       ),

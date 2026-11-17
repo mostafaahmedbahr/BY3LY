@@ -23,6 +23,9 @@ class DeviceTokenSync {
   static String? _lastSyncedToken;
   static Future<void>? _inFlight;
 
+  /// True only when a real backend endpoint was supplied at build time.
+  static bool get isConfigured => EndPoints.updateDeviceToken.trim().isNotEmpty;
+
   /// Prevents duplicate POSTs when startup, token refresh and login all fire
   /// at the same time.
   static Future<void> sync({bool force = false}) async {
@@ -61,6 +64,15 @@ class DeviceTokenSync {
 
     // Always keep the freshest token locally so login/OTP can send it too.
     await CacheHelper.saveData(key: StorageKeys.fcmToken, value: token);
+
+    if (!isConfigured) {
+      logWarning(
+        'DeviceTokenSync: no verified backend endpoint configured; '
+        'token kept locally. Supply FCM_UPDATE_ENDPOINT once the backend '
+        'contract is confirmed.',
+      );
+      return;
+    }
 
     final String? lastPersisted = CacheHelper.getData(
       key: StorageKeys.fcmTokenSynced,

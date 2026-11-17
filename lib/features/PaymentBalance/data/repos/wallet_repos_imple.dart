@@ -1,6 +1,6 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
@@ -20,14 +20,12 @@ class WalletRepoImpl implements WalletRepos {
       var response = await apiService!.getData(
         endPoint: EndPoints.walletHistory,
       );
-      WalletHistoryModel result =
-          WalletHistoryModel.fromJson(response.data);
-      debugPrint(
-          'WalletRepo history: ${(result.history ?? []).length} items');
+      WalletHistoryModel result = WalletHistoryModel.fromJson(response.data);
+      logWarning('WalletRepo history: ${(result.history ?? []).length} items');
       return right(result);
     } catch (e, s) {
-      debugPrint('WalletRepo history error: $e');
-      debugPrint(s.toString());
+      logWarning('WalletRepo history error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {
@@ -47,15 +45,18 @@ class WalletRepoImpl implements WalletRepos {
       final formData = FormData.fromMap({
         'amount': amount,
         'payment_method': paymentMethod,
-        if (transferReference != null &&
-            transferReference.trim().isNotEmpty)
+        if (transferReference != null && transferReference.trim().isNotEmpty)
           'transfer_reference': transferReference.trim(),
       });
-      formData.files.add(MapEntry(
-        'receipt',
-        await MultipartFile.fromFile(receiptPath,
-            filename: receiptPath.split('/').last),
-      ));
+      formData.files.add(
+        MapEntry(
+          'receipt',
+          await MultipartFile.fromFile(
+            receiptPath,
+            filename: receiptPath.split('/').last,
+          ),
+        ),
+      );
       var response = await apiService!.postData(
         endPoint: EndPoints.walletTopUp,
         data: formData,
@@ -63,8 +64,8 @@ class WalletRepoImpl implements WalletRepos {
       final result = GeneralModel.fromJson(response.data);
       return right(result);
     } catch (e, s) {
-      debugPrint('WalletRepo topUp error: $e');
-      debugPrint(s.toString());
+      logWarning('WalletRepo topUp error: $e');
+      logWarning(s.toString());
       if (e is DioException) {
         return left(ServerFailure.fromDioError(e));
       } else {

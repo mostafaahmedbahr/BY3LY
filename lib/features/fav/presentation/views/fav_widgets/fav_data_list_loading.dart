@@ -21,9 +21,7 @@ class FavDataListLoading extends StatelessWidget {
             duration: const Duration(milliseconds: 700),
             child: const SlideAnimation(
               horizontalOffset: 40.0,
-              child: FadeInAnimation(
-                child: _FavSkeletonRow(),
-              ),
+              child: FadeInAnimation(child: _FavSkeletonRow()),
             ),
           );
         },
@@ -49,11 +47,7 @@ class _FavSkeletonRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SimmerLoading(
-          height: 116,
-          width: 104,
-          raduis: 12,
-        ),
+        const SimmerLoading(height: 116, width: 104, raduis: 12),
         const SizedBox(width: 12),
         Expanded(
           child: Padding(

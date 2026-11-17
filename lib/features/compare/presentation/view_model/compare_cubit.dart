@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart'
     as details;
 import 'package:by3ly/features/productDetails/data/repos/product_details_repo.dart';
@@ -12,7 +13,7 @@ import 'compare_states.dart';
 /// (usually the details page) and fetches their side-by-side data.
 class CompareCubit extends Cubit<CompareStates> {
   CompareCubit(this.compareRepos, [this.productDetailsRepo])
-      : super(CompareInitState());
+    : super(CompareInitState());
 
   static CompareCubit get(BuildContext context) =>
       BlocProvider.of<CompareCubit>(context);
@@ -61,22 +62,29 @@ class CompareCubit extends Cubit<CompareStates> {
   Future<void> fetchComparison() async {
     if (basketIds.length < 2) return;
     emit(CompareProductsLoading());
-    final result = await compareRepos
-        .compareProducts(productIds: [...basketIds]);
-    return result.fold((failure) async {
-      debugPrint('CompareCubit fetchComparison failed: ${failure.errMessage}');
-      await _fetchDetailsFallback();
-    }, (data) async {
-      final products = data.data?.products ?? [];
-      if (data.status == true && products.length >= 2) {
-        compareModel = data;
-        emit(CompareProductsSuccess(data));
-      } else {
-        debugPrint(
-            'CompareCubit compareProducts returned ${products.length} items, using details fallback');
+    final result = await compareRepos.compareProducts(
+      productIds: [...basketIds],
+    );
+    return result.fold(
+      (failure) async {
+        logWarning(
+          'CompareCubit fetchComparison failed: ${failure.errMessage}',
+        );
         await _fetchDetailsFallback();
-      }
-    });
+      },
+      (data) async {
+        final products = data.data?.products ?? [];
+        if (data.status == true && products.length >= 2) {
+          compareModel = data;
+          emit(CompareProductsSuccess(data));
+        } else {
+          logWarning(
+            'CompareCubit compareProducts returned ${products.length} items, using details fallback',
+          );
+          await _fetchDetailsFallback();
+        }
+      },
+    );
   }
 
   /// Fallback: builds the comparison from the regular product-details
@@ -91,9 +99,13 @@ class CompareCubit extends Cubit<CompareStates> {
     try {
       final results = await Future.wait([
         productDetailsRepo!.getProductDetailsData(
-            productId: basketIds[0], type: 'home'),
+          productId: basketIds[0],
+          type: 'home',
+        ),
         productDetailsRepo!.getProductDetailsData(
-            productId: basketIds[1], type: 'home'),
+          productId: basketIds[1],
+          type: 'home',
+        ),
       ]);
       final products = <CompareProduct>[];
       for (final r in results) {
@@ -114,7 +126,7 @@ class CompareCubit extends Cubit<CompareStates> {
         emit(CompareProductsError('Something went wrong'));
       }
     } catch (e) {
-      debugPrint('CompareCubit details fallback failed: $e');
+      logWarning('CompareCubit details fallback failed: $e');
       emit(CompareProductsError(e.toString()));
     }
   }
@@ -148,7 +160,13 @@ class CompareCubit extends Cubit<CompareStates> {
               reviewsCount: p.seller!.reviewsCount,
             ),
       image: p.image,
-      imageUrls: (p.images?.map((e) => e.image).whereType<String>().where((e) => e.isNotEmpty).toList() ?? const []),
+      imageUrls:
+          (p.images
+              ?.map((e) => e.image)
+              .whereType<String>()
+              .where((e) => e.isNotEmpty)
+              .toList() ??
+          const []),
       rate: p.rate?.toString(),
       countCommenets: p.countCommenets,
       commenets: p.commenets,

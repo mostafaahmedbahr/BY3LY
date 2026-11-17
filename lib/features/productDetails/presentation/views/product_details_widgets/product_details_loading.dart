@@ -28,8 +28,7 @@ class ProductDetailsLoading extends StatelessWidget {
           // Main image.
           const SimmerLoading(height: 300, raduis: 0),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -39,10 +38,9 @@ class ProductDetailsLoading extends StatelessWidget {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: 4,
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(width: 10),
-                    itemBuilder: (_, _) => const SimmerLoading(
-                        height: 60, width: 60, raduis: 10),
+                    separatorBuilder: (_, _) => const SizedBox(width: 10),
+                    itemBuilder: (_, _) =>
+                        const SimmerLoading(height: 60, width: 60, raduis: 10),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -58,9 +56,7 @@ class ProductDetailsLoading extends StatelessWidget {
                   children: [
                     SimmerLoading(height: 44, width: 44, raduis: 22),
                     SizedBox(width: 10),
-                    Expanded(
-                      child: SimmerLoading(height: 16, raduis: 8),
-                    ),
+                    Expanded(child: SimmerLoading(height: 16, raduis: 8)),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -74,8 +70,7 @@ class ProductDetailsLoading extends StatelessWidget {
                 const SizedBox(height: 6),
                 const SimmerLoading(height: 13, raduis: 6),
                 const SizedBox(height: 6),
-                const SimmerLoading(
-                    height: 13, width: 200, raduis: 6),
+                const SimmerLoading(height: 13, width: 200, raduis: 6),
                 const SizedBox(height: 20),
                 // Action buttons.
                 const SimmerLoading(height: 48, raduis: 10),
@@ -90,19 +85,15 @@ class ProductDetailsLoading extends StatelessWidget {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: 4,
-                    separatorBuilder: (_, _) =>
-                        const SizedBox(width: 10),
+                    separatorBuilder: (_, _) => const SizedBox(width: 10),
                     itemBuilder: (_, _) => const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SimmerLoading(
-                            height: 110, width: 165, raduis: 12),
+                        SimmerLoading(height: 110, width: 165, raduis: 12),
                         SizedBox(height: 8),
-                        SimmerLoading(
-                            height: 12, width: 140, raduis: 6),
+                        SimmerLoading(height: 12, width: 140, raduis: 6),
                         SizedBox(height: 6),
-                        SimmerLoading(
-                            height: 12, width: 90, raduis: 6),
+                        SimmerLoading(height: 12, width: 90, raduis: 6),
                       ],
                     ),
                   ),

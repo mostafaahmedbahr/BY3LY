@@ -23,10 +23,7 @@ bool? _asBool(dynamic v) {
 
 /// Maps a raw list into models, skipping junk entries silently —
 /// one malformed entry must never take the whole response down.
-List<T>? _parseList<T>(
-  dynamic raw,
-  T Function(Map<String, dynamic>) fromJson,
-) {
+List<T>? _parseList<T>(dynamic raw, T Function(Map<String, dynamic>) fromJson) {
   if (raw is! List) return null;
   final out = <T>[];
   for (final e in raw) {
@@ -86,9 +83,18 @@ class Data {
     product = rawProduct is Map
         ? Product.fromJson(Map<String, dynamic>.from(rawProduct))
         : null;
-    relatedProducts = _parseList(json["relatedProducts"], RelatedProducts.fromJson);
-    similarProducts = _parseList(json["similarProducts"], SimilarProducts.fromJson);
-    sponsoredProducts = _parseList(json["sponsoredProducts"], SponsoredProducts.fromJson);
+    relatedProducts = _parseList(
+      json["relatedProducts"],
+      RelatedProducts.fromJson,
+    );
+    similarProducts = _parseList(
+      json["similarProducts"],
+      SimilarProducts.fromJson,
+    );
+    sponsoredProducts = _parseList(
+      json["sponsoredProducts"],
+      SponsoredProducts.fromJson,
+    );
     banners = _parseList(json["banners"], Banners.fromJson);
   }
 

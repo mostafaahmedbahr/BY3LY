@@ -30,12 +30,31 @@ class FakeNotificationsRepos implements NotificationsRepos {
   final List<Map<String, dynamic>> items;
 
   FakeNotificationsRepos({List<Map<String, dynamic>>? items})
-      : items = items ??
-            [
-              {'id': '1', 'title': 'إشعار أول', 'body': 'body 1', 'is_read': false, 'created_at': '2026-11-01 10:00:00'},
-              {'id': '2', 'title': 'إشعار ثاني', 'body': 'body 2', 'is_read': true, 'created_at': '2026-11-02 11:30:00'},
-              {'id': '3', 'title': 'إشعار ثالث', 'body': 'body 3', 'is_read': false, 'created_at': '2026-11-03 12:00:00'},
-            ];
+    : items =
+          items ??
+          [
+            {
+              'id': '1',
+              'title': 'إشعار أول',
+              'body': 'body 1',
+              'is_read': false,
+              'created_at': '2026-11-01 10:00:00',
+            },
+            {
+              'id': '2',
+              'title': 'إشعار ثاني',
+              'body': 'body 2',
+              'is_read': true,
+              'created_at': '2026-11-02 11:30:00',
+            },
+            {
+              'id': '3',
+              'title': 'إشعار ثالث',
+              'body': 'body 3',
+              'is_read': false,
+              'created_at': '2026-11-03 12:00:00',
+            },
+          ];
 
   @override
   Future<Either<Failure, NotificationsModel>> getNotificationsData({
@@ -46,22 +65,32 @@ class FakeNotificationsRepos implements NotificationsRepos {
     getCalls++;
     if (shouldFail) return Left(ServerFailure('offline'));
     if (statusFalse) {
-      return Right(NotificationsModel.fromJson({'status': false, 'message': 'rejected'}));
+      return Right(
+        NotificationsModel.fromJson({'status': false, 'message': 'rejected'}),
+      );
     }
-    return Right(NotificationsModel.fromJson({
-      'status': true,
-      'message': 'ok',
-      'data': {
-        'notifications': items,
-        'pagination': {'current_page': page, 'last_page': 1, 'per_page': perPage, 'total': items.length},
-        'unread_count': items.where((n) => n['is_read'] != true).length,
-      },
-    }));
+    return Right(
+      NotificationsModel.fromJson({
+        'status': true,
+        'message': 'ok',
+        'data': {
+          'notifications': items,
+          'pagination': {
+            'current_page': page,
+            'last_page': 1,
+            'per_page': perPage,
+            'total': items.length,
+          },
+          'unread_count': items.where((n) => n['is_read'] != true).length,
+        },
+      }),
+    );
   }
 
   @override
-  Future<Either<Failure, GeneralModel>> markNotificationRead(
-      {required String notificationId}) async {
+  Future<Either<Failure, GeneralModel>> markNotificationRead({
+    required String notificationId,
+  }) async {
     markReadCalls++;
     if (shouldFail) return Left(ServerFailure('offline'));
     for (final n in items) {
@@ -81,8 +110,9 @@ class FakeNotificationsRepos implements NotificationsRepos {
   }
 
   @override
-  Future<Either<Failure, GeneralModel>> deleteNotification(
-      {required String notificationId}) async {
+  Future<Either<Failure, GeneralModel>> deleteNotification({
+    required String notificationId,
+  }) async {
     deleteOneCalls++;
     if (shouldFail) return Left(ServerFailure('offline'));
     items.removeWhere((n) => n['id'] == notificationId);
@@ -166,19 +196,21 @@ void main() {
   });
 
   group('NotificationsCubit', () {
-    test('getNotificationsData replaces the list and syncs unreadCount',
-        () async {
-      final repo = FakeNotificationsRepos();
-      final cubit = NotificationsCubit(repo);
+    test(
+      'getNotificationsData replaces the list and syncs unreadCount',
+      () async {
+        final repo = FakeNotificationsRepos();
+        final cubit = NotificationsCubit(repo);
 
-      await cubit.getNotificationsData();
+        await cubit.getNotificationsData();
 
-      expect(cubit.state, isA<GetNotificationsDataSuccess>());
-      expect(cubit.notificationsList.length, 3);
-      expect(cubit.unreadCount, 2);
-      expect(cubit.currentPage, 1);
-      expect(cubit.lastPage, 1);
-    });
+        expect(cubit.state, isA<GetNotificationsDataSuccess>());
+        expect(cubit.notificationsList.length, 3);
+        expect(cubit.unreadCount, 2);
+        expect(cubit.currentPage, 1);
+        expect(cubit.lastPage, 1);
+      },
+    );
 
     test('server failure emits error with message', () async {
       final repo = FakeNotificationsRepos()..shouldFail = true;
@@ -209,8 +241,10 @@ void main() {
 
       expect(repo.markReadCalls, 1);
       expect(cubit.unreadCount, 1);
-      expect(cubit.notificationsList.firstWhere((n) => n.id == '1').isRead,
-          isTrue);
+      expect(
+        cubit.notificationsList.firstWhere((n) => n.id == '1').isRead,
+        isTrue,
+      );
     });
 
     test('markAllAsRead flips everything', () async {
@@ -225,18 +259,20 @@ void main() {
       expect(cubit.notificationsList.every((n) => n.isRead == true), isTrue);
     });
 
-    test('deleteNotification removes the item locally and decrements unread',
-        () async {
-      final repo = FakeNotificationsRepos();
-      final cubit = NotificationsCubit(repo);
-      await cubit.getNotificationsData();
+    test(
+      'deleteNotification removes the item locally and decrements unread',
+      () async {
+        final repo = FakeNotificationsRepos();
+        final cubit = NotificationsCubit(repo);
+        await cubit.getNotificationsData();
 
-      await cubit.deleteNotification('1'); // unread
+        await cubit.deleteNotification('1'); // unread
 
-      expect(repo.deleteOneCalls, 1);
-      expect(cubit.notificationsList.length, 2);
-      expect(cubit.unreadCount, 1);
-    });
+        expect(repo.deleteOneCalls, 1);
+        expect(cubit.notificationsList.length, 2);
+        expect(cubit.unreadCount, 1);
+      },
+    );
 
     test('read filter applies client-side', () async {
       final repo = FakeNotificationsRepos();
@@ -252,7 +288,7 @@ void main() {
   });
 
   group('NotificationsView', () {
-    Widget _app(NotificationsCubit cubit) {
+    Widget app(NotificationsCubit cubit) {
       return ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
@@ -279,10 +315,9 @@ void main() {
       );
     }
 
-    testWidgets('renders items and read-status filter chips',
-        (tester) async {
+    testWidgets('renders items and read-status filter chips', (tester) async {
       final cubit = NotificationsCubit(FakeNotificationsRepos());
-      await tester.pumpWidget(_app(cubit));
+      await tester.pumpWidget(app(cubit));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
 

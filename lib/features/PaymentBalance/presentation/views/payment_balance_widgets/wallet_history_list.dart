@@ -44,10 +44,7 @@ class WalletHistoryList extends StatelessWidget {
         child: Center(
           child: Text(
             context.tr(LocaleKeys.noPreviousTransactions),
-            style: TextStyle(
-              fontSize: 13.5,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 13.5, color: AppColors.textSecondary),
           ),
         ),
       );
@@ -76,8 +73,8 @@ class WalletHistoryItemCard extends StatelessWidget {
     final amountText = amount == null
         ? '...'
         : whole
-            ? amount.toInt().toString()
-            : amount.toString();
+        ? amount.toInt().toString()
+        : amount.toString();
     final accent = credit ? AppColors.mainColor : AppColors.redColor;
     final method = methodName(context, item.paymentMethod);
 
@@ -138,8 +135,8 @@ class WalletHistoryItemCard extends StatelessWidget {
                         (item.typeLabel?.trim().isNotEmpty ?? false)
                             ? item.typeLabel!
                             : (credit
-                                ? context.tr(LocaleKeys.deposit)
-                                : context.tr(LocaleKeys.debit)),
+                                  ? context.tr(LocaleKeys.deposit)
+                                  : context.tr(LocaleKeys.debit)),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -196,7 +193,9 @@ class WalletHistoryItemCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary.withValues(alpha: 0.85),
+                          color: AppColors.textSecondary.withValues(
+                            alpha: 0.85,
+                          ),
                         ),
                       ),
                     ],
@@ -217,8 +216,7 @@ class WalletHistoryItemCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              AppColors.mainColor.withValues(alpha: 0.10),
+                          color: AppColors.mainColor.withValues(alpha: 0.10),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(

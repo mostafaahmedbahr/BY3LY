@@ -1,5 +1,4 @@
 import 'package:by3ly/core/routing/routes.dart';
-import 'package:by3ly/features/login/presentation/views/login_view.dart';
 import 'package:by3ly/features/onBoarding/presentation/views/on_boarding_view.dart';
 import 'package:by3ly/lang/ar_lang.dart';
 import 'package:by3ly/lang/codegen_loader.g.dart';
@@ -29,9 +28,8 @@ Widget _testApp() {
           localizationsDelegates: context.localizationDelegates,
           home: const OnBoardingView(),
           routes: {
-            Routes.loginView: (_) => const Scaffold(
-                  body: Center(child: Text('login screen')),
-                ),
+            Routes.loginView: (_) =>
+                const Scaffold(body: Center(child: Text('login screen'))),
           },
         ),
       ),
@@ -49,8 +47,9 @@ void main() {
   });
 
   group('OnBoardingView', () {
-    testWidgets('renders first slide and skip navigates to login',
-        (tester) async {
+    testWidgets('renders first slide and skip navigates to login', (
+      tester,
+    ) async {
       await tester.pumpWidget(_testApp());
       await tester.pump(const Duration(milliseconds: 400));
 
@@ -63,8 +62,7 @@ void main() {
       expect(find.text('login screen'), findsOneWidget);
     });
 
-    testWidgets('CTA walks through the three slides',
-        (tester) async {
+    testWidgets('CTA walks through the three slides', (tester) async {
       await tester.pumpWidget(_testApp());
       await tester.pump(const Duration(milliseconds: 400));
 

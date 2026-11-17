@@ -34,18 +34,14 @@ class FakeChooseLocationRepos implements ChooseLocationRepos {
             {'id': 21, 'name': 'الدقي'},
           ],
         },
-        {
-          'id': 3,
-          'name': 'إسكندرية',
-          'centers': <Map<String, dynamic>>[],
-        },
+        {'id': 3, 'name': 'إسكندرية', 'centers': <Map<String, dynamic>>[]},
       ],
     },
   });
 
   @override
   Future<Either<Failure, AllCitiesAndCentersModel>>
-      getAllCitiesAndCentersData() async {
+  getAllCitiesAndCentersData() async {
     getCalls++;
     if (fetchShouldFail) {
       return Left(ServerFailure('offline'));
@@ -62,11 +58,9 @@ class FakeChooseLocationRepos implements ChooseLocationRepos {
     if (postShouldFail) {
       return Left(ServerFailure('save failed'));
     }
-    return Right(ChooseLocationModel(
-      status: true,
-      number: 1,
-      message: 'تم الحفظ',
-    ));
+    return Right(
+      ChooseLocationModel(status: true, number: 1, message: 'تم الحفظ'),
+    );
   }
 }
 
@@ -80,20 +74,22 @@ void main() {
       cubit.close();
     });
 
-    test('fetch success populates cities and exposes first city centers',
-        () async {
-      final repo = FakeChooseLocationRepos();
-      final cubit = ChooseLocationCubit(repo);
+    test(
+      'fetch success populates cities and exposes first city centers',
+      () async {
+        final repo = FakeChooseLocationRepos();
+        final cubit = ChooseLocationCubit(repo);
 
-      await cubit.getAllCitiesAndCenters();
+        await cubit.getAllCitiesAndCenters();
 
-      expect(repo.getCalls, 1);
-      expect(cubit.state, isA<GetAllCitiesAndCentersSuccess>());
-      expect(cubit.allCitiesList.length, 3);
-      expect(cubit.allCitiesList.first.centers!.length, 2);
-      expect(cubit.allCentersList.length, 2);
-      await cubit.close();
-    });
+        expect(repo.getCalls, 1);
+        expect(cubit.state, isA<GetAllCitiesAndCentersSuccess>());
+        expect(cubit.allCitiesList.length, 3);
+        expect(cubit.allCitiesList.first.centers!.length, 2);
+        expect(cubit.allCentersList.length, 2);
+        await cubit.close();
+      },
+    );
 
     test('fetch failure emits error state and keeps list empty', () async {
       final repo = FakeChooseLocationRepos()..fetchShouldFail = true;

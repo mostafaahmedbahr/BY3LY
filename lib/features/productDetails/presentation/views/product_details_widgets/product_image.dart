@@ -38,20 +38,18 @@ class ProductImage extends StatelessWidget {
       listener: (context, state) {
         if (state is AddProductToCompareSuccessState) {
           Toast.showSuccessToast(
-              msg: state.addProductToCompareModel.message.toString(),
-              context: context
+            msg: state.addProductToCompareModel.message.toString(),
+            context: context,
           );
           context.read<ProductDetailsCubit>().getProductDetailsData(
-              productId: productId,
-              type: "home"
+            productId: productId,
+            type: "home",
           );
         }
         if (state is AddProductToCompareErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error.toString()),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error.toString())));
         }
       },
       builder: (context, state) {
@@ -63,9 +61,7 @@ class ProductImage extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  final urls = images.isNotEmpty
-                      ? images
-                      : [imageUrl];
+                  final urls = images.isNotEmpty ? images : [imageUrl];
                   FullScreenGallery.open(
                     context,
                     images: urls,
@@ -108,8 +104,7 @@ class ProductImage extends StatelessWidget {
                     final inBasket = compareCubit.isInBasket(productId);
                     return InkWell(
                       onTap: () {
-                        final added =
-                            compareCubit.toggleBasket(productId);
+                        final added = compareCubit.toggleBasket(productId);
                         if (added) {
                           if (compareCubit.basketIds.length >= 2) {
                             context.pushNamed(Routes.compareView);
@@ -122,15 +117,16 @@ class ProductImage extends StatelessWidget {
                           }
                         } else {
                           Toast.showSuccessToast(
-                            msg: context
-                                .tr(LocaleKeys.removeFromCompare),
+                            msg: context.tr(LocaleKeys.removeFromCompare),
                             context: context,
                           );
                         }
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 9),
+                          horizontal: 14,
+                          vertical: 9,
+                        ),
                         decoration: BoxDecoration(
                           color: inBasket
                               ? AppColors.mainColor
@@ -138,14 +134,10 @@ class ProductImage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(24),
                           border: inBasket
                               ? null
-                              : Border.all(
-                                  color: Colors.white,
-                                  width: 1.2,
-                                ),
+                              : Border.all(color: Colors.white, width: 1.2),
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  Colors.black.withValues(alpha: 0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -159,9 +151,7 @@ class ProductImage extends StatelessWidget {
                               width: 20,
                               height: 20,
                               colorFilter: ColorFilter.mode(
-                                inBasket
-                                    ? Colors.white
-                                    : AppColors.accent,
+                                inBasket ? Colors.white : AppColors.accent,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -169,9 +159,7 @@ class ProductImage extends StatelessWidget {
                             Text(
                               LocaleKeys.compration.tr(),
                               style: AppStyles.textStyle12W600Gary.copyWith(
-                                color: inBasket
-                                    ? Colors.white
-                                    : AppColors.text,
+                                color: inBasket ? Colors.white : AppColors.text,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

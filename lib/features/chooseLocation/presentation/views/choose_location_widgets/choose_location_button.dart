@@ -27,18 +27,14 @@ class ChooseLocationButton extends StatelessWidget {
                   ? const LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
-                      colors: [
-                        AppColors.mainColor,
-                        AppColors.secondColor,
-                      ],
+                      colors: [AppColors.mainColor, AppColors.secondColor],
                     )
                   : null,
               color: submittable ? null : const Color(0xffB6B6B6),
               boxShadow: submittable
                   ? [
                       BoxShadow(
-                        color: AppColors.mainColor
-                            .withValues(alpha: 0.45),
+                        color: AppColors.mainColor.withValues(alpha: 0.45),
                         blurRadius: 18,
                         offset: const Offset(0, 8),
                       ),
@@ -50,12 +46,12 @@ class ChooseLocationButton extends StatelessWidget {
               child: InkWell(
                 onTap: submittable && !loading
                     ? () => cubit.addLocationCityAndCenter(
-                          cityId: cubit.selectedCityId,
-                          centerId: cubit.selectedCenterId,
-                        )
+                        cityId: cubit.selectedCityId,
+                        centerId: cubit.selectedCenterId,
+                      )
                     : loading
-                        ? null
-                        : () => _showHint(context, cubit),
+                    ? null
+                    : () => _showHint(context, cubit),
                 child: loading
                     ? const Center(
                         child: SizedBox(

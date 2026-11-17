@@ -1,26 +1,11 @@
-import 'package:by3ly/core/utils/app_colors/app_colors.dart';
-import 'package:by3ly/lang/locale_keys.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:by3ly/features/PaymentBalance/presentation/views/payment_and_balance_view.dart';
 import 'package:flutter/material.dart';
 
-import 'add_balance_widgets/add_balance_view_body.dart';
-
+/// Legacy entry point kept for backwards compatibility. It now opens the
+/// server-verified wallet/top-up screen instead of hardcoded transfer details.
 class AddBalanceView extends StatelessWidget {
   const AddBalanceView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        shadowColor: AppColors.mainColor,
-        surfaceTintColor:  AppColors.mainColor,
-        title:   Text(LocaleKeys.paymentMethods.tr(),style: TextStyle(
-            color: AppColors.text,
-            fontWeight: FontWeight.bold
-        ),),
-      ),
-      body: const AddBalanceViewBody(),
-    ));
-  }
+  Widget build(BuildContext context) => const PaymentAndBalanceView();
 }

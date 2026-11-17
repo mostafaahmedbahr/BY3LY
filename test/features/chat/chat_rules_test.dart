@@ -13,15 +13,20 @@ void main() {
     });
     test('zero', () => expect(formatChatPrice(0), '0'));
     test('decimals kept', () => expect(formatChatPrice(1234.56), '1,234.56'));
-    test('negative numbers preserved with sign',
-        () => expect(formatChatPrice(-5000), '-5,000'));
+    test(
+      'negative numbers preserved with sign',
+      () => expect(formatChatPrice(-5000), '-5,000'),
+    );
   });
 
   group('imageExtension', () {
     test('lowercased extension without dot', () {
       expect(ChatRules.imageExtension('file.JPG'), 'jpg');
     });
-    test('multi-dot path', () => expect(ChatRules.imageExtension('a.b.c.d.png'), 'png'));
+    test(
+      'multi-dot path',
+      () => expect(ChatRules.imageExtension('a.b.c.d.png'), 'png'),
+    );
     test('no extension', () => expect(ChatRules.imageExtension('noext'), ''));
     test('trailing dot', () => expect(ChatRules.imageExtension('trail.'), ''));
     test('empty string', () => expect(ChatRules.imageExtension(''), ''));
@@ -45,10 +50,18 @@ void main() {
 
   group('isAllowedImageSize', () {
     test('zero ok', () => expect(ChatRules.isAllowedImageSize(0), isTrue));
-    test('max ok',
-        () => expect(ChatRules.isAllowedImageSize(ChatRules.maxImageBytes), isTrue));
-    test('one over max not ok',
-        () => expect(ChatRules.isAllowedImageSize(ChatRules.maxImageBytes + 1), isFalse));
+    test(
+      'max ok',
+      () =>
+          expect(ChatRules.isAllowedImageSize(ChatRules.maxImageBytes), isTrue),
+    );
+    test(
+      'one over max not ok',
+      () => expect(
+        ChatRules.isAllowedImageSize(ChatRules.maxImageBytes + 1),
+        isFalse,
+      ),
+    );
   });
 
   group('sortedMessagesDesc', () {
@@ -60,7 +73,10 @@ void main() {
       expect(ChatRules.sortedMessagesDesc([a, b, c, d]), [c, b, d, a]);
     });
 
-    test('empty list preserved', () => expect(ChatRules.sortedMessagesDesc([]), isEmpty));
+    test(
+      'empty list preserved',
+      () => expect(ChatRules.sortedMessagesDesc([]), isEmpty),
+    );
   });
 
   group('sameMessageIds', () {
@@ -90,11 +106,20 @@ void main() {
     final existing = [ChatMessageModel(id: 1), ChatMessageModel(id: 2)];
     test('drops ids already present', () {
       final incoming = [ChatMessageModel(id: 3), ChatMessageModel(id: 2)];
-      expect(ChatRules.filterNewMessages(incoming, existing).map((e) => e.id), [3]);
+      expect(ChatRules.filterNewMessages(incoming, existing).map((e) => e.id), [
+        3,
+      ]);
     });
     test('order preserved', () {
-      final incoming = [ChatMessageModel(id: 5), ChatMessageModel(id: 2), ChatMessageModel(id: 4)];
-      expect(ChatRules.filterNewMessages(incoming, existing).map((e) => e.id), [5, 4]);
+      final incoming = [
+        ChatMessageModel(id: 5),
+        ChatMessageModel(id: 2),
+        ChatMessageModel(id: 4),
+      ];
+      expect(ChatRules.filterNewMessages(incoming, existing).map((e) => e.id), [
+        5,
+        4,
+      ]);
     });
     test('identity comparison fails silently for null ids', () {
       final incoming = [ChatMessageModel(id: null)];
@@ -136,4 +161,3 @@ void main() {
     });
   });
 }
-

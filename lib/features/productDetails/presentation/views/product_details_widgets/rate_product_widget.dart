@@ -86,9 +86,9 @@ class _RateProductWidgetState extends State<RateProductWidget> {
             _expanded = false;
           });
         } else if (state is RateProductErrorState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error)));
         }
       },
       builder: (context, state) {
@@ -131,7 +131,9 @@ class _RateProductWidgetState extends State<RateProductWidget> {
                       Container(
                         margin: const EdgeInsets.only(left: 8, right: 8),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xffFFF8E6),
                           borderRadius: BorderRadius.circular(12),

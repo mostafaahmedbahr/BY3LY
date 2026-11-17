@@ -53,10 +53,7 @@ class SectionHeader extends StatelessWidget {
               onTap: onAction,
               borderRadius: BorderRadius.circular(10),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 5,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

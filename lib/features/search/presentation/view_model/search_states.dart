@@ -1,8 +1,8 @@
-
 import '../../data/models/all_products_search_model.dart';
-abstract class SearchStates{}
 
-class SearchInitState extends SearchStates{
+abstract class SearchStates {}
+
+class SearchInitState extends SearchStates {
   @override
   String toString() => 'SearchInitState';
 }

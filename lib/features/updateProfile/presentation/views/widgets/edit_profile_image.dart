@@ -20,19 +20,18 @@ class EditProfileImage extends StatelessWidget {
     return BlocBuilder<UpdateProfileDataCubit, UpdateProfileDataStates>(
       builder: (context, state) {
         final updateProfileDataCubit = UpdateProfileDataCubit.get(context);
-        final imageUrl =
-            context.read<ProfileCubit>().profileModel?.data?.user?.image;
+        final imageUrl = context
+            .read<ProfileCubit>()
+            .profileModel
+            ?.data
+            ?.user
+            ?.image;
         final picked = updateProfileDataCubit.profileImage;
 
         Widget avatarChild;
         if (picked != null) {
           avatarChild = ClipOval(
-            child: Image.file(
-              picked,
-              fit: BoxFit.cover,
-              width: 84,
-              height: 84,
-            ),
+            child: Image.file(picked, fit: BoxFit.cover, width: 84, height: 84),
           );
         } else if (imageUrl != null && imageUrl.isNotEmpty) {
           avatarChild = ClipOval(
@@ -49,10 +48,7 @@ class EditProfileImage extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: SvgPicture.asset(
               AppImages.camera,
-              colorFilter: ColorFilter.mode(
-                AppColors.text,
-                BlendMode.srcIn,
-              ),
+              colorFilter: ColorFilter.mode(AppColors.text, BlendMode.srcIn),
             ),
           );
         }
@@ -76,52 +72,51 @@ class EditProfileImage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text(
-                  context.tr(LocaleKeys.profilePhoto),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: updateProfileDataCubit.uploadProfilePicture,
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.mainColor,
-                      ),
-                      child: Text(
-                        context.tr(LocaleKeys.change),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
+                  Text(
+                    context.tr(LocaleKeys.profilePhoto),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    if (picked != null)
+                  ),
+                  Row(
+                    children: [
                       TextButton(
-                        onPressed: updateProfileDataCubit.clearProfileImage,
+                        onPressed: updateProfileDataCubit.uploadProfilePicture,
                         style: TextButton.styleFrom(
                           foregroundColor: AppColors.mainColor,
                         ),
                         child: Text(
-                          context.tr(LocaleKeys.delete),
-                          style: const TextStyle(
+                          context.tr(LocaleKeys.change),
+                          style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: AppColors.redColor,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                       ),
-                  ],
-                ),
-              ],
+                      if (picked != null)
+                        TextButton(
+                          onPressed: updateProfileDataCubit.clearProfileImage,
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.mainColor,
+                          ),
+                          child: Text(
+                            context.tr(LocaleKeys.delete),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.redColor,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
           ],
         );
       },
     );
   }
 }
-

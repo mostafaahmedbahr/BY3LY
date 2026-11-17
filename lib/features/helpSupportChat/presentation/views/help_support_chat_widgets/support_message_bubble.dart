@@ -34,7 +34,10 @@ Map<String, String> supportImageHeaders() {
   final langCode = (savedLang is String && savedLang.isNotEmpty)
       ? savedLang
       : 'ar';
-  final headers = <String, String>{'Accept': 'application/json', 'lang': langCode};
+  final headers = <String, String>{
+    'Accept': 'application/json',
+    'lang': langCode,
+  };
   // The support cubit awaits getUserToken() in init() before the first
   // render, so the static is populated at this point on this screen.
   final token = CacheTokenManger.userToken;
@@ -117,9 +120,7 @@ class SupportMessageBubble extends StatelessWidget {
               bottomStart: const Radius.circular(4),
               bottomEnd: const Radius.circular(18),
             ),
-            border: Border.all(
-              color: AppColors.border.withValues(alpha: 0.6),
-            ),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.045),
@@ -130,152 +131,160 @@ class SupportMessageBubble extends StatelessWidget {
           );
 
     return Align(
-      alignment: isMine
-          ? AlignmentDirectional.centerEnd
-          : AlignmentDirectional.centerStart,
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.78,
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 3.5),
-        padding: EdgeInsets.all(message.isImage && !_isDeleted ? 5 : 12),
-        decoration: decoration,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!isMine && !_isDeleted)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2.5,
+          alignment: isMine
+              ? AlignmentDirectional.centerEnd
+              : AlignmentDirectional.centerStart,
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+            ),
+            margin: const EdgeInsets.symmetric(vertical: 3.5),
+            padding: EdgeInsets.all(message.isImage && !_isDeleted ? 5 : 12),
+            decoration: decoration,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isMine && !_isDeleted)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2.5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.accent.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.headset_mic_rounded,
+                            size: 10,
+                            color: AppColors.mainColor,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            context.tr(LocaleKeys.supportTeam),
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.4,
+                              color: AppColors.mainColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.accent.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                if (_isDeleted)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.block_rounded,
+                          size: 15,
+                          color: AppColors.redColor.withValues(alpha: 0.85),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          context.tr(LocaleKeys.deletedMessage),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.redColor.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else ...[
+                  if (message.isImage)
+                    GestureDetector(
+                      onTap: onImageTap,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: SizedBox(
+                          width: 220,
+                          height: 180,
+                          child: CachedNetworkImage(
+                            imageUrl: supportImageUrl(message.image),
+                            httpHeaders: supportImageHeaders(),
+                            fit: BoxFit.cover,
+                            placeholder: (_, _) =>
+                                const Center(child: CustomLoading()),
+                            errorWidget: (_, _, _) =>
+                                const Icon(Icons.broken_image_outlined),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if ((message.body?.trim().isNotEmpty ?? false))
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        message.body!,
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          height: 1.45,
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                ],
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: 2,
+                    end: 2,
+                    top: 4,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.headset_mic_rounded,
-                        size: 10,
-                        color: AppColors.mainColor,
-                      ),
-                      const SizedBox(width: 4),
                       Text(
-                        context.tr(LocaleKeys.supportTeam),
+                        formatMessageTimestamp(message.createdAt),
                         style: TextStyle(
                           fontSize: 9.5,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.4,
-                          color: AppColors.mainColor,
+                          color: textColor.withValues(alpha: 0.75),
                         ),
                       ),
+                      if (isMine && !_isDeleted) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          message.isRead == true
+                              ? Icons.done_all_rounded
+                              : Icons.done_rounded,
+                          size: 13,
+                          color: message.isRead == true
+                              ? const Color(0xFF9BF5C9)
+                              : textColor.withValues(alpha: 0.75),
+                        ),
+                      ],
                     ],
                   ),
                 ),
-              ),
-            if (_isDeleted)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.block_rounded,
-                      size: 15,
-                      color: AppColors.redColor.withValues(alpha: 0.85),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      context.tr(LocaleKeys.deletedMessage),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        color: AppColors.redColor.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else ...[
-              if (message.isImage)
-                GestureDetector(
-                  onTap: onImageTap,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: SizedBox(
-                      width: 220,
-                      height: 180,
-                      child: CachedNetworkImage(
-                        imageUrl: supportImageUrl(message.image),
-                        httpHeaders: supportImageHeaders(),
-                        fit: BoxFit.cover,
-                        placeholder: (_, _) =>
-                            const Center(child: CustomLoading()),
-                        errorWidget: (_, _, _) =>
-                            const Icon(Icons.broken_image_outlined),
-                      ),
-                    ),
-                  ),
-                ),
-              if ((message.body?.trim().isNotEmpty ?? false))
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 2,
-                  ),
-                  child: Text(
-                    message.body!,
-                    style: TextStyle(
-                      fontSize: 13.5,
-                      height: 1.45,
-                      color: textColor,
-                    ),
-                  ),
-                ),
-            ],
-            Padding(
-              padding: const EdgeInsetsDirectional.only(
-                start: 2,
-                end: 2,
-                top: 4,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    formatMessageTimestamp(message.createdAt),
-                    style: TextStyle(
-                      fontSize: 9.5,
-                      color: textColor.withValues(alpha: 0.75),
-                    ),
-                  ),
-                  if (isMine && !_isDeleted) ...[
-                    const SizedBox(width: 4),
-                    Icon(
-                      message.isRead == true
-                          ? Icons.done_all_rounded
-                          : Icons.done_rounded,
-                      size: 13,
-                      color: message.isRead == true
-                          ? const Color(0xFF9BF5C9)
-                          : textColor.withValues(alpha: 0.75),
-                    ),
-                  ],
-                ],
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    )
+          ),
+        )
         .animate()
         .fadeIn(duration: 280.ms, curve: Curves.easeOut)
-        .slideY(begin: 0.1, end: 0, duration: 280.ms, curve: Curves.easeOutCubic);
+        .slideY(
+          begin: 0.1,
+          end: 0,
+          duration: 280.ms,
+          curve: Curves.easeOutCubic,
+        );
   }
 }

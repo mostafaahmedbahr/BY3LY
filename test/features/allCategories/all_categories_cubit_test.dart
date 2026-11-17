@@ -13,20 +13,20 @@ class FakeAllCategoriesRepo implements AllCategoriesRepo {
 
   final List<Categories> sampleCategories = [
     Categories(id: 1, name: 'عقارات', image: 'img1.jpg'),
-    Categories(id: 2, name: 'عربيات', image: 'img2.jpg',
-        subCategories: [SubCategories(id: 11, name: 'ملاكي', productsCount: 5)]),
+    Categories(
+      id: 2,
+      name: 'عربيات',
+      image: 'img2.jpg',
+      subCategories: [SubCategories(id: 11, name: 'ملاكي', productsCount: 5)],
+    ),
     Categories(id: 3, name: 'موبايلات', image: 'img3.jpg'),
   ];
 
   AllCategoriesModel _build() => AllCategoriesModel.fromJson({
-        'status': true,
-        'message': 'ok',
-        'data': {
-          'categories': sampleCategories
-              .map((c) => c.toJson())
-              .toList(),
-        },
-      });
+    'status': true,
+    'message': 'ok',
+    'data': {'categories': sampleCategories.map((c) => c.toJson()).toList()},
+  });
 
   @override
   Future<Either<Failure, AllCategoriesModel>> getAllCategories() async {

@@ -34,12 +34,13 @@ AppBar premiumAppBar(BuildContext context) {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.16),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.35),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
           ),
-          child: const Icon(Icons.lock_outline_rounded,
-              color: Colors.white, size: 18),
+          child: const Icon(
+            Icons.lock_outline_rounded,
+            color: Colors.white,
+            size: 18,
+          ),
         ),
         const SizedBox(width: 10),
         Expanded(

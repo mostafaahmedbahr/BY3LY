@@ -17,8 +17,9 @@ class AllAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final withImages =
-        ads.where((ad) => HomeAdsStrip.urlsOf(ad).isNotEmpty).toList();
+    final withImages = ads
+        .where((ad) => HomeAdsStrip.urlsOf(ad).isNotEmpty)
+        .toList();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -48,9 +49,7 @@ class AllAdsView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
               ),
               child: const Icon(
                 Icons.campaign_rounded,
@@ -78,10 +77,7 @@ class AllAdsView extends StatelessWidget {
           ? Center(
               child: Text(
                 context.tr(LocaleKeys.noResults),
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
               ),
             )
           : ListView.separated(
@@ -90,8 +86,7 @@ class AllAdsView extends StatelessWidget {
               separatorBuilder: (_, _) => Gap(12.h),
               itemBuilder: (context, index) {
                 return BannerAds(
-                  imageUrls:
-                      HomeAdsStrip.urlsOf(withImages[index]),
+                  imageUrls: HomeAdsStrip.urlsOf(withImages[index]),
                 );
               },
             ),

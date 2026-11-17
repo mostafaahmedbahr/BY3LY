@@ -167,7 +167,9 @@ class _SupportChatLoading extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
       baseColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFE7ECE8),
-      highlightColor: isDark ? const Color(0xFF2C3A50) : const Color(0xFFFAFBFA),
+      highlightColor: isDark
+          ? const Color(0xFF2C3A50)
+          : const Color(0xFFFAFBFA),
       period: const Duration(milliseconds: 1500),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(14, 18, 14, 12),

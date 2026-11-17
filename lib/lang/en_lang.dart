@@ -43,6 +43,9 @@ class EnLang {
     "copyCompanyName": "Company name copied",
     "instaPay": "Instapay",
     "confirmPayment": "Confirm Payment",
+    "legacyTopUpNotice":
+        "Wallet top-ups are handled on the Payment and Balance screen, where the transfer receipt is uploaded and verified by the server.",
+    "openWalletTopUp": "Open wallet top-up",
     "type": "Type",
     "removerFromFav": "Remove from favorites",
     "all": "All Sales",
@@ -480,6 +483,10 @@ class EnLang {
     "confirmTopUp": "Confirm top-up",
     "confirmSubscription": "Confirm subscription",
     "enterValidAmount": "Please enter a valid amount",
+    "topUpRejected":
+        "The top-up was not confirmed by the server. Please review the receipt and try again",
+    "subscriptionRejected":
+        "The subscription was not confirmed by the server. Please review the receipt and try again",
     "noPaymentMethodsAvailable": "No payment methods available",
     "packageSubscribed": "Expiry date",
     "remainingAds": "Remaining ads",

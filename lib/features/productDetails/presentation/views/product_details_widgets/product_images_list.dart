@@ -45,15 +45,14 @@ class ProductImagesList extends StatelessWidget {
                         : Colors.transparent,
                     border: Border.all(
                       width: selected ? 2 : 1.2,
-                      color: selected
-                          ? AppColors.mainColor
-                          : AppColors.border,
+                      color: selected ? AppColors.mainColor : AppColors.border,
                     ),
                     boxShadow: selected
                         ? [
                             BoxShadow(
-                              color: AppColors.mainColor
-                                  .withValues(alpha: 0.30),
+                              color: AppColors.mainColor.withValues(
+                                alpha: 0.30,
+                              ),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),

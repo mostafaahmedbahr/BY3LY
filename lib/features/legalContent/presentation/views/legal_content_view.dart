@@ -56,15 +56,9 @@ class LegalContentView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
               ),
-              child: Icon(
-                _icon(),
-                color: Colors.white,
-                size: 18,
-              ),
+              child: Icon(_icon(), color: Colors.white, size: 18),
             ),
             const SizedBox(width: 10),
             Expanded(

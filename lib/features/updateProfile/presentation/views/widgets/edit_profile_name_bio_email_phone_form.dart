@@ -76,10 +76,9 @@ class _EditProfileNameBioEmailPhoneFormState
                   ),
                 ),
               ),
-              validator: (value) =>
-                  value == null || value.trim().isEmpty
-                      ? null // phone is optional — only validate when filled
-                      : MyValidators.phoneValidator(value),
+              validator: (value) => value == null || value.trim().isEmpty
+                  ? null // phone is optional — only validate when filled
+                  : MyValidators.phoneValidator(value),
             ),
           ],
         );

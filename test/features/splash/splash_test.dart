@@ -35,21 +35,25 @@ void main() {
     await EasyLocalization.ensureInitialized();
   });
 
-  testWidgets('splash shows the wordmark and tagline, then navigates to OnBoarding',
-      (tester) async {
-    await tester.pumpWidget(_harness(child: const SplashView()));
-    await tester.pump(const Duration(milliseconds: 100));
-    // Brand wordmark (no separate tagline in the committed design).
-    expect(find.byType(Image), findsOneWidget);
+  testWidgets(
+    'splash shows the wordmark and tagline, then navigates to OnBoarding',
+    (tester) async {
+      await tester.pumpWidget(_harness(child: const SplashView()));
+      await tester.pump(const Duration(milliseconds: 100));
+      // Brand wordmark (no separate tagline in the committed design).
+      expect(find.byType(Image), findsOneWidget);
 
-    // Intro (1.6s) + fade route (450ms).
-    await tester.pump(const Duration(milliseconds: 1700));
-    await tester.pump(const Duration(milliseconds: 600));
+      // Intro (1.6s) + fade route (450ms).
+      await tester.pump(const Duration(milliseconds: 1700));
+      await tester.pump(const Duration(milliseconds: 600));
 
-    expect(find.byType(OnBoardingView), findsOneWidget);
-  });
+      expect(find.byType(OnBoardingView), findsOneWidget);
+    },
+  );
 
-  testWidgets('splash body renders the wordmark during the intro', (tester) async {
+  testWidgets('splash body renders the wordmark during the intro', (
+    tester,
+  ) async {
     await tester.pumpWidget(_harness(child: const SplashView()));
     // Pump the first frames of the intro.
     await tester.pump(const Duration(milliseconds: 100));

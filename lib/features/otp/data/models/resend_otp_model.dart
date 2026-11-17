@@ -1,5 +1,3 @@
-
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -22,6 +20,7 @@ bool? _asBool(dynamic v) {
   }
   return null;
 }
+
 class ResendOtpModel {
   bool? status;
   String? message;
@@ -40,7 +39,7 @@ class ResendOtpModel {
     final Map<String, dynamic> result = <String, dynamic>{};
     result["status"] = status;
     result["message"] = message;
-    if(data != null) {
+    if (data != null) {
       result["data"] = data?.toJson();
     }
     return result;

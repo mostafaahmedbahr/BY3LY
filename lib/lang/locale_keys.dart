@@ -51,6 +51,8 @@ abstract class LocaleKeys {
   static const copyCompanyName = "copyCompanyName";
   static const instaPay = "instaPay";
   static const confirmPayment = "confirmPayment";
+  static const legacyTopUpNotice = "legacyTopUpNotice";
+  static const openWalletTopUp = "openWalletTopUp";
   static const type = "type";
   static const removerFromFav = "removerFromFav";
   static const all = "all";
@@ -456,6 +458,8 @@ abstract class LocaleKeys {
   static const confirmTopUp = "confirmTopUp";
   static const confirmSubscription = "confirmSubscription";
   static const enterValidAmount = "enterValidAmount";
+  static const topUpRejected = "topUpRejected";
+  static const subscriptionRejected = "subscriptionRejected";
   static const noPaymentMethodsAvailable = "noPaymentMethodsAvailable";
   static const packageSubscribed = "packageSubscribed";
   static const remainingAds = "remainingAds";

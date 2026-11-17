@@ -1,4 +1,3 @@
-
 String? _asString(dynamic v) => v?.toString();
 
 int? _asInt(dynamic v) {
@@ -37,16 +36,14 @@ class BannersModel {
     if (rawData is List) {
       rawList = rawData;
     } else if (rawData is Map<String, dynamic>) {
-      final inner = rawData["banners"] ??
+      final inner =
+          rawData["banners"] ??
           rawData["data"] ??
           rawData["slides"] ??
           rawData["items"];
       if (inner is List) rawList = inner;
     }
-    banners = rawList
-            ?.map((e) => BannerItem.fromJson(e))
-            .toList() ??
-        [];
+    banners = rawList?.map((e) => BannerItem.fromJson(e)).toList() ?? [];
   }
 }
 
@@ -70,15 +67,16 @@ class BannerItem {
     final map = Map<String, dynamic>.from(json);
     return BannerItem(
       id: _asInt(map["id"]),
-      image: _asString(map["image"]) ??
+      image:
+          _asString(map["image"]) ??
           _asString(map["image_url"]) ??
           _asString(map["banner"]) ??
           _asString(map["photo"]) ??
           _asString(map["url"]),
       title: _asString(map["title"]) ?? _asString(map["name"]),
-      description:
-          _asString(map["description"]) ?? _asString(map["desc"]),
-      link: _asString(map["link"]) ??
+      description: _asString(map["description"]) ?? _asString(map["desc"]),
+      link:
+          _asString(map["link"]) ??
           _asString(map["url"]) ??
           _asString(map["action_url"]) ??
           _asString(map["redirect"]),

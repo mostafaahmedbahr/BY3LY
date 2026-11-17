@@ -32,8 +32,7 @@ class LoginTermsWidget extends StatelessWidget {
               context.tr(LocaleKeys.loginTermsMsg2),
               style: AppStyles.textStyle10W400Green.copyWith(
                 decoration: TextDecoration.underline,
-                decorationColor:
-                    AppColors.mainColor.withValues(alpha: 0.45),
+                decorationColor: AppColors.mainColor.withValues(alpha: 0.45),
               ),
             ),
           ),

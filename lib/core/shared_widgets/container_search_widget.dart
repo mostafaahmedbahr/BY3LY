@@ -14,8 +14,9 @@ class ContainerSearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        LayoutCubit.get(context)
-            .changeBottomNav(LayoutCubit.pageIndex = 2, context);
+        LayoutCubit.get(
+          context,
+        ).changeBottomNav(LayoutCubit.pageIndex = 2, context);
       },
       borderRadius: BorderRadius.circular(10),
       child: IgnorePointer(

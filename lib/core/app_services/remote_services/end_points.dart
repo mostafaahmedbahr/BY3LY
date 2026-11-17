@@ -51,11 +51,13 @@ class EndPoints {
 
   /// Endpoint that accepts `{ "device_token": "..." }` for the logged-in user.
   ///
-  /// Override at build time if the backend uses a different path:
-  ///   --dart-define=FCM_UPDATE_ENDPOINT=your-backend-path
+  /// The backend contract for token rotation has NOT been published. The only
+  /// confirmed contract so far is that `login` / `verifyCode` accept
+  /// `device_token`. No path is assumed: sync stays disabled until the backend
+  /// team supplies one via:
+  ///   --dart-define=FCM_UPDATE_ENDPOINT=verified-backend-path
   static const String updateDeviceToken = String.fromEnvironment(
     'FCM_UPDATE_ENDPOINT',
-    defaultValue: 'updateDeviceToken',
   );
 
   /// Account settings / privacy: GET = read, PATCH = update.

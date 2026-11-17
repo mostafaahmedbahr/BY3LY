@@ -7,8 +7,10 @@ import 'products_filter.dart';
 import 'products_filter_sheet.dart';
 
 class AllSubCategoriesProductsList extends StatefulWidget {
-  const AllSubCategoriesProductsList(
-      {super.key, required this.allSubCategoriesProductsList});
+  const AllSubCategoriesProductsList({
+    super.key,
+    required this.allSubCategoriesProductsList,
+  });
 
   final List<Products> allSubCategoriesProductsList;
 
@@ -93,20 +95,19 @@ class _AllSubCategoriesProductsListState
       }
       // Place filter (governorate + optional center).
       if (_filter.cityId != null) {
-        final cityMatch = _matchesId(p.cityId, _filter.cityId!) ||
+        final cityMatch =
+            _matchesId(p.cityId, _filter.cityId!) ||
             (_filter.cityName != null &&
-                (p.location?.toString() ?? '')
-                    .contains(_filter.cityName!));
+                (p.location?.toString() ?? '').contains(_filter.cityName!));
         if (!cityMatch) return false;
         if (_filter.centerId != null) {
-          final centerOk = _matchesId(p.centerId, _filter.centerId!) ||
+          final centerOk =
+              _matchesId(p.centerId, _filter.centerId!) ||
               (_filter.centerName != null &&
-                  (p.location?.toString() ?? '')
-                      .contains(_filter.centerName!));
+                  (p.location?.toString() ?? '').contains(_filter.centerName!));
           if (!centerOk) return false;
         } else if (_filter.centerName != null &&
-            !(p.location?.toString() ?? '')
-                .contains(_filter.centerName!)) {
+            !(p.location?.toString() ?? '').contains(_filter.centerName!)) {
           return false;
         }
       }
@@ -243,11 +244,11 @@ class _AllSubCategoriesProductsListState
                     ),
                   if (_filter.subCategoryId != null)
                     _ActiveFilterChip(
-                      label: _filter.subCategoryName ??
-                          '${_filter.subCategoryId}',
+                      label:
+                          _filter.subCategoryName ?? '${_filter.subCategoryId}',
                       onDeleted: () => setState(
-                        () => _filter =
-                            _filter.copyWith(clearSubCategory: true),
+                        () =>
+                            _filter = _filter.copyWith(clearSubCategory: true),
                       ),
                     ),
                   if (_filter.type != null)
@@ -374,10 +375,7 @@ class _ActiveFilterChip extends StatelessWidget {
     return Chip(
       label: Text(
         label,
-        style: const TextStyle(
-          color: AppColors.whiteColor,
-          fontSize: 12,
-        ),
+        style: const TextStyle(color: AppColors.whiteColor, fontSize: 12),
       ),
       backgroundColor: AppColors.mainColor,
       deleteIcon: const Icon(
@@ -386,9 +384,7 @@ class _ActiveFilterChip extends StatelessWidget {
         color: AppColors.whiteColor,
       ),
       onDeleted: onDeleted,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       padding: EdgeInsets.zero,
     );
   }

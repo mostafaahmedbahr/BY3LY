@@ -6,7 +6,7 @@ import '../models/cities_centers_model.dart';
 
 abstract class ChooseLocationRepos {
   Future<Either<Failure, AllCitiesAndCentersModel>>
-      getAllCitiesAndCentersData();
+  getAllCitiesAndCentersData();
   Future<Either<Failure, ChooseLocationModel>> chooseLocationCityAndCenter({
     required int cityId,
     required int centerId,

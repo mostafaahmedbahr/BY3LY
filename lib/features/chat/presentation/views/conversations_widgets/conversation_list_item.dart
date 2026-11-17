@@ -152,8 +152,7 @@ class ConversationListItem extends StatelessWidget {
                                 const SizedBox(width: 8),
                                 Text(
                                   formatChatDate(
-                                    last?.createdAt ??
-                                        conversation.updatedAt,
+                                    last?.createdAt ?? conversation.updatedAt,
                                   ),
                                   style: TextStyle(
                                     fontSize: 11,
@@ -170,8 +169,7 @@ class ConversationListItem extends StatelessWidget {
                             const SizedBox(height: 6),
                             // Last message preview
                             Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 if (last?.isMine == true) ...[
                                   Icon(
@@ -208,13 +206,16 @@ class ConversationListItem extends StatelessWidget {
                                       vertical: 3,
                                     ),
                                     constraints: const BoxConstraints(
-                                        minWidth: 22),
+                                      minWidth: 22,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: AppColors.accent,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
-                                      _unreadCount > 99 ? '99+' : '$_unreadCount',
+                                      _unreadCount > 99
+                                          ? '99+'
+                                          : '$_unreadCount',
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         color: Colors.white,
@@ -269,9 +270,7 @@ class _ProductPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceVariant,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -96,7 +96,8 @@ class AppBarWithUploadImage extends StatelessWidget {
                         border: Border.all(color: Colors.white, width: 3),
                       ),
                       child: ClipOval(
-                        child: registerCubit.profileImage != null &&
+                        child:
+                            registerCubit.profileImage != null &&
                                 registerCubit.profileImage!.path != ""
                             ? Image.file(
                                 registerCubit.profileImage!,

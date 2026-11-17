@@ -28,98 +28,97 @@ class ChooseCenter extends StatelessWidget {
             const SizedBox(height: 20),
             chooseLocationCubit.centerIsSelect
                 ? Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color.fromRGBO(14, 133, 101, 0.25),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(AppImages.mapLocation),
-                      const SizedBox(width: 10),
-                      Text(
-                        chooseLocationCubit.selectedCenter,
-                        style: AppStyles.textStyle16W600Black.copyWith(
-                          color: AppColors.accent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      chooseLocationCubit.resetCenterSelection();
-                    },
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromRGBO(14, 133, 101, 0.25),
+                    ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          context.tr(LocaleKeys.change),
-                          style: AppStyles.textStyle16W500Black.copyWith(
-                            color: AppColors.text,
-                          ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(AppImages.mapLocation),
+                            const SizedBox(width: 10),
+                            Text(
+                              chooseLocationCubit.selectedCenter,
+                              style: AppStyles.textStyle16W600Black.copyWith(
+                                color: AppColors.accent,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 5),
-                        SvgPicture.asset(
-                          AppImages.globe,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.text,
-                            BlendMode.srcIn,
+                        InkWell(
+                          onTap: () {
+                            chooseLocationCubit.resetCenterSelection();
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                context.tr(LocaleKeys.change),
+                                style: AppStyles.textStyle16W500Black.copyWith(
+                                  color: AppColors.text,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                AppImages.globe,
+                                colorFilter: ColorFilter.mode(
+                                  AppColors.text,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            )
+                  )
                 : ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: chooseLocationCubit.allCentersList.length,
-              itemBuilder: (context, index) {
-                final center = chooseLocationCubit.allCentersList[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: GestureDetector(
-                    onTap: () {
-                      chooseLocationCubit.chooseCenter(
-                        center.name!,
-                        center.id!,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: chooseLocationCubit.allCentersList.length,
+                    itemBuilder: (context, index) {
+                      final center = chooseLocationCubit.allCentersList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            chooseLocationCubit.chooseCenter(
+                              center.name!,
+                              center.id!,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color:
+                                  chooseLocationCubit.selectedCenter ==
+                                      center.name
+                                  ? const Color.fromRGBO(14, 133, 101, 0.25)
+                                  : AppColors.surfaceVariant,
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(AppImages.mapLocation),
+                                const SizedBox(width: 10),
+                                Text(
+                                  center.name.toString(),
+                                  style: AppStyles.textStyle16W600Black
+                                      .copyWith(color: AppColors.accent),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       );
                     },
-                    child: Container(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: chooseLocationCubit.selectedCenter ==
-                            center.name
-                            ? const Color.fromRGBO(14, 133, 101, 0.25)
-                            : AppColors.surfaceVariant,
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(AppImages.mapLocation),
-                          const SizedBox(width: 10),
-                          Text(
-                            center.name.toString(),
-                            style: AppStyles.textStyle16W600Black
-                                .copyWith(
-                                color: AppColors.accent),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                );
-              },
-            ),
             const SizedBox(height: 20),
           ],
         );

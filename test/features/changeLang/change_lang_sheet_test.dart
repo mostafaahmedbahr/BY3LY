@@ -44,10 +44,11 @@ void main() {
     );
   }
 
-  testWidgets('both options visible with Arabic as default',
-      (tester) async {
+  testWidgets('both options visible with Arabic as default', (tester) async {
     CacheHelper.saveData(key: 'language', value: 'ar');
-    await tester.pumpWidget(languageSheetHarness(start: const Locale('ar', '')));
+    await tester.pumpWidget(
+      languageSheetHarness(start: const Locale('ar', '')),
+    );
     await tester.pumpAndSettle();
 
     // Both options visible (labels follow the active locale)
@@ -58,20 +59,24 @@ void main() {
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
   });
 
-  testWidgets('English start locale shows English as selected',
-      (tester) async {
+  testWidgets('English start locale shows English as selected', (tester) async {
     CacheHelper.saveData(key: 'language', value: 'en');
-    await tester.pumpWidget(languageSheetHarness(start: const Locale('en', '')));
+    await tester.pumpWidget(
+      languageSheetHarness(start: const Locale('en', '')),
+    );
     await tester.pumpAndSettle();
 
     expect(find.textContaining('English'), findsOneWidget);
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
   });
 
-  testWidgets('tapping the currently selected language pops the sheet',
-      (tester) async {
+  testWidgets('tapping the currently selected language pops the sheet', (
+    tester,
+  ) async {
     CacheHelper.saveData(key: 'language', value: 'ar');
-    await tester.pumpWidget(languageSheetHarness(start: const Locale('ar', '')));
+    await tester.pumpWidget(
+      languageSheetHarness(start: const Locale('ar', '')),
+    );
     await tester.pumpAndSettle();
 
     // Tap the Arabic option (it's current) — should pop the sheet,

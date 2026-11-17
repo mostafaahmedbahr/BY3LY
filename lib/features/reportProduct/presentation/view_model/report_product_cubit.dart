@@ -1,3 +1,4 @@
+﻿import 'package:by3ly/core/extensions/log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +10,7 @@ import 'package:by3ly/features/reportProduct/presentation/view_model/report_prod
 
 class ReportProductCubit extends Cubit<ReportProductStates> {
   ReportProductCubit(this.reportProductsRepos)
-      : super(ReportProductInitState());
+    : super(ReportProductInitState());
 
   static ReportProductCubit get(BuildContext context) =>
       BlocProvider.of<ReportProductCubit>(context);
@@ -91,8 +92,9 @@ class ReportProductCubit extends Cubit<ReportProductStates> {
     var result = await reportProductsRepos.getReportReasons();
     return result.fold(
       (failure) {
-        debugPrint(
-            'ReportProductCubit getReportReasons failed: ${failure.errMessage}');
+        logWarning(
+          'ReportProductCubit getReportReasons failed: ${failure.errMessage}',
+        );
         emit(GetReportReasonsError(failure.errMessage));
       },
       (data) {
@@ -131,8 +133,9 @@ class ReportProductCubit extends Cubit<ReportProductStates> {
     );
     return result.fold(
       (failure) {
-        debugPrint(
-            'ReportProductCubit submitReportAd failed: ${failure.errMessage}');
+        logWarning(
+          'ReportProductCubit submitReportAd failed: ${failure.errMessage}',
+        );
         emit(ReportAdError(failure.errMessage));
       },
       (data) {

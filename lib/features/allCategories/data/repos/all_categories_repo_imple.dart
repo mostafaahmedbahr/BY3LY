@@ -7,19 +7,17 @@ import 'package:dio/dio.dart';
 import '../../../../core/app_services/remote_services/api_service.dart';
 import '../../../../core/app_services/remote_services/end_points.dart';
 
-
 class AllCategoriesRepoImpl implements AllCategoriesRepo {
   final ApiService apiService;
 
   AllCategoriesRepoImpl(this.apiService);
 
-
   @override
-  Future<Either<Failure, AllCategoriesModel>> getAllCategories() async{
+  Future<Either<Failure, AllCategoriesModel>> getAllCategories() async {
     try {
       var response = await apiService.getData(
-          endPoint: EndPoints.viewAllCategories,
-        );
+        endPoint: EndPoints.viewAllCategories,
+      );
       AllCategoriesModel result = AllCategoriesModel.fromJson(response.data);
       return right(result);
     } catch (e) {

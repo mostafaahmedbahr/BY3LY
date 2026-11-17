@@ -1,10 +1,10 @@
+import 'package:by3ly/core/extensions/log.dart';
 import 'dart:async';
 
 import 'package:by3ly/core/app_services/local_services/cache_helper.dart';
 import 'package:by3ly/core/notifications/device_token_sync.dart';
 import 'package:by3ly/core/app_services/local_services/cache_token.dart';
 import 'package:by3ly/core/utils/app_consts/storage_keys.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/otp_model.dart';
@@ -44,12 +44,8 @@ class OtpCubit extends Cubit<OtpStates> {
             } catch (e) {
               // Secure storage is best-effort — the in-memory token still
               // authenticates the user this session.
-              debugPrint('OtpCubit: secure token persist failed — $e');
+              logWarning('OtpCubit: secure token persist failed — $e');
             }
-            await CacheHelper.saveData(
-              key: StorageKeys.userToken,
-              value: token,
-            );
             await CacheHelper.saveData(key: StorageKeys.isGuest, value: false);
             // OTP already sends device_token; force-sync to cover rejected/missing
             // values in the payload and keep the backend token current.

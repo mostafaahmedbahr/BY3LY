@@ -10,10 +10,7 @@ import '../../view_model/change_password_states.dart';
 import 'premium_cta_button.dart';
 
 class ChangePasswordButton extends StatelessWidget {
-  const ChangePasswordButton({
-    super.key,
-    required this.formKey,
-  });
+  const ChangePasswordButton({super.key, required this.formKey});
 
   final GlobalKey<FormState> formKey;
 

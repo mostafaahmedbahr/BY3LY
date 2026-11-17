@@ -56,6 +56,7 @@ class RegisterForm extends StatelessWidget {
           prefixIcon: SvgPicture.asset(AppImages.email),
         ),
         Gap(20.h),
+
         /// age
         CustomTextFormField(
           controller: registerCubit.ageCon,
@@ -67,13 +68,13 @@ class RegisterForm extends StatelessWidget {
           prefixIcon: SvgPicture.asset(AppImages.email),
         ),
         Gap(20.h),
-        BlocBuilder<RegisterCubit,RegisterStates>(
-          buildWhen: (previous, current){
-            return current is ChangeSuffixIconState
-                || current is ChangeSuffixIconState2;
+        BlocBuilder<RegisterCubit, RegisterStates>(
+          buildWhen: (previous, current) {
+            return current is ChangeSuffixIconState ||
+                current is ChangeSuffixIconState2;
           },
-          builder: (context,state){
-            return  Column(
+          builder: (context, state) {
+            return Column(
               children: [
                 /// password
                 CustomTextFormField(
@@ -123,7 +124,6 @@ class RegisterForm extends StatelessWidget {
               ],
             );
           },
-
         ),
       ],
     );

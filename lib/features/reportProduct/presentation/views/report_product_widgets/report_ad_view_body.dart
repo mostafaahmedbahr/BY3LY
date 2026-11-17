@@ -17,8 +17,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// description, then POST reportAd {seller_id, product_id, reason,
 /// description}.
 class ReportAdViewBody extends StatefulWidget {
-  const ReportAdViewBody(
-      {super.key, required this.sellerId, required this.productId});
+  const ReportAdViewBody({
+    super.key,
+    required this.sellerId,
+    required this.productId,
+  });
 
   final int sellerId;
   final int productId;
@@ -57,8 +60,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
       builder: (context, state) {
         final cubit = ReportProductCubit.get(context);
 
-        if (state is GetReportReasonsLoading &&
-            cubit.reportReasons.isEmpty) {
+        if (state is GetReportReasonsLoading && cubit.reportReasons.isEmpty) {
           return const Padding(
             padding: EdgeInsets.all(20),
             child: Column(
@@ -78,8 +80,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
             ),
           );
         }
-        if (state is GetReportReasonsError &&
-            cubit.reportReasons.isEmpty) {
+        if (state is GetReportReasonsError && cubit.reportReasons.isEmpty) {
           return CustomErrorWidget(
             error: state.message,
             onTap: () => cubit.getReportReasons(),
@@ -95,9 +96,7 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
             children: [
               Text(
                 context.tr(LocaleKeys.reasonForReport),
-                style: AppStyles.textStyle16W600Black.copyWith(
-                  fontSize: 20,
-                ),
+                style: AppStyles.textStyle16W600Black.copyWith(fontSize: 20),
               ),
               const CustomSizedBox(height: 10),
               Text(
@@ -106,33 +105,27 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
               ),
               const CustomSizedBox(height: 16),
               if (reasons.isEmpty)
-                Text(
-                  '-',
-                  style: TextStyle(color: AppColors.textSecondary),
-                )
+                Text('-', style: TextStyle(color: AppColors.textSecondary))
               else
                 ...reasons.where((r) => (r.id ?? '').isNotEmpty).map((reason) {
                   final key = reason.id!;
-                  final selected =
-                      cubit.selectedReasonKey == key;
+                  final selected = cubit.selectedReasonKey == key;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: InkWell(
-                      onTap: () =>
-                          cubit.selectReportReason(key),
+                      onTap: () => cubit.selectReportReason(key),
                       borderRadius: BorderRadius.circular(14),
                       child: AnimatedContainer(
-                        duration:
-                            const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 14),
+                          horizontal: 14,
+                          vertical: 14,
+                        ),
                         decoration: BoxDecoration(
                           color: selected
-                              ? AppColors.mainColor
-                                  .withValues(alpha: 0.07)
+                              ? AppColors.mainColor.withValues(alpha: 0.07)
                               : AppColors.surface,
-                          borderRadius:
-                              BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14),
                           border: Border.all(
                             color: selected
                                 ? AppColors.mainColor
@@ -204,18 +197,14 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [
-                        AppColors.yellowColor,
-                        Color(0xffE08B1B),
-                      ],
+                      colors: [AppColors.yellowColor, Color(0xffE08B1B)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            AppColors.yellowColor.withValues(alpha: 0.40),
+                        color: AppColors.yellowColor.withValues(alpha: 0.40),
                         blurRadius: 14,
                         offset: const Offset(0, 6),
                       ),
@@ -229,18 +218,20 @@ class _ReportAdViewBodyState extends State<ReportAdViewBody> {
                       onTap: submitting
                           ? null
                           : () {
-                        if (cubit.selectedReasonKey == null) {
-                          Toast.showErrorToast(
-                            msg: context.tr(LocaleKeys.pleaseSelectReason),
-                            context: context,
-                          );
-                          return;
-                        }
-                        cubit.submitReportAd(
-                          sellerId: widget.sellerId,
-                          productId: widget.productId,
-                        );
-                      },
+                              if (cubit.selectedReasonKey == null) {
+                                Toast.showErrorToast(
+                                  msg: context.tr(
+                                    LocaleKeys.pleaseSelectReason,
+                                  ),
+                                  context: context,
+                                );
+                                return;
+                              }
+                              cubit.submitReportAd(
+                                sellerId: widget.sellerId,
+                                productId: widget.productId,
+                              );
+                            },
                       child: Center(
                         child: submitting
                             ? const SizedBox(

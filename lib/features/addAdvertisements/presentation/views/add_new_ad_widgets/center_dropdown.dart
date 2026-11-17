@@ -20,8 +20,7 @@ class CenterDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChooseLocationCubit, ChooseLocationStates>(
       builder: (context, locState) {
-        final cities =
-            ChooseLocationCubit.get(context).allCitiesList;
+        final cities = ChooseLocationCubit.get(context).allCitiesList;
         return BlocBuilder<AddNewAdCubit, AddNewAdStates>(
           builder: (context, adState) {
             final adCubit = AddNewAdCubit.get(context);
@@ -34,8 +33,7 @@ class CenterDropdown extends StatelessWidget {
             }
 
             // Cities still loading → skeleton box, not a dead dropdown.
-            if (cities.isEmpty &&
-                locState is! GetAllCitiesAndCentersError) {
+            if (cities.isEmpty && locState is! GetAllCitiesAndCentersError) {
               return Container(
                 height: 56,
                 width: double.infinity,
@@ -73,17 +71,17 @@ class CenterDropdown extends StatelessWidget {
                 onChanged: null,
                 decoration: dropdownDecoration(
                   context.tr(LocaleKeys.center),
-                  prefix: const Icon(Icons.my_location_outlined,
-                      color: AppColors.mainColor, size: 20),
+                  prefix: const Icon(
+                    Icons.my_location_outlined,
+                    color: AppColors.mainColor,
+                    size: 20,
+                  ),
                 ),
               );
             }
             return DropdownButtonFormField<int>(
-              key: ValueKey(
-                  'center_${adCubit.cityId}_${adCubit.centerId}'),
-              initialValue: centers
-                      .map((c) => c.id)
-                      .contains(adCubit.centerId)
+              key: ValueKey('center_${adCubit.cityId}_${adCubit.centerId}'),
+              initialValue: centers.map((c) => c.id).contains(adCubit.centerId)
                   ? adCubit.centerId
                   : null,
               items: centers.map((c) {
@@ -95,8 +93,11 @@ class CenterDropdown extends StatelessWidget {
               onChanged: adCubit.selectCenter,
               decoration: dropdownDecoration(
                 context.tr(LocaleKeys.center),
-                prefix: const Icon(Icons.my_location_outlined,
-                    color: AppColors.mainColor, size: 20),
+                prefix: const Icon(
+                  Icons.my_location_outlined,
+                  color: AppColors.mainColor,
+                  size: 20,
+                ),
               ),
             );
           },
