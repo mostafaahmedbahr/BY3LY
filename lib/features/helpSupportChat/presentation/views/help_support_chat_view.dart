@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/view_model/help_support_chat_cubit.dart';
 import 'package:by3ly/features/helpSupportChat/presentation/view_model/help_support_chat_states.dart';
 import 'package:by3ly/features/chat/presentation/views/chat_helpers.dart';
-import 'package:by3ly/features/chat/presentation/views/chat_widgets/image_source_sheet.dart';
+import 'package:by3ly/core/shared_widgets/image_source_sheet.dart';
 import 'help_support_chat_widgets/help_support_chat_view_body.dart';
 
 class HelpSupportChatView extends StatefulWidget {
@@ -176,7 +176,10 @@ class _PremiumSupportAppBar extends StatelessWidget
           PositionedDirectional(
             top: -46,
             end: -30,
-            child: _Ring(size: 122, color: Colors.white.withValues(alpha: 0.07)),
+            child: _Ring(
+              size: 122,
+              color: Colors.white.withValues(alpha: 0.07),
+            ),
           ),
           PositionedDirectional(
             top: 14,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:by3ly/core/shared_widgets/custom_button.dart';
 import 'package:by3ly/core/shared_widgets/custom_loading.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
+import 'package:by3ly/core/shared_widgets/image_source_sheet.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
 import 'package:by3ly/features/packages/presentation/view_model/packages_states.dart';
@@ -104,7 +105,13 @@ class TransferForm extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             InkWell(
-              onTap: submitting ? null : () => payCubit.pickReceipt(),
+              onTap: submitting
+                  ? null
+                  : () async {
+                      final source = await showImageSourceSheet(context);
+                      if (source == null || !context.mounted) return;
+                      await payCubit.pickReceipt(source);
+                    },
               borderRadius: BorderRadius.circular(14),
               child: Container(
                 height: 120,

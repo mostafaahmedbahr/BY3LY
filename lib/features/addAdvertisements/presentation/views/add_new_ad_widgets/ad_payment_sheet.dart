@@ -8,6 +8,8 @@ import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new
 import 'package:by3ly/features/packages/data/repos/packages_repos_imple.dart';
 import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,8 +40,8 @@ Future<void> showAdPaymentSheet(BuildContext context) {
       providers: [
         BlocProvider.value(value: adCubit),
         BlocProvider(
-          create: (_) => PackagesCubit(getIt.get<PackagesRepoImpl>())
-            ..getPaymentMethods(),
+          create: (_) =>
+              PackagesCubit(getIt.get<PackagesRepoImpl>())..getPaymentMethods(),
         ),
       ],
       child: const AdPaymentSheetBody(),
@@ -89,8 +91,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
   }
 
   Future<void> _fetchSettings() async {
-    final result =
-        await context.read<AddNewAdCubit>().loadPublishingSettings();
+    final result = await context.read<AddNewAdCubit>().loadPublishingSettings();
     if (!mounted) return;
     result.fold(
       (_) => setState(() {
@@ -129,11 +130,17 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
     final method = payCubit.selectedMethod;
     final receipt = payCubit.receiptImage;
     if (method?.code == null) {
-      Toast.showErrorToast(msg: 'اختر طريقة التحويل', context: context);
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.transferMethodRequired),
+        context: context,
+      );
       return;
     }
     if (receipt == null) {
-      Toast.showErrorToast(msg: 'ارفع صورة التحويل', context: context);
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.receiptRequired),
+        context: context,
+      );
       return;
     }
     adCubit.submit(
@@ -148,8 +155,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
   @override
   Widget build(BuildContext context) {
     final adCubit = context.read<AddNewAdCubit>();
-    final user =
-        context.read<ProfileCubit>().profileModel?.data?.user;
+    final user = context.read<ProfileCubit>().profileModel?.data?.user;
     final balance = user?.walletBalance;
     final fee = _settings?.price ?? 0;
     final walletCoversFee = (balance ?? 0) >= fee;
@@ -159,8 +165,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
         // and pops the page with result=true.
         if (state is AddNewAdSuccess) {
           Navigator.pop(context);
-        } else if (state is AddNewAdPaymentRequired ||
-            state is AddNewAdError) {
+        } else if (state is AddNewAdPaymentRequired || state is AddNewAdError) {
           // The sheet is the visible surface here — toast instead of
           // a snackbar hidden behind it.
           Toast.showErrorToast(
@@ -187,203 +192,197 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
               bottom: MediaQuery.of(context).viewInsets.bottom + 14,
             ),
             child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Grabber
-                Container(
-                  width: 44,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Grabber
+                  Container(
+                    width: 44,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 14),
-                // Premium header: gradient icon badge + title + hint
-                Row(
-                  children: [
-                    Container(
-                      height: 52,
-                      width: 52,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            AppColors.mainColor,
-                            AppColors.secondColor,
+                  const SizedBox(height: 14),
+                  // Premium header: gradient icon badge + title + hint
+                  Row(
+                    children: [
+                      Container(
+                        height: 52,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppColors.mainColor,
+                              AppColors.secondColor,
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.mainColor.withValues(alpha: 0.4),
+                              blurRadius: 12,
+                              offset: const Offset(0, 5),
+                            ),
                           ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.mainColor
-                                .withValues(alpha: 0.4),
-                            blurRadius: 12,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.payments_rounded,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'اختر طريقة الدفع',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.text,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'الباقة أو الإعلانات المجانية خلصت — ادفع رسوم النشر لإعلانك',
-                            style: TextStyle(
-                              fontSize: 11.5,
-                              height: 1.45,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      tooltip: 'إغلاق',
-                      onPressed: () => Navigator.pop(context),
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceVariant,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.border.withValues(
-                                alpha: 0.7),
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.close_rounded,
-                          size: 18,
-                          color: AppColors.textSecondary,
+                        child: const Icon(
+                          Icons.payments_rounded,
+                          color: Colors.white,
+                          size: 26,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                if (_loadingSettings)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: CustomLoading(),
-                  )
-                else if (_settingsFailed)
-                  PaymentSettingsError(onRetry: _loadSettings)
-                else ...[
-                  // Publishing fee + wallet balance (same info the
-                  // website shows above its payment section).
-                  PaymentFeeCard(
-                    feeLabel: _settings?.priceLabel ?? '0 ج.م',
-                    balanceLabel:
-                        '${_formatBalance(balance)} ${_settings?.currencyLabel ?? 'ج.م'}',
-                  ),
-                  const SizedBox(height: 16),
-                  BlocBuilder<AddNewAdCubit, AddNewAdStates>(
-                    builder: (context, adState) {
-                      final submitting = adState is AddNewAdLoading;
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Wallet: only when the balance covers the fee.
-                          PaymentOptionTile(
-                            icon:
-                                Icons.account_balance_wallet_outlined,
-                            title: 'محفظة بيعلي',
-                            subtitle: walletCoversFee
-                                ? 'سيتم خصم ${_settings?.priceLabel ?? ''} من رصيد محفظتك.'
-                                : 'رصيد محفظتك غير كافٍ. اشحن المحفظة أو ادفع بالتحويل.',
-                            enabled: walletCoversFee,
-                            trailing: submitting && !_showTransfer
-                                ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: AppColors.mainColor,
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 16,
-                                    color: AppColors.textSecondary,
-                                  ),
-                            onTap: submitting
-                                ? null
-                                : () {
-                                    if (!walletCoversFee) {
-                                      Toast.showErrorToast(
-                                        msg:
-                                            'رصيد محفظتك غير كافٍ. اشحن المحفظة أو ادفع بالتحويل.',
-                                        context: context,
-                                      );
-                                      return;
-                                    }
-                                    _submitWallet(adCubit);
-                                  },
-                          ),
-                          const SizedBox(height: 12),
-                          // Transfer: expands the reference + receipt
-                          // form inline (same as the wallet top-up).
-                          PaymentOptionTile(
-                            icon: Icons.swap_horiz_rounded,
-                            title: 'تحويل',
-                            expanded: _showTransfer,
-                            subtitle:
-                                'تحويل بنكي أو محافظ إلكترونية',
-                            trailing: Icon(
-                              _showTransfer
-                                  ? Icons
-                                      .keyboard_arrow_down_rounded
-                                  : Icons.arrow_forward_ios_rounded,
-                              size: 18,
-                              color: AppColors.mainColor,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'اختر طريقة الدفع',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.text,
+                              ),
                             ),
-                            onTap: submitting
-                                ? null
-                                : () => setState(
-                                    () =>
-                                        _showTransfer = !_showTransfer),
-                          ),
-                          if (_showTransfer) ...[
-                            const SizedBox(height: 12),
-                            TransferForm(
-                              submitting: submitting,
-                              referenceController: _referenceCon,
-                              onConfirm: () => _submitTransfer(
-                                adCubit,
-                                context.read<PackagesCubit>(),
-                                submitting: submitting,
+                            const SizedBox(height: 2),
+                            Text(
+                              'الباقة أو الإعلانات المجانية خلصت — ادفع رسوم النشر لإعلانك',
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                height: 1.45,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
-                        ],
-                      );
-                    },
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'إغلاق',
+                        onPressed: () => Navigator.pop(context),
+                        icon: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceVariant,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.border.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.close_rounded,
+                            size: 18,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 16),
+                  if (_loadingSettings)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: CustomLoading(),
+                    )
+                  else if (_settingsFailed)
+                    PaymentSettingsError(onRetry: _loadSettings)
+                  else ...[
+                    // Publishing fee + wallet balance (same info the
+                    // website shows above its payment section).
+                    PaymentFeeCard(
+                      feeLabel: _settings?.priceLabel ?? '0 ج.م',
+                      balanceLabel:
+                          '${_formatBalance(balance)} ${_settings?.currencyLabel ?? 'ج.م'}',
+                    ),
+                    const SizedBox(height: 16),
+                    BlocBuilder<AddNewAdCubit, AddNewAdStates>(
+                      builder: (context, adState) {
+                        final submitting = adState is AddNewAdLoading;
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Wallet: only when the balance covers the fee.
+                            PaymentOptionTile(
+                              icon: Icons.account_balance_wallet_outlined,
+                              title: 'محفظة بيعلي',
+                              subtitle: walletCoversFee
+                                  ? 'سيتم خصم ${_settings?.priceLabel ?? ''} من رصيد محفظتك.'
+                                  : 'رصيد محفظتك غير كافٍ. اشحن المحفظة أو ادفع بالتحويل.',
+                              enabled: walletCoversFee,
+                              trailing: submitting && !_showTransfer
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: AppColors.mainColor,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 16,
+                                      color: AppColors.textSecondary,
+                                    ),
+                              onTap: submitting
+                                  ? null
+                                  : () {
+                                      if (!walletCoversFee) {
+                                        Toast.showErrorToast(
+                                          msg:
+                                              'رصيد محفظتك غير كافٍ. اشحن المحفظة أو ادفع بالتحويل.',
+                                          context: context,
+                                        );
+                                        return;
+                                      }
+                                      _submitWallet(adCubit);
+                                    },
+                            ),
+                            const SizedBox(height: 12),
+                            // Transfer: expands the reference + receipt
+                            // form inline (same as the wallet top-up).
+                            PaymentOptionTile(
+                              icon: Icons.swap_horiz_rounded,
+                              title: 'تحويل',
+                              expanded: _showTransfer,
+                              subtitle: 'تحويل بنكي أو محافظ إلكترونية',
+                              trailing: Icon(
+                                _showTransfer
+                                    ? Icons.keyboard_arrow_down_rounded
+                                    : Icons.arrow_forward_ios_rounded,
+                                size: 18,
+                                color: AppColors.mainColor,
+                              ),
+                              onTap: submitting
+                                  ? null
+                                  : () => setState(
+                                      () => _showTransfer = !_showTransfer,
+                                    ),
+                            ),
+                            if (_showTransfer) ...[
+                              const SizedBox(height: 12),
+                              TransferForm(
+                                submitting: submitting,
+                                referenceController: _referenceCon,
+                                onConfirm: () => _submitTransfer(
+                                  adCubit,
+                                  context.read<PackagesCubit>(),
+                                  submitting: submitting,
+                                ),
+                              ),
+                            ],
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

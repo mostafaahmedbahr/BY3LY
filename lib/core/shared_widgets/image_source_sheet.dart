@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-/// Bottom sheet asking the user where to upload an image from.
+/// Shared bottom sheet asking the user where to pick an image from.
 /// Returns the picked [ImageSource], or null when dismissed.
 Future<ImageSource?> showImageSourceSheet(BuildContext context) {
   return showModalBottomSheet<ImageSource>(

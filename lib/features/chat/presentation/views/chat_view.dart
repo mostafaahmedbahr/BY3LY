@@ -10,7 +10,7 @@ import '../view_model/chat_states.dart';
 import 'chat_helpers.dart';
 import 'chat_widgets/chat_input_bar.dart';
 import 'chat_widgets/chat_messages_list.dart';
-import 'chat_widgets/image_source_sheet.dart';
+import 'package:by3ly/core/shared_widgets/image_source_sheet.dart';
 import 'chat_widgets/message_action_sheet.dart';
 
 class ChatView extends StatefulWidget {
@@ -123,8 +123,7 @@ class _ChatViewState extends State<ChatView> {
       context: context,
       message: message,
       onCopy: () {
-        Clipboard.setData(ClipboardData(text: message.body ?? ''))
-            .then((_) {
+        Clipboard.setData(ClipboardData(text: message.body ?? '')).then((_) {
           if (!mounted) return;
           Toast.showSuccessToast(
             msg: context.tr(LocaleKeys.copy),
@@ -309,4 +308,3 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 }
-

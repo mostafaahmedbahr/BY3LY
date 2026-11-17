@@ -448,6 +448,8 @@ abstract class LocaleKeys {
   static const amountHint = "amountHint";
   static const chooseTransferMethod = "chooseTransferMethod";
   static const uploadTransferReceipt = "uploadTransferReceipt";
+  static const receiptRequired = "receiptRequired";
+  static const transferMethodRequired = "transferMethodRequired";
   static const changeImage = "changeImage";
   static const transferReferenceOptional = "transferReferenceOptional";
   static const transferReferenceHint = "transferReferenceHint";
@@ -492,5 +494,6 @@ abstract class LocaleKeys {
   static const sellerPhone = "sellerPhone";
   static const sellerReviews = "sellerReviews";
   static const viewAll = "viewAll";
-  static const brandSlogan = "brandSlogan";  static const noChangesToSave = "noChangesToSave";
+  static const brandSlogan = "brandSlogan";
+  static const noChangesToSave = "noChangesToSave";
 }

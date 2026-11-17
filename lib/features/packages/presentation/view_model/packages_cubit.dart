@@ -10,8 +10,7 @@ import 'packages_states.dart';
 class PackagesCubit extends Cubit<PackagesStates> {
   PackagesCubit(this.packagesRepos) : super(PackagesInitState());
 
-  static PackagesCubit get(BuildContext context) =>
-      BlocProvider.of(context);
+  static PackagesCubit get(BuildContext context) => BlocProvider.of(context);
 
   final PackagesRepos packagesRepos;
   PackagesModel? packagesModel;
@@ -46,12 +45,15 @@ class PackagesCubit extends Cubit<PackagesStates> {
   Future<void> getPackages() async {
     emit(GetPackagesLoadingState());
     var result = await packagesRepos.getPackages();
-    return result.fold((failure) {
-      emit(GetPackagesErrorState(failure.errMessage));
-    }, (data) {
-      packagesModel = data;
-      emit(GetPackagesSuccessState(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(GetPackagesErrorState(failure.errMessage));
+      },
+      (data) {
+        packagesModel = data;
+        emit(GetPackagesSuccessState(data));
+      },
+    );
   }
 
   /// The package currently being subscribed to (shows a spinner
@@ -67,11 +69,14 @@ class PackagesCubit extends Cubit<PackagesStates> {
       paymentMethod: 'wallet',
     );
     subscribingPackageId = null;
-    return result.fold((failure) {
-      emit(SubscribePackageErrorState(failure.errMessage));
-    }, (data) {
-      emit(SubscribePackageSuccessState(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(SubscribePackageErrorState(failure.errMessage));
+      },
+      (data) {
+        emit(SubscribePackageSuccessState(data));
+      },
+    );
   }
 
   // ----- Transfer flow -----
@@ -100,30 +105,31 @@ class PackagesCubit extends Cubit<PackagesStates> {
       // (e.g. the add-ad sheet) render them.
       paymentMethodsModel = cached;
       final methods = cached.data?.methods ?? [];
-      selectedMethod ??=
-          methods.isNotEmpty ? methods.first : null;
+      selectedMethod ??= methods.isNotEmpty ? methods.first : null;
       emit(GetPaymentMethodsSuccessState(cached));
       return;
     }
     emit(GetPaymentMethodsLoadingState());
     var result = await packagesRepos.getPaymentMethods();
-    return result.fold((failure) {
-      emit(GetPaymentMethodsErrorState(failure.errMessage));
-    }, (data) {
-      paymentMethodsModel = data;
-      cachedMethods = data;
-      final methods = data.data?.methods ?? [];
-      selectedMethod = methods.isNotEmpty ? methods.first : null;
-      emit(GetPaymentMethodsSuccessState(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(GetPaymentMethodsErrorState(failure.errMessage));
+      },
+      (data) {
+        paymentMethodsModel = data;
+        cachedMethods = data;
+        final methods = data.data?.methods ?? [];
+        selectedMethod = methods.isNotEmpty ? methods.first : null;
+        emit(GetPaymentMethodsSuccessState(data));
+      },
+    );
   }
 
   final ImagePicker _picker = ImagePicker();
   XFile? receiptImage;
 
-  Future<void> pickReceipt() async {
-    final picked =
-        await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> pickReceipt(ImageSource source) async {
+    final picked = await _picker.pickImage(source: source);
     if (picked == null) return;
     receiptImage = picked;
     emit(ReceiptPickedState());
@@ -146,10 +152,13 @@ class PackagesCubit extends Cubit<PackagesStates> {
       receiptPath: receiptImage!.path,
     );
     subscribingPackageId = null;
-    return result.fold((failure) {
-      emit(SubscribePackageErrorState(failure.errMessage));
-    }, (data) {
-      emit(SubscribePackageSuccessState(data));
-    });
+    return result.fold(
+      (failure) {
+        emit(SubscribePackageErrorState(failure.errMessage));
+      },
+      (data) {
+        emit(SubscribePackageSuccessState(data));
+      },
+    );
   }
 }

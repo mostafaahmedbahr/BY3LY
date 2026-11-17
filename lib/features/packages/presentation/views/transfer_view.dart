@@ -4,6 +4,7 @@ import 'package:by3ly/core/shared_widgets/custom_button.dart';
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/custom_loading.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
+import 'package:by3ly/core/shared_widgets/image_source_sheet.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/new_toast/toast.dart';
 import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_cubit.dart';
@@ -26,9 +27,10 @@ import 'packages_widgets/transfer_method_card.dart';
 ///   wallet page refreshes the balance and the history.
 class TransferView extends StatefulWidget {
   const TransferView({super.key, this.package, this.topUpMode = false})
-      : assert(
-            (package == null) == topUpMode,
-            'Pass either package or topUpMode');
+    : assert(
+        (package == null) == topUpMode,
+        'Pass either package or topUpMode',
+      );
 
   final Packages? package;
   final bool topUpMode;
@@ -57,6 +59,51 @@ class _TransferViewState extends State<TransferView> {
     _amountController.dispose();
     _referenceCon.dispose();
     super.dispose();
+  }
+
+  void _confirm(
+    BuildContext context,
+    PackagesCubit cubit, {
+    required bool topUpMode,
+    required Packages? package,
+  }) {
+    final String? amount = topUpMode ? _amountController.text.trim() : null;
+    if (topUpMode && (amount!.isEmpty || double.tryParse(amount) == null)) {
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.enterValidAmount),
+        context: context,
+      );
+      return;
+    }
+
+    final method = cubit.selectedMethod;
+    if (method?.code == null) {
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.transferMethodRequired),
+        context: context,
+      );
+      return;
+    }
+    if (cubit.receiptImage == null) {
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.receiptRequired),
+        context: context,
+      );
+      return;
+    }
+
+    if (topUpMode) {
+      context.read<WalletCubit>().topUp(
+        amount: amount!,
+        paymentMethod: method!.code!,
+        receiptPath: cubit.receiptImage!.path,
+        transferReference: _referenceCon.text.trim().isEmpty
+            ? null
+            : _referenceCon.text.trim(),
+      );
+    } else if (package?.id != null) {
+      cubit.checkoutWithTransfer(packageId: package!.id!);
+    }
   }
 
   @override
@@ -120,13 +167,13 @@ class _TransferViewState extends State<TransferView> {
         },
         builder: (context, state) {
           final package = widget.package;
-          final paying = !topUpMode &&
+          final paying =
+              !topUpMode &&
               cubit.subscribingPackageId != null &&
               cubit.subscribingPackageId == package?.id;
-          final canConfirm = cubit.selectedMethod?.code != null &&
-              cubit.receiptImage != null &&
-              !paying &&
-              (topUpMode || package?.id != null);
+          // Receipt/method are validated on tap so the user gets a clear
+          // message instead of a disabled button with no explanation.
+          final canConfirm = !paying && (topUpMode || package?.id != null);
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -144,8 +191,7 @@ class _TransferViewState extends State<TransferView> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color:
-                          AppColors.mainColor.withValues(alpha: 0.06),
+                      color: AppColors.mainColor.withValues(alpha: 0.06),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Row(
@@ -187,8 +233,7 @@ class _TransferViewState extends State<TransferView> {
                   Expanded(
                     child: CustomErrorWidget(
                       error: state.error,
-                      onTap: () =>
-                          cubit.getPaymentMethods(forceRefresh: true),
+                      onTap: () => cubit.getPaymentMethods(forceRefresh: true),
                     ),
                   )
                 else
@@ -197,8 +242,7 @@ class _TransferViewState extends State<TransferView> {
                         ? Center(
                             child: Text(
                               context.tr(LocaleKeys.noPaymentMethodsAvailable),
-                              style: TextStyle(
-                                  color: AppColors.textSecondary),
+                              style: TextStyle(color: AppColors.textSecondary),
                             ),
                           )
                         : ListView.separated(
@@ -206,15 +250,12 @@ class _TransferViewState extends State<TransferView> {
                             separatorBuilder: (_, _) =>
                                 const SizedBox(height: 10),
                             itemBuilder: (context, index) {
-                              final method =
-                                  cubit.paymentMethods[index];
-                              final selected =
-                                  cubit.selectedMethod == method;
+                              final method = cubit.paymentMethods[index];
+                              final selected = cubit.selectedMethod == method;
                               return TransferMethodCard(
                                 method: method,
                                 selected: selected,
-                                onTap: () =>
-                                    cubit.selectMethod(method),
+                                onTap: () => cubit.selectMethod(method),
                               );
                             },
                           ),
@@ -222,20 +263,24 @@ class _TransferViewState extends State<TransferView> {
                 const SizedBox(height: 12),
                 // Receipt picker.
                 InkWell(
-                  onTap: paying ? null : () => cubit.pickReceipt(),
+                  onTap: paying
+                      ? null
+                      : () async {
+                          final source = await showImageSourceSheet(context);
+                          if (source == null || !context.mounted) return;
+                          await cubit.pickReceipt(source);
+                        },
                   borderRadius: BorderRadius.circular(14),
                   child: Container(
                     height: 120,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                          color: AppColors.border),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: cubit.receiptImage == null
                         ? Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Icon(
                                 Icons.cloud_upload_outlined,
@@ -257,8 +302,7 @@ class _TransferViewState extends State<TransferView> {
                             fit: StackFit.expand,
                             children: [
                               ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(13),
+                                borderRadius: BorderRadius.circular(13),
                                 child: Image.file(
                                   File(cubit.receiptImage!.path),
                                   fit: BoxFit.cover,
@@ -268,15 +312,13 @@ class _TransferViewState extends State<TransferView> {
                                 top: 8,
                                 left: 8,
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Colors.black
-                                        .withValues(alpha: 0.6),
-                                    borderRadius:
-                                        BorderRadius.circular(10),
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     context.tr(LocaleKeys.changeImage),
@@ -320,48 +362,18 @@ class _TransferViewState extends State<TransferView> {
                 if (topUpMode)
                   BlocBuilder<WalletCubit, WalletStates>(
                     builder: (context, walletState) {
-                      final walletPaying =
-                          walletState is TopUpLoadingState;
+                      final walletPaying = walletState is TopUpLoadingState;
                       return _ConfirmButton(
                         loading: walletPaying,
                         label: context.tr(LocaleKeys.confirmTopUp),
                         onPressed: walletPaying
                             ? null
-                            : () {
-                                final amount = _amountController
-                                    .text
-                                    .trim();
-                                if (amount.isEmpty ||
-                                    double.tryParse(amount) ==
-                                        null) {
-                                  Toast.showErrorToast(
-                                    msg: context.tr(LocaleKeys.enterValidAmount),
-                                    context: context,
-                                  );
-                                  return;
-                                }
-                                final method =
-                                    cubit.selectedMethod;
-                                final receipt =
-                                    cubit.receiptImage;
-                                if (method?.code == null ||
-                                    receipt == null) {
-                                  return;
-                                }
-                                context
-                                    .read<WalletCubit>()
-                                    .topUp(
-                                      amount: amount,
-                                      paymentMethod:
-                                          method!.code!,
-                                      receiptPath: receipt.path,
-                                      transferReference:
-                                          _referenceCon.text.trim().isEmpty
-                                              ? null
-                                              : _referenceCon.text
-                                                  .trim(),
-                                    );
-                              },
+                            : () => _confirm(
+                                context,
+                                cubit,
+                                topUpMode: true,
+                                package: null,
+                              ),
                       );
                     },
                   )
@@ -371,9 +383,12 @@ class _TransferViewState extends State<TransferView> {
                     label: context.tr(LocaleKeys.confirmSubscription),
                     onPressed: !canConfirm || package?.id == null
                         ? null
-                        : () => cubit.checkoutWithTransfer(
-                              packageId: package!.id!,
-                            ),
+                        : () => _confirm(
+                            context,
+                            cubit,
+                            topUpMode: false,
+                            package: package,
+                          ),
                   ),
               ],
             ),
@@ -395,8 +410,7 @@ class _TransferViewState extends State<TransferView> {
             );
             Navigator.pop(context, true);
           } else if (state is TopUpErrorState) {
-            Toast.showErrorToast(
-                msg: state.error, context: context);
+            Toast.showErrorToast(msg: state.error, context: context);
           }
         },
         child: scaffold,
