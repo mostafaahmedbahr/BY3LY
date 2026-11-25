@@ -31,7 +31,8 @@ class SearchReposImpl implements SearchRepos {
         response.data,
       );
       logWarning(
-        "SearchReposImpl getAllProductsForSearch page=$page query=$query",
+        'SearchReposImpl getAllProductsForSearch page=$page query=$query '
+        'lastPage=${result.data?.pagination?.resolvedLastPage ?? '-'}',
       );
       return right(result);
     } catch (e, s) {

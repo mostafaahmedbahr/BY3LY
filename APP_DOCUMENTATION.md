@@ -330,7 +330,7 @@ lib/
 - **الغرض**: بحث نصي + فلترة سيرفرية + **Pagination حقيقي** (infinite scroll).
 - **الـ API**: `GET /products?page=N&<filter params>`.
 - **الفلتر**: نفس `ProductsFilter` (`showProductsFilterSheet`): `category_id, sub_category_id, min_price, max_price, city_id, center_id, shipping_type (free|paid|both), condition (new|used|both)`.
-- **الرد**: `data{products[], pagination{current_page, last_page, per_page, total}}` — `hasMore => currentPage < lastPage`، وتحميل المزيد عند الوصول لـ 300px من النهاية، مع زر Retry عند فشل الصفحات التالية.
+- **الرد**: `data{products[], pagination{current_page, last_page?, total_pages?, per_page, total}}` — الكود بيقبل `last_page` أو `total_pages` (زي الإعلانات) مع fallback من `total / per_page`. `hasMore => currentPage < lastPage`، وتحميل المزيد عند الوصول لـ 300px من النهاية، مع زر Retry عند فشل الصفحات التالية.
 - **ملاحظة**: الفلترة النصية (البحث الحر) محلية على الصفحات المحمّلة؛ `searchProducts` معرّف لكن غير مستخدم.
 - **كود ميت**: `search_filter_view.dart` (قوائم عربي مهاردكود + زر بلا onPressed).
 

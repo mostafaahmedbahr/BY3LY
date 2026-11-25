@@ -83,6 +83,9 @@ class FakeSearchRepos implements SearchRepos {
   int calls = 0;
   ProductsFilter? lastFilter;
   bool shouldFail = false;
+
+  /// Emulates the real API shape: `total_pages` instead of `last_page`.
+  bool useTotalPages = false;
   final Map<int, bool> pageFailed = {};
 
   @override
@@ -95,10 +98,18 @@ class FakeSearchRepos implements SearchRepos {
     if (shouldFail || pageFailed[page] == true) {
       return Left(ServerFailure('fetch failed'));
     }
-    final fixture = page == 1 ? _searchJsonPage1 : _searchJsonPage2;
-    return Right(
-      AllProductsSearchModel.fromJson(Map<String, dynamic>.from(fixture)),
+    final fixture = Map<String, dynamic>.from(
+      page == 1 ? _searchJsonPage1 : _searchJsonPage2,
     );
+    if (useTotalPages) {
+      final data = Map<String, dynamic>.from(fixture['data'] as Map);
+      final pagination = Map<String, dynamic>.from(data['pagination'] as Map);
+      final lastPage = pagination.remove('last_page');
+      pagination['total_pages'] = lastPage;
+      data['pagination'] = pagination;
+      fixture['data'] = data;
+    }
+    return Right(AllProductsSearchModel.fromJson(fixture));
   }
 }
 
@@ -189,6 +200,25 @@ void main() {
       expect(pagination.total, 3);
     });
 
+    test('reads total_pages when last_page is absent', () {
+      final model = AllProductsSearchModel.fromJson({
+        'status': true,
+        'data': {
+          'products': [],
+          'pagination': {
+            'current_page': 1,
+            'total_pages': 2,
+            'per_page': 10,
+            'total': 12,
+          },
+        },
+      });
+      final pagination = model.data!.pagination!;
+      expect(pagination.lastPage, isNull);
+      expect(pagination.totalPages, 2);
+      expect(pagination.resolvedLastPage, 2);
+    });
+
     test('skips garbage product entries and drops non-map data', () {
       final model = AllProductsSearchModel.fromJson({
         'status': '1',
@@ -252,6 +282,20 @@ void main() {
       expect(repo.calls, 2);
       expect(cubit.allProductsForSearchList.length, 3);
       expect(cubit.allProductsForSearchList[2].id, 13);
+      expect(cubit.hasMore, isFalse);
+      await cubit.close();
+    });
+
+    test('total_pages from the API enables loadMore', () async {
+      final repo = FakeSearchRepos()..useTotalPages = true;
+      final cubit = SearchCubit(repo);
+
+      await cubit.getAllProductsForSearch();
+      expect(cubit.lastPage, 2);
+      expect(cubit.hasMore, isTrue);
+
+      await cubit.getAllProductsForSearch(loadMore: true);
+      expect(cubit.allProductsForSearchList.length, 3);
       expect(cubit.hasMore, isFalse);
       await cubit.close();
     });

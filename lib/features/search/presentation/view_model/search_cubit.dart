@@ -75,7 +75,12 @@ class SearchCubit extends Cubit<SearchStates> {
           final pagination = data.data?.pagination;
           if (pagination != null) {
             currentPage = pagination.currentPage ?? page;
-            lastPage = pagination.lastPage ?? page;
+            lastPage =
+                pagination.resolvedLastPage ??
+                // Last resort: derive it when neither key came back.
+                (pagination.total != null && (pagination.perPage ?? 0) > 0
+                    ? (pagination.total! / pagination.perPage!).ceil()
+                    : page);
           } else {
             // Backend sent no pagination info: treat as a single page.
             currentPage = page;
