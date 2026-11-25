@@ -49,19 +49,54 @@ class FakeAdvertisementsRepo implements AdvertisementsRepo {
     ),
   ];
 
-  MyAdsDataModel _model() => MyAdsDataModel(
-    status: true,
-    message: 'ok',
-    data: Data(ads: _seedAds.map((a) => Ads.fromJson(a.toJson())).toList()),
-  );
+  /// Last requested page / page size, exposed for pagination assertions.
+  int lastRequestedPage = 0;
+  int lastRequestedPerPage = 0;
+
+  /// When set, the fake emulates a backend that paginates its response.
+  Pagination? pagination;
+
+  /// Extra generated ads, used to exercise the local pagination fallback.
+  int extraAdsCount = 0;
 
   @override
-  Future<Either<Failure, MyAdsDataModel>> getMyAdsData() async {
+  Future<Either<Failure, MyAdsDataModel>> getMyAdsData({
+    int page = 1,
+    int perPage = 10,
+  }) async {
     fetchCalls++;
+    lastRequestedPage = page;
+    lastRequestedPerPage = perPage;
     if (fetchShouldFail) {
       return Left(ServerFailure('fetch failed'));
     }
-    return Right(_model());
+    final all = _seedAds.map((a) => Ads.fromJson(a.toJson())).toList();
+    for (int i = 0; i < extraAdsCount; i++) {
+      all.add(Ads(id: 100 + i, name: 'extra $i', isPaused: false));
+    }
+    final effectivePerPage = pagination?.perPage ?? perPage;
+    final start = (page - 1) * effectivePerPage;
+    final pageAds = pagination == null
+        ? all
+        : (start >= all.length
+              ? <Ads>[]
+              : all.skip(start).take(effectivePerPage).toList());
+    final responsePagination = pagination == null
+        ? null
+        : Pagination(
+            currentPage: page,
+            lastPage: pagination!.lastPage,
+            totalPages: pagination!.totalPages,
+            perPage: pagination!.perPage,
+            total: pagination!.total,
+          );
+    return Right(
+      MyAdsDataModel(
+        status: true,
+        message: 'ok',
+        data: Data(ads: pageAds, pagination: responsePagination),
+      ),
+    );
   }
 
   @override
@@ -275,6 +310,92 @@ void main() {
 
     expect(cubit.state, isA<DeleteAdErrorState>());
     expect(cubit.allMyAdsList.map((a) => a.id), [1, 2, 3]);
+    await cubit.close();
+  });
+
+  test('server pagination appends pages and stops at the last page', () async {
+    final repo = FakeAdvertisementsRepo()
+      ..pagination = Pagination(
+        currentPage: 1,
+        lastPage: 2,
+        perPage: 2,
+        total: 3,
+      );
+    final cubit = AdvertisementsCubit(repo);
+
+    await cubit.fetchMyAds();
+    expect(repo.lastRequestedPage, 1);
+    expect(cubit.allMyAdsList.map((a) => a.id), [1, 2]);
+    expect(cubit.currentPage, 1);
+    expect(cubit.lastPage, 2);
+    expect(cubit.hasMore, isTrue);
+
+    await cubit.fetchMyAds(loadMore: true);
+    expect(repo.lastRequestedPage, 2);
+    expect(cubit.allMyAdsList.map((a) => a.id), [1, 2, 3]);
+    expect(cubit.currentPage, 2);
+    expect(cubit.hasMore, isFalse);
+
+    // No extra request once the last page is reached.
+    await cubit.fetchMyAds(loadMore: true);
+    expect(repo.fetchCalls, 2);
+    await cubit.close();
+  });
+
+  test('total_pages from the API is used when last_page is absent', () async {
+    final repo = FakeAdvertisementsRepo()
+      ..pagination = Pagination(
+        currentPage: 1,
+        totalPages: 2,
+        perPage: 2,
+        total: 3,
+      );
+    final cubit = AdvertisementsCubit(repo);
+
+    await cubit.fetchMyAds();
+    expect(cubit.lastPage, 2);
+    expect(cubit.hasMore, isTrue);
+
+    await cubit.fetchMyAds(loadMore: true);
+    expect(cubit.allMyAdsList.map((a) => a.id), [1, 2, 3]);
+    expect(cubit.hasMore, isFalse);
+    await cubit.close();
+  });
+
+  test('load-more failure keeps loaded ads and emits pagination error', () async {
+    final repo = FakeAdvertisementsRepo()
+      ..pagination = Pagination(
+        currentPage: 1,
+        lastPage: 2,
+        perPage: 2,
+        total: 3,
+      );
+    final cubit = AdvertisementsCubit(repo);
+    await cubit.fetchMyAds();
+
+    repo.fetchShouldFail = true;
+    await cubit.fetchMyAds(loadMore: true);
+
+    expect(cubit.state, isA<GetAllMyAdsDataPaginationErrorState>());
+    expect(cubit.allMyAdsList.map((a) => a.id), [1, 2]);
+    expect(cubit.isLoadingMore, isFalse);
+    await cubit.close();
+  });
+
+  test('backend without pagination info is paginated locally', () async {
+    final repo = FakeAdvertisementsRepo()..extraAdsCount = 12;
+    final cubit = AdvertisementsCubit(repo);
+
+    await cubit.fetchMyAds();
+    expect(repo.lastRequestedPerPage, AdvertisementsCubit.adsPerPage);
+    expect(cubit.allMyAdsList.length, AdvertisementsCubit.adsPerPage);
+    expect(cubit.lastPage, 2);
+    expect(cubit.hasMore, isTrue);
+
+    await cubit.fetchMyAds(loadMore: true);
+    expect(cubit.allMyAdsList.length, 15);
+    expect(cubit.currentPage, 2);
+    expect(cubit.hasMore, isFalse);
     await cubit.close();
   });
 }

@@ -18,6 +18,15 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
 
   List<Ads> allMyAdsList = [];
 
+  /// Page size used when talking to the backend, and for the local fallback
+  /// when `getAllAds` does not report pagination info.
+  static const int adsPerPage = 10;
+
+  int currentPage = 1;
+  int lastPage = 1;
+  bool isLoadingMore = false;
+  bool get hasMore => currentPage < lastPage;
+
   int advertisementsTypeIndex = 0;
 
   void setAdvertisementsTypeIndex(int index) {
@@ -174,23 +183,84 @@ class AdvertisementsCubit extends Cubit<AdvertisementsStates> {
     }
   }
 
-  /// Fetches the full ads list from the server (single source of truth).
-  Future<void> fetchMyAds() async {
-    allMyAdsList = [];
-    emit(GetAllMyAdsDataLoadingState());
-    final result = await advertisementsRepo.getMyAdsData();
+  /// Fetches one page of the seller's ads from the server.
+  ///
+  /// `loadMore: false` (default) resets to page 1 and replaces the list —
+  /// this is what pull-to-refresh and every "refresh after edit" call use.
+  /// `loadMore: true` appends the next page and keeps the current items.
+  Future<void> fetchMyAds({bool loadMore = false}) async {
+    if (loadMore) {
+      if (isLoadingMore || !hasMore) return;
+      isLoadingMore = true;
+      emit(GetAllMyAdsDataPaginatingState());
+    } else {
+      currentPage = 1;
+      lastPage = 1;
+      allMyAdsList = [];
+      emit(GetAllMyAdsDataLoadingState());
+    }
+
+    final page = loadMore ? currentPage + 1 : 1;
+    final result = await advertisementsRepo.getMyAdsData(
+      page: page,
+      perPage: adsPerPage,
+    );
     return result.fold(
       (failure) {
         logWarning(
           'AdvertisementsCubit fetchMyAds failed: ${failure.errMessage}',
         );
-        emit(GetAllMyAdsDataErrorState(failure.errMessage));
+        isLoadingMore = false;
+        if (loadMore) {
+          emit(GetAllMyAdsDataPaginationErrorState(failure.errMessage));
+        } else {
+          emit(GetAllMyAdsDataErrorState(failure.errMessage));
+        }
       },
       (data) {
+        isLoadingMore = false;
         myAdsDataModel = data;
-        allMyAdsList = [...?myAdsDataModel?.data?.ads];
-        logSuccess(allMyAdsList.length.toString());
-        logSuccess('length');
+        if (data.status != true) {
+          final msg = data.message ?? 'Something went wrong';
+          if (loadMore) {
+            emit(GetAllMyAdsDataPaginationErrorState(msg));
+          } else {
+            emit(GetAllMyAdsDataErrorState(msg));
+          }
+          return;
+        }
+
+        final rawAds = data.data?.ads ?? [];
+        final pagination = data.data?.pagination;
+        late final List<Ads> pageAds;
+        if (pagination != null) {
+          // Backend paginated the response: trust its numbers and use every
+          // item it returned for this page.
+          currentPage = pagination.currentPage ?? page;
+          lastPage =
+              pagination.resolvedLastPage ??
+              // Last resort: derive it from the total when neither key came.
+              (pagination.total != null && (pagination.perPage ?? 0) > 0
+                  ? (pagination.total! / pagination.perPage!).ceil()
+                  : page);
+          if (lastPage < 1) lastPage = 1;
+          pageAds = rawAds;
+        } else {
+          // Backend ignored `page`: emulate pagination over the full list
+          // so the UI still loads page by page instead of dumping everything.
+          currentPage = page;
+          lastPage = (rawAds.length / adsPerPage).ceil();
+          if (lastPage < 1) lastPage = 1;
+          final start = (page - 1) * adsPerPage;
+          pageAds = rawAds.skip(start).take(adsPerPage).toList();
+        }
+
+        if (loadMore) {
+          allMyAdsList = [...allMyAdsList, ...pageAds];
+        } else {
+          allMyAdsList = [...pageAds];
+        }
+        logSuccess('page=$page/$lastPage ads=${allMyAdsList.length}');
         emit(GetAllMyAdsDataSuccessState(data));
       },
     );

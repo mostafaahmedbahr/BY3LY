@@ -28,6 +28,23 @@ class GetAllMyAdsDataErrorState extends AdvertisementsStates {
   String toString() => 'GetAllMyAdsDataErrorState(error: $error)';
 }
 
+/// Emitted while a following page is loading; previously loaded ads stay
+/// visible and a small spinner is appended to the list.
+class GetAllMyAdsDataPaginatingState extends AdvertisementsStates {
+  @override
+  String toString() => 'GetAllMyAdsDataPaginatingState';
+}
+
+/// A following page failed; the loaded ads stay visible and the footer shows
+/// a retry button instead of replacing the whole list.
+class GetAllMyAdsDataPaginationErrorState extends AdvertisementsStates {
+  final String error;
+  GetAllMyAdsDataPaginationErrorState(this.error);
+
+  @override
+  String toString() => 'GetAllMyAdsDataPaginationErrorState(error: $error)';
+}
+
 class DeleteAdLoadingState extends AdvertisementsStates {
   final int adId;
   DeleteAdLoadingState(this.adId);

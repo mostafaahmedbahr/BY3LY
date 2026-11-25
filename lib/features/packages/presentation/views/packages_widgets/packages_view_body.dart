@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_error_widget.dart';
+import '../../../../../features/profile/presentation/view_model/profile_cubit.dart';
 import '../../../../../core/shared_widgets/custom_loading.dart';
 import '../../../../../core/utils/new_toast/toast.dart';
 import '../../view_model/packages_cubit.dart';
@@ -26,8 +27,10 @@ class PackagesViewBody extends StatelessWidget {
                 : context.tr(LocaleKeys.subscriptionSuccessful),
             context: context,
           );
-          // Refresh the packages page after a successful subscription.
+          // Refresh both the packages page and the shared profile: a wallet
+          // checkout deducts the fee from the balance.
           context.read<PackagesCubit>().getPackages();
+          context.read<ProfileCubit>().getProfile();
         } else if (state is SubscribePackageErrorState) {
           Toast.showErrorToast(msg: state.error, context: context);
         }

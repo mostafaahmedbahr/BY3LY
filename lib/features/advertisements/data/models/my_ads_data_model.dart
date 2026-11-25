@@ -47,13 +47,18 @@ class MyAdsDataModel {
 
 class Data {
   List<Ads>? ads;
+  Pagination? pagination;
 
-  Data({this.ads});
+  Data({this.ads, this.pagination});
 
   Data.fromJson(Map<String, dynamic> json) {
     ads = json["ads"] == null
         ? null
         : (json["ads"] as List).map((e) => Ads.fromJson(e)).toList();
+    final rawPagination = json["pagination"];
+    pagination = rawPagination is Map
+        ? Pagination.fromJson(Map<String, dynamic>.from(rawPagination))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +66,50 @@ class Data {
     if (ads != null) {
       jsonData["ads"] = ads?.map((e) => e.toJson()).toList();
     }
+    if (pagination != null) {
+      jsonData["pagination"] = pagination?.toJson();
+    }
+    return jsonData;
+  }
+}
+
+/// Laravel-style pagination block returned by paginated endpoints.
+/// Some backends omit it for `getAllAds`, in which case the cubit paginates
+/// the returned list locally.
+class Pagination {
+  int? currentPage;
+  int? lastPage;
+  int? totalPages;
+  int? perPage;
+  int? total;
+
+  Pagination({
+    this.currentPage,
+    this.lastPage,
+    this.totalPages,
+    this.perPage,
+    this.total,
+  });
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    currentPage = _asInt(json["current_page"]);
+    // Laravel uses `last_page`; this API returns `total_pages`. Support both.
+    lastPage = _asInt(json["last_page"]);
+    totalPages = _asInt(json["total_pages"]);
+    perPage = _asInt(json["per_page"]);
+    total = _asInt(json["total"]);
+  }
+
+  /// Last page number regardless of which key the backend used.
+  int? get resolvedLastPage => lastPage ?? totalPages;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["current_page"] = currentPage;
+    jsonData["last_page"] = lastPage;
+    jsonData["total_pages"] = totalPages;
+    jsonData["per_page"] = perPage;
+    jsonData["total"] = total;
     return jsonData;
   }
 }

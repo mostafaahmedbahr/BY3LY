@@ -17,11 +17,31 @@ class AdvertisementsViewBody extends StatefulWidget {
 
 class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+    // Fetch the next page slightly before the user reaches the very bottom.
+    if (max - current <= 300) {
+      AdvertisementsCubit.get(context).fetchMyAds(loadMore: true);
+    }
   }
 
   void _clearSearch(AdvertisementsCubit cubit) {
@@ -43,6 +63,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
           color: AppColors.mainColor,
           onRefresh: () => advertisementsCubit.fetchMyAds(),
           child: ListView(
+            controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
             children: [
@@ -74,7 +95,7 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
               const SizedBox(height: 10),
               if (state is GetAllMyAdsDataLoadingState)
                 const MyAdsLoading()
-              else if (state is GetAllMyAdsDataErrorState)
+              else if (state is GetAllMyAdsDataErrorState && products.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: CustomErrorWidget(
@@ -112,6 +133,44 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
                   if (i > 0) const SizedBox(height: 15),
                   MyAdsListItem(adsProduct: products[i]),
                 ],
+
+              /// Pagination footer: keeps loaded ads visible while the next
+              /// page is fetched, with a retry action if that page fails.
+              if (advertisementsCubit.isLoadingMore)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 18),
+                  child: Center(
+                    child: SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                    ),
+                  ),
+                )
+              else if (state is GetAllMyAdsDataPaginationErrorState)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        state.error,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () =>
+                            advertisementsCubit.fetchMyAds(loadMore: true),
+                        child: Text(
+                          context.tr(LocaleKeys.retry),
+                          style: TextStyle(color: AppColors.mainColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         );

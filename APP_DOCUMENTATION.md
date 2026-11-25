@@ -402,7 +402,7 @@ lib/
 ### 4.3.4 إعلاناتي (`advertisements/`)
 - **الغرض**: قائمة كل إعلانات المستخدم مع بحث + تبويبات الحالة + إيقاف/تفعيل/حذف + زر الباقات وزر الإضافة.
 - **الـ API**:
-  - `GET /getAllAds` (بدون params؛ الفلترة بالتبويب/البحث تتم محليًا).
+  - `GET /getAllAds?page=N&per_page=10` — تحميل صفحات عبر Infinite Scroll (300px قبل النهاية)؛ إن لم يُرجع الـ backend `pagination`، يتم تقسيم القائمة محليًا. الفلترة بالتبويب/البحث تتم محليًا على الصفحات المحمّلة.
   - `POST /deleteAds` — body `{ad_id}` (بعد حوار تأكيد).
   - `POST /pauseAd` / `POST /resumeAd` — body `{ad_id}` → تحديث `is_paused` محليًا (الحماية من double-tap عبر `_pauseResumeInFlight`).
 - **التبويبات**: `["الكل", "النشط الان", "الغير نشط"]` مع عدادات لكل تبويب.
@@ -899,8 +899,10 @@ payments (orders) ─── packages / wallet/top-up / addNewAds fees
 ### `POST /editAds` (multipart)
 - `ad_id` + نفس حقول النشر (بدون حقول دفع) + `images[]` **الجديدة فقط**.
 
-### `GET /getAllAds`
-- بدون params؛ الرد: `data{ads: [...]}` — يتضمن `is_paused`, `status`, `views`, `reviews_count`... إلخ.
+### `GET /getAllAds?page=1&per_page=10`
+- الرد: `data{ads: [...], pagination{current_page, last_page?, total_pages?, per_page, total}?}` — يتضمن `is_paused`, `status`, `views`, `reviews_count`... إلخ.
+- الـ API بيرجّع `total_pages` (مش `last_page`)؛ الكود بيقبل الاتنين (`resolvedLastPage`) مع fallback لحسابها من `total / per_page`.
+- `pagination` اختياري؛ عند غيابه تُقسَّم القائمة محليًا (صفحات من 10) مع إيقاف التحميل عند آخر صفحة.
 
 ### `POST /deleteAds`
 - الجسم: `{"ad_id": int}`. الرد: `GeneralModel`.
@@ -1150,7 +1152,7 @@ flutter analyze                    # بدون أخطاء متوقعة — lints 
 
 ## 11.4 الأداء والبنية
 
-- لا pagination إلا في البحث؛ قوائم (fav/ads/seller/best view/sub-category) تحمّل كل شيء دفعة واحدة.
+- pagination موجود في البحث والإعلانات والإشعارات والشات (Infinite Scroll)؛ قوائم (fav/seller/best view/sub-category) ما زالت تحمّل كل شيء دفعة واحدة.
 - `AllSubCategoriesProductsCubit` **يُلحق** (append) المنتجات بلا قص — النمو التراكمي لانهائي في نفس الصفحة.
 - شات بالـ **polling** (كل دقيقة للشاشة المفتوحة + كل دقيقتين للقائمة) — غير لحظي؛ إلى جانب ذلك، عامِل `after_id` ذكي لكنه لا يصمت إشعاراته لنفس المرسل (يعتمد على السيرفر).
 - لا caching للصور المُحللة إلا عبر `CachedNetworkImage` (مقبول).

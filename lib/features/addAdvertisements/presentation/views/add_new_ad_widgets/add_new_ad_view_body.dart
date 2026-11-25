@@ -190,6 +190,9 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
     return BlocConsumer<AddNewAdCubit, AddNewAdStates>(
       listener: (context, state) {
         if (state is AddNewAdSuccess) {
+          // A wallet-funded publish deducts the fee on the server. Refresh the
+          // shared profile so the wallet balance is never shown stale.
+          context.read<ProfileCubit>().getProfile();
           CherryToast.success(
             title: Text(
               (state.message?.trim().isNotEmpty ?? false)

@@ -15,12 +15,20 @@ class AdvertisementsRepoImpl implements AdvertisementsRepo {
   AdvertisementsRepoImpl(this.apiService);
 
   @override
-  Future<Either<Failure, MyAdsDataModel>> getMyAdsData() async {
+  Future<Either<Failure, MyAdsDataModel>> getMyAdsData({
+    int page = 1,
+    int perPage = 10,
+  }) async {
     try {
-      var response = await apiService!.getData(endPoint: EndPoints.myAds);
+      var response = await apiService!.getData(
+        endPoint: EndPoints.myAds,
+        query: {"page": page, "per_page": perPage},
+      );
       MyAdsDataModel result = MyAdsDataModel.fromJson(response.data);
       debugPrint(
-        'AdvertisementsRepoImpl getMyAdsData: ${result.data?.ads?.length ?? 0} items',
+        'AdvertisementsRepoImpl getMyAdsData page=$page: '
+        '${result.data?.ads?.length ?? 0} items, '
+        'lastPage=${result.data?.pagination?.resolvedLastPage ?? '-'}',
       );
       return right(result);
     } catch (e, s) {
