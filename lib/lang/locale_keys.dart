@@ -461,6 +461,7 @@ abstract class LocaleKeys {
   static const topUpRejected = "topUpRejected";
   static const subscriptionRejected = "subscriptionRejected";
   static const noPaymentMethodsAvailable = "noPaymentMethodsAvailable";
+  static const paymentsUnavailable = "paymentsUnavailable";
   static const packageSubscribed = "packageSubscribed";
   static const remainingAds = "remainingAds";
   static const adsCount = "adsCount";

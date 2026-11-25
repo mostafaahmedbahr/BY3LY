@@ -476,6 +476,7 @@ class ArLang {
     "subscriptionRejected":
         "لم يتم تأكيد الاشتراك من السيرفر، برجاء مراجعة الإيصال والمحاولة مرة أخرى",
     "noPaymentMethodsAvailable": "لا يوجد طرق تحويل متاحة",
+    "paymentsUnavailable": "الدفع غير متاح حالياً، برجاء المحاولة لاحقاً",
     "packageSubscribed": "تاريخ الانتهاء",
     "remainingAds": "الإعلانات المتبقية",
     "adsCount": "إعلان",

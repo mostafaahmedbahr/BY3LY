@@ -5,6 +5,7 @@ import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_cub
 import 'package:by3ly/features/PaymentBalance/presentation/views/payment_balance_widgets/payment_and_balance_view_body.dart';
 import 'package:by3ly/features/packages/data/repos/packages_repos_imple.dart';
 import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,22 @@ class PaymentAndBalanceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The whole payment/balance area is hidden with the server flag.
+    if (!context.watch<ProfileCubit>().paymentsEnabled) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              context.tr(LocaleKeys.paymentsUnavailable),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15, color: AppColors.textSecondary),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(

@@ -25,6 +25,9 @@ import 'transfer_form.dart';
 /// transfer method + transfer reference + receipt. The chosen keys are
 /// posted to addNewAds (payment_method / receipt / transfer_reference).
 Future<void> showAdPaymentSheet(BuildContext context) {
+  if (!context.read<ProfileCubit>().paymentsEnabled) {
+    return Future.value();
+  }
   final adCubit = AddNewAdCubit.get(context);
   return showModalBottomSheet(
     context: context,
@@ -118,6 +121,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
   }
 
   void _submitWallet(AddNewAdCubit adCubit) {
+    if (!context.read<ProfileCubit>().paymentsEnabled) return;
     adCubit.submit(paymentMethod: 'wallet');
   }
 
@@ -127,6 +131,7 @@ class _AdPaymentSheetBodyState extends State<AdPaymentSheetBody> {
     required bool submitting,
   }) {
     if (submitting) return;
+    if (!context.read<ProfileCubit>().paymentsEnabled) return;
     final method = payCubit.selectedMethod;
     final receipt = payCubit.receiptImage;
     if (method?.code == null) {

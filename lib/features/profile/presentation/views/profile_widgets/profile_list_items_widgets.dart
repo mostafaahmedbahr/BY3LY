@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import '../../../../../main_importants.dart';
 import '../../../../fav/presentation/views/fav_view.dart';
 import '../../../../statistics/presentation/views/statistics_view.dart';
+import '../../view_model/profile_cubit.dart';
+import '../../view_model/profile_states.dart';
 
 /// روابط سريعة في صف واحد مدمج (بدل 5 عناصر مرصوصة بطول 65 لكل عنصر).
 class ProfileListItemsWidgets extends StatelessWidget {
@@ -27,29 +29,36 @@ class ProfileListItemsWidgets extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          _QuickAction(
-            icon: CupertinoIcons.money_pound_circle,
-            label: context.tr(LocaleKeys.paymentAndBalance),
-            onTap: () => _push(context, const PaymentAndBalanceView()),
-          ),
-          _QuickAction(
-            icon: CupertinoIcons.heart_fill,
-            label: LocaleKeys.favorite.tr(),
-            onTap: () => _push(context, const FavView()),
-          ),
-          _QuickAction(
-            icon: CupertinoIcons.chart_bar_fill,
-            label: LocaleKeys.statistics.tr(),
-            onTap: () => _push(context, const StatisticsView()),
-          ),
-          _QuickAction(
-            icon: CupertinoIcons.square_split_2x2_fill,
-            label: LocaleKeys.comparison.tr(),
-            onTap: () => _push(context, const CompareView()),
-          ),
-        ],
+      child: BlocBuilder<ProfileCubit, ProfileStates>(
+        builder: (context, state) {
+          final paymentsEnabled = context.read<ProfileCubit>().paymentsEnabled;
+          return Row(
+            children: [
+              // Hidden by the server-controlled payment_available flag.
+              if (paymentsEnabled)
+                _QuickAction(
+                  icon: CupertinoIcons.money_pound_circle,
+                  label: context.tr(LocaleKeys.paymentAndBalance),
+                  onTap: () => _push(context, const PaymentAndBalanceView()),
+                ),
+              _QuickAction(
+                icon: CupertinoIcons.heart_fill,
+                label: LocaleKeys.favorite.tr(),
+                onTap: () => _push(context, const FavView()),
+              ),
+              _QuickAction(
+                icon: CupertinoIcons.chart_bar_fill,
+                label: LocaleKeys.statistics.tr(),
+                onTap: () => _push(context, const StatisticsView()),
+              ),
+              _QuickAction(
+                icon: CupertinoIcons.square_split_2x2_fill,
+                label: LocaleKeys.comparison.tr(),
+                onTap: () => _push(context, const CompareView()),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

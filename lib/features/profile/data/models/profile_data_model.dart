@@ -81,6 +81,7 @@ class User {
   String? token;
   int? walletBalance;
   String? walletCurrency;
+  bool? paymentAvailable;
   SubscriptionPackage? subscriptionPackage;
   int? centerId;
   int? cityId;
@@ -98,6 +99,7 @@ class User {
     this.token,
     this.walletBalance,
     this.walletCurrency,
+    this.paymentAvailable,
     this.subscriptionPackage,
     this.centerId,
     this.cityId,
@@ -105,6 +107,10 @@ class User {
     this.centerName,
     this.createdAt,
   });
+
+  /// Server-controlled payment switch. An absent/null field keeps payments
+  /// enabled so older API versions don't accidentally turn them off.
+  bool get isPaymentAvailable => paymentAvailable ?? true;
 
   User.fromJson(Map<String, dynamic> json) {
     id = _asInt(json["id"]);
@@ -116,6 +122,7 @@ class User {
     token = _asString(json["token"]);
     walletBalance = _asInt(json["wallet_balance"]);
     walletCurrency = _asString(json["wallet_currency"]);
+    paymentAvailable = _asBool(json["payment_available"]);
     final rawPackage = json["subscription_package"];
     subscriptionPackage = rawPackage is Map
         ? SubscriptionPackage.fromJson(Map<String, dynamic>.from(rawPackage))
@@ -138,6 +145,7 @@ class User {
     data["token"] = token;
     data["wallet_balance"] = walletBalance;
     data["wallet_currency"] = walletCurrency;
+    data["payment_available"] = paymentAvailable;
     if (subscriptionPackage != null) {
       data["subscription_package"] = subscriptionPackage?.toJson();
     }

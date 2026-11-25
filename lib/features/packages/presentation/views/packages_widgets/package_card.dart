@@ -2,8 +2,11 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/shared_widgets/custom_button.dart';
+import '../../../../profile/presentation/view_model/profile_cubit.dart';
+import '../../../../profile/presentation/view_model/profile_states.dart';
 import '../../../data/models/packages_model.dart';
 import 'payment_method_sheet.dart';
 
@@ -190,18 +193,26 @@ class PackageCard extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 8),
-            CustomButton(
-              btnText: Text(
-                package.isSubscriped == true
-                    ? context.tr(LocaleKeys.renewSubscription)
-                    : context.tr(LocaleKeys.subscribeNow),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () => showPaymentMethodSheet(context, package),
+            BlocBuilder<ProfileCubit, ProfileStates>(
+              builder: (context, state) {
+                // No subscribe/renew CTA while payments are disabled.
+                if (!context.read<ProfileCubit>().paymentsEnabled) {
+                  return const SizedBox.shrink();
+                }
+                return CustomButton(
+                  btnText: Text(
+                    package.isSubscriped == true
+                        ? context.tr(LocaleKeys.renewSubscription)
+                        : context.tr(LocaleKeys.subscribeNow),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  onPressed: () => showPaymentMethodSheet(context, package),
+                );
+              },
             ),
           ],
         ),

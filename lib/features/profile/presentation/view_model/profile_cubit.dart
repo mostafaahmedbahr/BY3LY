@@ -1,4 +1,4 @@
-﻿import 'package:by3ly/core/extensions/log.dart';
+import 'package:by3ly/core/extensions/log.dart';
 import 'dart:io';
 
 import 'package:by3ly/features/profile/data/models/profile_data_model.dart';
@@ -54,6 +54,11 @@ class ProfileCubit extends Cubit<ProfileStates> {
   }
 
   ProfileModel? profileModel;
+
+  /// Server-controlled payment switch, shared by all payment entry points.
+  /// Defaults to true while the profile is not loaded yet / field is absent.
+  bool get paymentsEnabled =>
+      profileModel?.data?.user?.isPaymentAvailable ?? true;
 
   /// Clear cached profile (call on logout / before fresh login).
   void clearProfile() {

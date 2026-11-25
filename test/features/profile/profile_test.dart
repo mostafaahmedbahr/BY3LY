@@ -38,6 +38,7 @@ final Map<String, dynamic> _profileJson = {
       'token': 'tok',
       'wallet_balance': '1500',
       'wallet_currency': 'EGP',
+      'payment_available': '1',
       'center_id': '2',
       'city_id': '3',
       'cityName': 'القاهرة',
@@ -173,6 +174,9 @@ void main() {
       expect(user.id, 7);
       expect(user.name, 'أحمد محمود');
       expect(user.walletBalance, 1500);
+      expect(user.paymentAvailable, isTrue);
+      expect(user.isPaymentAvailable, isTrue);
+      expect(user.toJson()['payment_available'], isTrue);
       expect(user.centerId, 2);
       expect(user.cityId, 3);
 
@@ -182,6 +186,27 @@ void main() {
       expect(pkg.durationDays, 30);
       expect(pkg.adsLimit, 50);
       expect(pkg.features, ['مميز 1', 'مميز 2']);
+    });
+
+    test('payment_available off is respected, missing keeps payments on', () {
+      final base = (_profileJson['data'] as Map)['user'] as Map;
+      final off = ProfileModel.fromJson({
+        'status': true,
+        'data': {
+          'user': {...base, 'payment_available': 0},
+        },
+      });
+      expect(off.data!.user!.paymentAvailable, isFalse);
+      expect(off.data!.user!.isPaymentAvailable, isFalse);
+
+      final withoutField = Map<String, dynamic>.from(base)
+        ..remove('payment_available');
+      final missing = ProfileModel.fromJson({
+        'status': true,
+        'data': {'user': withoutField},
+      });
+      expect(missing.data!.user!.paymentAvailable, isNull);
+      expect(missing.data!.user!.isPaymentAvailable, isTrue);
     });
 
     test('tolerates non-map data / user / package payloads', () {

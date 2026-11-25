@@ -488,6 +488,8 @@ class EnLang {
     "subscriptionRejected":
         "The subscription was not confirmed by the server. Please review the receipt and try again",
     "noPaymentMethodsAvailable": "No payment methods available",
+    "paymentsUnavailable":
+        "Payments are temporarily unavailable. Please try again later",
     "packageSubscribed": "Expiry date",
     "remainingAds": "Remaining ads",
     "adsCount": "ads",

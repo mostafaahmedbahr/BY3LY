@@ -1,3 +1,4 @@
+import 'package:by3ly/core/utils/new_toast/toast.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,13 @@ import '../transfer_view.dart';
 /// Bottom sheet shown when tapping "اشترك الآن":
 /// wallet (with balance) or transfer.
 Future<void> showPaymentMethodSheet(BuildContext context, Packages package) {
+  if (!context.read<ProfileCubit>().paymentsEnabled) {
+    Toast.showErrorToast(
+      msg: context.tr(LocaleKeys.paymentsUnavailable),
+      context: context,
+    );
+    return Future.value();
+  }
   // The sheet is a new route above the page's BlocProvider, so the
   // cubit is passed explicitly to keep it visible inside the sheet.
   final packagesCubit = PackagesCubit.get(context);

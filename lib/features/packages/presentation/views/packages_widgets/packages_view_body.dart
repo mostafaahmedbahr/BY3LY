@@ -18,6 +18,10 @@ class PackagesViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // No package list at all while payments are disabled.
+    if (!context.watch<ProfileCubit>().paymentsEnabled) {
+      return const SizedBox.shrink();
+    }
     return BlocConsumer<PackagesCubit, PackagesStates>(
       listener: (context, state) {
         if (state is SubscribePackageSuccessState) {

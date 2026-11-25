@@ -6,6 +6,7 @@ import 'package:by3ly/features/howToMakePurchase/presentation/views/how_to_make_
 import 'package:by3ly/features/productDetails/data/models/product_details_model.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/view_model/product_details_states.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/name_location_price_des_of_product.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_image.dart';
 import 'package:by3ly/features/productDetails/presentation/views/product_details_widgets/product_images_list.dart';
@@ -171,19 +172,21 @@ class ProductDetailsViewBody extends StatelessWidget {
                   const CustomSizedBox(height: 10),
                   const TipsForYourSafety(),
                   const CustomSizedBox(height: 18),
-                  // Outline help-link to purchase instructions.
-                  _OutlineAction(
-                    icon: Icons.shopping_cart_outlined,
-                    label: context.tr(LocaleKeys.howToPurchase),
-                    onTap: () => Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.fade,
-                        child: const HowToMakePurchaseView(),
+                  // Purchase instructions are payment-related too.
+                  if (context.watch<ProfileCubit>().paymentsEnabled) ...[
+                    _OutlineAction(
+                      icon: Icons.shopping_cart_outlined,
+                      label: context.tr(LocaleKeys.howToPurchase),
+                      onTap: () => Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: const HowToMakePurchaseView(),
+                        ),
                       ),
                     ),
-                  ),
-                  const CustomSizedBox(height: 10),
+                    const CustomSizedBox(height: 10),
+                  ],
                   // Outline support-link that opens the report flow.
                   _OutlineAction(
                     icon: Icons.flag_rounded,

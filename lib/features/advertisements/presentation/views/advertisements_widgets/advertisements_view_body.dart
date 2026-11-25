@@ -1,5 +1,6 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/features/advertisements/presentation/view_model/advertisements_states.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import '../../../../../main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../view_model/advertisements_cubit.dart';
@@ -67,8 +68,11 @@ class _AdvertisementsViewBodyState extends State<AdvertisementsViewBody> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
             children: [
-              const AddBundleButton(),
-              const SizedBox(height: 16),
+              // Packages/bundles are hidden with the server payment flag.
+              if (context.watch<ProfileCubit>().paymentsEnabled) ...[
+                const AddBundleButton(),
+                const SizedBox(height: 16),
+              ],
               CustomTextFormField(
                 controller: _searchController,
                 keyboardType: TextInputType.text,

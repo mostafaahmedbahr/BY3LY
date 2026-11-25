@@ -6,22 +6,36 @@ import 'package:flutter/material.dart';
 
 /// Premium gradient hero shown at the top of the ad form.
 ///
-/// Shows a live completion percentage derived from the real form state
-/// (images, name, description, price, category(+sub), city+center) so the
-/// header never lies about the form's progress.
+/// Shows a live completion percentage: one completed wizard step = one
+/// unit out of six, matching the stepper (not one unit per form field).
 class PremiumHeroHeader extends StatelessWidget {
-  const PremiumHeroHeader({super.key});
+  const PremiumHeroHeader({super.key, required this.currentStep});
+
+  /// Index of the wizard step currently on screen, so the "done" count
+  /// follows the six-step stepper exactly.
+  final int currentStep;
 
   static const int _totalSteps = 6;
 
+  /// One unit per wizard step — not per form field — so the percentage
+  /// matches the stepper (category, name+desc, price, images, shipping,
+  /// location).
   int _completedSteps(AddNewAdCubit c) {
     var done = 0;
-    if (c.totalImagesCount >= 1) done++;
-    if (c.nameCon.text.trim().isNotEmpty) done++;
-    if (c.descCon.text.trim().isNotEmpty) done++;
-    final price = double.tryParse(c.priceCon.text.trim());
-    if (price != null && price > 0) done++;
+    // Step 1: category + sub-category.
     if (c.categoryId != null && c.subCategoryId != null) done++;
+    // Step 2: name + description count together as one step.
+    if (c.nameCon.text.trim().isNotEmpty && c.descCon.text.trim().isNotEmpty) {
+      done++;
+    }
+    // Step 3: price.
+    if ((double.tryParse(c.priceCon.text.trim()) ?? 0) > 0) done++;
+    // Step 4: at least one image.
+    if (c.totalImagesCount >= 1) done++;
+    // Step 5: shipping/condition already have valid defaults; count it
+    // once the user has actually moved past that step.
+    if (currentStep > 4) done++;
+    // Step 6: city + centre.
     if (c.cityId != null && c.centerId != null) done++;
     return done;
   }

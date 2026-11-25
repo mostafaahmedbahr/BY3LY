@@ -66,6 +66,8 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
   bool _publishedFromSheet = false;
 
   Future<void> _openPaymentSheet() async {
+    // No payment / transfer sheet while payments are switched off.
+    if (!context.read<ProfileCubit>().paymentsEnabled) return;
     if (_paymentSheetOpen) return;
     _paymentSheetOpen = true;
     _publishedFromSheet = false;
@@ -209,9 +211,11 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
             Navigator.pop(context, true);
           }
         } else if (state is AddNewAdPaymentRequired) {
-          // Package/free ads exhausted → the server demands payment:
-          // force the payment step instead of publishing directly.
-          if (!_paymentSheetOpen) {
+          // Only surface payment demands while payments are available.
+          // With the flag off there is no payment step to open, so stay
+          // silent instead of showing a payment message after publishing.
+          if (!_paymentSheetOpen &&
+              context.read<ProfileCubit>().paymentsEnabled) {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -249,7 +253,7 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   // Not const: progress must recompute on every cubit emit.
-                  child: PremiumHeroHeader(),
+                  child: PremiumHeroHeader(currentStep: _currentStep),
                 ),
                 PremiumStepIndicator(currentStep: _currentStep),
                 Expanded(
@@ -547,6 +551,12 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
     }
     if (cubit.isEditMode) {
       cubit.submitEdit();
+      return;
+    }
+    // With the server payment flag off there is no payment step at all:
+    // publish straight away, with no payment-related message.
+    if (!context.read<ProfileCubit>().paymentsEnabled) {
+      cubit.submit();
       return;
     }
     // Same rule as the website: publish free only

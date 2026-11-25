@@ -9,6 +9,7 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/new_toast/toast.dart';
 import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_cubit.dart';
 import 'package:by3ly/features/PaymentBalance/presentation/view_model/wallet_states.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,13 @@ class _TransferViewState extends State<TransferView> {
     required bool topUpMode,
     required Packages? package,
   }) {
+    if (!context.read<ProfileCubit>().paymentsEnabled) {
+      Toast.showErrorToast(
+        msg: context.tr(LocaleKeys.paymentsUnavailable),
+        context: context,
+      );
+      return;
+    }
     final String? amount = topUpMode ? _amountController.text.trim() : null;
     if (topUpMode && (amount!.isEmpty || double.tryParse(amount) == null)) {
       Toast.showErrorToast(
