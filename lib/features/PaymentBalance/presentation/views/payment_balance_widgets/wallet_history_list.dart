@@ -7,6 +7,39 @@ import 'package:flutter/material.dart';
 import '../../../data/models/wallet_history_model.dart';
 import 'receipt_sheet.dart';
 
+/// Orange used for transactions that are still under review.
+const Color pendingColor = Color(0xffE8930C);
+
+/// Normalized status group: approved / rejected / pending / unknown.
+String statusGroup(String? status, String? label) {
+  final v = '${status ?? ''} ${label ?? ''}'.toLowerCase();
+  if (v.contains('approve') ||
+      v.contains('success') ||
+      v.contains('accept') ||
+      v.contains('مقبول') ||
+      v.contains('ناجح') ||
+      v.contains('مكتمل')) {
+    return 'approved';
+  }
+  if (v.contains('reject') ||
+      v.contains('fail') ||
+      v.contains('cancel') ||
+      v.contains('مرفوض') ||
+      v.contains('فاشل') ||
+      v.contains('ملغي')) {
+    return 'rejected';
+  }
+  if (v.contains('pend') ||
+      v.contains('review') ||
+      v.contains('wait') ||
+      v.contains('قيد') ||
+      v.contains('انتظار') ||
+      v.contains('مراجعة')) {
+    return 'pending';
+  }
+  return 'unknown';
+}
+
 /// Method-name lookup used by cards (shared across the screen).
 String methodName(BuildContext context, String? code) {
   switch ((code ?? '').trim().toLowerCase()) {
@@ -75,7 +108,20 @@ class WalletHistoryItemCard extends StatelessWidget {
         : whole
         ? amount.toInt().toString()
         : amount.toString();
-    final accent = credit ? AppColors.mainColor : AppColors.redColor;
+
+    // Arrow / accent follow the transaction status:
+    // deposit -> up, rejected -> down + red, still under review -> orange.
+    final group = statusGroup(item.status, item.statusLabel);
+    final rejected = group == 'rejected';
+    final pending = group == 'pending';
+    final arrowUp = credit && !rejected;
+    final accent = rejected
+        ? AppColors.redColor
+        : pending
+        ? pendingColor
+        : credit
+        ? AppColors.mainColor
+        : AppColors.redColor;
     final method = methodName(context, item.paymentMethod);
 
     return Container(
@@ -95,7 +141,8 @@ class WalletHistoryItemCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Direction chip — green down arrow for credits, red up for debits.
+          // Direction chip — up for deposits, down for rejected/debits,
+          // red when rejected and orange while still under review.
           Container(
             height: 46,
             width: 46,
@@ -115,9 +162,7 @@ class WalletHistoryItemCard extends StatelessWidget {
               ],
             ),
             child: Icon(
-              credit
-                  ? Icons.arrow_downward_rounded
-                  : Icons.arrow_upward_rounded,
+              arrowUp ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
               color: Colors.white,
               size: 22,
             ),
@@ -259,34 +304,7 @@ class StatusPill extends StatelessWidget {
   final String? label;
 
   /// Normalized status group: approved / rejected / pending / unknown.
-  String get _group {
-    final v = '${status ?? ''} ${label ?? ''}'.toLowerCase();
-    if (v.contains('approve') ||
-        v.contains('success') ||
-        v.contains('accept') ||
-        v.contains('مقبول') ||
-        v.contains('ناجح') ||
-        v.contains('مكتمل')) {
-      return 'approved';
-    }
-    if (v.contains('reject') ||
-        v.contains('fail') ||
-        v.contains('cancel') ||
-        v.contains('مرفوض') ||
-        v.contains('فاشل') ||
-        v.contains('ملغي')) {
-      return 'rejected';
-    }
-    if (v.contains('pend') ||
-        v.contains('review') ||
-        v.contains('wait') ||
-        v.contains('قيد') ||
-        v.contains('انتظار') ||
-        v.contains('مراجعة')) {
-      return 'pending';
-    }
-    return 'unknown';
-  }
+  String get _group => statusGroup(status, label);
 
   Color get _color {
     switch (_group) {
@@ -295,7 +313,7 @@ class StatusPill extends StatelessWidget {
       case 'rejected':
         return AppColors.redColor;
       case 'pending':
-        return const Color(0xffE8930C);
+        return pendingColor;
       default:
         return AppColors.textSecondary;
     }
