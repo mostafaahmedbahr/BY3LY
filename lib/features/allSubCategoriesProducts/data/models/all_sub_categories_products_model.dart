@@ -55,13 +55,18 @@ class AllSubCategoriesProductsModel {
 
 class Data {
   List<Products>? products;
+  Pagination? pagination;
 
-  Data({this.products});
+  Data({this.products, this.pagination});
 
   Data.fromJson(Map<String, dynamic> json) {
     products = json["products"] == null
         ? null
         : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
+    final rawPagination = json["pagination"];
+    pagination = rawPagination is Map
+        ? Pagination.fromJson(Map<String, dynamic>.from(rawPagination))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +74,47 @@ class Data {
     if (products != null) {
       jsonData["products"] = products?.map((e) => e.toJson()).toList();
     }
+    if (pagination != null) {
+      jsonData["pagination"] = pagination?.toJson();
+    }
+    return jsonData;
+  }
+}
+
+/// Laravel-style pagination block. The API may send `last_page` or
+/// `total_pages`; [resolvedLastPage] accepts either.
+class Pagination {
+  int? currentPage;
+  int? lastPage;
+  int? totalPages;
+  int? perPage;
+  int? total;
+
+  Pagination({
+    this.currentPage,
+    this.lastPage,
+    this.totalPages,
+    this.perPage,
+    this.total,
+  });
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    currentPage = _asInt(json["current_page"]);
+    lastPage = _asInt(json["last_page"]);
+    totalPages = _asInt(json["total_pages"]);
+    perPage = _asInt(json["per_page"]);
+    total = _asInt(json["total"]);
+  }
+
+  int? get resolvedLastPage => lastPage ?? totalPages;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["current_page"] = currentPage;
+    jsonData["last_page"] = lastPage;
+    jsonData["total_pages"] = totalPages;
+    jsonData["per_page"] = perPage;
+    jsonData["total"] = total;
     return jsonData;
   }
 }

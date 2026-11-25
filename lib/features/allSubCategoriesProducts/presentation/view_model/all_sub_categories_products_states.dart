@@ -28,3 +28,28 @@ class GetAllSubCategoriesProductsError extends AllSubCategoriesProductsStates {
   @override
   String toString() => 'GetAllSubCategoriesProductsError(message: $message)';
 }
+
+/// Next page is loading; already loaded products stay visible.
+class GetAllSubCategoriesProductsPaginating
+    extends AllSubCategoriesProductsStates {
+  @override
+  String toString() => 'GetAllSubCategoriesProductsPaginating';
+}
+
+/// Next page failed; loaded products stay visible and the footer shows retry.
+class GetAllSubCategoriesProductsPaginationError
+    extends AllSubCategoriesProductsStates {
+  final String message;
+  GetAllSubCategoriesProductsPaginationError(this.message);
+
+  @override
+  String toString() =>
+      'GetAllSubCategoriesProductsPaginationError(message: $message)';
+}
+
+/// Filter sheet applied/cleared — lets the list rebuild its chips.
+class SubCategoryProductsFilterChanged
+    extends AllSubCategoriesProductsStates {
+  @override
+  String toString() => 'SubCategoryProductsFilterChanged';
+}

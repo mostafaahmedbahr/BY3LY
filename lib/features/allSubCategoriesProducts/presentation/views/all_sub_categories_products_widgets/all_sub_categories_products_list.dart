@@ -1,4 +1,6 @@
 import 'package:by3ly/features/allSubCategoriesProducts/data/models/all_sub_categories_products_model.dart';
+import 'package:by3ly/features/allSubCategoriesProducts/presentation/view_model/all_sub_categories_products_cubit.dart';
+import 'package:by3ly/features/allSubCategoriesProducts/presentation/view_model/all_sub_categories_products_states.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -22,12 +24,35 @@ class AllSubCategoriesProductsList extends StatefulWidget {
 class _AllSubCategoriesProductsListState
     extends State<AllSubCategoriesProductsList> {
   final TextEditingController _searchController = TextEditingController();
-  ProductsFilter _filter = const ProductsFilter.empty();
+  final ScrollController _scrollController = ScrollController();
+
+  /// Filter state lives in the cubit so applying it refetches page 1
+  /// server-side instead of filtering only the loaded pages.
+  ProductsFilter get _filter =>
+      AllSubCategoriesProductsCubit.get(context).productsFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+    if (max - current <= 300) {
+      AllSubCategoriesProductsCubit.get(context).loadMore();
+    }
   }
 
   double? _productPrice(Products p) {
@@ -116,20 +141,14 @@ class _AllSubCategoriesProductsListState
   }
 
   Future<void> _openFilterSheet() async {
-    final result = await showModalBottomSheet<ProductsFilter>(
+    final cubit = AllSubCategoriesProductsCubit.get(context);
+    final result = await showProductsFilterSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => ProductsFilterSheet(
-        initial: _filter,
-        availableTypes: _availableTypes,
-      ),
+      initial: _filter,
+      availableTypes: _availableTypes,
     );
     if (result != null && mounted) {
-      setState(() => _filter = result);
+      cubit.applyFilter(result);
     }
   }
 
@@ -140,6 +159,8 @@ class _AllSubCategoriesProductsListState
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<AllSubCategoriesProductsCubit>();
+    final state = cubit.state;
     final filtered = _filtered;
     final hasActiveSearch = _searchController.text.trim().isNotEmpty;
     final hasActiveFilter = !_filter.isEmpty;
@@ -235,8 +256,8 @@ class _AllSubCategoriesProductsListState
                   if (_filter.categoryId != null)
                     _ActiveFilterChip(
                       label: _filter.categoryName ?? '${_filter.categoryId}',
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(
+                      onDeleted: () => cubit.applyFilter(
+                        _filter.copyWith(
                           clearCategory: true,
                           clearSubCategory: true,
                         ),
@@ -246,45 +267,41 @@ class _AllSubCategoriesProductsListState
                     _ActiveFilterChip(
                       label:
                           _filter.subCategoryName ?? '${_filter.subCategoryId}',
-                      onDeleted: () => setState(
-                        () =>
-                            _filter = _filter.copyWith(clearSubCategory: true),
+                      onDeleted: () => cubit.applyFilter(
+                        _filter.copyWith(clearSubCategory: true),
                       ),
                     ),
                   if (_filter.type != null)
                     _ActiveFilterChip(
                       label: _filter.type!,
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(clearType: true),
-                      ),
+                      onDeleted: () =>
+                          cubit.applyFilter(_filter.copyWith(clearType: true)),
                     ),
                   if (_filter.minPrice != null || _filter.maxPrice != null)
                     _ActiveFilterChip(
                       label:
                           '${_filter.minPrice?.toStringAsFixed(0) ?? ''} - ${_filter.maxPrice?.toStringAsFixed(0) ?? ''}',
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(clearPrice: true),
-                      ),
+                      onDeleted: () =>
+                          cubit.applyFilter(_filter.copyWith(clearPrice: true)),
                     ),
                   if (_filter.cityId != null)
                     _ActiveFilterChip(
                       label: _filter.placeLabel,
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(clearPlace: true),
-                      ),
+                      onDeleted: () =>
+                          cubit.applyFilter(_filter.copyWith(clearPlace: true)),
                     ),
                   if (_filter.shippingType != null)
                     _ActiveFilterChip(
                       label: _filter.shippingType!,
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(clearShipping: true),
+                      onDeleted: () => cubit.applyFilter(
+                        _filter.copyWith(clearShipping: true),
                       ),
                     ),
                   if (_filter.condition != null)
                     _ActiveFilterChip(
                       label: _filter.condition!,
-                      onDeleted: () => setState(
-                        () => _filter = _filter.copyWith(clearCondition: true),
+                      onDeleted: () => cubit.applyFilter(
+                        _filter.copyWith(clearCondition: true),
                       ),
                     ),
                 ],
@@ -305,7 +322,7 @@ class _AllSubCategoriesProductsListState
           Gap(10.h),
 
           Expanded(
-            child: filtered.isEmpty
+            child: filtered.isEmpty && !cubit.isLoadingMore
                 ? Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -328,9 +345,8 @@ class _AllSubCategoriesProductsListState
                           TextButton(
                             onPressed: () {
                               _searchController.clear();
-                              setState(() {
-                                _filter = const ProductsFilter.empty();
-                              });
+                              cubit.clearFilter();
+                              setState(() {});
                             },
                             child: Text(
                               context.tr(LocaleKeys.clearAll),
@@ -342,20 +358,64 @@ class _AllSubCategoriesProductsListState
                       ],
                     ),
                   )
-                : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10.h,
-                      crossAxisSpacing: 10.w,
-                      // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
-                      mainAxisExtent: 235,
-                    ),
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) {
-                      return AllSubCategoriesProductsListItem(
-                        product: filtered[index],
-                      );
-                    },
+                : Column(
+                    children: [
+                      Expanded(
+                        child: GridView.builder(
+                          controller: _scrollController,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10.h,
+                                crossAxisSpacing: 10.w,
+                                // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
+                                mainAxisExtent: 235,
+                              ),
+                          itemCount: filtered.length,
+                          itemBuilder: (context, index) {
+                            return AllSubCategoriesProductsListItem(
+                              product: filtered[index],
+                            );
+                          },
+                        ),
+                      ),
+                      // Pagination footer — loaded products stay visible.
+                      if (cubit.isLoadingMore)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          child: SizedBox(
+                            width: 28.w,
+                            height: 28.w,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                            ),
+                          ),
+                        )
+                      else if (state
+                          is GetAllSubCategoriesProductsPaginationError)
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Column(
+                            children: [
+                              Text(
+                                state.message,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: cubit.loadMore,
+                                child: Text(
+                                  context.tr(LocaleKeys.retry),
+                                  style: TextStyle(color: AppColors.mainColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
           ),
         ],

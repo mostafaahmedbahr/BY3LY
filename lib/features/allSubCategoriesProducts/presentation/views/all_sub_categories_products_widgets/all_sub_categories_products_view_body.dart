@@ -30,10 +30,12 @@ class AllSubCategoriesProductsViewBody extends StatelessWidget {
             builder: (context, state) {
               var sellAllBestViewCubit = context
                   .read<AllSubCategoriesProductsCubit>();
-              if (state is GetAllSubCategoriesProductsLoading) {
+              if (state is GetAllSubCategoriesProductsLoading &&
+                  sellAllBestViewCubit.allSubCategoriesProductsList.isEmpty) {
                 return const AllSubCategoriesProductsLoading();
               }
-              if (state is GetAllSubCategoriesProductsError) {
+              if (state is GetAllSubCategoriesProductsError &&
+                  sellAllBestViewCubit.allSubCategoriesProductsList.isEmpty) {
                 return CustomErrorWidget(
                   error: state.message.toString(),
                   onTap: () => context

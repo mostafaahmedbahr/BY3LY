@@ -320,11 +320,11 @@ lib/
 - **صفر منتجات** → Snackbar "لا يوجد منتجات في هذا القسم" بدل الانتقال.
 
 ### 4.2.4 منتجات الفئة الفرعية (`allSubCategoriesProducts/`)
-- **الغرض**: شبكة منتجات القسم الفرعي مع بحث محلي + ورقة فلتر **محلية** (client-side filtering).
-- **الـ API**: `GET /productBySubCategory?sub_category_id=<int>`.
-- **الفلتر**: ورقة `ProductsFilterSheet` (Category/SubCategory/Type/Price range/City+Center/Shipping/Condition) — لكن هنا **كل الفلترة محلية** على القائمة المحمّلة؛ انتقال الـ params للسيرفر يتم فقط عبر `ProductsFilter.toQueryParams()` في Search.
-- **الصفحات**: لا يوجد pagination.
-- **التراكم**: `AllSubCategoriesProductsCubit` **يُلحق** المنتجات الجديدة للقائمة (بدون قص).
+- **الغرض**: شبكة منتجات القسم الفرعي مع بحث نصي + ورقة فلتر + **pagination** (infinite scroll).
+- **الـ API**: `GET /productBySubCategory?sub_category_id=<int>&page=N&per_page=10&<filter params>`.
+- **الفلتر**: نفس `showProductsFilterSheet` المستخدم في البحث؛ حالة الفلتر في الـ cubit (`applyFilter`)، والـ params السيرفرية (`ProductsFilter.toQueryParams()`) تُرسل مع كل صفحة + fallback محلي للأنواع/النص على الصفحات المحمّلة.
+- **الصفحات**: `pagination{current_page, last_page?/total_pages?, per_page, total}` — تحميل تالي عند 300px قبل النهاية، مع spinner/زر Retry في التذييل؛ إن غاب الـ pagination من الرد تُقسَّم القائمة محليًا (صفحات من 10).
+- **التراكم**: الـ cubit يُلحق صفحات جديدة عند `loadMore` ويستبدل القائمة عند إعادة التحميل/تغيير الفلتر (بدون تكرار).
 
 ### 4.2.5 البحث (`search/`)
 - **الغرض**: بحث نصي + فلترة سيرفرية + **Pagination حقيقي** (infinite scroll).
@@ -874,8 +874,9 @@ payments (orders) ─── packages / wallet/top-up / addNewAds fees
 ### `GET /getSubCategories?category_id=<int>`
 - الرد: `data{subCategories: [...]}`.
 
-### `GET /productBySubCategory?sub_category_id=<int>`
-- الرد: `data{products: [...]}` (لا pagination).
+### `GET /productBySubCategory?sub_category_id=<int>&page=1&per_page=10`
+- الرد: `data{products: [...], pagination{current_page, last_page?, total_pages?, per_page, total}?}`.
+- نفس بارامترات فلتر `/products` مدعومة؛ `pagination` اختياري والـ cubit يتعامل مع غيابه محليًا.
 
 ### `GET /products` — البحث
 - **الـ Query**: `page` (افتراضي 1) + من الفلتر: `category_id, sub_category_id, min_price, max_price, city_id, center_id, shipping_type (free|paid|both), condition (new|used|both)`.
@@ -1152,8 +1153,8 @@ flutter analyze                    # بدون أخطاء متوقعة — lints 
 
 ## 11.4 الأداء والبنية
 
-- pagination موجود في البحث والإعلانات والإشعارات والشات (Infinite Scroll)؛ قوائم (fav/seller/best view/sub-category) ما زالت تحمّل كل شيء دفعة واحدة.
-- `AllSubCategoriesProductsCubit` **يُلحق** (append) المنتجات بلا قص — النمو التراكمي لانهائي في نفس الصفحة.
+- pagination موجود في البحث ومنتجات الأقسام والإعلانات والإشعارات والشات (Infinite Scroll)؛ قوائم (fav/seller/best view) ما زالت تحمّل كل شيء دفعة واحدة.
+- `AllSubCategoriesProductsCubit` يَلحق صفحات pagination عند السكرول، ويستبدل القائمة عند تغيير الفلتر/إعادة التحميل (بدون تكرار).
 - شات بالـ **polling** (كل دقيقة للشاشة المفتوحة + كل دقيقتين للقائمة) — غير لحظي؛ إلى جانب ذلك، عامِل `after_id` ذكي لكنه لا يصمت إشعاراته لنفس المرسل (يعتمد على السيرفر).
 - لا caching للصور المُحللة إلا عبر `CachedNetworkImage` (مقبول).
 - `HomeCubit` + `SearchCubit` يجتمعان عند إقلاع التطبيق حتى لو كان الهدف شاشة غير Home — بدء أثقل بلا داعٍ (مقبول لتحسين TTFB للـ Home).
