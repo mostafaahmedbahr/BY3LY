@@ -613,8 +613,8 @@ class _BottomBar extends StatelessWidget {
     final ctaIcon = isLastStep
         ? (isEditMode ? Icons.edit_rounded : Icons.rocket_launch_rounded)
         : (isRtl
-              ? Icons.arrow_back_ios_new_rounded
-              : Icons.arrow_forward_ios_rounded);
+              ? Icons.arrow_forward_ios_rounded
+              : Icons.arrow_back_ios_new_rounded);
     return Container(
       padding: EdgeInsets.fromLTRB(
         16,
