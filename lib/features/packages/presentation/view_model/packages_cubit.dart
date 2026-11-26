@@ -69,6 +69,11 @@ class PackagesCubit extends Cubit<PackagesStates> {
   /// on its own button only).
   int? subscribingPackageId;
 
+  /// True after a successful checkout on this visit to the packages
+  /// screen. The screen returns it as the route result so the caller
+  /// (My Ads) only refreshes when something actually changed.
+  bool purchasedThisVisit = false;
+
   /// Wallet checkout: {package_id, payment_method: "wallet"}.
   Future<void> checkoutWithWallet({required int packageId}) async {
     subscribingPackageId = packageId;
@@ -94,6 +99,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
           );
           return;
         }
+        purchasedThisVisit = true;
         emit(SubscribePackageSuccessState(data));
       },
     );
@@ -188,6 +194,7 @@ class PackagesCubit extends Cubit<PackagesStates> {
           );
           return;
         }
+        purchasedThisVisit = true;
         emit(SubscribePackageSuccessState(data));
       },
     );

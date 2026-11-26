@@ -409,6 +409,7 @@ lib/
   - `POST /pauseAd` / `POST /resumeAd` — body `{ad_id}` → تحديث `is_paused` محليًا (الحماية من double-tap عبر `_pauseResumeInFlight`).
 - **التبويبات**: `["الكل", "النشط الان", "الغير نشط"]` مع عدادات لكل تبويب.
 - **شارة مميزة**: `status == 3` → شارة "مميز" (`isFeatured`)؛ `is_urgent == true` → شارة "عاجل".
+- **زر الباقات** (`AddBundleButton`): يفتح `PackagesView`؛ الصفحة تُرِجع `true` عند الرجوع فقط لو حصل اشتراك ناجح (`PackagesCubit.purchasedThisVisit`)، و`fetchMyAds()` لا يُستدعى على فتح/رجوع عادي بدون شراء.
 
 ### 4.3.5 الباقات والاشتراك (`packages/`)
 - **الغرض**: شراء باقة نشر/عرض (قرار تجربة: باقات بمدة شهري/3/6/سنوي).

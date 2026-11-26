@@ -15,12 +15,12 @@ class AddBundleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await context.pushNamed(Routes.packagesView);
-        // A bundle/purchase can change ad statuses (e.g. featured), so
-        // refresh the page when coming back.
-        if (context.mounted) {
-          AdvertisementsCubit.get(context).fetchMyAds();
-        }
+        // PackagesView returns true only after an actual purchase.
+        final purchased = await context.pushNamed(Routes.packagesView);
+        if (purchased != true || !context.mounted) return;
+        // A new bundle can change ad statuses (e.g. featured) — refresh
+        // only then, not on a plain open-and-back.
+        AdvertisementsCubit.get(context).fetchMyAds();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14),

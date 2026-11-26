@@ -287,6 +287,23 @@ void main() {
       expect(repo.lastCheckoutReceipt, isNull);
     });
 
+    test('purchasedThisVisit marked only after a successful checkout', () async {
+      final cubit = PackagesCubit(FakePackagesRepos());
+      expect(cubit.purchasedThisVisit, isFalse);
+
+      await cubit.checkoutWithWallet(packageId: 1);
+      expect(cubit.purchasedThisVisit, isTrue);
+    });
+
+    test('failed checkout leaves purchasedThisVisit false', () async {
+      final cubit = PackagesCubit(FakePackagesRepos()..failCheckout = true);
+
+      await cubit.checkoutWithWallet(packageId: 1);
+
+      expect(cubit.state, isA<SubscribePackageErrorState>());
+      expect(cubit.purchasedThisVisit, isFalse);
+    });
+
     test('checkoutWithTransfer without receipt is a no-op (guard)', () async {
       final repo = FakePackagesRepos();
       final cubit = PackagesCubit(repo);
