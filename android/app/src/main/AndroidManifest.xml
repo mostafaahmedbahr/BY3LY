@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Android 13+ runtime notification permission (also declared by the
          firebase_messaging plugin; kept here so it is explicit). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
