@@ -37,6 +37,12 @@ android {
 
     buildTypes {
         release {
+            // R8 + resource shrinking are on by default in modern Flutter,
+            // but keep them explicit so a Gradle template change cannot
+            // silently turn them off. Plugin-specific keep rules come from
+            // the Flutter tool and each plugin's consumer rules.
+            isMinifyEnabled = true
+            isShrinkResources = true
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")

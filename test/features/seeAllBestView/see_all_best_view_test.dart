@@ -50,16 +50,53 @@ final Map<String, dynamic> _fixture = {
   },
 };
 
+Map<String, dynamic> _bestViewPage(int page, List<int> ids) {
+  return {
+    'status': true,
+    'message': 'ok',
+    'data': {
+      'products': [
+        for (final id in ids)
+          {'id': id, 'name': 'منتج $id', 'price': '100', 'status': 1},
+      ],
+      'pagination': {
+        'total': 20,
+        'per_page': 10,
+        'current_page': page,
+        'total_pages': 2,
+      },
+    },
+  };
+}
+
 class FakeSellAllBestViewRepo implements SellAllBestViewRepo {
   int calls = 0;
+  int lastPage = 0;
   bool shouldFail = false;
 
+  FakeSellAllBestViewRepo({
+    this.pageOneFixture,
+    this.pageTwoFixture,
+    this.failPage,
+  });
+
+  final Map<String, dynamic>? pageOneFixture;
+  final Map<String, dynamic>? pageTwoFixture;
+  final int? failPage;
+
   @override
-  Future<Either<Failure, SellAllBestViewModel>> getAllBestViewProducts() async {
+  Future<Either<Failure, SellAllBestViewModel>> getAllBestViewProducts({
+    int page = 1,
+  }) async {
     calls++;
+    lastPage = page;
     if (shouldFail) return Left(ServerFailure('fetch failed'));
+    if (failPage == page) return Left(ServerFailure('page $page failed'));
+    final source = page == 2
+        ? (pageTwoFixture ?? _fixture)
+        : (pageOneFixture ?? _fixture);
     return Right(
-      SellAllBestViewModel.fromJson(Map<String, dynamic>.from(_fixture)),
+      SellAllBestViewModel.fromJson(Map<String, dynamic>.from(source)),
     );
   }
 }
@@ -159,6 +196,21 @@ void main() {
       });
       expect(model.data, isNull);
     });
+
+    test('pagination accepts total_pages and the last_page alias', () {
+      final model = SellAllBestViewModel.fromJson(_bestViewPage(1, [21]));
+      expect(model.data!.pagination!.totalPages, 2);
+      expect(model.data!.pagination!.currentPage, 1);
+
+      final aliased = SellAllBestViewModel.fromJson({
+        'status': true,
+        'data': {
+          'products': [],
+          'pagination': {'current_page': 1, 'last_page': 3},
+        },
+      });
+      expect(aliased.data!.pagination!.totalPages, 3);
+    });
   });
 
   group('SellAllBestViewCubit', () {
@@ -199,6 +251,64 @@ void main() {
         'fetch failed',
       );
       expect(cubit.sellAllBestViewModel, isNull);
+      await sub.cancel();
+      await cubit.close();
+    });
+
+    test('loadMore fetches page 2 and appends without duplicates', () async {
+      final repo = FakeSellAllBestViewRepo(
+        pageOneFixture: _bestViewPage(1, [21]),
+        pageTwoFixture: _bestViewPage(2, [21, 22]),
+      );
+      final cubit = SellAllBestViewCubit(repo);
+      final events = <SellAllBestViewStates>[];
+      final sub = cubit.stream.listen(events.add);
+
+      await cubit.getSellAllBestView();
+      expect(cubit.hasMore, isTrue);
+      await cubit.getSellAllBestView(loadMore: true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(repo.calls, 2);
+      expect(repo.lastPage, 2);
+      expect(cubit.sellAllBestViewModel!.data!.products!.map((p) => p.id), [
+        21,
+        22,
+      ]);
+      expect(cubit.isLoadingMore, isFalse);
+      expect(cubit.hasMore, isFalse);
+      expect(events.last, isA<GetAllBestViewProductsSuccessState>());
+      await sub.cancel();
+      await cubit.close();
+    });
+
+    test('loadMore is ignored once the last page is reached', () async {
+      final repo = FakeSellAllBestViewRepo();
+      final cubit = SellAllBestViewCubit(repo);
+      await cubit.getSellAllBestView();
+      expect(cubit.hasMore, isFalse);
+
+      await cubit.getSellAllBestView(loadMore: true);
+      expect(repo.calls, 1);
+      await cubit.close();
+    });
+
+    test('pagination error keeps earlier products on screen', () async {
+      final repo = FakeSellAllBestViewRepo(
+        pageOneFixture: _bestViewPage(1, [21]),
+        failPage: 2,
+      );
+      final cubit = SellAllBestViewCubit(repo);
+      final events = <SellAllBestViewStates>[];
+      final sub = cubit.stream.listen(events.add);
+
+      await cubit.getSellAllBestView();
+      await cubit.getSellAllBestView(loadMore: true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events.last, isA<GetAllBestViewProductsPaginationErrorState>());
+      expect(cubit.sellAllBestViewModel!.data!.products!.single.id, 21);
+      expect(cubit.isLoadingMore, isFalse);
       await sub.cancel();
       await cubit.close();
     });
@@ -290,6 +400,42 @@ void main() {
       await tester.tap(find.text('fetch failed'));
       await _settle(tester);
       expect(repo.calls, 2);
+    });
+
+    testWidgets('load-more button fetches and shows the next page', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      final repo = FakeSellAllBestViewRepo(
+        pageOneFixture: _bestViewPage(1, [21]),
+        pageTwoFixture: _bestViewPage(2, [22]),
+      );
+      final cubit = SellAllBestViewCubit(repo);
+      await cubit.getSellAllBestView();
+      await tester.pumpWidget(
+        _harness(
+          providers: [BlocProvider<SellAllBestViewCubit>.value(value: cubit)],
+          child: const SeeAllBestViewBodyList(),
+        ),
+      );
+      await _settle(tester);
+
+      expect(find.text('رؤية المزيد'), findsOneWidget);
+      expect(find.text('منتج 22'), findsNothing);
+
+      await tester.tap(find.text('رؤية المزيد'));
+      await _settle(tester);
+
+      expect(repo.lastPage, 2);
+      expect(find.text('منتج 22'), findsOneWidget);
+      expect(find.text('رؤية المزيد'), findsNothing);
+      await cubit.close();
     });
   });
 }

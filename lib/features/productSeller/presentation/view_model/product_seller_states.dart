@@ -20,3 +20,11 @@ class GetProductSellerDataErrorState extends ProductSellerStates {
 }
 
 class SellerDataIndexState extends ProductSellerStates {}
+
+/// Silent background state for "load more" — the seller header/tabs stay put.
+class GetProductSellerDataPaginatingState extends ProductSellerStates {}
+
+class GetProductSellerDataPaginationErrorState extends ProductSellerStates {
+  final String error;
+  GetProductSellerDataPaginationErrorState(this.error);
+}

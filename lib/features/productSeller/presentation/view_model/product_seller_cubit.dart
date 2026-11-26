@@ -14,21 +14,71 @@ class ProductSellerCubit extends Cubit<ProductSellerStates> {
   final ProductSellerRepo productSellerRepo;
   ProductSellerModel? productSellerModel;
 
-  Future<void> getProductSellerData({required int sellerId}) async {
-    emit(GetProductSellerDataLoadingState());
+  /// The API returns 10 products per page (100 for the demo seller).
+  int currentPage = 1;
+  int lastPage = 1;
+  bool isLoadingMore = false;
+  bool get hasMore => currentPage < lastPage;
+
+  Future<void> getProductSellerData({
+    required int sellerId,
+    bool loadMore = false,
+  }) async {
+    if (loadMore) {
+      if (isLoadingMore || !hasMore) return;
+      isLoadingMore = true;
+      emit(GetProductSellerDataPaginatingState());
+    } else {
+      currentPage = 1;
+      lastPage = 1;
+      emit(GetProductSellerDataLoadingState());
+    }
+
+    final page = loadMore ? currentPage + 1 : 1;
     var result = await productSellerRepo.getProductSellerData(
       sellerId: sellerId,
+      page: page,
     );
     return result.fold(
       (failure) {
-        emit(GetProductSellerDataErrorState(failure.errMessage));
+        isLoadingMore = false;
+        if (loadMore) {
+          emit(GetProductSellerDataPaginationErrorState(failure.errMessage));
+        } else {
+          emit(GetProductSellerDataErrorState(failure.errMessage));
+        }
       },
       (data) {
-        if (data.status == true) {
+        isLoadingMore = false;
+        if (data.status != true) {
+          final message = data.message.toString();
+          if (loadMore) {
+            emit(GetProductSellerDataPaginationErrorState(message));
+          } else {
+            emit(GetProductSellerDataErrorState(message));
+          }
+          return;
+        }
+
+        final pagination = data.data?.pagination;
+        currentPage = pagination?.currentPage ?? page;
+        lastPage = pagination?.totalPages ?? currentPage;
+
+        if (loadMore && productSellerModel?.data != null) {
+          final cached = productSellerModel!;
+          final target = cached.data!;
+          final existing = target.products ?? <Products>[];
+          final seen = existing.map((p) => p.id).toSet();
+          final fresh = (data.data?.products ?? <Products>[])
+              .where((p) => !seen.contains(p.id))
+              .toList();
+          target
+            ..products = [...existing, ...fresh]
+            ..pagination = pagination ?? target.pagination;
+          emit(GetProductSellerDataSuccessState(cached));
+        } else {
           productSellerModel = data;
           emit(GetProductSellerDataSuccessState(data));
-        } else {
-          emit(GetProductSellerDataErrorState(data.message.toString()));
         }
       },
     );

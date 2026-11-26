@@ -14,12 +14,12 @@ class ProductSellerRepoImpl implements ProductSellerRepo {
   @override
   Future<Either<Failure, ProductSellerModel>> getProductSellerData({
     required int sellerId,
+    int page = 1,
   }) async {
     try {
       var response = await apiService!.getData(
         endPoint: EndPoints.sellerProduct,
-
-        query: {"seller_id": sellerId},
+        query: {"seller_id": sellerId, "page": page},
       );
       ProductSellerModel result = ProductSellerModel.fromJson(response.data);
       return right(result);

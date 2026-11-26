@@ -4,6 +4,8 @@ import 'package:by3ly/features/productSeller/presentation/view_model/product_sel
 import 'package:by3ly/features/productSeller/presentation/view_model/product_seller_states.dart';
 import 'package:by3ly/core/app_services/remote_services/service_locator.dart';
 import 'package:by3ly/features/productSeller/data/repos/product_seller_repos.dart';
+import 'package:by3ly/lang/locale_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,6 +62,36 @@ class ProductSellerViewBody extends StatelessWidget {
                   SellerProductsList(products: products),
                 if (cubit.sellerDataIndex == 3)
                   SellerProductsList(products: products),
+                if ((cubit.sellerDataIndex == 2 ||
+                        cubit.sellerDataIndex == 3) &&
+                    cubit.hasMore)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: OutlinedButton(
+                      onPressed: state is GetProductSellerDataPaginatingState
+                          ? null
+                          : () => cubit.getProductSellerData(
+                              sellerId: sellerId,
+                              loadMore: true,
+                            ),
+                      child: state is GetProductSellerDataPaginatingState
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(context.tr(LocaleKeys.seeMore)),
+                    ),
+                  ),
+                if (state is GetProductSellerDataPaginationErrorState)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      state.error,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
               ],
             ),
           );

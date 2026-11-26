@@ -5,5 +5,6 @@ import 'package:by3ly/features/productSeller/data/models/product_seller_model.da
 abstract class ProductSellerRepo {
   Future<Either<Failure, ProductSellerModel>> getProductSellerData({
     required int sellerId,
+    int page = 1,
   });
 }

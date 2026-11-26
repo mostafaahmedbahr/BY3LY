@@ -132,6 +132,31 @@ class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
                       },
                     ),
             ),
+            if (cubit.hasMore)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: OutlinedButton(
+                  onPressed: state is GetAllBestViewProductsPaginatingState
+                      ? null
+                      : () => cubit.getSellAllBestView(loadMore: true),
+                  child: state is GetAllBestViewProductsPaginatingState
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(context.tr(LocaleKeys.seeMore)),
+                ),
+              ),
+            if (state is GetAllBestViewProductsPaginationErrorState)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  state.error,
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ),
           ],
         );
       },

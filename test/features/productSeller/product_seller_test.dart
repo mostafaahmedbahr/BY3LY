@@ -87,23 +87,61 @@ final Map<String, dynamic> _sellerJson = {
   },
 };
 
+Map<String, dynamic> _sellerPage(int page, List<int> ids) {
+  return {
+    'status': true,
+    'message': 'ok',
+    'data': {
+      'seller': _sellerJson['data']['seller'],
+      'products': [
+        for (final id in ids) {'id': id, 'name': 'منتج $id', 'status': 1},
+      ],
+      'pagination': {
+        'total': 20,
+        'per_page': 10,
+        'current_page': page,
+        'total_pages': 2,
+      },
+    },
+  };
+}
+
 class FakeProductSellerRepo implements ProductSellerRepo {
   int calls = 0;
   int? lastSellerId;
+  int lastPage = 0;
   bool shouldFail = false;
+
+  FakeProductSellerRepo({
+    this.pageOneFixture,
+    this.pageTwoFixture,
+    this.failPage,
+  });
+
+  final Map<String, dynamic>? pageOneFixture;
+  final Map<String, dynamic>? pageTwoFixture;
+  final int? failPage;
 
   @override
   Future<Either<Failure, ProductSellerModel>> getProductSellerData({
     required int sellerId,
+    int page = 1,
   }) async {
     calls++;
     lastSellerId = sellerId;
+    lastPage = page;
     if (shouldFail) {
       return Left(ServerFailure('fetch failed'));
     }
+    if (failPage == page) {
+      return Left(ServerFailure('page $page failed'));
+    }
     // Fresh copy every call — repos must not leak fixtures between tests.
+    final source = page == 2
+        ? (pageTwoFixture ?? _sellerJson)
+        : (pageOneFixture ?? _sellerJson);
     return Right(
-      ProductSellerModel.fromJson(Map<String, dynamic>.from(_sellerJson)),
+      ProductSellerModel.fromJson(Map<String, dynamic>.from(source)),
     );
   }
 }
@@ -341,6 +379,64 @@ void main() {
         await cubit.close();
       },
     );
+
+    test('loadMore fetches page 2 and appends without duplicates', () async {
+      final repo = FakeProductSellerRepo(
+        pageOneFixture: _sellerPage(1, [21]),
+        pageTwoFixture: _sellerPage(2, [21, 22]),
+      );
+      final cubit = ProductSellerCubit(repo);
+      final events = <ProductSellerStates>[];
+      final sub = cubit.stream.listen(events.add);
+
+      await cubit.getProductSellerData(sellerId: 7);
+      expect(cubit.hasMore, isTrue);
+      await cubit.getProductSellerData(sellerId: 7, loadMore: true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(repo.calls, 2);
+      expect(repo.lastPage, 2);
+      expect(cubit.productSellerModel!.data!.products!.map((p) => p.id), [
+        21,
+        22,
+      ]);
+      expect(cubit.isLoadingMore, isFalse);
+      expect(cubit.hasMore, isFalse);
+      expect(events.last, isA<GetProductSellerDataSuccessState>());
+      await sub.cancel();
+      await cubit.close();
+    });
+
+    test('loadMore is ignored once the last page is reached', () async {
+      final repo = FakeProductSellerRepo();
+      final cubit = ProductSellerCubit(repo);
+      await cubit.getProductSellerData(sellerId: 7);
+      expect(cubit.hasMore, isFalse);
+
+      await cubit.getProductSellerData(sellerId: 7, loadMore: true);
+      expect(repo.calls, 1);
+      await cubit.close();
+    });
+
+    test('pagination error keeps earlier products on screen', () async {
+      final repo = FakeProductSellerRepo(
+        pageOneFixture: _sellerPage(1, [21]),
+        failPage: 2,
+      );
+      final cubit = ProductSellerCubit(repo);
+      final events = <ProductSellerStates>[];
+      final sub = cubit.stream.listen(events.add);
+
+      await cubit.getProductSellerData(sellerId: 7);
+      await cubit.getProductSellerData(sellerId: 7, loadMore: true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(events.last, isA<GetProductSellerDataPaginationErrorState>());
+      expect(cubit.productSellerModel!.data!.products!.single.id, 21);
+      expect(cubit.isLoadingMore, isFalse);
+      await sub.cancel();
+      await cubit.close();
+    });
   });
 
   group('Seller widgets', () {
@@ -500,6 +596,37 @@ void main() {
       await tester.tap(find.text('fetch failed'));
       await _settle(tester);
       expect(repo.calls, 2);
+    });
+
+    testWidgets('load-more button fetches the next page of ads', (
+      tester,
+    ) async {
+      final repo = FakeProductSellerRepo(
+        pageOneFixture: _sellerPage(1, [21]),
+        pageTwoFixture: _sellerPage(2, [22]),
+      );
+      await tester.pumpWidget(
+        _harness(
+          providers: [
+            BlocProvider<ProfileCubit>(
+              create: (_) => ProfileCubit(FakeProfileRepos()),
+            ),
+          ],
+          child: ProductSellerViewBody(sellerId: 7, repo: repo),
+        ),
+      );
+      await _settle(tester);
+
+      await tester.tap(find.text('المعروض الان'));
+      await _settle(tester);
+
+      expect(find.text('رؤية المزيد'), findsOneWidget);
+      await tester.tap(find.text('رؤية المزيد'));
+      await _settle(tester);
+
+      expect(repo.lastPage, 2);
+      expect(find.text('منتج 22'), findsOneWidget);
+      expect(find.text('رؤية المزيد'), findsNothing);
     });
   });
 }

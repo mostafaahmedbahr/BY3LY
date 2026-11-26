@@ -13,9 +13,14 @@ class SellAllBestViewRepoImpl implements SellAllBestViewRepo {
   SellAllBestViewRepoImpl(this.apiService);
 
   @override
-  Future<Either<Failure, SellAllBestViewModel>> getAllBestViewProducts() async {
+  Future<Either<Failure, SellAllBestViewModel>> getAllBestViewProducts({
+    int page = 1,
+  }) async {
     try {
-      var response = await apiService!.getData(endPoint: EndPoints.bestAllView);
+      var response = await apiService!.getData(
+        endPoint: EndPoints.bestAllView,
+        query: {"page": page},
+      );
       SellAllBestViewModel result = SellAllBestViewModel.fromJson(
         response.data,
       );

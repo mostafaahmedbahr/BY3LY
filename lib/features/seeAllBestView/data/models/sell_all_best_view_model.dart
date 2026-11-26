@@ -57,11 +57,16 @@ class SellAllBestViewModel {
 
 class Data {
   List<Products>? products;
+  Pagination? pagination;
 
-  Data({this.products});
+  Data({this.products, this.pagination});
 
   Data.fromJson(Map<String, dynamic> json) {
     products = _parseList(json["products"], Products.fromJson);
+    final rawPagination = json["pagination"];
+    pagination = rawPagination is Map
+        ? Pagination.fromJson(Map<String, dynamic>.from(rawPagination))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +74,35 @@ class Data {
     if (products != null) {
       jsonData["products"] = products?.map((e) => e.toJson()).toList();
     }
+    if (pagination != null) {
+      jsonData["pagination"] = pagination?.toJson();
+    }
+    return jsonData;
+  }
+}
+
+/// Laravel-style pagination returned by `bestAllView` (10 per page).
+class Pagination {
+  int? total;
+  int? perPage;
+  int? currentPage;
+  int? totalPages;
+
+  Pagination({this.total, this.perPage, this.currentPage, this.totalPages});
+
+  Pagination.fromJson(Map<String, dynamic> json) {
+    total = _asInt(json["total"]);
+    perPage = _asInt(json["per_page"]);
+    currentPage = _asInt(json["current_page"]);
+    totalPages = _asInt(json["total_pages"]) ?? _asInt(json["last_page"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> jsonData = <String, dynamic>{};
+    jsonData["total"] = total;
+    jsonData["per_page"] = perPage;
+    jsonData["current_page"] = currentPage;
+    jsonData["total_pages"] = totalPages;
     return jsonData;
   }
 }

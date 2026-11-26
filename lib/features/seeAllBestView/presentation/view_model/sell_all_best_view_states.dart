@@ -27,3 +27,18 @@ class GetAllBestViewProductsErrorState extends SellAllBestViewStates {
   @override
   String toString() => 'GetAllBestViewProductsErrorState(error: $error)';
 }
+
+/// Silent background state for "load more" — the grid stays on screen.
+class GetAllBestViewProductsPaginatingState extends SellAllBestViewStates {
+  @override
+  String toString() => 'GetAllBestViewProductsPaginatingState';
+}
+
+class GetAllBestViewProductsPaginationErrorState extends SellAllBestViewStates {
+  final String error;
+  GetAllBestViewProductsPaginationErrorState(this.error);
+
+  @override
+  String toString() =>
+      'GetAllBestViewProductsPaginationErrorState(error: $error)';
+}
