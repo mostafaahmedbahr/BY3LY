@@ -1,5 +1,3 @@
-import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
-import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../../../main_importants.dart';
@@ -82,26 +80,6 @@ class SettingsListWidget extends StatelessWidget {
 
               // المظهر
               const ThemeModeSwitch(),
-              const SettingsDivider(),
-
-              // الإشعارات
-              BlocBuilder<ProfileCubit, ProfileStates>(
-                builder: (context, state) {
-                  return CompactSettingsTile(
-                    title: LocaleKeys.notifications.tr(),
-                    imagePath: AppImages.notification,
-                    trailing: CupertinoSwitch(
-                      activeTrackColor: AppColors.mainColor,
-                      value: ProfileCubit.get(context).switchValue,
-                      onChanged: (value) {
-                        ProfileCubit.get(
-                          context,
-                        ).changeNotificationValue(value);
-                      },
-                    ),
-                  );
-                },
-              ),
               const SettingsDivider(),
 
               // معلومات قانونية (قابلة للطي: عن التطبيق / الشروط / الخصوصية)

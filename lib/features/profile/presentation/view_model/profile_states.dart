@@ -9,8 +9,6 @@ class ProfileInitState extends ProfileStates {}
 
 class UploadImageInProfileSuccessState extends ProfileStates {}
 
-class ChangeNotificationValueState extends ProfileStates {}
-
 class GetProfileDataLoadingState extends ProfileStates {}
 
 class GetProfileDataSuccessState extends ProfileStates {

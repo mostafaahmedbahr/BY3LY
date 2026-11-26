@@ -46,13 +46,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
     }
   }
 
-  bool switchValue = true;
-
-  void changeNotificationValue(bool newValue) {
-    switchValue = newValue;
-    emit(ChangeNotificationValueState());
-  }
-
   ProfileModel? profileModel;
 
   /// Server-controlled payment switch, shared by all payment entry points.

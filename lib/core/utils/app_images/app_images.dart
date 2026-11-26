@@ -4,7 +4,6 @@ class AppImages {
       "assets/images/logo2_transparent.png";
   static const String egyptLogo = "assets/images/emojione_flag-for-egypt.svg";
   static const String shield = "assets/images/Shield.svg";
-  static const String notification = "assets/images/Notification.svg";
   static const String logout = "assets/images/logout.svg";
   static const String heart = "assets/images/Heart.svg";
   static const String bullhorn = "assets/images/Bullhorn.svg";

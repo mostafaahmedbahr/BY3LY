@@ -306,21 +306,6 @@ void main() {
       await cubit.close();
     });
 
-    test('changeNotificationValue flips the switch and emits', () async {
-      final cubit = ProfileCubit(FakeProfileRepos());
-      expect(cubit.switchValue, isTrue);
-      final events = <ProfileStates>[];
-      final sub = cubit.stream.listen(events.add);
-
-      cubit.changeNotificationValue(false);
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.switchValue, isFalse);
-      expect(events.single, isA<ChangeNotificationValueState>());
-      await sub.cancel();
-      await cubit.close();
-    });
-
     test('clearProfile drops cached data', () async {
       final repo = FakeProfileRepos();
       final cubit = ProfileCubit(repo);
