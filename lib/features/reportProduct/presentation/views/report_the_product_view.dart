@@ -1,4 +1,5 @@
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/features/reportProduct/presentation/view_model/report_product_cubit.dart';
 import 'package:by3ly/features/reportProduct/presentation/views/report_product_widgets/report_ad_view_body.dart';
 import 'package:by3ly/features/reportProduct/presentation/views/report_product_widgets/report_the_product_view_body.dart';
 import 'package:by3ly/lang/locale_keys.dart';
@@ -8,11 +9,32 @@ import 'package:flutter/material.dart';
 /// Premium report screen — brand gradient AppBar with a flag icon.
 /// Two flows live here: ad report (sellerId + productId) and the general
 /// support complaint (either id missing).
-class ReportTheProductView extends StatelessWidget {
+class ReportTheProductView extends StatefulWidget {
   const ReportTheProductView({super.key, this.sellerId, this.productId});
 
   final int? sellerId;
   final int? productId;
+
+  @override
+  State<ReportTheProductView> createState() => _ReportTheProductViewState();
+}
+
+class _ReportTheProductViewState extends State<ReportTheProductView> {
+  @override
+  void initState() {
+    super.initState();
+    // The ad-report body fetches its own reasons. The general complaint flow
+    // used to depend on a startup request; load it when the screen opens.
+    if (widget.sellerId == null || widget.productId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final cubit = ReportProductCubit.get(context);
+        if (cubit.allComplaintsTypesList.isEmpty) {
+          cubit.getAllComplaintsTypesData();
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +92,17 @@ class ReportTheProductView extends StatelessWidget {
           ],
         ),
       ),
-      body: (sellerId != null && productId != null)
+      body: (widget.sellerId != null && widget.productId != null)
           // Report a specific ad: reasons + reportAd endpoint.
-          ? ReportAdViewBody(sellerId: sellerId!, productId: productId!)
+          ? ReportAdViewBody(
+              sellerId: widget.sellerId!,
+              productId: widget.productId!,
+            )
           // General complaint (e.g. from help & support).
-          : ReportTheProductViewBody(sellerId: sellerId, productId: productId),
+          : ReportTheProductViewBody(
+              sellerId: widget.sellerId,
+              productId: widget.productId,
+            ),
     );
   }
 }

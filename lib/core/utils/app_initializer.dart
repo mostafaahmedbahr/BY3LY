@@ -54,9 +54,12 @@ class AppInitializer {
     // 🔹 Dependency Injection
     setup();
 
-    // 🔹 Device Token (needs Firebase + DI for token syncing)
-    // ignore: unawaited_futures
-    getDeviceToken();
+    // 🔹 Device Token (needs Firebase + DI for token syncing). Deferred until
+    // after the first frame so permission prompts/retries never delay splash.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ignore: unawaited_futures
+      getDeviceToken();
+    });
 
     // 🔹 Bloc Observer
     Bloc.observer = SimpleBlocObserver();

@@ -38,7 +38,6 @@ import 'package:by3ly/features/reportProduct/data/report_product_repos/report_pr
 import 'package:by3ly/features/search/presentation/view_model/search_cubit.dart';
 import 'package:by3ly/features/updateProfile/data/repos/update_profile_data_repo_imple.dart';
 import 'package:by3ly/features/updateProfile/presentation/view_model/update_profile_data_cubit.dart';
-import 'package:by3ly/core/utils/guest_guard.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -47,29 +46,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
+      // Providers only — no page/network work here. Account-wide fetches run
+      // once LayoutView is on screen; screen-specific fetches run on open.
       providers: [
         BlocProvider(create: (context) => AuthCubit()..checkAuthStatus()),
         BlocProvider(create: (context) => LayoutCubit()),
         BlocProvider(
-          create: (context) {
-            // Guests have no token: skip account-only requests (they 401).
-            final cubit = ProfileCubit(getIt.get<ProfileRepoImpl>());
-            if (!GuestGuard.isGuest) cubit.getProfile();
-            return cubit;
-          },
+          create: (context) => ProfileCubit(getIt.get<ProfileRepoImpl>()),
         ),
         BlocProvider(
           create: (context) =>
-              ReportProductCubit(getIt.get<ReportProductsReposImpl>())
-                ..getAllComplaintsTypesData(),
+              ReportProductCubit(getIt.get<ReportProductsReposImpl>()),
         ),
         BlocProvider(
-          create: (context) {
-            final cubit = PrivacyCubit(getIt.get<PrivacyRepoImpl>());
-            // Settings are account-scoped: guests would get a 401.
-            if (!GuestGuard.isGuest) cubit.getSettings();
-            return cubit;
-          },
+          create: (context) => PrivacyCubit(getIt.get<PrivacyRepoImpl>()),
         ),
         BlocProvider(create: (context) => HelpSupportCubit()),
         BlocProvider(create: (context) => AddBalanceCubit()),
@@ -81,21 +71,14 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) => ConfirmPaymentCubit()),
         BlocProvider(
-          create: (context) {
-            final cubit = FavCubit(getIt.get<FavDataRepoImpl>());
-            if (!GuestGuard.isGuest) cubit.getFavData();
-            return cubit;
-          },
+          create: (context) => FavCubit(getIt.get<FavDataRepoImpl>()),
+        ),
+        BlocProvider(
+          create: (context) => SearchCubit(getIt.get<SearchReposImpl>()),
         ),
         BlocProvider(
           create: (context) =>
-              SearchCubit(getIt.get<SearchReposImpl>())
-                ..getAllProductsForSearch(),
-        ),
-        BlocProvider(
-          create: (context) =>
-              ChooseLocationCubit(getIt.get<ChooseLocationReposImpl>())
-                ..getAllCitiesAndCenters(),
+              ChooseLocationCubit(getIt.get<ChooseLocationReposImpl>()),
         ),
         BlocProvider(create: (context) => LanguageCubit()),
         BlocProvider(
@@ -108,14 +91,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
-              SellAllBestViewCubit(getIt.get<SellAllBestViewRepoImpl>())
-                ..getSellAllBestView(),
+              SellAllBestViewCubit(getIt.get<SellAllBestViewRepoImpl>()),
         ),
-        BlocProvider(
-          create: (context) => HomeCubit(getIt.get<HomeRepoImpl>())
-            ..getHome()
-            ..getBanners(),
-        ),
+        BlocProvider(create: (context) => HomeCubit(getIt.get<HomeRepoImpl>())),
         BlocProvider(
           create: (context) => CompareCubit(
             getIt.get<CompareReposImpl>(),
@@ -123,32 +101,16 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) {
-            final cubit = NotificationsCubit(
-              getIt.get<NotificationsDataRepoImpl>(),
-            );
-            if (!GuestGuard.isGuest) {
-              cubit.getNotificationsData(type: "general");
-            }
-            return cubit;
-          },
+          create: (context) =>
+              NotificationsCubit(getIt.get<NotificationsDataRepoImpl>()),
         ),
+        // Shared singletons: badges are refreshed from LayoutView once the
+        // first frame is on screen, and after chat actions/lifecycle resumes.
         BlocProvider<ChatUnreadCubit>.value(
-          value: () {
-            // Shared singleton: the badge stays in sync with the chat screens.
-            final cubit = getIt.get<ChatUnreadCubit>();
-            if (!GuestGuard.isGuest) cubit.refresh();
-            return cubit;
-          }(),
+          value: getIt.get<ChatUnreadCubit>(),
         ),
         BlocProvider<SupportUnreadCubit>.value(
-          value: () {
-            // Shared singleton: the badge on the help screen stays in sync
-            // with the support chat.
-            final cubit = getIt.get<SupportUnreadCubit>();
-            if (!GuestGuard.isGuest) cubit.refresh();
-            return cubit;
-          }(),
+          value: getIt.get<SupportUnreadCubit>(),
         ),
       ],
       child: ThemeProvider(

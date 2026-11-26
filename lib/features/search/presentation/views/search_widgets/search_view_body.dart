@@ -33,6 +33,12 @@ class _SearchViewBodyState extends State<SearchViewBody> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // Loaded on demand instead of at app startup. The list is shared/cached
+    // in the cubit, so reopening the screen does not refetch.
+    final cubit = SearchCubit.get(context);
+    if (cubit.allProductsForSearchList.isEmpty) {
+      cubit.getAllProductsForSearch();
+    }
   }
 
   @override

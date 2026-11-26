@@ -3,8 +3,15 @@ import 'package:by3ly/core/notifications/app_notifications.dart';
 import 'package:by3ly/core/utils/guest_guard.dart';
 import 'package:by3ly/features/chat/presentation/view_model/chat_unread_cubit.dart';
 import 'package:by3ly/features/chat/presentation/view_model/chat_states.dart';
+import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
+import 'package:by3ly/features/fav/presentation/view_model/fav_states.dart';
+import 'package:by3ly/features/helpSupportChat/presentation/view_model/support_unread_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_cubit.dart';
 import 'package:by3ly/features/layout/presentation/view_model/layout_states.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_cubit.dart';
+import 'package:by3ly/features/notifications/presentation/view_model/notifications_states.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
+import 'package:by3ly/features/profile/presentation/view_model/profile_states.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,12 +31,32 @@ class LayoutViewState extends State<LayoutView> {
   @override
   void initState() {
     super.initState();
-    // LayoutView is recreated after login, so refresh the chat badge once the
-    // new account is available. Guests have no token, skip the request.
+    // LayoutView is recreated after login, so refresh account data once the
+    // new account is available. Guests have no token, skip every request.
+    // Deferred here from MyApp so the splash/first frame is not delayed; the
+    // guards avoid duplicate calls when LayoutView is rebuilt.
     if (!GuestGuard.isGuest) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
+
+        final profile = context.read<ProfileCubit>();
+        if (profile.profileModel == null && profile.state is ProfileInitState) {
+          profile.getProfile();
+        }
+
+        final fav = context.read<FavCubit>();
+        if (fav.favDataModel == null && fav.state is FavInitState) {
+          fav.getFavData();
+        }
+
+        final notifications = context.read<NotificationsCubit>();
+        if (notifications.notificationsModel == null &&
+            notifications.state is NotificationsInitState) {
+          notifications.getNotificationsData();
+        }
+
         ChatUnreadCubit.get(context).refresh();
+        SupportUnreadCubit.get(context).refresh();
       });
     }
     // If the app was launched by tapping a notification, open the

@@ -25,6 +25,18 @@ class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Previously fetched at app startup; now loaded only when this screen opens.
+    // A cubit that already tried (even with an error) is left to its own retry.
+    final cubit = SellAllBestViewCubit.get(context);
+    if (cubit.sellAllBestViewModel == null &&
+        cubit.state is SellAllBestViewInitState) {
+      cubit.getSellAllBestView();
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
