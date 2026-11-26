@@ -169,6 +169,49 @@ void main() {
     });
   });
 
+  group('Packages.isActiveWithAds (create-ad package gate)', () {
+    final future = DateTime.now().add(const Duration(days: 1)).toIso8601String();
+    final past = DateTime.now().subtract(const Duration(days: 1))
+        .toIso8601String();
+
+    test('subscribed package with ads left and future ends_at is active', () {
+      final p = Packages.fromJson({
+        'is_subscriped': true,
+        'remaining_ads': 3,
+        'ends_at': future,
+      });
+      expect(p.isActiveWithAds, isTrue);
+    });
+
+    test('remaining_ads == 0 or past ends_at is not active', () {
+      expect(
+        Packages.fromJson({
+          'is_subscriped': true,
+          'remaining_ads': 0,
+          'ends_at': future,
+        }).isActiveWithAds,
+        isFalse,
+      );
+      expect(
+        Packages.fromJson({
+          'is_subscriped': true,
+          'remaining_ads': 3,
+          'ends_at': past,
+        }).isActiveWithAds,
+        isFalse,
+      );
+    });
+
+    test('unsubscribed package is never active', () {
+      final p = Packages.fromJson({
+        'is_subscriped': false,
+        'remaining_ads': 9,
+        'ends_at': future,
+      });
+      expect(p.isActiveWithAds, isFalse);
+    });
+  });
+
   group('PaymentMethodsModel parsing', () {
     test('methods list parses correctly', () {
       final model = PaymentMethodsModel.fromJson({

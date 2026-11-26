@@ -230,6 +230,30 @@ class Packages {
 
 /// Packages Extension
 extension PackagesX on Packages {
+  /// True while this is the user's subscribed package, it still has ads
+  /// (`remaining_ads > 0`) and `ends_at` hasn't arrived yet.
+  bool get isActiveWithAds {
+    if (isSubscriped != true) return false;
+
+    final remaining = remainingAds;
+    if (remaining != null && remaining <= 0) return false;
+
+    final text = endsAt?.trim();
+    if (text != null && text.isNotEmpty) {
+      DateTime? end;
+      // Date-only values ("2026-12-31") stay valid for the whole day.
+      if (text.length == 10) {
+        final day = DateTime.tryParse(text);
+        if (day != null) {
+          end = DateTime(day.year, day.month, day.day, 23, 59, 59);
+        }
+      }
+      end ??= DateTime.tryParse(text);
+      if (end != null && !end.isAfter(DateTime.now())) return false;
+    }
+    return true;
+  }
+
   int? get durationMonths {
     final d = durationDays;
 

@@ -383,9 +383,11 @@ lib/
 - **الغرض**: نشر إعلان بيع بخطوات: صور → بيانات → فئة → شحن/حالة → موقع → معاينة الدفع.
 - **الحقول**: صور (1–5، كاميرا/معرض، multipart باسم `images[]`)، `name`, `description`, `price`, `discount?` (نسبة تُحسب حيًا)، `is_negotiable` (0/1), `is_urgent` (0/1), `category_id` + `sub_category_id` (قائمة منسدلة معتمدة)، `shipping_type` (`free|paid`)، `condition` (`new|used`)، `city_id` + `center_id` (افتراضيات من بروفايل المستخدم عبر `initLocation`), `listing_type` مهاردكود `'sale'`.
 - **بوابة النشر**:
-  1. يحاول `isPublishingCovered()` → `GET /subscriptions/current`: إذا `active && !is_expired && (ads_limit == 0 || remaining_ads > 0)` → نشر مباشر بدون حقول دفع.
-  2. إن فشل الفحص أو غير مغطى → `showAdPaymentSheet` (انظر 4.3.2).
-  3. السيرفر قد يفرض الدفع: إذا `fieldErrors` يحتوي `payment_method | receipt | transfer_reference` → يعيد فتح الورقة (`AddNewAdPaymentRequired`).
+  1. يعمل `GET /subscriptionPackages` (`PackagesCubit.getPackages()`) قبل القرار: إن كانت هناك باقة `is_subscriped == true` و`remaining_ads > 0` و`ends_at` لم يمرّ بعد → نشر مباشر يُخصم من الباقة، بدون حقول دفع ولا خصم من المحفظة/الرصيد.
+  2. إن لم توجد، يحاول `isPublishingCovered()` → `GET /subscriptions/current` بنفس القاعدة (`remaining_ads > 0` و`ends_at` المستقبلي وعدم `is_expired`).
+  3. إن فشل الفحص أو غير مغطى → `showAdPaymentSheet` (انظر 4.3.2).
+  4. السيرفر قد يفرض الدفع: إذا `fieldErrors` يحتوي `payment_method | receipt | transfer_reference` → يعيد فتح الورقة (`AddNewAdPaymentRequired`).
+  5. بعد النجاح يُعاد جلب `GET /subscriptionPackages` حتى يتحدّث عدّاد `remaining_ads` المعروض.
 - **الـ API**: `POST /addNewAds` — **multipart** بالحقول: `name, description, price, discount?, is_negotiable, is_urgent, listing_type, category_id, sub_category_id, shipping_type, condition, city_id, center_id` + `payment_method?` + `transfer_reference?` + `images[]` + `receipt?` (فقط عند الدفع بتحويل).
 - **النجاح** → `AddNewAdSuccess` → Pop مع `true` → قائمة إعلاناتي تعيد الجلب.
 - **ملفات**: `data/repos/add_advertisements_repos_imple.dart` (و`AddNewAdCubit` في `view_model/add_new_ad_cubit.dart`)، `presentation/views/add_new_ad_view.dart` + `add_new_ad_widgets/add_new_ad_view_body.dart` + `ad_payment_sheet.dart`.
@@ -542,7 +544,7 @@ lib/
 | **مستخدم مسجل غير مفعل** | `isActive == false` في رد login (يتطلب OTP) | عمليًا **لا توجد شاشة تغطي هذه الحالة** — انظر القسم 11 |
 | **مستخدم مفعل (Buyer/Seller)** | `isActive == true` + توكن في secure storage | كل ما يلي + النشر (بشرط الدفع/الاشتراك) + إعلاناتي + الإحصائيات + الإعدادات كاملة |
 | **مالك الإعلان (Seller)** | `ProfileCubit` user id == `product.seller.id` | إيقاف/تفعيل إعلانه، منع زر الشات مع نفسه، إحصائياته، إعلاناته |
-| **مشترك بباقة (Subscriber)** | `subscription_package != null` أو `subscriptions/current.isCovered` | نشر إعلانات مجانية ضمن الحد؛ غير ذلك تُدفع "رسوم النشر" لكل إعلان |
+| **مشترك بباقة (Subscriber)** | `subscriptions/current` → `remaining_ads > 0` + `ends_at` لم يمرّ | نشر إعلانات مباشرة يُخصم من الباقة؛ عند النفاد تُدفع "رسوم النشر" لكل إعلان |
 | **Admin / مشرف** | **Not Found** — لا توجد أدوار إدارية في الكود | غير موجود |
 
 قيود إضافية مفروضة في الكود:
@@ -751,7 +753,7 @@ DioException
 - **`payment_methods`**: `{code, name, account}` (من `payment-methods`).
 - **`wallet_history`**: `{id, amount|balance, type, type_label|title, status, status_label, payment_method, receipt_url, created_at}` — حقول متعددة الاحتمالات (يتسامح النموذج مع صيغ كثيرة).
 - **`ad-publishing-settings`**: `{price, currency, payment_methods:[{code, account}]}` — رسوم نشر ثابتة.
-- **`subscriptions/current`**: `{status, is_expired, ads_limit, used_ads, remaining_ads}`.
+- **`subscriptions/current`**: `{status, is_expired, ads_limit, used_ads, remaining_ads, ends_at}` — قرار النشر المجاني من `remaining_ads > 0` و`ends_at` المستقبلي.
 
 ### 7.2.6 جداول مساعدة
 
@@ -918,7 +920,7 @@ payments (orders) ─── packages / wallet/top-up / addNewAds fees
 - وضعان: **JSON** `{package_id, payment_method: 'wallet'}` أو **multipart** `{package_id, payment_method: <code>, receipt: file}`.
 
 ### `GET /subscriptions/current`
-- الرد: `{status, is_expired, ads_limit, used_ads, remaining_ads}` — `isCovered` في الكود: `active && !is_expired && (ads_limit<=0 || remaining_ads>0)`.
+- الرد: `{status, is_expired, ads_limit, used_ads, remaining_ads, ends_at}` — `isCovered` في الكود: يوجد اشتراك && `!is_expired` && `ends_at` لم يمرّ && `remaining_ads > 0` (مع fallback إلى `ads_limit` عند غياب `remaining_ads`). يقبل الرد الغلاف `{status, data:{...}}` أو الكائن المباشر.
 
 ### `GET /ad-publishing-settings`
 - الرد: `{price, currency, payment_methods: [{code, account}]}`.

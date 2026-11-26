@@ -286,8 +286,9 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
     );
   }
 
-  /// Whether publishing is still covered by the subscription package
-  /// (same rule as the website: active, not expired, ads remaining).
+  /// Whether publishing is still covered by the subscription package:
+  /// `remaining_ads > 0` and `ends_at` hasn't arrived yet. In that case
+  /// the ad is deducted from the package — no wallet/balance deduction.
   ///
   /// Returns null when the check itself failed so the caller can fall
   /// back to the profile package instead of forcing a payment.

@@ -4,6 +4,7 @@ import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_cubit.dart';
 import 'package:by3ly/features/addAdvertisements/presentation/view_model/add_new_ad_states.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
+import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
 import 'package:by3ly/features/profile/presentation/view_model/profile_cubit.dart';
 import 'package:by3ly/lang/locale_keys.dart';
 import 'package:cherry_toast/cherry_toast.dart';
@@ -195,6 +196,12 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
           // A wallet-funded publish deducts the fee on the server. Refresh the
           // shared profile so the wallet balance is never shown stale.
           context.read<ProfileCubit>().getProfile();
+          // A package-funded publish deducts one from `remaining_ads` on the
+          // server — refetch the packages so the counter isn't shown stale.
+          // Editing doesn't consume an ad (and has no PackagesCubit scope).
+          if (!context.read<AddNewAdCubit>().isEditMode) {
+            context.read<PackagesCubit>().getPackages();
+          }
           CherryToast.success(
             title: Text(
               (state.message?.trim().isNotEmpty ?? false)
@@ -559,28 +566,37 @@ class _AddNewAdViewBodyState extends State<AddNewAdViewBody> {
       cubit.submit();
       return;
     }
-    // Same rule as the website: publish free only
-    // while the package still has ads left; when the
-    // package or the free ads are exhausted, force
-    // the payment step (wallet / transfer).
+    // Publish straight away while the subscribed package still has ads
+    // (remaining_ads > 0) and ends_at hasn't arrived yet — the ad is then
+    // deducted from the package, never from the wallet / balance.
     // Captured before the awaits so no BuildContext is used across them.
     final profileCubit = context.read<ProfileCubit>();
+    final packagesCubit = context.read<PackagesCubit>();
     setState(() => _checkingPackage = true);
-    final coverage = await cubit.isPublishingCovered();
+
+    // Refetch the packages before deciding: the list carries
+    // is_subscriped + remaining_ads + ends_at, so it must be fresh.
+    await packagesCubit.getPackages();
     if (!mounted) return;
-    bool covered;
-    if (coverage != null) {
-      covered = coverage;
-    } else {
-      // Check failed (offline, etc.) → fall back to
-      // the profile package instead of demanding a
-      // payment the server may still not need.
-      try {
-        await profileCubit.getProfile();
-      } catch (_) {}
+    bool covered = packagesCubit.hasActivePackageWithAds;
+    if (!covered) {
+      // The current subscription is the second gate (it can also cover
+      // publishing through free ads outside a listed package).
+      final coverage = await cubit.isPublishingCovered();
       if (!mounted) return;
-      covered =
-          profileCubit.profileModel?.data?.user?.subscriptionPackage != null;
+      if (coverage != null) {
+        covered = coverage;
+      } else {
+        // Both checks failed (offline, etc.) → fall back to
+        // the profile package instead of demanding a
+        // payment the server may still not need.
+        try {
+          await profileCubit.getProfile();
+        } catch (_) {}
+        if (!mounted) return;
+        covered =
+            profileCubit.profileModel?.data?.user?.subscriptionPackage != null;
+      }
     }
     if (!mounted) return;
     setState(() => _checkingPackage = false);

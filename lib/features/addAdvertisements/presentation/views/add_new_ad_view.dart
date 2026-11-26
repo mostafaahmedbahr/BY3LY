@@ -6,6 +6,8 @@ import 'package:by3ly/features/allCategories/data/repos/all_categories_repo_impl
 import 'package:by3ly/features/allCategories/presentation/view_model/all_categories_cubit.dart';
 import 'package:by3ly/features/allSubCategories/data/repos/all_sub_categories_repos_imple.dart';
 import 'package:by3ly/features/allSubCategories/presentation/view_model/all_sub_categories_cubit.dart';
+import 'package:by3ly/features/packages/data/repos/packages_repos_imple.dart';
+import 'package:by3ly/features/packages/presentation/view_model/packages_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../main_importants.dart';
@@ -29,6 +31,11 @@ class AddNewAdView extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               AllSubCategoriesCubit(getIt.get<AllSubCategoriesRepoImpl>()),
+        ),
+        // Used to refetch the packages after publishing: the ad is
+        // deducted from `remaining_ads`, so the card/counter must update.
+        BlocProvider(
+          create: (context) => PackagesCubit(getIt.get<PackagesRepoImpl>()),
         ),
       ],
       child: Scaffold(

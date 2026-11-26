@@ -31,6 +31,11 @@ class PackagesCubit extends Cubit<PackagesStates> {
 
   List<Packages> get allPackages => packagesModel?.data?.packages ?? [];
 
+  /// Whether a subscribed package still has ads left and hasn't ended.
+  /// Used by the create-ad screen as a second gate alongside
+  /// `subscriptions/current` — both expose `remaining_ads`.
+  bool get hasActivePackageWithAds => allPackages.any((p) => p.isActiveWithAds);
+
   /// Client-side filter by the selected duration tab (durationDays
   /// mapped to 1 / 3 / 6 / 12 months). If no package carries duration
   /// info, everything is shown under every tab so the screen never
@@ -49,11 +54,13 @@ class PackagesCubit extends Cubit<PackagesStates> {
     var result = await packagesRepos.getPackages();
     return result.fold(
       (failure) {
-        emit(GetPackagesErrorState(failure.errMessage));
+        // The caller may have left the screen while the request was in
+        // flight (e.g. right after publishing an ad).
+        if (!isClosed) emit(GetPackagesErrorState(failure.errMessage));
       },
       (data) {
         packagesModel = data;
-        emit(GetPackagesSuccessState(data));
+        if (!isClosed) emit(GetPackagesSuccessState(data));
       },
     );
   }
