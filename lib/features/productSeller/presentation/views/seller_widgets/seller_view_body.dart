@@ -50,48 +50,64 @@ class ProductSellerViewBody extends StatelessWidget {
 
           return SafeArea(
             top: false,
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
-              children: [
-                SellerHeroCard(seller: seller, sellerId: sellerId),
-                const SizedBox(height: 16),
-                const SellerTabButtons(),
-                const SizedBox(height: 14),
-                if (cubit.sellerDataIndex == 1) const SellerInfoPanel(),
-                if (cubit.sellerDataIndex == 2)
-                  SellerProductsList(products: products),
-                if (cubit.sellerDataIndex == 3)
-                  SellerProductsList(products: products),
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      SellerHeroCard(seller: seller, sellerId: sellerId),
+                      const SizedBox(height: 16),
+                      const SellerTabButtons(),
+                      const SizedBox(height: 14),
+                      if (cubit.sellerDataIndex == 1) const SellerInfoPanel(),
+                    ]),
+                  ),
+                ),
+                if (cubit.sellerDataIndex == 2 || cubit.sellerDataIndex == 3)
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SellerProductsList(products: products),
+                  ),
                 if ((cubit.sellerDataIndex == 2 ||
                         cubit.sellerDataIndex == 3) &&
                     cubit.hasMore)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: OutlinedButton(
-                      onPressed: state is GetProductSellerDataPaginatingState
-                          ? null
-                          : () => cubit.getProductSellerData(
-                              sellerId: sellerId,
-                              loadMore: true,
-                            ),
-                      child: state is GetProductSellerDataPaginatingState
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(context.tr(LocaleKeys.seeMore)),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                      child: OutlinedButton(
+                        onPressed: state is GetProductSellerDataPaginatingState
+                            ? null
+                            : () => cubit.getProductSellerData(
+                                sellerId: sellerId,
+                                loadMore: true,
+                              ),
+                        child: state is GetProductSellerDataPaginatingState
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(context.tr(LocaleKeys.seeMore)),
+                      ),
                     ),
                   ),
                 if (state is GetProductSellerDataPaginationErrorState)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text(
-                      state.error,
-                      style: const TextStyle(color: Colors.red, fontSize: 12),
-                      textAlign: TextAlign.center,
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+                      child: Text(
+                        state.error,
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
+                // Original ListView had 24px bottom padding. The sliver list
+                // above has none, so keep the trailing space here.
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
               ],
             ),
           );

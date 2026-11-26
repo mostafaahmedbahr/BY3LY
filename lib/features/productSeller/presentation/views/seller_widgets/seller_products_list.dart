@@ -9,6 +9,9 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 /// Shared product list used by both the "live now" and "previously sold"
 /// tabs — null-safe, animated, identical to every other product strip.
+///
+/// Emitted as a [SliverList] so the parent CustomScrollView builds only the
+/// visible rows (the old `ListView(shrinkWrap: true)` built all of them).
 class SellerProductsList extends StatelessWidget {
   const SellerProductsList({super.key, required this.products});
 
@@ -18,28 +21,32 @@ class SellerProductsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = products ?? const <Products>[];
     if (items.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Center(
-          child: Icon(
-            Icons.inventory_2_outlined,
-            size: 52,
-            color: AppColors.border,
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          child: Center(
+            child: Icon(
+              Icons.inventory_2_outlined,
+              size: 52,
+              color: AppColors.border,
+            ),
           ),
         ),
       );
     }
 
-    return AnimationLimiter(
-      child: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: items.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return AnimationConfiguration.staggeredList(
-            position: index,
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        // Odd indices are the 10px separators, same as the old
+        // ListView.separated layout.
+        if (index.isOdd) return const SizedBox(height: 10);
+        final itemIndex = index ~/ 2;
+        final item = items[itemIndex];
+        // AnimationLimiter renders a RenderBox, so it must wrap each row
+        // (not the SliverList itself, which expects RenderSliver children).
+        return AnimationLimiter(
+          child: AnimationConfiguration.staggeredList(
+            position: itemIndex,
             duration: const Duration(milliseconds: 300),
             child: SlideAnimation(
               verticalOffset: 36,
@@ -66,9 +73,9 @@ class SellerProductsList extends StatelessWidget {
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }, childCount: items.length * 2 - 1),
     );
   }
 }

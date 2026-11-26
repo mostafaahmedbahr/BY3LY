@@ -479,21 +479,35 @@ void main() {
     ) async {
       final model = ProductSellerModel.fromJson(_sellerJson);
 
+      // SellerProductsList emits slivers now, so it lives in a
+      // CustomScrollView (same as the real seller screen).
       await tester.pumpWidget(
-        _harness(child: SellerProductsList(products: model.data!.products)),
+        _harness(
+          child: CustomScrollView(
+            slivers: [SellerProductsList(products: model.data!.products)],
+          ),
+        ),
       );
       await _settle(tester);
       expect(find.text('آيفون 15 برو'), findsOneWidget);
       expect(find.text('سامسونج S24'), findsOneWidget);
 
       await tester.pumpWidget(
-        _harness(child: const SellerProductsList(products: [])),
+        _harness(
+          child: const CustomScrollView(
+            slivers: [SellerProductsList(products: [])],
+          ),
+        ),
       );
       await _settle(tester);
       expect(find.byIcon(Icons.inventory_2_outlined), findsOneWidget);
 
       await tester.pumpWidget(
-        _harness(child: const SellerProductsList(products: null)),
+        _harness(
+          child: const CustomScrollView(
+            slivers: [SellerProductsList(products: null)],
+          ),
+        ),
       );
       await _settle(tester);
       expect(find.byIcon(Icons.inventory_2_outlined), findsOneWidget);

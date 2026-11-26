@@ -8,6 +8,8 @@ import '../../../../seeAllBestView/presentation/views/see_all_best_view.dart';
 import 'best_view_products_list.dart';
 import 'section_header.dart';
 
+/// Best-of section emitted as slivers so the parent CustomScrollView can keep
+/// the grid lazy. Padding/spacing match the old Padding + Column version.
 class BestViewProducts extends StatelessWidget {
   const BestViewProducts({super.key, required this.bestView});
 
@@ -15,25 +17,29 @@ class BestViewProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SliverPadding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        children: [
-          SectionHeader(
-            title: context.tr(LocaleKeys.bestView),
-            actionLabel: context.tr(LocaleKeys.seeAll),
-            onAction: () => Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                child: const SeeAllView(),
+      sliver: SliverMainAxisGroup(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SectionHeader(
+                title: context.tr(LocaleKeys.bestView),
+                actionLabel: context.tr(LocaleKeys.seeAll),
+                onAction: () => Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const SeeAllView(),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 12),
+            ]),
           ),
-          const SizedBox(height: 12),
-          Padding(
+          SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: BestViewProductsList(bestView: bestView),
+            sliver: BestViewProductsList(bestView: bestView),
           ),
         ],
       ),

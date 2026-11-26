@@ -44,34 +44,36 @@ class HomeViewBody extends StatelessWidget {
             final cubit = context.read<HomeCubit>();
             await Future.wait([cubit.getHome(), cubit.getBanners()]);
           },
-          child: ListView(
+          child: CustomScrollView(
             // Always allow the drag, even when the content fits on screen.
             physics: const AlwaysScrollableScrollPhysics(),
-            children: [
+            slivers: [
               /// Banners slider (above the search).
-              const HomeBannerSlider(),
+              const SliverToBoxAdapter(child: HomeBannerSlider()),
 
               /// search
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10.h,
-                  bottom: 10.h,
-                  right: 20.w,
-                  left: 20.w,
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 10.h,
+                    bottom: 10.h,
+                    right: 20.w,
+                    left: 20.w,
+                  ),
+                  child: const ContainerSearchWidget(),
                 ),
-                child: const ContainerSearchWidget(),
               ),
 
               /// CategoriesList (title + horizontal, first 5).
-              const CategoriesList(),
+              const SliverToBoxAdapter(child: CategoriesList()),
               // /// Sponsored ads strip (first image of available ads).
               // if (ads.isNotEmpty) HomeAdsStrip(ads: ads),
 
               ///BannerToLogin
-              const BannerToLogin(),
-              Gap(10.h),
+              const SliverToBoxAdapter(child: BannerToLogin()),
+              SliverToBoxAdapter(child: Gap(10.h)),
 
-              /// BestView grid (vertical scroll, all items).
+              /// BestView grid — a SliverGrid, so only visible cards build.
               if (bestView.isNotEmpty) BestViewProducts(bestView: bestView),
             ],
           ),
