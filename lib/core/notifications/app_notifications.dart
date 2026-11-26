@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../firebase_options.dart';
 import '../../my_app.dart';
@@ -81,7 +82,12 @@ class AppNotifications {
       await DeviceTokenSync.sync(force: true);
     });
 
-    await DeviceTokenSync.sync();
+    // The first FCM token lookup + backend POST used to block the first
+    // frame. Run it after the splash is on screen; getDeviceToken() (also
+    // deferred) calls the same guarded sync, so duplicate triggers collapse.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(DeviceTokenSync.sync());
+    });
   }
 
   /// Call once after the first frame. Handles the "app was terminated and the

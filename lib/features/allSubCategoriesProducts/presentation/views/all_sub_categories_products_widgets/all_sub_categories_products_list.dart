@@ -1,6 +1,7 @@
 import 'package:by3ly/features/allSubCategoriesProducts/data/models/all_sub_categories_products_model.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/view_model/all_sub_categories_products_cubit.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/view_model/all_sub_categories_products_states.dart';
+import 'package:by3ly/core/utils/search_filter_cache.dart';
 import 'package:by3ly/main_importants.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -25,6 +26,9 @@ class _AllSubCategoriesProductsListState
     extends State<AllSubCategoriesProductsList> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final SearchDebouncer _debounce = SearchDebouncer();
+  final FilteredListCache<Products> _filteredCache =
+      FilteredListCache<Products>();
 
   /// Filter state lives in the cubit so applying it refetches page 1
   /// server-side instead of filtering only the loaded pages.
@@ -39,6 +43,7 @@ class _AllSubCategoriesProductsListState
 
   @override
   void dispose() {
+    _debounce.dispose();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
@@ -80,64 +85,73 @@ class _AllSubCategoriesProductsListState
 
   List<Products> get _filtered {
     final query = _searchController.text.trim().toLowerCase();
-    return widget.allSubCategoriesProductsList.where((p) {
-      // Search by name (and description).
-      if (query.isNotEmpty) {
-        final name = (p.name ?? '').toLowerCase();
-        final desc = (p.desc ?? '').toLowerCase();
-        if (!name.contains(query) && !desc.contains(query)) return false;
-      }
-      // Type filter.
-      if (_filter.type != null && (p.type ?? '').trim() != _filter.type) {
-        return false;
-      }
-      if (_filter.categoryId != null &&
-          !_matchesId(p.categoryId, _filter.categoryId!)) {
-        return false;
-      }
-      if (_filter.subCategoryId != null &&
-          !_matchesId(p.subCategoryId, _filter.subCategoryId!)) {
-        return false;
-      }
-      if (_filter.shippingType != null && _filter.shippingType != 'both') {
-        final s = (p.shippingType ?? '').trim().toLowerCase();
-        if (s.isNotEmpty && s != _filter.shippingType) return false;
-      }
-      if (_filter.condition != null && _filter.condition != 'both') {
-        final c = (p.condition ?? '').trim().toLowerCase();
-        if (c.isNotEmpty && c != _filter.condition) return false;
-      }
-      // Price range filter.
-      if (_filter.minPrice != null || _filter.maxPrice != null) {
-        final price = _productPrice(p);
-        if (price == null) return false;
-        if (_filter.minPrice != null && price < _filter.minPrice!) {
+    final source = widget.allSubCategoriesProductsList;
+    final filter = _filter;
+    final key =
+        '$query|${filter.type}|${filter.toQueryParams()}|${FilteredListCache.sourceKey(source)}';
+    return _filteredCache.get(
+      key,
+      () => source.where((p) {
+        // Search by name (and description).
+        if (query.isNotEmpty) {
+          final name = (p.name ?? '').toLowerCase();
+          final desc = (p.desc ?? '').toLowerCase();
+          if (!name.contains(query) && !desc.contains(query)) return false;
+        }
+        // Type filter.
+        if (_filter.type != null && (p.type ?? '').trim() != _filter.type) {
           return false;
         }
-        if (_filter.maxPrice != null && price > _filter.maxPrice!) {
+        if (_filter.categoryId != null &&
+            !_matchesId(p.categoryId, _filter.categoryId!)) {
           return false;
         }
-      }
-      // Place filter (governorate + optional center).
-      if (_filter.cityId != null) {
-        final cityMatch =
-            _matchesId(p.cityId, _filter.cityId!) ||
-            (_filter.cityName != null &&
-                (p.location?.toString() ?? '').contains(_filter.cityName!));
-        if (!cityMatch) return false;
-        if (_filter.centerId != null) {
-          final centerOk =
-              _matchesId(p.centerId, _filter.centerId!) ||
-              (_filter.centerName != null &&
-                  (p.location?.toString() ?? '').contains(_filter.centerName!));
-          if (!centerOk) return false;
-        } else if (_filter.centerName != null &&
-            !(p.location?.toString() ?? '').contains(_filter.centerName!)) {
+        if (_filter.subCategoryId != null &&
+            !_matchesId(p.subCategoryId, _filter.subCategoryId!)) {
           return false;
         }
-      }
-      return true;
-    }).toList();
+        if (_filter.shippingType != null && _filter.shippingType != 'both') {
+          final s = (p.shippingType ?? '').trim().toLowerCase();
+          if (s.isNotEmpty && s != _filter.shippingType) return false;
+        }
+        if (_filter.condition != null && _filter.condition != 'both') {
+          final c = (p.condition ?? '').trim().toLowerCase();
+          if (c.isNotEmpty && c != _filter.condition) return false;
+        }
+        // Price range filter.
+        if (_filter.minPrice != null || _filter.maxPrice != null) {
+          final price = _productPrice(p);
+          if (price == null) return false;
+          if (_filter.minPrice != null && price < _filter.minPrice!) {
+            return false;
+          }
+          if (_filter.maxPrice != null && price > _filter.maxPrice!) {
+            return false;
+          }
+        }
+        // Place filter (governorate + optional center).
+        if (_filter.cityId != null) {
+          final cityMatch =
+              _matchesId(p.cityId, _filter.cityId!) ||
+              (_filter.cityName != null &&
+                  (p.location?.toString() ?? '').contains(_filter.cityName!));
+          if (!cityMatch) return false;
+          if (_filter.centerId != null) {
+            final centerOk =
+                _matchesId(p.centerId, _filter.centerId!) ||
+                (_filter.centerName != null &&
+                    (p.location?.toString() ?? '').contains(
+                      _filter.centerName!,
+                    ));
+            if (!centerOk) return false;
+          } else if (_filter.centerName != null &&
+              !(p.location?.toString() ?? '').contains(_filter.centerName!)) {
+            return false;
+          }
+        }
+        return true;
+      }).toList(),
+    );
   }
 
   Future<void> _openFilterSheet() async {
@@ -153,8 +167,9 @@ class _AllSubCategoriesProductsListState
   }
 
   void _clearSearch() {
+    _debounce.cancel();
     _searchController.clear();
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -186,7 +201,7 @@ class _AllSubCategoriesProductsListState
                           onPressed: _clearSearch,
                         )
                       : null,
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) => _debounce(() => setState(() {})),
                 ),
               ),
               Gap(10.w),
@@ -346,7 +361,8 @@ class _AllSubCategoriesProductsListState
                             onPressed: () {
                               _searchController.clear();
                               cubit.clearFilter();
-                              setState(() {});
+                              _debounce.cancel();
+                              if (mounted) setState(() {});
                             },
                             child: Text(
                               context.tr(LocaleKeys.clearAll),
@@ -363,14 +379,13 @@ class _AllSubCategoriesProductsListState
                       Expanded(
                         child: GridView.builder(
                           controller: _scrollController,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10.h,
-                                crossAxisSpacing: 10.w,
-                                // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
-                                mainAxisExtent: 235,
-                              ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10.h,
+                            crossAxisSpacing: 10.w,
+                            // ارتفاع ثابت بدل نسبة عشان ميحصلش overflow على الشاشات الضيقة
+                            mainAxisExtent: 235,
+                          ),
                           itemCount: filtered.length,
                           itemBuilder: (context, index) {
                             return AllSubCategoriesProductsListItem(

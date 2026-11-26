@@ -1,6 +1,7 @@
 import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/custom_sized_box.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
+import 'package:by3ly/core/utils/search_filter_cache.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/views/all_sub_categories_products_widgets/products_filter.dart';
 import 'package:by3ly/features/allSubCategoriesProducts/presentation/views/all_sub_categories_products_widgets/products_filter_sheet.dart';
 import 'package:by3ly/features/search/data/models/all_products_search_model.dart';
@@ -28,6 +29,14 @@ class SearchViewBody extends StatefulWidget {
 class _SearchViewBodyState extends State<SearchViewBody> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final SearchDebouncer _debounce = SearchDebouncer();
+  final FilteredListCache<Products> _filteredCache =
+      FilteredListCache<Products>();
+
+  void _applySearchNow() {
+    _debounce.cancel();
+    if (mounted) setState(() {});
+  }
 
   @override
   void initState() {
@@ -43,6 +52,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
 
   @override
   void dispose() {
+    _debounce.dispose();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
@@ -76,57 +86,64 @@ class _SearchViewBodyState extends State<SearchViewBody> {
 
   List<Products> _filtered(List<Products> source, ProductsFilter filter) {
     final query = _searchController.text.trim().toLowerCase();
-    return source.where((p) {
-      if (query.isNotEmpty) {
-        final name = (p.name ?? '').toLowerCase();
-        final desc = (p.desc ?? '').toLowerCase();
-        if (!name.contains(query) && !desc.contains(query)) return false;
-      }
-      if (filter.type != null && (p.type ?? '').trim() != filter.type) {
-        return false;
-      }
-      // Server keys (local fallback for already-loaded pages).
-      if (filter.categoryId != null &&
-          !_matchesId(p.categoryId, filter.categoryId!)) {
-        return false;
-      }
-      if (filter.subCategoryId != null &&
-          !_matchesId(p.subCategoryId, filter.subCategoryId!)) {
-        return false;
-      }
-      if (filter.shippingType != null && filter.shippingType != 'both') {
-        final s = (p.shippingType ?? '').trim().toLowerCase();
-        if (s.isNotEmpty && s != filter.shippingType) return false;
-      }
-      if (filter.condition != null && filter.condition != 'both') {
-        final c = (p.condition ?? '').trim().toLowerCase();
-        if (c.isNotEmpty && c != filter.condition) return false;
-      }
-      if (filter.minPrice != null || filter.maxPrice != null) {
-        final price = _productPrice(p);
-        if (price == null) return false;
-        if (filter.minPrice != null && price < filter.minPrice!) return false;
-        if (filter.maxPrice != null && price > filter.maxPrice!) return false;
-      }
-      if (filter.cityId != null) {
-        final cityMatch =
-            _matchesId(p.cityId, filter.cityId!) ||
-            (filter.cityName != null &&
-                (p.location?.toString() ?? '').contains(filter.cityName!));
-        if (!cityMatch) return false;
-        if (filter.centerId != null) {
-          final centerOk =
-              _matchesId(p.centerId, filter.centerId!) ||
-              (filter.centerName != null &&
-                  (p.location?.toString() ?? '').contains(filter.centerName!));
-          if (!centerOk) return false;
-        } else if (filter.centerName != null &&
-            !(p.location?.toString() ?? '').contains(filter.centerName!)) {
+    final key =
+        '$query|${filter.type}|${filter.toQueryParams()}|${FilteredListCache.sourceKey(source)}';
+    return _filteredCache.get(
+      key,
+      () => source.where((p) {
+        if (query.isNotEmpty) {
+          final name = (p.name ?? '').toLowerCase();
+          final desc = (p.desc ?? '').toLowerCase();
+          if (!name.contains(query) && !desc.contains(query)) return false;
+        }
+        if (filter.type != null && (p.type ?? '').trim() != filter.type) {
           return false;
         }
-      }
-      return true;
-    }).toList();
+        // Server keys (local fallback for already-loaded pages).
+        if (filter.categoryId != null &&
+            !_matchesId(p.categoryId, filter.categoryId!)) {
+          return false;
+        }
+        if (filter.subCategoryId != null &&
+            !_matchesId(p.subCategoryId, filter.subCategoryId!)) {
+          return false;
+        }
+        if (filter.shippingType != null && filter.shippingType != 'both') {
+          final s = (p.shippingType ?? '').trim().toLowerCase();
+          if (s.isNotEmpty && s != filter.shippingType) return false;
+        }
+        if (filter.condition != null && filter.condition != 'both') {
+          final c = (p.condition ?? '').trim().toLowerCase();
+          if (c.isNotEmpty && c != filter.condition) return false;
+        }
+        if (filter.minPrice != null || filter.maxPrice != null) {
+          final price = _productPrice(p);
+          if (price == null) return false;
+          if (filter.minPrice != null && price < filter.minPrice!) return false;
+          if (filter.maxPrice != null && price > filter.maxPrice!) return false;
+        }
+        if (filter.cityId != null) {
+          final cityMatch =
+              _matchesId(p.cityId, filter.cityId!) ||
+              (filter.cityName != null &&
+                  (p.location?.toString() ?? '').contains(filter.cityName!));
+          if (!cityMatch) return false;
+          if (filter.centerId != null) {
+            final centerOk =
+                _matchesId(p.centerId, filter.centerId!) ||
+                (filter.centerName != null &&
+                    (p.location?.toString() ?? '').contains(
+                      filter.centerName!,
+                    ));
+            if (!centerOk) return false;
+          } else if (filter.centerName != null &&
+              !(p.location?.toString() ?? '').contains(filter.centerName!)) {
+            return false;
+          }
+        }
+        return true;
+      }).toList(),
+    );
   }
 
   List<String> _availableTypes(List<Products> source) {
@@ -170,11 +187,13 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                   suffixIcon: _searchController.text.trim().isNotEmpty
                       ? IconButton(
                           icon: const Icon(Icons.clear, size: 20),
-                          onPressed: () =>
-                              setState(() => _searchController.clear()),
+                          onPressed: () {
+                            _searchController.clear();
+                            _applySearchNow();
+                          },
                         )
                       : null,
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) => _debounce(() => setState(() {})),
                 ),
               ),
               const SizedBox(width: 10),
@@ -384,7 +403,7 @@ class _SearchViewBodyState extends State<SearchViewBody> {
                                       onPressed: () {
                                         _searchController.clear();
                                         cubit.clearSearchFilter();
-                                        setState(() {});
+                                        _applySearchNow();
                                       },
                                       child: Text(
                                         context.tr(LocaleKeys.clearAll),

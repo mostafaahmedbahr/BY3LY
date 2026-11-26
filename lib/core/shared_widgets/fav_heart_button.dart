@@ -10,6 +10,8 @@ import 'package:easy_localization/easy_localization.dart';
 ///   with a small pop animation, and reverts automatically on failure.
 /// - Toast is guarded by [productId], so tapping one card never shows
 ///   duplicate toasts from the other mounted cards.
+/// - Only states that concern THIS product trigger a rebuild. A toggle no
+///   longer rebuilds every heart on the screen.
 class FavHeartButton extends StatefulWidget {
   const FavHeartButton({
     super.key,
@@ -44,6 +46,11 @@ class _FavHeartButtonState extends State<FavHeartButton> {
 
   /// True while this button's own request is in flight (for toast guarding).
   bool _waiting = false;
+
+  void _setLocalFav(bool? value) {
+    if (_localFav == value || !mounted) return;
+    setState(() => _localFav = value);
+  }
 
   bool _isFav(FavCubit cubit) {
     // Guests always see a plain (non-favourited) heart.
@@ -80,52 +87,66 @@ class _FavHeartButtonState extends State<FavHeartButton> {
   @override
   Widget build(BuildContext context) {
     if (widget.productId == null) return const SizedBox.shrink();
-    return BlocConsumer<FavCubit, FavStates>(
+    // read (not watch): updates arrive through the filtered listener below.
+    final cubit = context.read<FavCubit>();
+    final isFav = _isFav(cubit);
+    final icon = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (child, animation) =>
+          ScaleTransition(scale: animation, child: child),
+      child: Icon(
+        key: ValueKey(isFav),
+        isFav ? Icons.favorite : Icons.favorite_border,
+        color: isFav ? widget.favIconColor : AppColors.textSecondary,
+        size: widget.iconSize,
+      ),
+    );
+    final child = !widget.withBackground
+        ? InkWell(onTap: _onTap, child: icon)
+        : Container(
+            height: widget.size,
+            width: widget.size,
+            decoration: BoxDecoration(
+              color: Colors.grey.withValues(alpha: 0.5),
+              shape: BoxShape.circle,
+            ),
+            child: InkWell(
+              onTap: _onTap,
+              borderRadius: BorderRadius.circular(widget.size / 2),
+              child: Center(child: icon),
+            ),
+          );
+
+    return BlocListener<FavCubit, FavStates>(
       listener: (context, state) {
+        if (state is GetFavDataSuccess ||
+            state is AddProductToFavSuccess ||
+            state is RemoveProductFromFavSuccess) {
+          // Server list refreshed — re-read the ids for this product.
+          if (mounted) setState(() {});
+          return;
+        }
+        if (state is FavToggleOptimistic &&
+            state.productId == widget.productId) {
+          // Toggle may have been started from another screen/card.
+          _setLocalFav(state.isNowFavourite);
+          return;
+        }
         if (!_waiting) return;
         if (state is FavToggleSuccess && state.productId == widget.productId) {
           _waiting = false;
+          _setLocalFav(state.isNowFavourite);
           _showToast(state.message, state.isNowFavourite);
         } else if (state is FavToggleError) {
           // Revert the local override, cubit already reverted its set.
           _waiting = false;
-          _localFav = null;
-          if (mounted) setState(() {});
+          _setLocalFav(null);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
-      builder: (context, state) {
-        final isFav = _isFav(FavCubit.get(context));
-        final icon = AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
-          transitionBuilder: (child, animation) =>
-              ScaleTransition(scale: animation, child: child),
-          child: Icon(
-            key: ValueKey(isFav),
-            isFav ? Icons.favorite : Icons.favorite_border,
-            color: isFav ? widget.favIconColor : AppColors.textSecondary,
-            size: widget.iconSize,
-          ),
-        );
-        if (!widget.withBackground) {
-          return InkWell(onTap: _onTap, child: icon);
-        }
-        return Container(
-          height: widget.size,
-          width: widget.size,
-          decoration: BoxDecoration(
-            color: Colors.grey.withValues(alpha: 0.5),
-            shape: BoxShape.circle,
-          ),
-          child: InkWell(
-            onTap: _onTap,
-            borderRadius: BorderRadius.circular(widget.size / 2),
-            child: Center(child: icon),
-          ),
-        );
-      },
+      child: child,
     );
   }
 }

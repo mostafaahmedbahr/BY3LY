@@ -1,6 +1,7 @@
 import 'package:by3ly/core/app_services/local_services/cache_helper.dart';
 import 'package:by3ly/core/errors/failure.dart';
 import 'package:by3ly/core/general_models/general_model.dart';
+import 'package:by3ly/core/shared_widgets/fav_heart_button.dart';
 import 'package:by3ly/features/fav/data/models/fav_model.dart';
 import 'package:by3ly/features/fav/data/repos/fav_repos.dart';
 import 'package:by3ly/features/fav/presentation/view_model/fav_cubit.dart';
@@ -436,6 +437,56 @@ void main() {
       expect(find.text('منتج 22'), findsOneWidget);
       expect(find.text('رؤية المزيد'), findsNothing);
       await cubit.close();
+    });
+
+    testWidgets('typing filters after the debounce, not on every keystroke', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 1600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      final cubit = await _loadedCubit();
+      await tester.pumpWidget(
+        _harness(
+          providers: [BlocProvider<SellAllBestViewCubit>.value(value: cubit)],
+          child: const SeeAllBestViewBodyList(),
+        ),
+      );
+      await _settle(tester);
+
+      await tester.enterText(find.byType(EditableText).first, 'سامسونج');
+      await tester.pump(const Duration(milliseconds: 80));
+      // Still inside the debounce window — the old result stays on screen.
+      expect(find.text('آيفون 15 برو'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.text('سامسونج S24'), findsOneWidget);
+      expect(find.text('آيفون 15 برو'), findsNothing);
+      await cubit.close();
+    });
+
+    testWidgets('a heart follows a toggle started from another screen', (
+      tester,
+    ) async {
+      final favCubit = FavCubit(FakeFavRepos())..getFavData();
+      await tester.pumpWidget(
+        _harness(
+          providers: [BlocProvider<FavCubit>.value(value: favCubit)],
+          child: const FavHeartButton(productId: 77),
+        ),
+      );
+      await _settle(tester);
+
+      expect(find.byIcon(Icons.favorite_border), findsOneWidget);
+      await favCubit.toggleFavourite(productId: 77);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.byIcon(Icons.favorite), findsOneWidget);
+      await favCubit.close();
     });
   });
 }

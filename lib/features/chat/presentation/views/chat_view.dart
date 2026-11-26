@@ -16,6 +16,28 @@ import 'chat_widgets/message_action_sheet.dart';
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
+  /// Message traffic is rendered by [ChatMessagesList]'s own BlocBuilder.
+  /// Rebuilding the whole scaffold (app bar + input bar) on every incoming
+  /// message is wasted work, so only states that actually change the scaffold
+  /// are allowed through.
+  static bool shouldRebuild(ChatStates previous, ChatStates current) {
+    if (current is ChatConversationDeleting ||
+        current is ChatConversationDeleted ||
+        current is ChatConversationDeleteError) {
+      return true; // toggles the app-bar progress bar
+    }
+    if (current is ChatMessageSending ||
+        current is ChatImageSending ||
+        current is ChatMessageSent ||
+        current is ChatMessageSendError) {
+      return true; // toggles the send buttons' busy state
+    }
+    // Defensive: hide the progress bar if the cubit leaves the deleting state
+    // without emitting one of the terminal states above.
+    if (previous is ChatConversationDeleting) return true;
+    return false;
+  }
+
   @override
   State<ChatView> createState() => _ChatViewState();
 }
@@ -149,6 +171,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ChatCubit, ChatStates>(
+      buildWhen: ChatView.shouldRebuild,
       listener: (context, state) {
         if (state is ChatMessageSendError) {
           Toast.showErrorToast(

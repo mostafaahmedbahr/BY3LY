@@ -2,6 +2,7 @@ import 'package:by3ly/core/shared_widgets/custom_error_widget.dart';
 import 'package:by3ly/core/shared_widgets/custom_text_form_filed.dart';
 import 'package:by3ly/core/utils/app_colors/app_colors.dart';
 import 'package:by3ly/core/utils/app_images/app_images.dart';
+import 'package:by3ly/core/utils/search_filter_cache.dart';
 import 'package:by3ly/features/seeAllBestView/data/models/sell_all_best_view_model.dart';
 import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_cubit.dart';
 import 'package:by3ly/features/seeAllBestView/presentation/view_model/sell_all_best_view_states.dart';
@@ -23,6 +24,9 @@ class SeeAllBestViewBodyList extends StatefulWidget {
 
 class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
   final TextEditingController _searchController = TextEditingController();
+  final SearchDebouncer _debounce = SearchDebouncer();
+  final FilteredListCache<Products> _filteredCache =
+      FilteredListCache<Products>();
 
   @override
   void initState() {
@@ -38,21 +42,25 @@ class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
 
   @override
   void dispose() {
+    _debounce.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
   List<Products> _filtered(List<Products> source) {
     final query = _searchController.text.trim().toLowerCase();
-    if (query.isEmpty) return source;
-    return source.where((p) {
-      final name = (p.name ?? '').toLowerCase();
-      final desc = (p.desc ?? '').toLowerCase();
-      final price = (p.price ?? '').toLowerCase();
-      return name.contains(query) ||
-          desc.contains(query) ||
-          price.contains(query);
-    }).toList();
+    final key = '$query|${FilteredListCache.sourceKey(source)}';
+    return _filteredCache.get(key, () {
+      if (query.isEmpty) return source;
+      return source.where((p) {
+        final name = (p.name ?? '').toLowerCase();
+        final desc = (p.desc ?? '').toLowerCase();
+        final price = (p.price ?? '').toLowerCase();
+        return name.contains(query) ||
+            desc.contains(query) ||
+            price.contains(query);
+      }).toList();
+    });
   }
 
   @override
@@ -85,11 +93,13 @@ class _SeeAllBestViewBodyListState extends State<SeeAllBestViewBodyList> {
               suffixIcon: _searchController.text.trim().isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear, size: 20),
-                      onPressed: () =>
-                          setState(() => _searchController.clear()),
+                      onPressed: () {
+                        _debounce.cancel();
+                        setState(() => _searchController.clear());
+                      },
                     )
                   : null,
-              onChanged: (_) => setState(() {}),
+              onChanged: (_) => _debounce(() => setState(() {})),
             ),
             const SizedBox(height: 12),
             Expanded(

@@ -411,6 +411,8 @@ void main() {
       await _settle(tester);
 
       await tester.enterText(find.byType(EditableText).first, 'سامسونج');
+      await tester.pump(const Duration(milliseconds: 80));
+      expect(find.text('آيفون 15 برو'), findsOneWidget);
       await _settle(tester);
 
       expect(find.text('سامسونج S24'), findsOneWidget);

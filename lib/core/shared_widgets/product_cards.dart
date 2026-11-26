@@ -53,45 +53,59 @@ class MinimalHeart extends StatefulWidget {
 class _MinimalHeartState extends State<MinimalHeart> {
   bool? _localFav;
 
+  void _setLocalFav(bool? value) {
+    if (_localFav == value || !mounted) return;
+    setState(() => _localFav = value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FavCubit, FavStates>(
+    // read (not watch): the listener below only reacts to this product.
+    final cubit = context.read<FavCubit>();
+    final isFav = GuestGuard.isGuest
+        ? false
+        : (_localFav ??
+              cubit.isFavourite(widget.productId) || widget.initialIsFavourite);
+
+    return BlocListener<FavCubit, FavStates>(
       listener: (context, state) {
-        if (state is FavToggleSuccess && state.productId == widget.productId) {
-          setState(() => _localFav = state.isNowFavourite);
+        if (state is GetFavDataSuccess ||
+            state is AddProductToFavSuccess ||
+            state is RemoveProductFromFavSuccess) {
+          // Server list refreshed — re-read the ids for this product.
+          if (mounted) setState(() {});
+          return;
+        }
+        if (state is FavToggleOptimistic &&
+            state.productId == widget.productId) {
+          _setLocalFav(state.isNowFavourite);
+        } else if (state is FavToggleSuccess &&
+            state.productId == widget.productId) {
+          _setLocalFav(state.isNowFavourite);
         } else if (state is FavToggleError) {
-          setState(() => _localFav = null);
+          _setLocalFav(null);
         }
       },
-      builder: (context, state) {
-        final cubit = FavCubit.get(context);
-        // Guests always see a plain (non-favourited) heart.
-        final isFav = GuestGuard.isGuest
-            ? false
-            : (_localFav ??
-                  cubit.isFavourite(widget.productId) ||
-                      widget.initialIsFavourite);
-        return Container(
-          height: widget.size,
-          width: widget.size,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: isFav ? AppColors.redColor : AppColors.border,
-              width: 1.2,
-            ),
+      child: Container(
+        height: widget.size,
+        width: widget.size,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isFav ? AppColors.redColor : AppColors.border,
+            width: 1.2,
           ),
-          child: Center(
-            child: FavHeartButton(
-              productId: widget.productId,
-              initialIsFavourite: widget.initialIsFavourite,
-              withBackground: false,
-              iconSize: widget.iconSize,
-            ),
+        ),
+        child: Center(
+          child: FavHeartButton(
+            productId: widget.productId,
+            initialIsFavourite: widget.initialIsFavourite,
+            withBackground: false,
+            iconSize: widget.iconSize,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
