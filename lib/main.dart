@@ -28,7 +28,6 @@ void main() async {
       // Must be registered before runApp so data-only messages are handled even
       // when the app is terminated.
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
       // Foreground display, tap handling, iOS presentation and token syncing.
       await AppNotifications.initialize();
       runApp(
