@@ -35,6 +35,11 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   List<File> images = [];
   static const int maxImages = 5;
 
+  /// Ads are shown as small cards, so cap picked images before upload:
+  /// less memory while previewing and a much smaller multipart body.
+  static const double _maxImageDimension = 1280;
+  static const int _imageQuality = 80;
+
   int? categoryId;
   int? subCategoryId;
 
@@ -99,7 +104,12 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
       messenger.showSnackBar(const SnackBar(content: Text('Max 5 images')));
       return;
     }
-    final x = await picker.pickImage(source: ImageSource.camera);
+    final x = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: _maxImageDimension,
+      maxHeight: _maxImageDimension,
+      imageQuality: _imageQuality,
+    );
     if (x != null) {
       images = [...images, File(x.path)];
       emit(AddNewAdImagesChanged());
@@ -109,7 +119,11 @@ class AddNewAdCubit extends Cubit<AddNewAdStates> {
   Future<void> pickImages(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     const warning = SnackBar(content: Text('Max 5 images'));
-    final selected = await picker.pickMultiImage();
+    final selected = await picker.pickMultiImage(
+      maxWidth: _maxImageDimension,
+      maxHeight: _maxImageDimension,
+      imageQuality: _imageQuality,
+    );
     if (selected.isEmpty) return;
     final room = maxImages - totalImagesCount;
     if (room <= 0) {
